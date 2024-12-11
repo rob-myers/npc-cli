@@ -7,7 +7,7 @@ import { damp } from "maath/easing";
 
 import { testNever, debug } from "../service/generic.js";
 import { Rect, Vect } from "../geom/index.js";
-import { dataUrlToBlobUrl, getModifierKeys, getRelativePointer, isRMB, isSmallViewport, isTouchDevice } from "../service/dom.js";
+import { dataUrlToBlobUrl, getModifierKeys, getRelativePointer, isRMB, isTouchDevice } from "../service/dom.js";
 import { longPressMs, pickedTypesInSomeRoom } from "../service/const.js";
 import { emptySceneForPicking, getTempInstanceMesh, hasObjectPickShaderMaterial, pickingRenderTarget, toXZ, unitXVector3, v3Precision } from "../service/three.js";
 import { popUpRootDataAttribute } from "../components/PopUp.jsx";
@@ -20,7 +20,7 @@ import useStateRef from "../hooks/use-state-ref.js";
  * @param {Props} props
  */
 export default function WorldView(props) {
-  const smallViewport = isSmallViewport();
+  const w = React.useContext(WorldContext);
 
   const state = useStateRef(/** @returns {State} */ () => ({
     canvas: /** @type {*} */ (null),
@@ -28,8 +28,8 @@ export default function WorldView(props) {
     controls: /** @type {*} */ (null),
     controlsViewportOpts: {
       maxPolarAngle: Math.PI / 4,
-      minDistance: smallViewport ? 5 : 5,
-      maxDistance: smallViewport ? 32 : 48,
+      minDistance: w.smallViewport ? 5 : 5,
+      maxDistance: w.smallViewport ? 32 : 48,
     },
     down: undefined,
     epoch: { pickStart: 0, pickEnd: 0, pointerDown: 0, pointerUp: 0 },
@@ -374,13 +374,12 @@ export default function WorldView(props) {
     },
   }), { reset: { controlsViewportOpts: true } });
 
-  const w = React.useContext(WorldContext);
   w.view = state;
 
   React.useEffect(() => {
     if (state.controls) {
-      state.controls.setPolarAngle(isSmallViewport() ? Math.PI / 2 : Math.PI / 4);
-      state.controls.setAzimuthalAngle(isSmallViewport() ? Math.PI / 6 : Math.PI / 4);
+      state.controls.setPolarAngle(w.smallViewport ? Math.PI / 2 : Math.PI / 4);
+      state.controls.setAzimuthalAngle(w.smallViewport ? Math.PI / 6 : Math.PI / 4);
     }
     emptySceneForPicking.onAfterRender = state.renderObjectPickScene;
   }, [state.controls]);
@@ -420,7 +419,7 @@ export default function WorldView(props) {
         panSpeed={2}
         {...state.controlsViewportOpts}
         //@ts-ignore see three-stdlib patch
-        minPanDistance={smallViewport ? 0.05 : 0}
+        minPanDistance={w.smallViewport ? 0.05 : 0}
       />
 
       <ContextMenu/>

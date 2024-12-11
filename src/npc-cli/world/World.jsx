@@ -65,6 +65,7 @@ export default function World(props) {
     gmRoomGraph: new GmRoomGraphClass(),
     hmr: /** @type {*} */ ({}),
     disconnected: true,
+    smallViewport: isSmallViewport(),
 
     texFloor: new TexArray({ ctKey: 'floor-tex-array', numTextures: 1, width: 0, height: 0 }),
     texCeil: new TexArray({ ctKey: 'ceil-tex-array', numTextures: 1, width: 0, height: 0 }),
@@ -79,7 +80,7 @@ export default function World(props) {
     ceil: /** @type {*} */ ({}),
     decor: /** @type {*} */ (null),
     obs: /** @type {*} */ (null),
-    wall: /** @type {*} */ (null),
+    wall: /** @type {*} */ ({}),
     door: /** @type {State['door']} */ ({
       onTick(_) {},
     }),
@@ -93,7 +94,6 @@ export default function World(props) {
     lib: {
       filter,
       firstValueFrom,
-      isSmallViewport,
       isVectJson: Vect.isVectJson,
       precision: toPrecision,
       removeFirst,
@@ -433,6 +433,7 @@ export default function World(props) {
  * @property {GmRoomGraphClass} gmRoomGraph
  * @property {Crowd} crowd
  * @property {boolean} disconnected
+ * @property {boolean} smallViewport
  *
  * @property {() => boolean} isReady
  * @property {(exportedNavMesh: Uint8Array) => void} loadTiledMesh
@@ -447,7 +448,6 @@ export default function World(props) {
  * @typedef StateUtil Utility functions and classes
  * @property {typeof filter} filter
  * @property {typeof firstValueFrom} firstValueFrom
- * @property {typeof isSmallViewport} isSmallViewport
  * @property {typeof import('../geom').Vect['isVectJson']} isVectJson
  * @property {typeof removeFirst} removeFirst
  * @property {typeof Subject} Subject

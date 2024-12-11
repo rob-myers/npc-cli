@@ -1,6 +1,6 @@
 import React from 'react';
 import { css } from "@emotion/css";
-import { getRelativePointer, isSmallViewport } from '../service/dom';
+import { getRelativePointer } from '../service/dom';
 import useStateRef from '../hooks/use-state-ref';
 import { zIndex } from '../service/const';
 import { WorldContext } from './world-context';
@@ -19,9 +19,9 @@ export default function TouchIndicator() {
       }
     },
     touchCircle: /** @type {HTMLDivElement} */ ({}),
-    touchRadiusPx: isSmallViewport() ? 70 : 35,
-    touchErrorPx: isSmallViewport() ? 10 : 5,
-    touchFadeSecs: isSmallViewport() ? 2 : 0.2,
+    touchRadiusPx: w.smallViewport ? 70 : 35,
+    touchErrorPx: w.smallViewport ? 10 : 5,
+    touchFadeSecs: w.smallViewport ? 2 : 0.2,
   }));
 
   React.useEffect(() => {

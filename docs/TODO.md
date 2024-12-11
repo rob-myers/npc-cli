@@ -22,7 +22,8 @@
     - ✅ can customise from CLI
       - ✅ links not icons
       - ✅ links trigger world events
-    - default: extra links on click switch
+    - extend default via script
+      - extra links on click switch
     - speech bubbles
     - example of static panel
   - remove `ContextMenu`

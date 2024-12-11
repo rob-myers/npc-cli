@@ -248,6 +248,8 @@ class CMInstance {
       kvs: opts.kvs ?? [],
       links: opts.links ?? [],
     };
+
+    this.pinned = w.smallViewport;
   }
 
   /**
