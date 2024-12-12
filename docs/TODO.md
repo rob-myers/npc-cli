@@ -31,8 +31,8 @@
     - ❌ show-context-menu event
     - ✅ example of static panel
     - ✅ remove `ContextMenu`
-    - default context menu can be "docked"
-    - remove static panels
+    - 🚧 default context menu can be "docked"
+    - 🚧 remove static panels
       - decided only default and speech bubbles
     - extend default via script
       - can add/remove named "matchers"

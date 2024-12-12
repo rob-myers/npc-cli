@@ -9,7 +9,6 @@ import useStateRef from '../hooks/use-state-ref';
  * @type {React.ForwardRefExoticComponent<Props & React.RefAttributes<State>>}
  */
 export const Html3d = React.forwardRef(({
-  calculatePosition = defaultCalculatePosition,
   castShadow,
   children,
   className,
@@ -138,7 +137,6 @@ export const Html3d = React.forwardRef(({
 *   React.HTMLAttributes<HTMLDivElement> & ReactThreeFiber.Object3DNode<THREE.Group, typeof THREE.Group> & {
 *   eps?: number;
 *   distanceFactor?: number;
-*   calculatePosition?: CalculatePosition;
 *   normal?: THREE.Vector3;
 *   open?: boolean;
 *   tracked?: THREE.Object3D;
@@ -170,17 +168,14 @@ const v2 = new THREE.Vector3()
  * @param {{ width: number; height: number }} size 
  * @returns {[number, number]}
  */
-function defaultCalculatePosition(el, camera, size) {
-  const objectPos = v1.setFromMatrixPosition(el.matrixWorld)
-  objectPos.project(camera)
-  const widthHalf = size.width / 2
-  const heightHalf = size.height / 2
-  return [objectPos.x * widthHalf + widthHalf, -(objectPos.y * heightHalf) + heightHalf]
+function calculatePosition(el, camera, size) {
+  // 🤔 support tracked offset vector?
+  const objectPos = v1.setFromMatrixPosition(el.matrixWorld);
+  objectPos.project(camera);
+  const widthHalf = size.width / 2;
+  const heightHalf = size.height / 2;
+  return [objectPos.x * widthHalf + widthHalf, -(objectPos.y * heightHalf) + heightHalf];
 }
-
-/**
- * @typedef {typeof defaultCalculatePosition} CalculatePosition
- */
 
 /**
  * @param {THREE.Object3D} el 

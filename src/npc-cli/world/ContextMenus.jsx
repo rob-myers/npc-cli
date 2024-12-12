@@ -16,16 +16,12 @@ export default function ContextMenus() {
   const state = useStateRef(/** @returns {State} */ () => ({
     lookup: {},
     savedOpts: tryLocalStorageGetParsed(`context-menus@${w.key}`) ?? {},
-    topLinks: { default: [
+    topLinks: [
       { key: 'toggle-kvs', label: 'meta', test: 'showKvs' },
       { key: 'toggle-pinned', label: 'pin', test: 'pinned' },
       { key: 'toggle-scaled', label: 'scale', test: 'scaled' },
       { key: 'close', label: 'exit' },
-    ], saved: [
-      { key: 'toggle-kvs', label: 'meta', test: 'showKvs' },
-      { key: 'toggle-scaled', label: 'scale', test: 'scaled' },
-      { key: 'delete', label: 'exit' },
-    ]},
+    ],
     delete(cmKey) {
       if (cmKey === 'default') {
         return false; // Cannot delete default
@@ -33,11 +29,6 @@ export default function ContextMenus() {
       const success = delete state.lookup[cmKey];
       update();
       return success;
-    },
-    getNextKey() {
-      let n = 0;
-      while (n in state.lookup) n++;
-      return `${n}`;
     },
     hide(key, force) {
       const cm = state.lookup[key];
@@ -47,25 +38,9 @@ export default function ContextMenus() {
       cm.open = false;
       cm.update();
     },
-    saveDefault() {
-      const defCm = state.lookup.default;
-      const cmKey = state.getNextKey();
-      const dstCm = state.lookup[cmKey] = new CMInstance(cmKey, w, {
-        showKvs: defCm.showKvs,
-      });
-      dstCm.setContext({
-        meta: defCm.meta,
-        position: new THREE.Vector3(...defCm.position),
-      });
-      defCm.open = false;
-      dstCm.open = true;
-      // violate default memo
-      defCm.epochMs = Date.now();
-      update();
-    },
-    saveOpts() {
+    saveOpts() {// only need to save default?
       tryLocalStorageSet(`context-menus@${w.key}`, JSON.stringify(
-        mapValues(state.lookup, ({ pinned, showKvs }) => ({ pinned, showKvs }))
+        mapValues(state.lookup, ({ pinned, showKvs, docked }) => ({ pinned, showKvs, docked }))
       ));
     },
     show(key, ct) {
@@ -76,7 +51,7 @@ export default function ContextMenus() {
       cm.open = true;
       cm.update();
     },
-  }), { reset: { lookup: false } });
+  }), { reset: { topLinks: false } });
 
   w.c = state;
 
@@ -99,13 +74,11 @@ export default function ContextMenus() {
 /**
  * @typedef State
  * @property {{ [cmKey: string]: CMInstance }} lookup
- * @property {{ [cmKey: string]: Pick<CMInstance, 'pinned' | 'showKvs'> }} savedOpts
- * @property {Record<'default' | 'saved', NPC.ContextMenuLink[]>} topLinks
+ * @property {{ [cmKey: string]: Pick<CMInstance, 'docked' | 'pinned' | 'showKvs'> }} savedOpts
+ * @property {NPC.ContextMenuLink[]} topLinks
  *
  * @property {(cmKey: string) => boolean} delete
- * @property {() => string} getNextKey
  * @property {(cmKey: string, force?: boolean) => void} hide
- * @property {() => void} saveDefault
  * @property {() => void} saveOpts
  * @property {(cmKey: string, ct?: NPC.ContextMenuContextDef) => void} show
  */
@@ -117,24 +90,19 @@ function ContextMenuContent({ cm, cm: { ui, w } }) {
 
   return <>
   
-    <div className="top-bar">
-
-     {cm.key === 'default'
-        ? <button onClick={w.c.saveDefault}>save</button>
-        : <span className="saved-cm-key">{cm.key}</span>
-     }
-
-      <div className="links" onClick={cm.onClickLink.bind(cm)}>
-        {w.c.topLinks[cm.key === 'default' ? 'default' : 'saved'].map(({ key, label, test }) =>
-          <button
-            key={key}
-            data-key={key}
-            className={test !== undefined && !(/** @type {*} */ (cm)[test]) ? 'off' : undefined}
-          >
-            {label}
-          </button>
-        )}
-      </div>
+    <div className="links top" onClick={cm.onClickLink.bind(cm)}>
+      {cm.key === 'default' && (
+        <button data-key="toggle-docked">{cm.docked ? 'undock' : 'dock'}</button>
+      )}
+      {w.c.topLinks.map(({ key, label, test }) =>
+        <button
+          key={key}
+          data-key={key}
+          className={test !== undefined && !(/** @type {*} */ (cm)[test]) ? 'off' : undefined}
+        >
+          {label}
+        </button>
+      )}
     </div>
 
     <div className="links" onClick={cm.onClickLink.bind(cm)}>
@@ -245,7 +213,6 @@ function ContextMenu({ cm }) {
   return (
     <Html3d
       ref={cm.html3dRef.bind(cm)}
-      calculatePosition={cm.calculatePosition}
       className={contextMenuCss}
       distanceFactor={cm.scaled ? cm.scale : undefined}
       position={cm.position}
@@ -286,6 +253,7 @@ class CMInstance {
   meta = /** @type {Geom.Meta} */ ({});
   position = /** @type {[number, number, number]} */ ([0, 0, 0]);
 
+  docked = false;
   open = false;
   pinned = false;
   scaled = false;
@@ -315,21 +283,6 @@ class CMInstance {
       kvs: opts.kvs ?? [],
       links: opts.links ?? [],
     };
-  }
-
-  /**
-   * @param {THREE.Object3D} el 
-   * @param {THREE.Camera} camera 
-   * @param {{ width: number; height: number }} size 
-   * @returns {[number, number]}
-   */
-  calculatePosition(el, camera, size) {
-    // 🤔 support tracked offset vector?
-    const objectPos = tmpVector1.setFromMatrixPosition(el.matrixWorld);
-    objectPos.project(camera);
-    const widthHalf = size.width / 2;
-    const heightHalf = size.height / 2;
-    return [objectPos.x * widthHalf + widthHalf, -(objectPos.y * heightHalf) + heightHalf];
   }
 
   /** @param {Geom.Meta} meta */
@@ -376,6 +329,10 @@ class CMInstance {
     this.meta = meta;
     this.position = position.toArray();
     this.computeKvsFromMeta(meta);
+  }
+
+  toggleDocked() {
+    this.docked = !this.docked;
   }
 
   toggleKvs() {
