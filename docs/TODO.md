@@ -34,8 +34,8 @@
     - ✅ default context menu can be "docked"
     - ✅ remove static panels
       - decided only default and speech bubbles
-    - default context menu pin 2d/3d (?)
-    - default context menu can drag?
+    - ✅ default context menu dock moves to lower left
+    - ❌ default context menu can drag
     - extend default via script
       - can add/remove named "matchers"
       - extra links on click switch

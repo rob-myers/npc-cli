@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { cx } from '@emotion/css';
 import * as ReactDOM from 'react-dom/client';
 import * as THREE from 'three';
 import { ReactThreeFiber, useFrame, useThree } from '@react-three/fiber'
@@ -104,9 +105,9 @@ export const Html3d = React.forwardRef(({
     React.useEffect(() => {
       if (state.rootDiv) {
         state.rootDiv.style.visibility = open ? 'visible' : 'hidden';
-        state.rootDiv.className = className ?? '';
+        state.rootDiv.className = cx(className, { docked });
       }
-    }, [state.rootDiv, open, className]);
+    }, [state.rootDiv, open, docked, className]);
 
     React.useLayoutEffect(() => {
       state.reactRoot?.render(

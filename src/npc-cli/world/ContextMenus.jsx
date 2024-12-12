@@ -51,7 +51,7 @@ export default function ContextMenus() {
       cm.open = true;
       cm.update();
     },
-  }), { reset: { topLinks: false } });
+  }), { reset: { topLinks: true } });
 
   w.c = state;
 
@@ -135,6 +135,17 @@ const contextMenuCss = css`
   top: 0;
   transform-origin: 0 0;
   background: transparent !important;
+  
+  opacity: 0.5;
+  &:active, &:hover {
+    opacity: 1;
+  }
+
+  &.docked {
+    transform: unset !important;
+    top: unset;
+    bottom: 0;
+  }
   
   > div {
     transform-origin: 0 0;
