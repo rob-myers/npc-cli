@@ -9,18 +9,16 @@ import useStateRef from '../hooks/use-state-ref';
  * @type {React.ForwardRefExoticComponent<Props & React.RefAttributes<State>>}
  */
 export const Html3d = React.forwardRef(({
-  castShadow,
   children,
   className,
   distanceFactor,
-  eps = 0.001,
+  docked,
   open,
-  receiveShadow,
   tracked,
   zIndex,
   ...props
 }, ref) => {
-    const { gl, camera, scene, size, events, advance } = useThree();
+    const { gl, camera, scene, size, events } = useThree();
 
     const state = useStateRef(/** @returns {State} */ () => ({
       delta: [0, 0],
@@ -32,16 +30,17 @@ export const Html3d = React.forwardRef(({
       rootDiv: document.createElement('div'),
       reactRoot: /** @type {*} */ (null),
       sign: 0,
+      shouldTranslate: false,
       zoom: 0,
 
       onFrame(_rootState) {
-        if (state.objTarget === null || state.innerDiv === null) {
+        if (state.shouldTranslate !== true) {
           return;
         }
   
         camera.updateMatrixWorld()
         state.group.updateWorldMatrix(true, false)
-        const vec = calculatePosition(state.objTarget, camera, size)
+        const vec = calculatePosition(/** @type {THREE.Object3D} */ (state.objTarget), camera, size)
   
         // use props.normal to hide when behind
         camera.getWorldDirection(cameraNormal);
@@ -75,6 +74,10 @@ export const Html3d = React.forwardRef(({
       }
     }), { deps: [distanceFactor, camera, size] });
 
+    state.shouldTranslate = (
+      state.objTarget !== null && state.innerDiv !== null && docked !== true
+    );
+
     React.useImperativeHandle(ref, () => state, []);
 
     // Append to the connected element, which makes HTML work with views
@@ -86,7 +89,7 @@ export const Html3d = React.forwardRef(({
         const currentRoot = (state.reactRoot = ReactDOM.createRoot(state.rootDiv))
         scene.updateMatrixWorld()
         const vec = calculatePosition(state.objTarget, camera, size)
-        state.rootDiv.style.cssText = `position:absolute;top:0;left:0;transform:translate3d(${vec[0]}px,${vec[1]}px,0);transform-origin:0 0;`
+        state.rootDiv.style.transform = `translate3d(${vec[0]}px,${vec[1]}px,0)`;
         if (state.domTarget) {
           state.domTarget.appendChild(state.rootDiv)
         }
@@ -98,18 +101,17 @@ export const Html3d = React.forwardRef(({
     }, [state.domTarget, state.objTarget])
 
     /** @type {React.CSSProperties} */
-    const styles = React.useMemo(() => ({
-      position: 'absolute',
-      transformOrigin: '0 0',
-      visibility: open ? 'visible' : 'hidden',
-    }), [open])
+    React.useEffect(() => {
+      if (state.rootDiv) {
+        state.rootDiv.style.visibility = open ? 'visible' : 'hidden';
+        state.rootDiv.className = className ?? '';
+      }
+    }, [state.rootDiv, open, className]);
 
     React.useLayoutEffect(() => {
       state.reactRoot?.render(
         <div
           ref={state.ref('innerDiv')}
-          style={styles}
-          className={className}
           children={children}
         />
       );
@@ -134,15 +136,20 @@ export const Html3d = React.forwardRef(({
 
 /**
  * @typedef {Omit<
-*   React.HTMLAttributes<HTMLDivElement> & ReactThreeFiber.Object3DNode<THREE.Group, typeof THREE.Group> & {
-*   eps?: number;
-*   distanceFactor?: number;
-*   normal?: THREE.Vector3;
-*   open?: boolean;
-*   tracked?: THREE.Object3D;
-*   zIndex?: number;
-* }, 'ref'>} Props
+ *   React.HTMLAttributes<HTMLDivElement> &
+ *   ReactThreeFiber.Object3DNode<THREE.Group, typeof THREE.Group> & BaseProps,
+ * 'ref'>} Props
 */
+
+/**
+ * @typedef BaseProps
+ * @property {boolean} [docked]
+ * @property {number} [distanceFactor]
+ * @property {THREE.Vector3} [normal]
+ * @property {boolean} open
+ * @property {THREE.Object3D} [tracked]
+ * @property {number} [zIndex]
+ */
 
 /**
 * @typedef State
@@ -155,10 +162,12 @@ export const Html3d = React.forwardRef(({
 * @property {HTMLDivElement} rootDiv
 * @property {ReactDOM.Root} reactRoot
 * @property {number} sign
+* @property {boolean} shouldTranslate
 * @property {number} zoom
 * @property {(rootState?: import('@react-three/fiber').RootState) => void} onFrame
 */
 
+const eps = 0.001;
 const v1 = new THREE.Vector3()
 const v2 = new THREE.Vector3()
 

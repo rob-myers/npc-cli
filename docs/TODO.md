@@ -31,9 +31,11 @@
     - ❌ show-context-menu event
     - ✅ example of static panel
     - ✅ remove `ContextMenu`
-    - 🚧 default context menu can be "docked"
-    - 🚧 remove static panels
+    - ✅ default context menu can be "docked"
+    - ✅ remove static panels
       - decided only default and speech bubbles
+    - default context menu pin 2d/3d (?)
+    - default context menu can drag?
     - extend default via script
       - can add/remove named "matchers"
       - extra links on click switch

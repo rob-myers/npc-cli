@@ -130,15 +130,22 @@ function ContextMenuContent({ cm, cm: { ui, w } }) {
 }
 
 const contextMenuCss = css`
+  position: absolute;
   left: 0;
   top: 0;
-  width: 200px;
+  transform-origin: 0 0;
+  background: transparent !important;
+  
+  > div {
+    transform-origin: 0 0;
+    width: 200px;
+    background-color: #000;
+    border: 1px solid #dddddd77;
+  }
 
-  background-color: #000;
   color: #fff;
   letter-spacing: 1px;
   font-size: smaller;
-  border: 1px solid #dddddd77;
 
   .top-bar {
     display: flex;
@@ -215,6 +222,7 @@ function ContextMenu({ cm }) {
       ref={cm.html3dRef.bind(cm)}
       className={contextMenuCss}
       distanceFactor={cm.scaled ? cm.scale : undefined}
+      docked={cm.docked}
       position={cm.position}
       normal={cm.normal}
       open={cm.open}
