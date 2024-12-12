@@ -181,7 +181,7 @@ export default function useHandleEvents(w) {
       if (typeof meta.switch === 'number') {
         return [
           { def: { key: 'open', gdKey: meta.gdKey, }, label: 'open', icon: 'icon--door-open', meta },
-          { def: { key: 'close', gdKey: meta.gdKey, }, label: 'close', icon: 'icon--door-closed', meta },
+          { def: { key: 'close', gdKey: meta.gdKey }, label: 'close', icon: 'icon--door-closed', meta },
           { def: { key: 'lock', gdKey: meta.gdKey, }, label: 'lock', icon: 'icon--door-locked', meta },
           { def: { key: 'unlock', gdKey: meta.gdKey, }, label: 'unlock', icon: 'icon--door-unlocked', meta },
           // 🚧 ring bell
@@ -220,7 +220,6 @@ export default function useHandleEvents(w) {
           }
 
           if (e.distancePx <= (e.touch ? 20 : 5)) {
-            w.cm.show(); // 🚧 remove
             state.showDefaultContextMenu();
           }
           break;
@@ -232,7 +231,6 @@ export default function useHandleEvents(w) {
           break;
         }
         case "pointerdown":
-          w.cm.hideUnlessPersisted();
           w.c.hide('default');
           break;
         case "pointerup":
@@ -279,9 +277,6 @@ export default function useHandleEvents(w) {
           state.doorToNpcs = {};
           state.npcToDoors = {};
           break;
-        case "update-context-menu":
-          state.updateContextMenu();
-          break;
         case "try-close-door":
           state.tryCloseDoor(e.gmId, e.doorId, e.meta);
           break;
@@ -291,11 +286,11 @@ export default function useHandleEvents(w) {
       const npc = w.n[e.npcKey];
 
       switch (e.key) {
-        case "click-act":
-          const success = state.onClickAct(e);
-          // colour act red/green
-          w.cm.setSelectedActColor(success ? '#7f7' : 'red');
-          break;
+        // case "click-act":
+        //   const success = state.onClickAct(e);
+        //   // colour act red/green
+        //   w.cm.setSelectedActColor(success ? '#7f7' : 'red');
+        //   break;
         case "enter-collider":
           if (e.type === 'nearby' || e.type === 'inside') {
             state.onEnterDoorCollider(e);
@@ -336,9 +331,9 @@ export default function useHandleEvents(w) {
           } else {
             state.externalNpcs.delete(e.key);
           }
-          if (w.cm.isTracking(e.npcKey)) {
-            w.cm.track(null);
-          }
+          // if (w.cm.isTracking(e.npcKey)) {
+          //   w.cm.track(null);
+          // }
           break;
         }
         // case "started-moving":
@@ -395,26 +390,26 @@ export default function useHandleEvents(w) {
           break;
       }
     },
-    onClickAct({ act: { def, meta }, npcKey, point }) {// 🚧 remove
-      if (meta.grKey !== undefined && state.npcToRoom.get(npcKey)?.grKey !== meta.grKey) {
-        return false; // acted inside different room
-      }
+    // onClickAct({ act: { def, meta }, npcKey, point }) {// 🚧 remove
+    //   if (meta.grKey !== undefined && state.npcToRoom.get(npcKey)?.grKey !== meta.grKey) {
+    //     return false; // acted inside different room
+    //   }
 
-      switch (def.key) {
-        case 'open':
-        case 'close':
-          return state.toggleDoor(def.gdKey, { npcKey, [def.key]: true,
-            access: meta.inner === true && meta.secure !== true ? true : undefined,
-            point,
-          });
-        case 'lock':
-        case 'unlock':
-          return state.toggleLock(def.gdKey, { npcKey, [def.key]: true,
-            point,
-          });
-        // 🚧
-      }
-    },
+    //   switch (def.key) {
+    //     case 'open':
+    //     case 'close':
+    //       return state.toggleDoor(def.gdKey, { npcKey, [def.key]: true,
+    //         access: meta.inner === true && meta.secure !== true ? true : undefined,
+    //         point,
+    //       });
+    //     case 'lock':
+    //     case 'unlock':
+    //       return state.toggleLock(def.gdKey, { npcKey, [def.key]: true,
+    //         point,
+    //       });
+    //     // 🚧
+    //   }
+    // },
     onClickLink(e) {// 🚧 move back to ContextMenus?
       const cm = w.c.lookup[e.cmKey];
       switch (e.linkKey) {
@@ -563,7 +558,6 @@ export default function useHandleEvents(w) {
     },
     onPointerUpMenuDesktop(e) {
       if (e.rmb && e.distancePx <= 5) {
-        w.cm.show(); // 🚧 remove
         state.showDefaultContextMenu();
       }
     },
@@ -652,43 +646,6 @@ export default function useHandleEvents(w) {
         warn(`${npc.key}: no longer inside any room`);
       }
     },
-    updateContextMenu() {// 🚧 remove
-      const { lastDown } = w.view;
-      if (lastDown === undefined) {
-        return;
-      }
-
-      const { meta, normal } = lastDown;
-
-      w.cm.metaActs = state.getMetaActs(meta);
-
-      w.cm.shownDown = lastDown;
-      w.cm.meta = meta;
-      w.cm.normal = normal;
-      w.cm.quaternion = new THREE.Quaternion().setFromUnitVectors(unitXVector3, normal);
-
-      w.cm.kvs = Object.entries(meta ?? {}).map(([k, v]) => {
-        const vStr = v === true ? '' : typeof v === 'string' ? v : JSON.stringify(v);
-        return { k, v: vStr, length: k.length + (vStr === '' ? 0 : 1) + vStr.length };
-      }).sort((a, b) => a.length < b.length ? -1 : 1);
-  
-      const roomNpcKeys = ('gmId' in meta && 'roomId' in meta)
-        ? Array.from(state.roomToNpcs[meta.gmId][meta.roomId] ?? [])
-        : []
-      ;
-
-      w.cm.npcKeys = meta.npcKey === undefined ? roomNpcKeys : [meta.npcKey];
-
-      if (w.cm.npcKey === null || !roomNpcKeys.includes(w.cm.npcKey)) {
-        w.cm.npcKey = w.cm.npcKeys[0] ?? null;
-      }
-
-      // track npc if meta.npcKey is a valid npc
-      w.cm.track(w.n[meta.npcKey]?.m.group);
-      w.cm.position = lastDown.position.toArray();
-
-      w.cm.update();
-    },
   }));
   
   w.e = state; // e for 'events state'
@@ -721,7 +678,6 @@ export default function useHandleEvents(w) {
  * `npcKey`s not inside any room
  *
  * @property {(door: Geomorph.DoorState) => boolean} canCloseDoor
- * @property {(e: Extract<NPC.Event, { key: 'click-act' }>) => boolean} onClickAct Returns `true` iff successful.
  * @property {(e: Extract<NPC.Event, { key: 'click-link' }>) => void} onClickLink
  * @property {(u: Geom.VectJson, v: Geom.VectJson, door: Geomorph.DoorState) => boolean} navSegIntersectsDoorway
  * @property {(npcKey: string, gdKey: Geomorph.GmDoorKey) => boolean} npcCanAccess
@@ -748,7 +704,6 @@ export default function useHandleEvents(w) {
  * @property {(gmId: number, doorId: number, eventMeta?: Geom.Meta) => void} tryCloseDoor
  * Try close door every `N` seconds, starting in `N` seconds.
  * @property {(npc: NPC.NPC) => void} tryPutNpcIntoRoom
- * @property {() => void} updateContextMenu
  */
 
 /** e.g. `'^g0'` -> `/^g0/` */

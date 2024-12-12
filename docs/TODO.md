@@ -29,13 +29,17 @@
     - ✅ no need to refresh all i.e. use cm.epochMs
     - ✅ show-context-menu event
     - ❌ show-context-menu event
-    - 🚧 extend default via script
-      - 🚧 can add/remove named "matchers"
-      - 🚧 extra links on click switch
-      - 🚧 extra links on click door
-    - speech bubbles
     - ✅ example of static panel
-  - remove `ContextMenu`
+    - ✅ remove `ContextMenu`
+    - default context menu can be "docked"
+    - remove static panels
+      - decided only default and speech bubbles
+    - extend default via script
+      - can add/remove named "matchers"
+      - extra links on click switch
+      - extra links on click door
+    - speech bubbles
+      - somehow set cm.tracked as `w.n[npcKey]?.m.group`
   - remove icon generation code from asset.js
 
 - 🚧 pre next.js migration

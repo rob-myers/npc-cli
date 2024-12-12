@@ -12,7 +12,6 @@ import { longPressMs, pickedTypesInSomeRoom } from "../service/const.js";
 import { emptySceneForPicking, getTempInstanceMesh, hasObjectPickShaderMaterial, pickingRenderTarget, toXZ, unitXVector3, v3Precision } from "../service/three.js";
 import { popUpRootDataAttribute } from "../components/PopUp.jsx";
 import { WorldContext } from "./world-context.js";
-import ContextMenu from "./ContextMenu.jsx"; // 🚧 remove
 import ContextMenus from "./ContextMenus.jsx";
 import useStateRef from "../hooks/use-state-ref.js";
 
@@ -422,7 +421,6 @@ export default function WorldView(props) {
         minPanDistance={w.smallViewport ? 0.05 : 0}
       />
 
-      <ContextMenu/>
       <ContextMenus/>
     </Canvas>
   );

@@ -87,7 +87,6 @@ export default function World(props) {
     npc: /** @type {*} */ (null), // Npcs
     menu: /** @type {State['menu']} */ ({ measure(_) {} }), // ContextMenu
     debug: /** @type {*} */ (null), // Debug
-    cm: /** @type {*} */ (null), // ContextMenu 🚧 remove
     c: /** @type {*} */ (null), // ContextMenus
 
     // 🚧 support hmr e.g. via state.hmr
@@ -418,7 +417,6 @@ export default function World(props) {
  * Shortcut for `w.npc.npc`
  * @property {import("./Doors").State['byKey']} d
  * Shortcut for `w.door.byKey`
- * @property {import("./ContextMenu").State} cm // 🚧 remove
  * @property {import("./ContextMenus").State} c
  *
  * @property {TexArray} texFloor
