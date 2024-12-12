@@ -16,17 +16,16 @@ export default function ContextMenus() {
   const state = useStateRef(/** @returns {State} */ () => ({
     lookup: {},
     savedOpts: tryLocalStorageGetParsed(`context-menus@${w.key}`) ?? {},
-    savedTopLinks: [
-      { key: 'toggle-kvs', label: 'meta', test: 'showKvs' },
-      { key: 'toggle-scaled', label: 'scale', test: 'scaled' },
-      { key: 'delete', label: 'exit' },
-    ],
-    topLinks: [
+    topLinks: { default: [
       { key: 'toggle-kvs', label: 'meta', test: 'showKvs' },
       { key: 'toggle-pinned', label: 'pin', test: 'pinned' },
       { key: 'toggle-scaled', label: 'scale', test: 'scaled' },
       { key: 'close', label: 'exit' },
-    ],
+    ], saved: [
+      { key: 'toggle-kvs', label: 'meta', test: 'showKvs' },
+      { key: 'toggle-scaled', label: 'scale', test: 'scaled' },
+      { key: 'delete', label: 'exit' },
+    ]},
     delete(cmKey) {
       if (cmKey === 'default') {
         return false; // Cannot delete default
@@ -101,8 +100,7 @@ export default function ContextMenus() {
  * @typedef State
  * @property {{ [cmKey: string]: CMInstance }} lookup
  * @property {{ [cmKey: string]: Pick<CMInstance, 'pinned' | 'showKvs'> }} savedOpts
- * @property {NPC.ContextMenuLink[]} savedTopLinks
- * @property {NPC.ContextMenuLink[]} topLinks
+ * @property {Record<'default' | 'saved', NPC.ContextMenuLink[]>} topLinks
  *
  * @property {(cmKey: string) => boolean} delete
  * @property {() => string} getNextKey
@@ -127,7 +125,7 @@ function ContextMenuContent({ cm, cm: { ui, w } }) {
      }
 
       <div className="links" onClick={cm.onClickLink.bind(cm)}>
-        {(cm.key === 'default' ? w.c.topLinks : w.c.savedTopLinks).map(({ key, label, test }) =>
+        {w.c.topLinks[cm.key === 'default' ? 'default' : 'saved'].map(({ key, label, test }) =>
           <button
             key={key}
             data-key={key}

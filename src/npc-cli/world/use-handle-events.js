@@ -177,7 +177,7 @@ export default function useHandleEvents(w) {
       }
       return npcKeys;
     },
-    getMetaActs(meta) {// 🚧 WIP
+    getMetaActs(meta) {// 🚧 remove
       if (typeof meta.switch === 'number') {
         return [
           { def: { key: 'open', gdKey: meta.gdKey, }, label: 'open', icon: 'icon--door-open', meta },
