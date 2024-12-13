@@ -501,7 +501,7 @@ const rootCss = css`
 
 const statsCss = css`
   position: absolute !important;
-  z-index: 4 !important;
+  z-index: 0 !important;
   left: unset !important;
   right: 0px;
 `;

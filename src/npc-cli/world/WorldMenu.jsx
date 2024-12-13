@@ -25,11 +25,16 @@ export default function WorldMenu(props) {
     durationKeys: {},
     initHeight: tryLocalStorageGetParsed(`log-height-px@${w.key}`) ?? 200,
     logger: /** @type {*} */ (null),
+    shown: true,
     pinned: tryLocalStorageGetParsed(`pin-log@${w.key}`) ?? false,
 
     changeLoggerPin(e) {
       state.pinned = e.currentTarget.checked;
       tryLocalStorageSet(`pin-log@${w.key}`, `${state.pinned}`);
+      update();
+    },
+    changeShown(e) {
+      state.shown = e.currentTarget.checked;
       update();
     },
     enableAll() {
@@ -97,27 +102,36 @@ export default function WorldMenu(props) {
     </div>}
 
     <div className={cx(loggerCss, {
-        shown: state.pinned || (w.disabled && state.debugWhilePaused),
-      })}
-    >
+      hidden: !state.pinned && !(w.disabled && state.debugWhilePaused)
+    })}>
       <Logger
         ref={api => state.logger = state.logger ?? api}
-        className="world-logger"
+        className={cx("world-logger", { hidden: state.shown === false })}
       />
-      <label>
-        <input
-          type="checkbox"
-          defaultChecked={state.pinned}
-          onChange={state.changeLoggerPin}
-        />
-        pin
-      </label>
+      <div className="controls">
+        <label>
+          <input
+            type="checkbox"
+            defaultChecked={state.shown}
+            onChange={state.changeShown}
+          />
+          logger
+        </label>
+        <label>
+          <input
+            type="checkbox"
+            defaultChecked={state.pinned}
+            onChange={state.changeLoggerPin}
+          />
+          pin
+        </label>
+      </div>
     </div>
 
     <TouchIndicator/>
 
     <div className={cx(cssTtyDisconnectedMessage, {
-      shown: w.disconnected === true
+      hidden: w.disconnected === false
     })}>
       <h3>[disconnected]</h3>
       click or show a tty tab
@@ -132,28 +146,33 @@ const loggerCss = css`
   top: 0;
   display: flex;
   flex-direction: column;
-  align-items: end;
 
   color: white;
   font-size: 12px;
   font-family: 'Courier New', Courier, monospace;
   padding: 8px;
 
+  &.hidden, .hidden {
+    display: none;
+  }
+  
   .world-logger {
-    /* 🚧 */
     width: 230px;
-    height: 200px;
+    height: 160px;
     textarea {
       visibility: hidden; // Hide cursor
     }
   }
+
   label {
     display: flex;
     align-items: center;
     gap: 8px;
   }
-  &:not(.shown) {
-    display: none;
+
+  .controls {
+    display: flex;
+    gap: 8px;
   }
 `;
 
@@ -181,9 +200,10 @@ const cssTtyDisconnectedMessage = css`
   }
 
   transition: opacity 600ms;
-  opacity: 0;
-  &.shown {
-    opacity: 100;
+  opacity: 100;
+  &.hidden {
+    opacity: 0;
+    display: initial; // override commons.css
   }
 `;
 
@@ -195,10 +215,13 @@ const cssTtyDisconnectedMessage = css`
  * @property {import('../terminal/Logger').State} logger
  * @property {number} initHeight
  * @property {boolean} pinned
+ * @property {boolean} shown
+ *
+ * @property {(e: React.ChangeEvent<HTMLInputElement>) => void} changeShown
  * @property {() => void} enableAll
  * @property {(msg: string) => void} measure
  * Measure durations by sending same `msg` twice.
- * @property {React.ChangeEventHandler<HTMLInputElement & { type: 'checkbox' }>} changeLoggerPin
+ * @property {React.ChangeEventHandler<HTMLInputElement>} changeLoggerPin
  * @property {() => void} onOverlayPointerUp
  * @property {() => void} storeTextareaHeight
  * @property {() => void} toggleDebug

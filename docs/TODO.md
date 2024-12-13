@@ -42,7 +42,7 @@
       - ✅ extra links on click switch
       - ✅ extra links on click door
         - do not support unauth npc inside room i.e. this action corresponds to having a remote key
-      - links take effect e.g. open door
+      - 🚧 links take effect e.g. open door
       - links can be npc-sensitive
     - speech bubbles
       - somehow set cm.tracked as `w.n[npcKey]?.m.group`
