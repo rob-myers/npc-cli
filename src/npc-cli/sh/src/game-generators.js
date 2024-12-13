@@ -157,6 +157,8 @@ export const setupContextMenu = ({ w }) => {
     }
     if (meta.door === true) {
       showLinks.push(
+        { key: "open", label: "open" },
+        { key: "close", label: "close" },
         // 🚧 knock
       );
     }

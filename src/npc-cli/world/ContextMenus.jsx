@@ -20,10 +20,8 @@ export default function ContextMenus() {
       { key: 'toggle-kvs', label: 'meta', test: 'showKvs' },
       { key: 'toggle-pinned', label: 'pin', test: 'pinned' },
       { key: 'toggle-scaled', label: 'scale', test: 'scaled' },
-      // { key: 'close', label: 'exit' },
     ], docked: [
       { key: 'toggle-kvs', label: 'meta', test: 'showKvs' },
-      // { key: 'close', label: 'exit' },
     ]},
     delete(cmKey) {
       if (cmKey === 'default') {
@@ -260,7 +258,7 @@ export class CMInstance {
   /** For violating React.memo */
   epochMs = 0;
   
-  match = /** @type {{ matcherKey: NPC.ContextMenuMatcher}} */ ({});
+  match = /** @type {{ [matcherKey: string]: NPC.ContextMenuMatcher}} */ ({});
   meta = /** @type {Geom.Meta} */ ({});
   position = /** @type {[number, number, number]} */ ([0, 0, 0]);
 
