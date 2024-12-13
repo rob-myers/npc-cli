@@ -38,6 +38,7 @@
     - ❌ default context menu can drag
     - 🚧 extend default via script
       - 🚧 can add/remove named "matchers"
+      - ℹ️ w.cm.match.foo = bar
       - extra links on click switch
       - extra links on click door
     - speech bubbles

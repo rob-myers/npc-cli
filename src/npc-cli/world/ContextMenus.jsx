@@ -14,7 +14,6 @@ export default function ContextMenus() {
   const w = React.useContext(WorldContext);
 
   const state = useStateRef(/** @returns {State} */ () => ({
-    default: /** @type {*} */ (null),
     lookup: {},
     savedOpts: tryLocalStorageGetParsed(`context-menus@${w.key}`) ?? {},
     topLinks: { embed: [
@@ -60,7 +59,7 @@ export default function ContextMenus() {
   w.c = state;
 
   React.useMemo(() => {// HMR
-    state.default = state.lookup.default ??= new CMInstance('default', w, { showKvs: true });
+    w.cm = state.lookup.default ??= new CMInstance('default', w, { showKvs: true });
 
     process.env.NODE_ENV === 'development' && Object.values(state.lookup).forEach(cm => {
       state.lookup[cm.key] = Object.assign(new CMInstance(cm.key, cm.w, cm.ui), {...cm});
@@ -77,7 +76,6 @@ export default function ContextMenus() {
 
 /**
  * @typedef State
- * @property {CMInstance} default Shortcut to `lookup.default`
  * @property {{ [cmKey: string]: CMInstance }} lookup
  * @property {{ [cmKey: string]: Pick<CMInstance, 'docked' | 'pinned' | 'showKvs'> }} savedOpts
  * @property {Record<'embed' | 'docked', NPC.ContextMenuLink[]>} topLinks

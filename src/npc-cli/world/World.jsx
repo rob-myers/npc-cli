@@ -88,6 +88,7 @@ export default function World(props) {
     menu: /** @type {State['menu']} */ ({ measure(_) {} }), // ContextMenu
     debug: /** @type {*} */ (null), // Debug
     c: /** @type {*} */ (null), // ContextMenus
+    cm: /** @type {*} */ (null), // c.lookup.default
 
     // 🚧 support hmr e.g. via state.hmr
     lib: {
@@ -418,6 +419,7 @@ export default function World(props) {
  * @property {import("./Doors").State['byKey']} d
  * Shortcut for `w.door.byKey`
  * @property {import("./ContextMenus").State} c
+ * @property {import("./ContextMenus").CMInstance} cm
  *
  * @property {TexArray} texFloor
  * @property {TexArray} texCeil
