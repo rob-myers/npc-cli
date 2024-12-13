@@ -575,10 +575,6 @@ export default function useHandleEvents(w) {
       state.npcToDoors[npcKey]?.inside.clear();
     },
     showDefaultContextMenu() {
-      /**
-       * The default context menu is special, e.g. we
-       * don't set its "context" until we open it.
-       */
       const { lastDown } = w.view;
       if (lastDown === undefined) {
         return;

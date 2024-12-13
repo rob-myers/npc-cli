@@ -136,10 +136,7 @@ const contextMenuCss = css`
   transform-origin: 0 0;
   background: transparent !important;
   
-  opacity: 0.5;
-  &:active, &:hover {
-    opacity: 1;
-  }
+  opacity: 0.8;
 
   &.docked {
     transform: unset !important;
