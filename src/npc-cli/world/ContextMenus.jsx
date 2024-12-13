@@ -16,13 +16,6 @@ export default function ContextMenus() {
   const state = useStateRef(/** @returns {State} */ () => ({
     lookup: {},
     savedOpts: tryLocalStorageGetParsed(`context-menus@${w.key}`) ?? {},
-    topLinks: { embed: [
-      { key: 'toggle-kvs', label: 'meta', test: 'showKvs' },
-      { key: 'toggle-pinned', label: 'pin', test: 'pinned' },
-      { key: 'toggle-scaled', label: 'scale', test: 'scaled' },
-    ], docked: [
-      { key: 'toggle-kvs', label: 'meta', test: 'showKvs' },
-    ]},
     delete(cmKey) {
       if (cmKey === 'default') {
         return false; // Cannot delete default
@@ -52,7 +45,7 @@ export default function ContextMenus() {
       cm.open = true;
       cm.update();
     },
-  }), { reset: { topLinks: true } });
+  }));
 
   w.c = state;
 
@@ -76,7 +69,6 @@ export default function ContextMenus() {
  * @typedef State
  * @property {{ [cmKey: string]: CMInstance }} lookup
  * @property {{ [cmKey: string]: Pick<CMInstance, 'docked' | 'pinned' | 'showKvs'> }} savedOpts
- * @property {Record<'embed' | 'docked', NPC.ContextMenuLink[]>} topLinks
  *
  * @property {(cmKey: string) => boolean} delete
  * @property {(cmKey: string, force?: boolean) => void} hide
@@ -87,7 +79,7 @@ export default function ContextMenus() {
 /**
  * @param {ContextMenuProps} props 
  */
-function ContextMenuContent({ cm, cm: { ui, w } }) {
+function ContextMenuContent({ cm, cm: { ui } }) {
 
   return <>
   
@@ -95,7 +87,7 @@ function ContextMenuContent({ cm, cm: { ui, w } }) {
       {cm.key === 'default' && (
         <button data-key="toggle-docked">{cm.docked ? 'embed' : 'dock'}</button>
       )}
-      {(cm.docked ? w.c.topLinks.docked : w.c.topLinks.embed).map(({ key, label, test }) =>
+      {(cm.docked ? topLinks.docked : topLinks.embed).map(({ key, label, test }) =>
         <button
           key={key}
           data-key={key}
@@ -129,6 +121,18 @@ function ContextMenuContent({ cm, cm: { ui, w } }) {
 
   </>;
 }
+
+/** @type {Record<'embed' | 'docked', NPC.ContextMenuLink[]>} */
+const topLinks = {
+  embed: [
+    { key: 'toggle-kvs', label: 'meta', test: 'showKvs' },
+    { key: 'toggle-pinned', label: 'pin', test: 'pinned' },
+    { key: 'toggle-scaled', label: 'scale', test: 'scaled' },
+  ],
+  docked: [
+    { key: 'toggle-kvs', label: 'meta', test: 'showKvs' },
+  ],
+};
 
 const contextMenuCss = css`
   position: absolute;
