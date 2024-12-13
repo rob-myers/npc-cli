@@ -92,10 +92,8 @@ class GeomorphService {
       ...symbolObstacles.flatMap((x) => geom.createOutset(x,
         typeof x.meta['nav-outset'] === 'number' ? x.meta['nav-outset'] * sguToWorldScale : obstacleOutset
       )),
-      ...decor.flatMap(d => // 🔔 decor cuboid can effect nav-mesh
-        d.type === 'cuboid' && d.meta.nav === true
-          ? geom.applyUnitQuadTransformWithOutset(tmpMat1.feedFromArray(d.transform), obstacleOutset)
-          : []
+      ...decor.filter(this.isDecorCuboid).filter(d => d.meta.nav === true).map(d =>
+        geom.applyUnitQuadTransformWithOutset(tmpMat1.feedFromArray(d.transform), obstacleOutset)
       ),
     ], hullOutline).filter((poly) => 
       // Ignore nav-mesh if AABB ≤ 1m², or poly intersects `ignoreNavPoints`

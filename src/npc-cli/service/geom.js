@@ -24,13 +24,16 @@ class geomServiceClass {
    * @returns {Geom.Poly}
    */
   applyUnitQuadTransformWithOutset(mat, outset) {
-    const width = tempVect1.set(mat.a, mat.b).length;
-    const height = tempVect1.set(mat.c, mat.d).length;
-    const sx = (width + 2 * outset) / width;
-    const sy = (height + 2 * outset) / height;
-    const ox = (2 * outset) / (width + 2 * outset);
-    const oy = (2 * outset) / (height + 2 * outset);
-    return Poly.fromRect({ x: -ox, y: -oy, width: sx, height: sy }).applyMatrix(mat);
+    const poly = new Poly([new Vect(0, 0), new Vect(0, 1), new Vect(1, 1), new Vect(1, 0)]);
+    poly.applyMatrix(mat).fixOrientationConvex();
+    return geom.createOutset(poly, outset)[0];
+    // const width = tempVect1.set(mat.a, mat.b).length;
+    // const height = tempVect1.set(mat.c, mat.d).length;
+    // const sx = (width + 2 * outset) / width;
+    // const sy = (height + 2 * outset) / height;
+    // const ox = (2 * outset) / (width + 2 * outset);
+    // const oy = (2 * outset) / (height + 2 * outset);
+    // return Poly.fromRect({ x: -ox, y: -oy, width: sx, height: sy }).applyMatrix(mat);
   }
 
   /**
