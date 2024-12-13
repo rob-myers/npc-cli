@@ -16,12 +16,15 @@ export default function ContextMenus() {
   const state = useStateRef(/** @returns {State} */ () => ({
     lookup: {},
     savedOpts: tryLocalStorageGetParsed(`context-menus@${w.key}`) ?? {},
-    topLinks: [
+    topLinks: { '3d': [
       { key: 'toggle-kvs', label: 'meta', test: 'showKvs' },
       { key: 'toggle-pinned', label: 'pin', test: 'pinned' },
       { key: 'toggle-scaled', label: 'scale', test: 'scaled' },
-      { key: 'close', label: 'exit' },
-    ],
+      // { key: 'close', label: 'exit' },
+    ], docked: [
+      { key: 'toggle-kvs', label: 'meta', test: 'showKvs' },
+      // { key: 'close', label: 'exit' },
+    ]},
     delete(cmKey) {
       if (cmKey === 'default') {
         return false; // Cannot delete default
@@ -75,7 +78,7 @@ export default function ContextMenus() {
  * @typedef State
  * @property {{ [cmKey: string]: CMInstance }} lookup
  * @property {{ [cmKey: string]: Pick<CMInstance, 'docked' | 'pinned' | 'showKvs'> }} savedOpts
- * @property {NPC.ContextMenuLink[]} topLinks
+ * @property {Record<'3d' | 'docked', NPC.ContextMenuLink[]>} topLinks
  *
  * @property {(cmKey: string) => boolean} delete
  * @property {(cmKey: string, force?: boolean) => void} hide
@@ -94,7 +97,7 @@ function ContextMenuContent({ cm, cm: { ui, w } }) {
       {cm.key === 'default' && (
         <button data-key="toggle-docked">{cm.docked ? 'undock' : 'dock'}</button>
       )}
-      {w.c.topLinks.map(({ key, label, test }) =>
+      {(cm.docked ? w.c.topLinks.docked : w.c.topLinks["3d"]).map(({ key, label, test }) =>
         <button
           key={key}
           data-key={key}
@@ -155,34 +158,25 @@ const contextMenuCss = css`
   letter-spacing: 1px;
   font-size: smaller;
 
-  .top-bar {
-    display: flex;
-    justify-content: space-between;
-    padding: 0 4px;
-  }
-
-  .saved-cm-key {
-    color: #ff7;
-  }
-
   .links {
     display: flex;
     flex-wrap: wrap;
     
     line-height: normal;
-    gap: 4px;
-    padding: 1px 0;
-    padding-left: 4px;
-
+    gap: 0px;
+    /* padding-left: 4px; */
   }
-
+  
   button {
     text-decoration: underline;
     color: #aaf;
+    padding: 5px 6px;
+    flex: 1;
   }
   button.off {
     filter: brightness(0.7);
   }
+
 
   .kvs {
     display: flex;
