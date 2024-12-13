@@ -116,7 +116,7 @@ export async function* events({ api, args, w }) {
  * Make a single hard-coded polygon non-navigable,
  * and also indicate it via debug polygon.
  * ```sh
- * selectPolysDemo [queryFilterType=0]
+ * selectPolysDemo [{queryFilterType}=0]
  * ```
  * @param {RunArg} ctxt
  */
@@ -135,6 +135,35 @@ export async function* selectPolysDemo({ w, args }) {
     filter.excludeFlags = navPolyFlag.unWalkable;
     polyRefs.forEach(polyRef => w.nav.navMesh.setPolyFlags(polyRef, navPolyFlag.unWalkable));
     w.debug.selectNavPolys(...polyRefs); // display via debug
+}
+
+/**
+ * 🔔 "export const" uses `call` rather than `map`
+ * @param {RunArg} ctxt
+ */
+export const setupContextMenu = ({ w }) => {
+
+  w.cm.match.door = ({ meta }) => {
+    const showLinks = /** @type {NPC.ContextMenuLink[]} */ ([]);
+
+    if (typeof meta.switch === "number") {
+      showLinks.push(
+        { key: "open", label: "open" },
+        { key: "close", label: "close" },
+        { key: "lock", label: "lock" },
+        { key: "unlock", label: "unlock" },
+        // 🚧 ring bell
+      );
+    }
+    if (meta.door === true) {
+      showLinks.push(
+        // 🚧 knock
+      );
+    }
+
+    return { showLinks };
+  };
+
 }
 
 /**
