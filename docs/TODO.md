@@ -48,6 +48,8 @@
       - somehow set cm.tracked as `w.n[npcKey]?.m.group`
   - remove icon generation code from asset.js
 
+- prevent two different npcs from fading to same do point
+
 - 🚧 pre next.js migration
   - ✅ finish/close wip todos
   - ✅ avoid stationary npc push through door
