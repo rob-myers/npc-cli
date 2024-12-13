@@ -249,6 +249,9 @@ declare namespace NPC {
     quaternion: import('three').Quaternion;
   }
 
+
+  type CMInstance = import('../world/ContextMenus').CMInstance;
+
   interface ContextMenuLink {
     key: string;
     label: string;
@@ -263,5 +266,13 @@ declare namespace NPC {
     position: THREE.Vector3;
     meta: Geom.Meta;
   }
+
+  /**
+   * Assume `parent.meta` has already been updated.
+   */
+  type ContextMenuMatcher = (parent: CMInstance) => {
+    showLinks?: ContextMenuLink[];
+    hideKeys?: string[];
+  };
 
 }

@@ -14,9 +14,10 @@ export default function ContextMenus() {
   const w = React.useContext(WorldContext);
 
   const state = useStateRef(/** @returns {State} */ () => ({
+    default: /** @type {*} */ (null),
     lookup: {},
     savedOpts: tryLocalStorageGetParsed(`context-menus@${w.key}`) ?? {},
-    topLinks: { '3d': [
+    topLinks: { embed: [
       { key: 'toggle-kvs', label: 'meta', test: 'showKvs' },
       { key: 'toggle-pinned', label: 'pin', test: 'pinned' },
       { key: 'toggle-scaled', label: 'scale', test: 'scaled' },
@@ -59,7 +60,7 @@ export default function ContextMenus() {
   w.c = state;
 
   React.useMemo(() => {// HMR
-    state.lookup.default ??= new CMInstance('default', w, { showKvs: true });
+    state.default = state.lookup.default ??= new CMInstance('default', w, { showKvs: true });
 
     process.env.NODE_ENV === 'development' && Object.values(state.lookup).forEach(cm => {
       state.lookup[cm.key] = Object.assign(new CMInstance(cm.key, cm.w, cm.ui), {...cm});
@@ -76,9 +77,10 @@ export default function ContextMenus() {
 
 /**
  * @typedef State
+ * @property {CMInstance} default Shortcut to `lookup.default`
  * @property {{ [cmKey: string]: CMInstance }} lookup
  * @property {{ [cmKey: string]: Pick<CMInstance, 'docked' | 'pinned' | 'showKvs'> }} savedOpts
- * @property {Record<'3d' | 'docked', NPC.ContextMenuLink[]>} topLinks
+ * @property {Record<'embed' | 'docked', NPC.ContextMenuLink[]>} topLinks
  *
  * @property {(cmKey: string) => boolean} delete
  * @property {(cmKey: string, force?: boolean) => void} hide
@@ -95,9 +97,9 @@ function ContextMenuContent({ cm, cm: { ui, w } }) {
   
     <div className="links top" onClick={cm.onClickLink.bind(cm)}>
       {cm.key === 'default' && (
-        <button data-key="toggle-docked">{cm.docked ? 'undock' : 'dock'}</button>
+        <button data-key="toggle-docked">{cm.docked ? 'embed' : 'dock'}</button>
       )}
-      {(cm.docked ? w.c.topLinks.docked : w.c.topLinks["3d"]).map(({ key, label, test }) =>
+      {(cm.docked ? w.c.topLinks.docked : w.c.topLinks.embed).map(({ key, label, test }) =>
         <button
           key={key}
           data-key={key}
@@ -249,7 +251,7 @@ function ContextMenu({ cm }) {
  * @property {NPC.ContextMenuLink[]} links
  */
 
-class CMInstance {
+export class CMInstance {
 
   /** @type {Html3dState} */
   html3d = /** @type {*} */ (null);
@@ -260,6 +262,7 @@ class CMInstance {
   /** For violating React.memo */
   epochMs = 0;
   
+  match = /** @type {{ matcherKey: NPC.ContextMenuMatcher}} */ ({});
   meta = /** @type {Geom.Meta} */ ({});
   position = /** @type {[number, number, number]} */ ([0, 0, 0]);
 
@@ -311,6 +314,21 @@ class CMInstance {
     }).sort((a, b) => a.length < b.length ? -1 : 1);
   }
 
+  /**
+   * Apply matchers, assuming `this.meta` is up-to-date.
+   */
+  computeLinks() {
+    let suppressKeys = /** @type {string[]} */ ([]);
+    const keyToLink = Object.values(this.match).reduce((agg, matcher) => {
+      const { showLinks, hideKeys } = matcher(this);
+      showLinks?.forEach(link => agg[link.key] = link);
+      suppressKeys.push(...hideKeys ?? []);
+      return agg;
+    }, /** @type {{ [linkKey: string]: NPC.ContextMenuLink }} */ ({}));
+    suppressKeys.forEach(key => delete keyToLink[key]);
+    this.ui.links = Object.values(keyToLink);
+  }
+
   dispose() {
     this.tracked = undefined;
     this.update = noop;
@@ -339,6 +357,7 @@ class CMInstance {
     this.meta = meta;
     this.position = position.toArray();
     this.computeKvsFromMeta(meta);
+    this.computeLinks();
   }
 
   toggleDocked() {
@@ -364,10 +383,6 @@ class CMInstance {
 
 /**
  * @typedef {import('../components/Html3d').State} Html3dState
- */
-
-/**
- * @typedef {typeof CMInstance} CMInstanceType
  */
 
 const tmpVector1 = new THREE.Vector3();

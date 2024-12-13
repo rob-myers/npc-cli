@@ -36,8 +36,8 @@
       - decided only default and speech bubbles
     - ✅ default context menu dock moves to lower left
     - ❌ default context menu can drag
-    - extend default via script
-      - can add/remove named "matchers"
+    - 🚧 extend default via script
+      - 🚧 can add/remove named "matchers"
       - extra links on click switch
       - extra links on click door
     - speech bubbles
