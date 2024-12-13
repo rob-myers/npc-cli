@@ -32,7 +32,7 @@ export function getBasicTileCacheMeshProcess() {
 export function getTileCacheGeneratorConfig(tileCacheMeshProcess) {
   // const cs = 0.1;
   // const cs = 0.08;
-  const cs = 0.15;
+  const cs = 0.1;
   // const cs = 0.05;
   return {
     // tileSize: 6.5 / cs,
@@ -44,7 +44,8 @@ export function getTileCacheGeneratorConfig(tileCacheMeshProcess) {
     detailSampleDist: 0,
     walkableClimb: 0,
     tileCacheMeshProcess,
-    maxSimplificationError: 0.75,
+    maxSimplificationError: 0.5,
+    // maxSimplificationError: 0,
     walkableRadius: 0,
     // mergeRegionArea: 20,
     // detailSampleMaxError: 0,
@@ -409,7 +410,6 @@ export function customGenerateTileCache(
       return { n: 0 };
     }
 
-    // 🚧 Create Detour data from Recast poly mesh
     for (const { areaId, areas } of options.areas ?? []) {
       for (const { hmin, hmax, verts } of areas) {
         const vertsArray = new VerticesArray();

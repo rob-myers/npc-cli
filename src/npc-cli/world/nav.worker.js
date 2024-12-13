@@ -30,18 +30,16 @@ async function handleMessages(e) {
     );
   
     const customAreaDefs = /** @type {NPC.TileCacheConvexAreaDef[]} */ ([]);
-    const meshes = gms.map(({ navDecomp, navDoorwaysOffset, mat4, transform: [a, b, c, d, e, f] }, gmId) => {
+    const meshes = gms.map(({ key, navDecomp, navDoorwaysOffset, mat4, transform: [a, b, c, d, e, f] }, gmId) => {
       const determinant = a * d - b * c;
       const mesh = new THREE.Mesh(decompToXZGeometry(navDecomp, { reverse: determinant === 1 }));
       mesh.applyMatrix4(mat4);
       mesh.updateMatrixWorld();
       
       const { tris, vs, tris: { length } } = navDecomp;
-      const allVerts = vs.map(v => (new THREE.Vector3(v.x, 0, v.y)).applyMatrix4(mat4))
+      const allVerts = vs.map(v => (new THREE.Vector3(v.x, 0, v.y)).applyMatrix4(mat4));
       for (let i = navDoorwaysOffset; i < length; i++) {
-        customAreaDefs.push({ areaId: 1, areas: [
-          { hmin: 0, hmax: 0.02, verts: tris[i].map(id => allVerts[id]) }
-        ]});
+        customAreaDefs.push({ areaId: 1, areas: [ { hmin: 0, hmax: 0.02, verts: tris[i].map(id => allVerts[id]) }]});
       }
       return mesh;
     });
