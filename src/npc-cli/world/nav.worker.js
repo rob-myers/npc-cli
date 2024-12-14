@@ -42,21 +42,16 @@ async function createNavAllAtOnce(mapKey) {
     error(`Failed to compute navMesh: ${'error' in result ? result.error : 'unknown error'}`);
     return;
   }
-  
-  const { navMesh, tileCache } = result;
-  const polysPerTile = range(navMesh.getMaxTiles()).flatMap((i) =>
-    navMesh.getTile(i).header()?.polyCount() ?? []
-  );
-  info('🤖 nav.worker', { totalTiles: polysPerTile.length, polysPerTile });
 
+  logTileCount(result.navMesh);
   worker.postMessage({
     type: "nav-mesh-response",
     mapKey,
-    exportedNavMesh: exportTileCache(navMesh, tileCache),
+    exportedNavMesh: exportTileCache(result.navMesh, result.tileCache),
   });
 
-  tileCache.destroy();
-  navMesh.destroy();
+  result.tileCache.destroy();
+  result.navMesh.destroy();
 }
 
 /** @param {string} mapKey  */
@@ -79,8 +74,10 @@ async function createNavTileByTile(mapKey) {
   }
   
   // 🚧 add tiles
+  // result.tileCache.addTile()
 
 
+  meshes.forEach((mesh) => mesh.geometry.dispose());
 }
 
 /** @param {string} mapKey  */
@@ -118,4 +115,16 @@ async function computeGeomorphMeshes(mapKey) {
   });
 
   return { meshes, customAreaDefs };
+}
+
+
+/**
+ * 
+ * @param {import('recast-navigation').NavMesh} navMesh 
+ */
+function logTileCount(navMesh) {
+  const polysPerTile = range(navMesh.getMaxTiles()).flatMap((i) =>
+    navMesh.getTile(i).header()?.polyCount() ?? []
+  );
+  info('🤖 nav.worker', { totalTiles: polysPerTile.length, polysPerTile });
 }

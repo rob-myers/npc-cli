@@ -190,9 +190,9 @@
     - e.g. `spawn rob $( click 1 ) --degrees=90`
     - e.g. `npc rob --showSelector=true --setLabel=Robbo`
 
-- try avoiding steiner points by adding "slightly raised rects"
-- try creating nav tiles to see if it avoids "steiner points"
+- 🚧 try creating nav tiles to see if it avoids "steiner points"
   - `request-nav-tiles` requests tile-by-tile
+- try avoiding steiner points by adding "slightly raised rects"
 - ❌ try scaling geometry up, using cs=0.15, then scaling down
 
 - ✅ BUG saw npc stuck with: agent, s.act (Walk), s.target (non-null)
