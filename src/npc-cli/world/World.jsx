@@ -58,7 +58,6 @@ export default function World(props) {
     nav: /** @type {*} */ ({}),
     physics: { worker: /** @type {*} */ (null), bodyKeyToUid: {}, bodyUidToKey: {}, rebuilds: 0 },
 
-    // 🚧 WIP
     dynNav: /** @type {DynamicTiledNavMesh} */ ({}),
 
     gmsData: /** @type {*} */ (null),
@@ -324,11 +323,14 @@ export default function World(props) {
   });
 
   React.useEffect(() => {// provide world for tty
+
+    // 🚧 WIP
     state.dynNav ??= new DynamicTiledNavMesh({
-      navMeshBounds: new THREE.Box3(new THREE.Vector3(-50, 0, -50), new THREE.Vector3(50, 0, 50)),
-      maxTiles: 512,
+      navMeshBounds: new THREE.Box3(new THREE.Vector3(-50, 0, -50), new THREE.Vector3(50, 0, 50)), // 🚧 never changes?
+      maxTiles: 512, // 🚧 too small?
       recastConfig: getTileCacheGeneratorConfig(),
-    });
+    }, state);
+
     setCached([props.worldKey], state);
     return () => removeCached([props.worldKey]);
   }, []);

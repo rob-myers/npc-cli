@@ -1,4 +1,3 @@
-// import { Topic } from '@/common/utils/topic'
 import {
     Detour,
     NavMesh,
@@ -10,7 +9,6 @@ import {
 } from 'recast-navigation'
 import * as THREE from 'three'
 import { buildConfig } from './build-tile'
-// import DynamicTiledNavMeshWorker from './dynamic-tiled-navmesh.worker?worker'
 
 export class DynamicTiledNavMesh {
     // onNavMeshUpdate = new Topic<[version: number, tile: [x: number, y: number]]>()
@@ -29,11 +27,14 @@ export class DynamicTiledNavMesh {
 
     /** @type {import('recast-navigation').RecastConfig} */recastConfig;
 
-    // /** @type {InstanceType<typeof DynamicTiledNavMeshWorker>[]} */workers;
-    // workerRoundRobin = 0
+    /**
+     * @param {DynamicTiledNavMeshProps} props
+     * @param {import('../world/World').State} w
+     */
+    constructor(props, w) {
+        /** @type {import('../world/World').State} */
+        this.w = w;
 
-    /** @param {DynamicTiledNavMeshProps} props */
-    constructor(props) {
         const navMeshBoundsMin = props.navMeshBounds.min
         const navMeshBoundsMax = props.navMeshBounds.max
         const navMeshBounds = /** @type {[min: THREE.Vector3Tuple, max: THREE.Vector3Tuple]} */ (
@@ -71,43 +72,37 @@ export class DynamicTiledNavMesh {
         navMesh.initTiled(navMeshParams)
 
         this.navMesh = navMesh
-
-        // 🚧 move "handling" into nav.worker
-        // this.workers = []
-        // for (let i = 0; i < props.workers; i++) {
-        //     const worker = new DynamicTiledNavMeshWorker()
-
-        //     worker.onmessage = (e) => {
-        //         const {
-        //             tileX,
-        //             tileY,
-        //             navMeshData: serialisedNavMeshData,
-        //         } = e.data as { tileX: number; tileY: number; navMeshData: Uint8Array }
-
-        //         const navMeshData = new UnsignedCharArray()
-        //         navMeshData.copy(serialisedNavMeshData as ArrayLike<number> as number[])
-
-        //         navMesh.removeTile(navMesh.getTileRefAt(tileX, tileY, 0))
-
-        //         const addTileResult = navMesh.addTile(navMeshData, Detour.DT_TILE_FREE_DATA, 0)
-
-        //         if (statusFailed(addTileResult.status)) {
-        //             console.error(
-        //                 `Failed to add tile to nav mesh at [${tileX}, ${tileY}], status: ${addTileResult.status} (${statusToReadableString(addTileResult.status)}`,
-        //             )
-
-        //             navMeshData.destroy()
-        //         }
-
-        //         this.navMeshVersion++
-        //         this.onNavMeshUpdate.emit(this.navMeshVersion, [tileX, tileY])
-        //     }
-
-        //     this.workers.push(worker)
-        // }
     }
 
     /**
+     * 🚧 call from WorldWorkers on receive message from worker
+     * @param {WW.BuildTileResponse} e 
+     */
+    onWorkerMessage(e) {
+        const { tileX, tileY, navMeshData: serialisedNavMeshData } = e;
+
+        const navMeshData = new UnsignedCharArray()
+        navMeshData.copy(serialisedNavMeshData)
+
+        this.navMesh.removeTile(this.navMesh.getTileRefAt(tileX, tileY, 0))
+        const addTileResult = this.navMesh.addTile(navMeshData, Detour.DT_TILE_FREE_DATA, 0)
+
+        if (statusFailed(addTileResult.status)) {
+            console.error(`Failed to add tile to nav mesh at [${
+                tileX
+            }, ${
+                tileY
+            }], status: ${addTileResult.status} (${statusToReadableString(addTileResult.status)}`)
+
+            navMeshData.destroy()
+        }
+
+        this.navMeshVersion++
+        // this.onNavMeshUpdate.emit(this.navMeshVersion, [tileX, tileY])
+    }
+
+    /**
+     * 🚧 see getPositionsAndIndices in @recast-navigation/three
      * 
      * @param {Float32Array} positions 
      * @param {Uint32Array} indices 
@@ -144,26 +139,26 @@ export class DynamicTiledNavMesh {
             indices: clonedIndices,
         }
 
-        // 🚧 communicate with nav.worker
-
-        // const worker = this.workers[this.workerRoundRobin]
-        // this.workerRoundRobin = (this.workerRoundRobin + 1) % this.workers.length
-        // worker.postMessage(job, [clonedPositions.buffer, clonedIndices.buffer])
+        // 🚧 handle this inside nav.worker
+        this.w.nav.worker.postMessage({
+            type: 'build-tile',
+            job,
+        }, [clonedPositions.buffer, clonedIndices.buffer]);
     }
 
-    /**
-     * @param {Float32Array} positions 
-     * @param {Uint32Array} indices 
-     */
-    buildAllTiles(positions, indices) {
-        const { tileWidth, tileHeight } = this
+    // /**
+    //  * @param {Float32Array} positions 
+    //  * @param {Uint32Array} indices 
+    //  */
+    // buildAllTiles(positions, indices) {
+    //     const { tileWidth, tileHeight } = this
 
-        for (let y = 0; y < tileHeight; y++) {
-            for (let x = 0; x < tileWidth; x++) {
-                this.buildTile(positions, indices, [x, y])
-            }
-        }
-    }
+    //     for (let y = 0; y < tileHeight; y++) {
+    //         for (let x = 0; x < tileWidth; x++) {
+    //             this.buildTile(positions, indices, [x, y])
+    //         }
+    //     }
+    // }
 
     /**
      * @param {THREE.Vector3} worldPosition 

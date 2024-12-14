@@ -21,8 +21,14 @@ async function handleMessages(e) {
   debug("🤖 nav.worker received", JSON.stringify(msg));
 
   if (msg.type === 'request-nav') {
-    if (msg.method === 'all-at-once') createNavAllAtOnce(msg.mapKey);
-    if (msg.method === 'tile-by-tile') createNavTileByTile(msg.mapKey);
+    switch (msg.method) {
+      case 'all-at-once': createNavAllAtOnce(msg.mapKey); break;
+      case 'tile-by-tile': createNavTileByTile(msg.mapKey); break;
+    }
+  }
+
+  if (msg.type === 'build-tile') {
+    buildTile(msg.job);
   }
 }
 
@@ -55,7 +61,7 @@ async function createNavAllAtOnce(mapKey) {
 }
 
 /** @param {string} mapKey  */
-async function createNavTileByTile(mapKey) {
+async function createNavTileByTile(mapKey) {// 🚧
   const { meshes, customAreaDefs } = await computeGeomorphMeshes(mapKey);
   
   await initRecastNav();
@@ -79,6 +85,16 @@ async function createNavTileByTile(mapKey) {
 
   meshes.forEach((mesh) => mesh.geometry.dispose());
 }
+
+/**
+ * 
+ * @param {WW.RequestBuildTile['job']} job
+ */
+function buildTile(job) {
+    // 🚧
+    
+}
+
 
 /** @param {string} mapKey  */
 async function computeGeomorphMeshes(mapKey) {
@@ -116,7 +132,6 @@ async function computeGeomorphMeshes(mapKey) {
 
   return { meshes, customAreaDefs };
 }
-
 
 /**
  * 
