@@ -48,8 +48,6 @@
       - somehow set cm.tracked as `w.n[npcKey]?.m.group`
   - remove icon generation code from asset.js
 
-- prevent two different npcs from fading to same do point
-
 - 🚧 pre next.js migration
   - ✅ finish/close wip todos
   - ✅ avoid stationary npc push through door
@@ -191,14 +189,13 @@
     - e.g. `npc rob --showSelector=true --setLabel=Robbo`
 
 - 🚧 try creating nav tiles to see if it avoids "steiner points"
-  - `request-nav-tiles` requests tile-by-tile
-- try avoiding steiner points by adding "slightly raised rects"
-- ❌ try scaling geometry up, using cs=0.15, then scaling down
+  - 🚧 migrate https://github.com/isaac-mason/sketches/blob/main/sketches/recast-navigation/dynamic-tiled-navmesh/src/navigation/dynamic-tiled-navmesh.ts
+    - ✅ dynamic-nav-mesh ts -> js
+    - ✅ build-tile ts -> js
+    - 🚧 move worker code into nav.worker
 
-- ✅ BUG saw npc stuck with: agent, s.act (Walk), s.target (non-null)
-  - ℹ️ by running quickly many times
-  - ℹ️ `w n.rob.agent.velocity` is `{x:0,y:0,z:0}`
-  - ✅ seems to be issue with nav mesh (cs too small)
+- try avoiding steiner points by adding "slightly raised rects"
+- prevent two different npcs from fading to same do point
 - BUG saw e.npcToDoor missing key
   - ℹ️ maybe physics.worker broke on hmr
 - Game Master option for partially transparent walls, where object-pick ignores walls
@@ -3237,3 +3234,10 @@ done
   - ℹ️ should try to replace `w.update()`
 - ✅ jerky npc movement when pause then unpause while moving
   - ℹ️ Floor/Ceiling were needlessly recomputed
+
+- ❌ try scaling geometry up, using cs=0.15, then scaling down
+
+- ✅ BUG saw npc stuck with: agent, s.act (Walk), s.target (non-null)
+  - ℹ️ by running quickly many times
+  - ℹ️ `w n.rob.agent.velocity` is `{x:0,y:0,z:0}`
+  - ✅ seems to be issue with nav mesh (cs too small)

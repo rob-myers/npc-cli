@@ -26,7 +26,7 @@ export function getBasicTileCacheMeshProcess() {
 }
 
 /**
- * @param {TileCacheMeshProcess} tileCacheMeshProcess
+ * @param {TileCacheMeshProcess} [tileCacheMeshProcess]
  * @returns {Partial<TileCacheGeneratorConfig>}
  */
 export function getTileCacheGeneratorConfig(tileCacheMeshProcess) {

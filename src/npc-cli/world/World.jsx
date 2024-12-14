@@ -9,6 +9,7 @@ import { importTileCache, Crowd } from "@recast-navigation/core";
 import { Vect } from "../geom";
 import { GmGraphClass } from "../graph/gm-graph";
 import { GmRoomGraphClass } from "../graph/gm-room-graph";
+import { DynamicTiledNavMesh } from "../dynamic-nav-mesh/dynamic-nav-mesh";
 import { floorTextureDimension } from "../service/const";
 import { debug, isDevelopment, keys, warn, removeFirst, toPrecision, pause, mapValues } from "../service/generic";
 import { getContext2d, invertCanvas, isSmallViewport } from "../service/dom";
@@ -17,7 +18,7 @@ import { fetchGeomorphsJson, getDecorSheetUrl, getObstaclesSheetUrl, WORLD_QUERY
 import { geomorph } from "../service/geomorph";
 import createGmsData from "../service/create-gms-data";
 import { imageLoader, toV3, toXZ } from "../service/three";
-import { disposeCrowd, getBasicTileCacheMeshProcess } from "../service/recast-detour";
+import { disposeCrowd, getBasicTileCacheMeshProcess, getTileCacheGeneratorConfig } from "../service/recast-detour";
 import { helper } from "../service/helper";
 import { TexArray } from "../service/tex-array";
 import { WorldContext } from "./world-context";
@@ -56,6 +57,9 @@ export default function World(props) {
 
     nav: /** @type {*} */ ({}),
     physics: { worker: /** @type {*} */ (null), bodyKeyToUid: {}, bodyUidToKey: {}, rebuilds: 0 },
+
+    // 🚧 WIP
+    dynNav: /** @type {DynamicTiledNavMesh} */ ({}),
 
     gmsData: /** @type {*} */ (null),
     events: new Subject(),
@@ -320,6 +324,11 @@ export default function World(props) {
   });
 
   React.useEffect(() => {// provide world for tty
+    state.dynNav ??= new DynamicTiledNavMesh({
+      navMeshBounds: new THREE.Box3(new THREE.Vector3(-50, 0, -50), new THREE.Vector3(50, 0, 50)),
+      maxTiles: 512,
+      recastConfig: getTileCacheGeneratorConfig(),
+    });
     setCached([props.worldKey], state);
     return () => removeCached([props.worldKey]);
   }, []);
@@ -398,6 +407,7 @@ export default function World(props) {
  *
  * @property {{ worker: WW.NavWorker } & NPC.TiledCacheResult} nav
  * @property {{ worker: WW.PhysicsWorker; rebuilds: number; } & import("../service/rapier").PhysicsBijection} physics
+ * @property {DynamicTiledNavMesh} dynNav
  *
  * @property {import('./WorldView').State} view
  * @property {import('./Floor').State} floor
