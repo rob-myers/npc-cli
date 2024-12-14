@@ -188,11 +188,14 @@
     - e.g. `spawn rob $( click 1 ) --degrees=90`
     - e.g. `npc rob --showSelector=true --setLabel=Robbo`
 
-- 🚧 try creating nav tiles to see if it avoids "steiner points"
-  - 🚧 migrate https://github.com/isaac-mason/sketches/blob/main/sketches/recast-navigation/dynamic-tiled-navmesh/src/navigation/dynamic-tiled-navmesh.ts
+- ❌ try creating nav tiles to see if it avoids "steiner points"
+  - ✅ migrate https://github.com/isaac-mason/sketches/blob/main/sketches/recast-navigation/dynamic-tiled-navmesh/src/navigation/dynamic-tiled-navmesh.ts
     - ✅ dynamic-nav-mesh ts -> js
     - ✅ build-tile ts -> js
-    - 🚧 move worker code into nav.worker
+    - ✅ move worker code into nav.worker
+    - ✅ get demo build working
+    - ✅ show demo navmesh
+  - ❌ decided against it
 
 - try avoiding steiner points by adding "slightly raised rects"
 - prevent two different npcs from fading to same do point

@@ -6,24 +6,15 @@ declare namespace WW {
 
   type MsgToNavWorker = (
     | RequestNavMesh
-    | RequestBuildTile
   );
 
   type MsgFromNavWorker = (
     | NavMeshResponse
-    | BuildTileResponse
   );
 
   interface RequestNavMesh {
     type: "request-nav";
     mapKey: string;
-    method: 'all-at-once' | 'tile-by-tile';
-  }
-
-  interface RequestBuildTile {
-    type: "build-tile";
-    // 🚧 move import
-    job: import('src/npc-cli/dynamic-nav-mesh/build-tile').BuildTileMeshProps;
   }
 
   interface NavMeshResponse {

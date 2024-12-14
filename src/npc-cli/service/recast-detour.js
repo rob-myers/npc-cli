@@ -2,6 +2,7 @@ import * as THREE from "three";
 import { NavMesh, RecastBuildContext, TileCache, TileCacheMeshProcess, freeCompactHeightfield, freeHeightfield, TileCacheData, freeHeightfieldLayerSet, VerticesArray, TrianglesArray, ChunkIdsArray, TriangleAreasArray, createRcConfig, calcGridSize, DetourTileCacheParams, Raw, vec3, NavMeshParams, RecastChunkyTriMesh, cloneRcConfig, allocHeightfield, createHeightfield, markWalkableTriangles, rasterizeTriangles, filterLowHangingWalkableObstacles, filterLedgeSpans, filterWalkableLowHeightSpans, allocCompactHeightfield, buildCompactHeightfield, erodeWalkableArea, allocHeightfieldLayerSet, buildHeightfieldLayers, getHeightfieldLayerHeights, getHeightfieldLayerAreas, getHeightfieldLayerCons, buildTileCacheLayer,  markConvexPolyArea } from "@recast-navigation/core";
 import { getPositionsAndIndices } from "@recast-navigation/three";
 import { createDefaultTileCacheMeshProcess, dtIlog2, dtNextPow2, getBoundingBox, tileCacheGeneratorConfigDefaults } from "@recast-navigation/generators";
+import { decompToXZGeometry } from "./three";
 
 /**
  * @param {import("@recast-navigation/core").Crowd} crowd
@@ -26,7 +27,7 @@ export function getBasicTileCacheMeshProcess() {
 }
 
 /**
- * @param {TileCacheMeshProcess} [tileCacheMeshProcess]
+ * @param {TileCacheMeshProcess} tileCacheMeshProcess
  * @returns {Partial<TileCacheGeneratorConfig>}
  */
 export function getTileCacheGeneratorConfig(tileCacheMeshProcess) {
@@ -35,8 +36,9 @@ export function getTileCacheGeneratorConfig(tileCacheMeshProcess) {
   const cs = 0.15;
   // const cs = 0.05;
   return {
-    // tileSize: 6.5 / cs,
-    cs, // Small `cs` means more tileCache updates when e.g. add obstacles
+    tileSize: 6.5 / cs,
+    // tileSize: 128,
+    cs,
     ch: 0.01, // EPSILON breaks obstacles
     borderSize: 0,
     expectedLayersPerTile: 1,
@@ -553,6 +555,29 @@ export function customGenerateTileCache(
     intermediates,
   };
 
+}
+
+/**
+ * @param {Geomorph.LayoutInstance} gm A item from `gms`.
+ */
+export function computeGmInstanceMesh(gm) {
+  const { navDecomp, navDoorwaysOffset, mat4, transform: [a, b, c, d, e, f] } = gm;
+  const determinant = a * d - b * c;
+  const mesh = new THREE.Mesh(decompToXZGeometry(navDecomp, { reverse: determinant === 1 }));
+  mesh.applyMatrix4(mat4);
+  mesh.updateMatrixWorld();
+  
+  const customAreaDefs = /** @type {NPC.TileCacheConvexAreaDef[]} */ ([]);
+  const { tris, vs, tris: { length } } = navDecomp;
+  const allVerts = vs.map(v => (new THREE.Vector3(v.x, 0, v.y)).applyMatrix4(mat4));
+  for (let i = navDoorwaysOffset; i < length; i++) {
+    customAreaDefs.push({
+      areaId: 1,
+      areas: [ { hmin: 0, hmax: 0.02, verts: tris[i].map(id => allVerts[id]) }],
+    });
+  }
+
+  return { mesh, customAreaDefs };
 }
 
 /**

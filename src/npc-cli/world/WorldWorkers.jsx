@@ -22,6 +22,8 @@ export default function WorldWorkers() {
       const msg = e.data;
       // 🔔 avoid logging navMesh to save memory
       debug(`main thread received "${msg.type}" from 🤖 nav.worker`);
+      // console.log(msg);
+
       if (msg.type === "nav-mesh-response") {
         w.menu.measure('request-nav');
         await initRecastNav();
@@ -73,7 +75,7 @@ export default function WorldWorkers() {
     if (w.threeReady && w.hash.full) {
       w.nav.worker = new Worker(new URL("./nav.worker", import.meta.url), { type: "module" });
       w.nav.worker.addEventListener("message", state.handleNavWorkerMessage);
-      
+
       w.physics.worker = new Worker(new URL("./physics.worker", import.meta.url), { type: "module" });
       w.physics.worker.addEventListener("message", state.handlePhysicsWorkerMessage);
 
@@ -96,7 +98,7 @@ export default function WorldWorkers() {
       
       w.events.next({ key: 'pre-request-nav', changedGmIds });
       w.menu.measure('request-nav');
-      w.nav.worker.postMessage({ type: "request-nav", mapKey: w.mapKey, method: 'all-at-once' });
+      w.nav.worker.postMessage({ type: "request-nav", mapKey: w.mapKey });
 
       w.events.next({ key: 'pre-setup-physics' });
       w.menu.measure('setup-physics');

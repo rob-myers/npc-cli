@@ -3,8 +3,7 @@ import { init as initRecastNav, exportTileCache } from "@recast-navigation/core"
 
 import { error, info, debug, warn, removeDups, range } from "../service/generic";
 import { geomorph } from "../service/geomorph";
-import { decompToXZGeometry, polysToXZGeometry } from "../service/three";
-import { customThreeToTileCache, getTileCacheGeneratorConfig, getBasicTileCacheMeshProcess } from "../service/recast-detour";
+import { customThreeToTileCache, getTileCacheGeneratorConfig, getBasicTileCacheMeshProcess, computeGmInstanceMesh } from "../service/recast-detour";
 import { fetchGeomorphsJson } from "../service/fetch-assets";
 
 /** @type {WW.WorkerGeneric<WW.MsgFromNavWorker, WW.MsgToNavWorker>} */
@@ -18,22 +17,16 @@ if (typeof window === 'undefined') {
 /** @param {MessageEvent<WW.MsgToNavWorker>} e */
 async function handleMessages(e) {
   const msg = e.data;
-  debug("🤖 nav.worker received", JSON.stringify(msg));
+  debug("🤖 nav.worker received", JSON.stringify(msg.type));
 
   if (msg.type === 'request-nav') {
-    switch (msg.method) {
-      case 'all-at-once': createNavAllAtOnce(msg.mapKey); break;
-      case 'tile-by-tile': createNavTileByTile(msg.mapKey); break;
-    }
+    onRequestNav(msg.mapKey);
   }
 
-  if (msg.type === 'build-tile') {
-    buildTile(msg.job);
-  }
 }
 
 /** @param {string} mapKey  */
-async function createNavAllAtOnce(mapKey) {
+async function onRequestNav(mapKey) {
   const { meshes, customAreaDefs } = await computeGeomorphMeshes(mapKey);
   await initRecastNav();
 
@@ -60,41 +53,6 @@ async function createNavAllAtOnce(mapKey) {
   result.navMesh.destroy();
 }
 
-/** @param {string} mapKey  */
-async function createNavTileByTile(mapKey) {// 🚧
-  const { meshes, customAreaDefs } = await computeGeomorphMeshes(mapKey);
-  
-  await initRecastNav();
-  
-  // 1st mesh only
-  const result = customThreeToTileCache(
-    meshes.slice(0, 1),
-    getTileCacheGeneratorConfig(getBasicTileCacheMeshProcess()),
-    { areas: customAreaDefs[0] },
-  );
-
-  if (!result.success) {
-    error(`Failed to compute navMesh: ${'error' in result ? result.error : 'unknown error'}`);
-    meshes.forEach((mesh) => mesh.geometry.dispose());
-    return;
-  }
-  
-  // 🚧 add tiles
-  // result.tileCache.addTile()
-
-
-  meshes.forEach((mesh) => mesh.geometry.dispose());
-}
-
-/**
- * 
- * @param {WW.RequestBuildTile['job']} job
- */
-function buildTile(job) {
-    // 🚧
-    
-}
-
 
 /** @param {string} mapKey  */
 async function computeGeomorphMeshes(mapKey) {
@@ -104,24 +62,12 @@ async function computeGeomorphMeshes(mapKey) {
     geomorph.computeLayoutInstance(geomorphs.layout[gmKey], gmId, transform)
   );
 
-  const customAreaDefs = /** @type {NPC.TileCacheConvexAreaDef[][]} */ (gms.map(() => []));
-
-  const meshes = gms.map(({ key, navDecomp, navDoorwaysOffset, mat4, transform: [a, b, c, d, e, f] }, gmId) => {
-    const determinant = a * d - b * c;
-    const mesh = new THREE.Mesh(decompToXZGeometry(navDecomp, { reverse: determinant === 1 }));
-    mesh.applyMatrix4(mat4);
-    mesh.updateMatrixWorld();
-    
-    const { tris, vs, tris: { length } } = navDecomp;
-    const allVerts = vs.map(v => (new THREE.Vector3(v.x, 0, v.y)).applyMatrix4(mat4));
-    for (let i = navDoorwaysOffset; i < length; i++) {
-      customAreaDefs[gmId].push({
-        areaId: 1,
-        areas: [ { hmin: 0, hmax: 0.02, verts: tris[i].map(id => allVerts[id]) }],
-      });
-    }
-
-    return mesh;
+  const { meshes, customAreaDefs } = gms.map(computeGmInstanceMesh).reduce((agg, { mesh, customAreaDefs }) => (
+    agg.meshes.push(mesh),
+    agg.customAreaDefs.push(...customAreaDefs),
+    agg
+  ), {
+    meshes: /** @type {THREE.Mesh[]} */ ([]), customAreaDefs: /** @type {NPC.TileCacheConvexAreaDef[]} */ ([]),
   });
 
   debug('🤖 nav.worker', {
