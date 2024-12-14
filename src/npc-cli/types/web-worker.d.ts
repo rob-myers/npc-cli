@@ -15,6 +15,7 @@ declare namespace WW {
   interface RequestNavMesh {
     type: "request-nav";
     mapKey: string;
+    method: 'all-at-once' | 'tile-by-tile';
   }
 
   interface NavMeshResponse {

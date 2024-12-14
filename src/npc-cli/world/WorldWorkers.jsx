@@ -96,7 +96,7 @@ export default function WorldWorkers() {
       
       w.events.next({ key: 'pre-request-nav', changedGmIds });
       w.menu.measure('request-nav');
-      w.nav.worker.postMessage({ type: "request-nav", mapKey: w.mapKey });
+      w.nav.worker.postMessage({ type: "request-nav", mapKey: w.mapKey, method: 'all-at-once' });
 
       w.events.next({ key: 'pre-setup-physics' });
       w.menu.measure('setup-physics');

@@ -1,7 +1,7 @@
 import * as THREE from "three";
 import { init as initRecastNav, exportTileCache } from "@recast-navigation/core";
 
-import { alloc, error, info, debug, warn, removeDups } from "../service/generic";
+import { error, info, debug, warn, removeDups, range } from "../service/generic";
 import { geomorph } from "../service/geomorph";
 import { decompToXZGeometry, polysToXZGeometry } from "../service/three";
 import { customThreeToTileCache, getTileCacheGeneratorConfig, getBasicTileCacheMeshProcess } from "../service/recast-detour";
@@ -21,63 +21,101 @@ async function handleMessages(e) {
   debug("🤖 nav.worker received", JSON.stringify(msg));
 
   if (msg.type === 'request-nav') {
-    const geomorphs = geomorph.deserializeGeomorphs(await fetchGeomorphsJson());
-  
-    const { mapKey } = msg;
-    const map = geomorphs.map[mapKey ?? "demo-map-1"];
-    const gms = map.gms.map(({ gmKey, transform }, gmId) =>
-      geomorph.computeLayoutInstance(geomorphs.layout[gmKey], gmId, transform)
-    );
-  
-    const customAreaDefs = /** @type {NPC.TileCacheConvexAreaDef[]} */ ([]);
-    const meshes = gms.map(({ key, navDecomp, navDoorwaysOffset, mat4, transform: [a, b, c, d, e, f] }, gmId) => {
-      const determinant = a * d - b * c;
-      const mesh = new THREE.Mesh(decompToXZGeometry(navDecomp, { reverse: determinant === 1 }));
-      mesh.applyMatrix4(mat4);
-      mesh.updateMatrixWorld();
-      
-      const { tris, vs, tris: { length } } = navDecomp;
-      const allVerts = vs.map(v => (new THREE.Vector3(v.x, 0, v.y)).applyMatrix4(mat4));
-      for (let i = navDoorwaysOffset; i < length; i++) {
-        customAreaDefs.push({ areaId: 1, areas: [ { hmin: 0, hmax: 0.02, verts: tris[i].map(id => allVerts[id]) }]});
-      }
-      return mesh;
-    });
-  
-    debug('🤖 nav.worker', {
-      'total vertices': meshes.reduce((agg, mesh) => agg + (mesh.geometry.getAttribute('position')?.count ?? 0), 0),
-      'total triangles': meshes.reduce((agg, mesh) => agg + (mesh.geometry.index?.count ?? 0) / 3, 0),
-      'total meshes': meshes.length,
-    });
-  
-    await initRecastNav();
-    const tileCacheMeshProcess = getBasicTileCacheMeshProcess();
-  
-    const result = customThreeToTileCache(
-      meshes,
-      getTileCacheGeneratorConfig(tileCacheMeshProcess),
-      { areas: customAreaDefs },
-    );
-    
-    if (result.success) {
-      const { navMesh, tileCache } = result;
-      const polysPerTile = alloc(navMesh.getMaxTiles()).flatMap((_, i) =>
-        navMesh.getTile(i).header()?.polyCount() ?? []
-      );
-      info('🤖 nav.worker', { totalTiles: polysPerTile.length, polysPerTile });
-  
-      worker.postMessage({
-        type: "nav-mesh-response",
-        mapKey,
-        exportedNavMesh: exportTileCache(navMesh, tileCache),
-      });
-  
-      tileCache.destroy();
-      navMesh.destroy();
-    } else {
-      error(`Failed to compute navMesh: ${'error' in result ? result.error : 'unknown error'}`);
-    }
-  
-    meshes.forEach((mesh) => mesh.geometry.dispose());
+    if (msg.method === 'all-at-once') createNavAllAtOnce(msg.mapKey);
+    if (msg.method === 'tile-by-tile') createNavTileByTile(msg.mapKey);
   }
+}
+
+/** @param {string} mapKey  */
+async function createNavAllAtOnce(mapKey) {
+  const { meshes, customAreaDefs } = await computeGeomorphMeshes(mapKey);
+  await initRecastNav();
+
+  const result = customThreeToTileCache(
+    meshes,
+    getTileCacheGeneratorConfig(getBasicTileCacheMeshProcess()),
+    { areas: customAreaDefs.flatMap(x => x) },
+  );
+  
+  meshes.forEach((mesh) => mesh.geometry.dispose());
+  if (!result.success) {
+    error(`Failed to compute navMesh: ${'error' in result ? result.error : 'unknown error'}`);
+    return;
+  }
+  
+  const { navMesh, tileCache } = result;
+  const polysPerTile = range(navMesh.getMaxTiles()).flatMap((i) =>
+    navMesh.getTile(i).header()?.polyCount() ?? []
+  );
+  info('🤖 nav.worker', { totalTiles: polysPerTile.length, polysPerTile });
+
+  worker.postMessage({
+    type: "nav-mesh-response",
+    mapKey,
+    exportedNavMesh: exportTileCache(navMesh, tileCache),
+  });
+
+  tileCache.destroy();
+  navMesh.destroy();
+}
+
+/** @param {string} mapKey  */
+async function createNavTileByTile(mapKey) {
+  const { meshes, customAreaDefs } = await computeGeomorphMeshes(mapKey);
+  
+  await initRecastNav();
+  
+  // 1st mesh only
+  const result = customThreeToTileCache(
+    meshes.slice(0, 1),
+    getTileCacheGeneratorConfig(getBasicTileCacheMeshProcess()),
+    { areas: customAreaDefs[0] },
+  );
+
+  if (!result.success) {
+    error(`Failed to compute navMesh: ${'error' in result ? result.error : 'unknown error'}`);
+    meshes.forEach((mesh) => mesh.geometry.dispose());
+    return;
+  }
+  
+  // 🚧 add tiles
+
+
+}
+
+/** @param {string} mapKey  */
+async function computeGeomorphMeshes(mapKey) {
+  const geomorphs = geomorph.deserializeGeomorphs(await fetchGeomorphsJson());
+  const map = geomorphs.map[mapKey ?? "demo-map-1"];
+  const gms = map.gms.map(({ gmKey, transform }, gmId) =>
+    geomorph.computeLayoutInstance(geomorphs.layout[gmKey], gmId, transform)
+  );
+
+  const customAreaDefs = /** @type {NPC.TileCacheConvexAreaDef[][]} */ (gms.map(() => []));
+
+  const meshes = gms.map(({ key, navDecomp, navDoorwaysOffset, mat4, transform: [a, b, c, d, e, f] }, gmId) => {
+    const determinant = a * d - b * c;
+    const mesh = new THREE.Mesh(decompToXZGeometry(navDecomp, { reverse: determinant === 1 }));
+    mesh.applyMatrix4(mat4);
+    mesh.updateMatrixWorld();
+    
+    const { tris, vs, tris: { length } } = navDecomp;
+    const allVerts = vs.map(v => (new THREE.Vector3(v.x, 0, v.y)).applyMatrix4(mat4));
+    for (let i = navDoorwaysOffset; i < length; i++) {
+      customAreaDefs[gmId].push({
+        areaId: 1,
+        areas: [ { hmin: 0, hmax: 0.02, verts: tris[i].map(id => allVerts[id]) }],
+      });
+    }
+
+    return mesh;
+  });
+
+  debug('🤖 nav.worker', {
+    'total vertices': meshes.reduce((agg, mesh) => agg + (mesh.geometry.getAttribute('position')?.count ?? 0), 0),
+    'total triangles': meshes.reduce((agg, mesh) => agg + (mesh.geometry.index?.count ?? 0) / 3, 0),
+    'total meshes': meshes.length,
+  });
+
+  return { meshes, customAreaDefs };
 }

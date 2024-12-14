@@ -13,14 +13,6 @@ export function addToLookup(newItem, lookup) {
 }
 
 /**
- * @param {number} n
- * @returns {null[]} Usage `alloc(10).forEach((_, i) => { ... })`
- */
-export function alloc(n) {
-  return Array(n).fill(null);
-}
-
-/**
  * JSDoc types lack a non-null assertion.
  * https://github.com/Microsoft/TypeScript/issues/23405#issuecomment-873331031
  *
