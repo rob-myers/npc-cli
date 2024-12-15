@@ -62,12 +62,11 @@ async function computeGeomorphMeshes(mapKey) {
     geomorph.computeLayoutInstance(geomorphs.layout[gmKey], gmId, transform)
   );
 
-  const { meshes, customAreaDefs } = gms.map(computeGmInstanceMesh).reduce((agg, { mesh, customAreaDefs }) => (
-    agg.meshes.push(mesh),
-    agg.customAreaDefs.push(...customAreaDefs),
-    agg
-  ), {
-    meshes: /** @type {THREE.Mesh[]} */ ([]), customAreaDefs: /** @type {NPC.TileCacheConvexAreaDef[]} */ ([]),
+  const meshes = /** @type {THREE.Mesh[]} */ ([]);
+  const customAreaDefs = /** @type {NPC.TileCacheConvexAreaDef[]} */ ([]);
+  gms.map(computeGmInstanceMesh).forEach((x) => {
+    meshes.push(x.mesh);
+    customAreaDefs.push(...x.customAreaDefs);
   });
 
   debug('🤖 nav.worker', {

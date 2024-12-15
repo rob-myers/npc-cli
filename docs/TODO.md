@@ -196,8 +196,10 @@
     - ✅ get demo build working
     - ✅ show demo navmesh
   - ❌ decided against it
+- 🚧 try avoid nav steiner points via:
+  - changing tile size
+  - extending door polygons e.g. deeper
 
-- try avoiding steiner points by adding "slightly raised rects"
 - prevent two different npcs from fading to same do point
 - BUG saw e.npcToDoor missing key
   - ℹ️ maybe physics.worker broke on hmr

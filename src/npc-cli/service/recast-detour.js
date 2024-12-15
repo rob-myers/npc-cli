@@ -33,7 +33,7 @@ export function getBasicTileCacheMeshProcess() {
 export function getTileCacheGeneratorConfig(tileCacheMeshProcess) {
   const cs = 0.15;
   return {
-    tileSize: 5.5 / cs,
+    // tileSize: 5.5 / cs,
     cs,
     ch: 0.01,
     borderSize: 0,
@@ -554,11 +554,11 @@ export function customGenerateTileCache(
 }
 
 /**
- * @param {Geomorph.LayoutInstance} gm A item from `gms`.
+ * @param {Geomorph.LayoutInstance} gm
+ * @returns {{ mesh: THREE.Mesh; customAreaDefs: NPC.TileCacheConvexAreaDef[] }}
  */
 export function computeGmInstanceMesh(gm) {
-  const { navDecomp, navDoorwaysOffset, mat4, transform: [a, b, c, d, e, f] } = gm;
-  const determinant = a * d - b * c;
+  const { navDecomp, navDoorwaysOffset, mat4, determinant } = gm;
   const mesh = new THREE.Mesh(decompToXZGeometry(navDecomp, { reverse: determinant === 1 }));
   mesh.applyMatrix4(mat4);
   mesh.updateMatrixWorld();
@@ -572,6 +572,15 @@ export function computeGmInstanceMesh(gm) {
       areas: [ { hmin: 0, hmax: 0.02, verts: tris[i].map(id => allVerts[id]) }],
     });
   }
+
+  // const navFixPolys = gm.unsorted.filter(x => 'nav-fix' in x.meta).map(x => x.clone());
+  // navFixPolys.forEach(poly => {
+  //   poly.applyMatrix(gm.matrix)
+  //   customAreaDefs.push({
+  //     areaId: 2,
+  //     areas: [ { hmin: 0, hmax: 0.02, verts: poly.outline.map(toV3) }],
+  //   })
+  // });
 
   return { mesh, customAreaDefs };
 }
