@@ -378,7 +378,7 @@ export class Npc {
     }
 
     this.s.wayIndex = 0;
-    this.s.lookSecs = 0.2;
+    this.s.lookSecs = 0.15;
 
     this.agent.updateParameters({
       maxAcceleration,
@@ -771,14 +771,14 @@ export class Npc {
   }
 }
 
-const maxAcceleration = 10;
+const maxAcceleration = 8;
 const staticSeparationWeight = 1;
 
 /** @type {Partial<import("@recast-navigation/core").CrowdAgentParams>} */
 export const crowdAgentParams = {
   radius: helper.defaults.radius, // 🔔 too large causes jerky collisions
   height: 1.5,
-  maxAcceleration: maxAcceleration / 4,
+  maxAcceleration: maxAcceleration,
   pathOptimizationRange: 10, // 🚧 clarify
   // collisionQueryRange: 0.7,
   collisionQueryRange: 1.5,
