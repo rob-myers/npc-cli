@@ -196,9 +196,11 @@
     - ✅ get demo build working
     - ✅ show demo navmesh
   - ❌ decided against it
-- 🚧 try avoid nav steiner points via:
-  - changing tile size
-  - extending door polygons e.g. deeper
+
+- ✅ try improve nav by changing tile size
+  - small tile size `0.1` has many Steiner points, yet is pretty good
+
+- 🚧 try avoid nav steiner points via large tile size and using areas
 
 - prevent two different npcs from fading to same do point
 - BUG saw e.npcToDoor missing key
