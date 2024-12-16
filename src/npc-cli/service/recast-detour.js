@@ -31,11 +31,11 @@ export function getBasicTileCacheMeshProcess() {
  * @returns {Partial<TileCacheGeneratorConfig>}
  */
 export function getTileCacheGeneratorConfig(tileCacheMeshProcess) {
-  const cs = 0.15;
   return {
+    // cs: 0.125,
+    cs: 0.1,
     tileSize: 10,
-    cs,
-    ch: 0.01,
+    ch: 0.001,
     borderSize: 0,
     expectedLayersPerTile: 1,
     detailSampleDist: 0,
