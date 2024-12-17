@@ -169,6 +169,41 @@ export const setupContextMenu = ({ w }) => {
 }
 
 /**
+ * events | handleContextMenu
+ * @param {RunArg<NPC.Event>} ctxt
+ */
+export async function* handleContextMenu({ api, w, datum: e }) {
+  
+  while ((e = await api.read()) !== api.eof) {
+    if (e.key !== "click-link") {
+      continue;
+    }
+
+    const { meta } = w.cm;
+
+    switch (e.linkKey) {
+      case "open":
+      case "close": {
+        w.e.toggleDoor(meta.gdKey, { npcKey: undefined, [e.linkKey]: true,
+          // access: meta.inner === true && meta.secure !== true ? true : undefined,
+          // point,
+        });
+        break;
+      }
+      case "lock":
+      case "unlock":{
+        w.e.toggleLock(meta.gdKey, { npcKey: undefined, [e.linkKey]: true,
+          // point,
+        });
+        break;
+      }
+    }
+
+  }
+
+}
+
+/**
  * Usage:
  * ```sh
  * w
@@ -224,6 +259,7 @@ export async function* w(ctxt) {
 }
 
 /**
+ * @template {any} [T=any]
  * @typedef RunArg
  * @property {import('../cmd.service').CmdService['processApi'] & {
 *   getCached(key: '__WORLD_KEY_VALUE__'): import('../../world/World').State;
@@ -231,5 +267,5 @@ export async function* w(ctxt) {
 * @property {string[]} args
 * @property {{ [key: string]: any; WORLD_KEY: '__WORLD_KEY_VALUE__' }} home
 * @property {import('../../world/World').State} w See `CACHE_SHORTCUTS`
-* @property {*} [datum] A shortcut for declaring a variable
+* @property {T} datum A shortcut for declaring a variable
 */

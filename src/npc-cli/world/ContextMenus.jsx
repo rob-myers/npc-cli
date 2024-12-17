@@ -345,7 +345,20 @@ export class CMInstance {
   onClickLink(e) {
     const button = /** @type {HTMLButtonElement} */ (e.target);
     const linkKey = button.dataset.key ?? 'unknown';
-    this.w.events.next({ key: 'click-link', cmKey: this.key, linkKey }); // 🚧
+
+    this.w.view.rootEl.focus();
+    this.w.events.next({ key: 'click-link', cmKey: this.key, linkKey });
+
+    switch (linkKey) {
+      // case 'delete': w.c.delete(e.cmKey); break;
+      case 'toggle-docked': this.toggleDocked(); break;
+      case 'toggle-kvs': this.toggleKvs(); break;
+      case 'toggle-pinned': this.togglePinned(); break;
+      case 'toggle-scaled': this.toggleScaled(); break;
+    }
+
+    this.w.c.saveOpts();
+    this.update();
   }
 
   /**
