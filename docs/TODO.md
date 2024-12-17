@@ -44,7 +44,13 @@
         - do not support unauth npc inside room i.e. this action corresponds to having a remote key
       - ✅ links take effect e.g. open door
       - 🚧 links can be npc-sensitive
-    - speech bubbles
+        - ✅ `cm.setNpc()` `cm.setNpc('rob')` and show
+        - ✅ can remove by clicking it
+        - ✅ temp: profile-1: triggered on select npc
+        - 🚧 triggered from speech bubble
+        - clean up
+        - handleContextMenu accounts for `cm.npcKey`
+    - 🚧 speech bubbles
       - somehow set cm.tracked as `w.n[npcKey]?.m.group`
   - remove icon generation code from asset.js
 

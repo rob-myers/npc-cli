@@ -78,15 +78,19 @@ export default function ContextMenus() {
 /**
  * @param {ContextMenuProps} props 
  */
-function ContextMenuContent({ cm, cm: { ui } }) {
+function ContextMenuUI({ cm, cm: { ui } }) {
 
   return <>
   
     <div className="links top" onClick={cm.onClickLink.bind(cm)}>
+      {cm.npcKey && <div className="npc-key" data-key="clear-npc">
+        {'('}<span>{cm.npcKey}</span>{')'}
+      </div>}
+
       {cm.key === 'default' && (
         <button data-key="toggle-docked">{cm.docked ? 'embed' : 'dock'}</button>
       )}
-      {(cm.docked ? topLinks.docked : topLinks.embed).map(({ key, label, test }) =>
+      {(cm.docked ? topLinks.docked : topLinks.embedded).map(({ key, label, test }) =>
         <button
           key={key}
           data-key={key}
@@ -121,9 +125,9 @@ function ContextMenuContent({ cm, cm: { ui } }) {
   </>;
 }
 
-/** @type {Record<'embed' | 'docked', NPC.ContextMenuLink[]>} */
+/** @type {Record<'embedded' | 'docked', NPC.ContextMenuLink[]>} */
 const topLinks = {
-  embed: [
+  embedded: [
     { key: 'toggle-kvs', label: 'meta', test: 'showKvs' },
     { key: 'toggle-pinned', label: 'pin', test: 'pinned' },
     { key: 'toggle-scaled', label: 'scale', test: 'scaled' },
@@ -146,6 +150,15 @@ const contextMenuCss = css`
     transform: unset !important;
     top: unset;
     bottom: 0;
+  }
+
+  .npc-key {
+    span {
+      color: #99ff99;
+      pointer-events: none;
+    }
+    padding: 5px 6px;
+    cursor: pointer;
   }
   
   > div {
@@ -232,7 +245,7 @@ function ContextMenu({ cm }) {
       tracked={cm.tracked}
       zIndex={cm.key === 'default' ? 1 : undefined}
     >
-      <ContextMenuContent cm={cm} />
+      <ContextMenuUI cm={cm} />
     </Html3d>
   );
 }
@@ -263,6 +276,7 @@ export class CMInstance {
   
   match = /** @type {{ [matcherKey: string]: NPC.ContextMenuMatcher}} */ ({});
   meta = /** @type {Geom.Meta} */ ({});
+  npcKey = /** @type {undefined | string} */ (undefined);
   position = /** @type {[number, number, number]} */ ([0, 0, 0]);
 
   docked = false;
@@ -351,6 +365,7 @@ export class CMInstance {
 
     switch (linkKey) {
       // case 'delete': w.c.delete(e.cmKey); break;
+      case 'clear-npc': this.setNpc(); break;
       case 'toggle-docked': this.toggleDocked(); break;
       case 'toggle-kvs': this.toggleKvs(); break;
       case 'toggle-pinned': this.togglePinned(); break;
@@ -370,6 +385,12 @@ export class CMInstance {
     this.position = position.toArray();
     this.computeKvsFromMeta(meta);
     this.computeLinks();
+  }
+
+  /** @param {string} [npcKey] */
+  setNpc(npcKey) {
+    this.npcKey = npcKey;
+    this.update();
   }
 
   toggleDocked() {
