@@ -32,16 +32,17 @@ export function getBasicTileCacheMeshProcess() {
  */
 export function getTileCacheGeneratorConfig(tileCacheMeshProcess) {
   return {
-    // cs: 0.125,
-    cs: 0.1,
-    tileSize: 10,
+    // cs: 0.1,
+    // tileSize: 10,
+    cs: 0.125,
+    tileSize: 15,
     ch: 0.001,
     borderSize: 0,
     expectedLayersPerTile: 1,
     detailSampleDist: 0,
     walkableClimb: 0,
     tileCacheMeshProcess,
-    maxSimplificationError: 0.75,
+    // maxSimplificationError: 0.75,
     // maxSimplificationError: 0,
     walkableRadius: 0,
     // mergeRegionArea: 20,
