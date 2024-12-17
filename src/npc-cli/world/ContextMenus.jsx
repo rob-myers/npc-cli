@@ -48,10 +48,9 @@ export default function ContextMenus() {
   }));
 
   w.c = state;
+  w.cm = state.lookup.default ??= new CMInstance('default', w, { showKvs: true });
 
   React.useMemo(() => {// HMR
-    w.cm = state.lookup.default ??= new CMInstance('default', w, { showKvs: true });
-
     process.env.NODE_ENV === 'development' && Object.values(state.lookup).forEach(cm => {
       state.lookup[cm.key] = Object.assign(new CMInstance(cm.key, cm.w, cm.ui), {...cm});
       cm.dispose();
