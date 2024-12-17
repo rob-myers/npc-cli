@@ -1,5 +1,4 @@
 import React from "react";
-import * as THREE from "three";
 import { Vect } from "../geom";
 import { defaultDoorCloseMs, npcNearUiDist, wallHeight } from "../service/const";
 import { pause, warn, debug } from "../service/generic";
@@ -7,6 +6,7 @@ import { geom } from "../service/geom";
 import { npcToBodyKey } from "../service/rapier";
 import { toV3, toXZ, unitXVector3 } from "../service/three";
 import useStateRef from "../hooks/use-state-ref";
+import { npcKeyToCmKey } from "./ContextMenus";
 
 /**
  * @param {import('./World').State} w
@@ -177,23 +177,6 @@ export default function useHandleEvents(w) {
       }
       return npcKeys;
     },
-    getMetaActs(meta) {// 🚧 remove
-      if (typeof meta.switch === 'number') {
-        return [
-          { def: { key: 'open', gdKey: meta.gdKey, }, label: 'open', icon: 'icon--door-open', meta },
-          { def: { key: 'close', gdKey: meta.gdKey }, label: 'close', icon: 'icon--door-closed', meta },
-          { def: { key: 'lock', gdKey: meta.gdKey, }, label: 'lock', icon: 'icon--door-locked', meta },
-          { def: { key: 'unlock', gdKey: meta.gdKey, }, label: 'unlock', icon: 'icon--door-unlocked', meta },
-          // 🚧 ring bell
-        ];
-      }
-      if (meta.door === true) {
-        return [
-          // 🚧 knock
-        ];
-      }
-      return [];
-    },
     async handleEvents(e) {
       // debug('useHandleEvents', e);
 
@@ -203,9 +186,6 @@ export default function useHandleEvents(w) {
 
       switch (e.key) {
         case "changed-zoom": // 'near' or 'far'
-          break;
-        case "click-link":
-          state.onClickLink(e);
           break;
         case "updated-gm-decor":
           // NOOP e.g. physics.worker rebuilds entire world onchange geomorphs
@@ -286,11 +266,6 @@ export default function useHandleEvents(w) {
       const npc = w.n[e.npcKey];
 
       switch (e.key) {
-        // case "click-act":
-        //   const success = state.onClickAct(e);
-        //   // colour act red/green
-        //   w.cm.setSelectedActColor(success ? '#7f7' : 'red');
-        //   break;
         case "enter-collider":
           if (e.type === 'nearby' || e.type === 'inside') {
             state.onEnterDoorCollider(e);
@@ -331,9 +306,8 @@ export default function useHandleEvents(w) {
           } else {
             state.externalNpcs.delete(e.key);
           }
-          // if (w.cm.isTracking(e.npcKey)) {
-          //   w.cm.track(null);
-          // }
+          
+          w.c.delete(npcKeyToCmKey(e.npcKey));
           break;
         }
         // case "started-moving":
@@ -389,38 +363,6 @@ export default function useHandleEvents(w) {
           }
           break;
       }
-    },
-    // onClickAct({ act: { def, meta }, npcKey, point }) {// 🚧 remove
-    //   if (meta.grKey !== undefined && state.npcToRoom.get(npcKey)?.grKey !== meta.grKey) {
-    //     return false; // acted inside different room
-    //   }
-
-    //   switch (def.key) {
-    //     case 'open':
-    //     case 'close':
-    //       return state.toggleDoor(def.gdKey, { npcKey, [def.key]: true,
-    //         access: meta.inner === true && meta.secure !== true ? true : undefined,
-    //         point,
-    //       });
-    //     case 'lock':
-    //     case 'unlock':
-    //       return state.toggleLock(def.gdKey, { npcKey, [def.key]: true,
-    //         point,
-    //       });
-    //     // 🚧
-    //   }
-    // },
-    onClickLink(e) {// 🚧 move back to ContextMenus?
-      const cm = w.c.lookup[e.cmKey];
-      switch (e.linkKey) {
-        case 'delete': w.c.delete(e.cmKey); break;
-        case 'toggle-docked': cm.toggleDocked(); break;
-        case 'toggle-kvs': cm.toggleKvs(); break;
-        case 'toggle-pinned': cm.togglePinned(); break;
-        case 'toggle-scaled': cm.toggleScaled(); break;
-      }
-      w.c.saveOpts();
-      cm.update();
     },
     navSegIntersectsDoorway(u, v, door) {
       // 🤔 more efficient approach?
@@ -590,9 +532,13 @@ export default function useHandleEvents(w) {
     toggleDoor(gdKey, opts) {
       const door = w.door.byKey[gdKey];
 
-      if (opts.point === undefined) {
-        // e.g. npc hits inside sensor
+      // clear if already closed
+      opts.clear = door.open === false ? true : state.someNpcInsideDoor(gdKey) === false;
+
+      if (opts.point === undefined || opts.npcKey === undefined) {
+        // e.g. npc hits "inside" sensor
         // e.g. npc with access enters doorway
+        // e.g. game master i.e. no npc
         return w.door.toggleDoorRaw(door, opts);
       }
 
@@ -601,12 +547,16 @@ export default function useHandleEvents(w) {
       }
 
       opts.access ??= state.npcCanAccess(opts.npcKey, gdKey);
-      opts.clear = state.someNpcInsideDoor(gdKey) === false;
 
       return w.door.toggleDoorRaw(door, opts);
     },
     toggleLock(gdKey, opts) {
       const door = w.door.byKey[gdKey];
+
+      if (opts.point === undefined || opts.npcKey === undefined) {
+        // e.g. game master i.e. no npc
+        return w.door.toggleLockRaw(door, opts);
+      }
 
       if (tmpVect1.copy(opts.point).distanceTo(w.n[opts.npcKey].getPoint()) > 1.5) {
         return false; // e.g. button not close enough
@@ -674,14 +624,12 @@ export default function useHandleEvents(w) {
  * `npcKey`s not inside any room
  *
  * @property {(door: Geomorph.DoorState) => boolean} canCloseDoor
- * @property {(e: Extract<NPC.Event, { key: 'click-link' }>) => void} onClickLink
  * @property {(u: Geom.VectJson, v: Geom.VectJson, door: Geomorph.DoorState) => boolean} navSegIntersectsDoorway
  * @property {(npcKey: string, gdKey: Geomorph.GmDoorKey) => boolean} npcCanAccess
  * @property {(npcKey: string, regexDef: string, act?: '+' | '-') => void} changeNpcAccess
  * @property {(r: number, g: number, b: number, a: number) => null | NPC.DecodedObjectPick} decodeObjectPick
  * @property {(door: Geomorph.DoorState) => void} ensureDoorPolyRefs
  * @property {(gmId: number, roomId: number, point: Geom.VectJson) => string[]} getNearbyNpcKeys
- * @property {(meta: Geom.Meta) => NPC.MetaAct[]} getMetaActs
  * Get possible meta acts e.g. may not be possible because npc not close enough
  * @property {(e: NPC.Event) => void} handleEvents
  * @property {(e: Extract<NPC.Event, { npcKey?: string }>) => void} handleNpcEvents
@@ -693,9 +641,9 @@ export default function useHandleEvents(w) {
  * @property {() => void} showDefaultContextMenu
  * @property {(gdKey: Geomorph.GmDoorKey) => boolean} someNpcInsideDoor
  * @property {(gdKey: Geomorph.GmDoorKey) => boolean} someNpcNearDoor
- * @property {(gdKey: Geomorph.GmDoorKey, opts: { npcKey: string; point?: Geom.VectJson; } & Geomorph.ToggleDoorOpts) => boolean} toggleDoor
+ * @property {(gdKey: Geomorph.GmDoorKey, opts: { npcKey?: string; point?: Geom.VectJson; } & Geomorph.ToggleDoorOpts) => boolean} toggleDoor
  * Returns `true` iff successful.
- * @property {(gdKey: Geomorph.GmDoorKey, opts: { npcKey: string; point: Geom.VectJson; } & Geomorph.ToggleLockOpts) => boolean} toggleLock
+ * @property {(gdKey: Geomorph.GmDoorKey, opts: { npcKey?: string; point?: Geom.VectJson; } & Geomorph.ToggleLockOpts) => boolean} toggleLock
  * Returns `true` iff successful.
  * @property {(gmId: number, doorId: number, eventMeta?: Geom.Meta) => void} tryCloseDoor
  * Try close door every `N` seconds, starting in `N` seconds.

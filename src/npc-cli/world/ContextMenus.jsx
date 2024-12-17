@@ -16,13 +16,20 @@ export default function ContextMenus() {
   const state = useStateRef(/** @returns {State} */ () => ({
     lookup: {},
     savedOpts: tryLocalStorageGetParsed(`context-menus@${w.key}`) ?? {},
-    delete(cmKey) {
-      if (cmKey === 'default') {
-        return false; // Cannot delete default
+
+    delete(...cmKeys) {
+      for (const cmKey of cmKeys) {
+        const cm = state.lookup[cmKey];
+        if (cmKey === 'default') {
+          continue; // Cannot delete default
+        }
+        if (cm !== undefined) {
+          cm.tracked = undefined;
+          delete state.lookup[cmKey];
+          update();
+          true;
+        }
       }
-      const success = delete state.lookup[cmKey];
-      update();
-      return success;
     },
     hide(key, force) {
       const cm = state.lookup[key];
@@ -45,13 +52,23 @@ export default function ContextMenus() {
       cm.open = true;
       cm.update();
     },
+    trackNpc(npcKey) {
+      if (npcKey in w.n) {
+        const cmKey = npcKeyToCmKey(npcKey);
+        const cm = state.lookup[cmKey] ??= new CMInstance(cmKey, w, { showKvs: false, pinned: true, npcKey });
+        cm.tracked = w.n[npcKey].m.group;
+        cm.open = true;
+        update();
+      } else {
+        throw Error(`ContextMenus.trackNpc: npc not found: "${npcKey}"`);
+      }
+    },
   }));
 
   w.c = state;
+  w.cm = state.lookup.default ??= new CMInstance('default', w, { showKvs: true });
 
   React.useMemo(() => {// HMR
-    w.cm = state.lookup.default ??= new CMInstance('default', w, { showKvs: true });
-
     process.env.NODE_ENV === 'development' && Object.values(state.lookup).forEach(cm => {
       state.lookup[cm.key] = Object.assign(new CMInstance(cm.key, cm.w, cm.ui), {...cm});
       cm.dispose();
@@ -70,7 +87,8 @@ export default function ContextMenus() {
  * @property {{ [cmKey: string]: CMInstance }} lookup
  * @property {{ [cmKey: string]: Pick<CMInstance, 'docked' | 'pinned' | 'showKvs'> }} savedOpts
  *
- * @property {(cmKey: string) => boolean} delete
+ * @property {(npcKey: string) => void} trackNpc Add speech bubble for specific npc
+ * @property {(...cmKeys: string[]) => void} delete
  * @property {(cmKey: string, force?: boolean) => void} hide
  * @property {() => void} saveOpts
  * @property {(cmKey: string, ct?: NPC.ContextMenuContextDef) => void} show
@@ -79,15 +97,18 @@ export default function ContextMenus() {
 /**
  * @param {ContextMenuProps} props 
  */
-function ContextMenuContent({ cm, cm: { ui } }) {
+function DefaultContextMenu({ cm, cm: { ui } }) {
 
   return <>
   
-    <div className="links top" onClick={cm.onClickLink.bind(cm)}>
-      {cm.key === 'default' && (
-        <button data-key="toggle-docked">{cm.docked ? 'embed' : 'dock'}</button>
-      )}
-      {(cm.docked ? topLinks.docked : topLinks.embed).map(({ key, label, test }) =>
+    <div className="links" onClick={cm.onClickLink.bind(cm)}>
+      {cm.npcKey !== undefined && <div className="npc-key" data-key="clear-npc">
+        {'['}<span>{cm.npcKey}</span>{']'}
+      </div>}
+
+      <button data-key="toggle-docked">{cm.docked ? 'embed' : 'dock'}</button>
+
+      {(cm.docked ? topLinks.docked : topLinks.embedded).map(({ key, label, test }) =>
         <button
           key={key}
           data-key={key}
@@ -122,9 +143,26 @@ function ContextMenuContent({ cm, cm: { ui } }) {
   </>;
 }
 
-/** @type {Record<'embed' | 'docked', NPC.ContextMenuLink[]>} */
+/**
+ * @param {ContextMenuProps} props 
+ */
+function NpcContextMenu({ cm }) {
+  return <>
+
+    <div className="npc-key">
+      <span>{cm.npcKey}</span>
+    </div>
+
+    <div className="speech-bubble">
+      {/* 🚧 */}
+    </div>
+
+  </>;
+}
+
+/** @type {Record<'embedded' | 'docked', NPC.ContextMenuLink[]>} */
 const topLinks = {
-  embed: [
+  embedded: [
     { key: 'toggle-kvs', label: 'meta', test: 'showKvs' },
     { key: 'toggle-pinned', label: 'pin', test: 'pinned' },
     { key: 'toggle-scaled', label: 'scale', test: 'scaled' },
@@ -134,7 +172,7 @@ const topLinks = {
   ],
 };
 
-const contextMenuCss = css`
+const defaultContextMenuCss = css`
   position: absolute;
   left: 0;
   top: 0;
@@ -143,17 +181,30 @@ const contextMenuCss = css`
   
   opacity: 0.8;
 
-  &.docked {
-    transform: unset !important;
-    top: unset;
-    bottom: 0;
-  }
-  
   > div {
     transform-origin: 0 0;
     width: 200px;
     background-color: #000;
     border: 1px solid #dddddd77;
+  }
+
+  &.docked {
+    transform: unset !important;
+    top: unset;
+    bottom: 0;
+  }
+
+  .npc-key {
+    span {
+      color: #99ff99;
+      pointer-events: none;
+    }
+    padding: 5px 6px;
+
+    cursor: pointer;
+    /* &:hover span, &:active span {
+      color: #f77;
+    } */
   }
 
   color: #fff;
@@ -205,6 +256,25 @@ const contextMenuCss = css`
   }
 `;
 
+const npcContextMenuCss = css`
+  --menu-width: 200px;
+
+  position: absolute;
+  top: 0;
+  left: 0;
+  left: calc(-1/2 * var(--menu-width));
+  transform-origin: 0 0;
+  background: transparent !important;
+
+  > div {
+    transform-origin: calc(+1/2 * var(--menu-width)) 0;
+    color: white;
+    width: var(--menu-width);
+    border: 1px solid #999;
+    padding: 4px;
+  }
+`;
+
 /** @type {React.MemoExoticComponent<(props: ContextMenuProps & { epochMs: number }) => JSX.Element>} */
 const MemoizedContextMenu = React.memo(ContextMenu);
 
@@ -224,8 +294,10 @@ function ContextMenu({ cm }) {
   return (
     <Html3d
       ref={cm.html3dRef.bind(cm)}
-      className={contextMenuCss}
-      distanceFactor={cm.scaled ? cm.scale : undefined}
+      className={cm.key === 'default' ? defaultContextMenuCss: npcContextMenuCss}
+      // distanceFactor={cm.scaled ? cm.scale : undefined}
+      // distanceFactor={10} // 🚧 must match initial camera distance
+      distanceFactor={cm.key === 'default' ? (cm.scaled ? cm.scale : undefined) : 10}
       docked={cm.docked}
       position={cm.position}
       normal={cm.normal}
@@ -233,7 +305,10 @@ function ContextMenu({ cm }) {
       tracked={cm.tracked}
       zIndex={cm.key === 'default' ? 1 : undefined}
     >
-      <ContextMenuContent cm={cm} />
+      {cm.key === 'default'
+        ? <DefaultContextMenu cm={cm} />
+        : <NpcContextMenu cm={cm} />
+      }
     </Html3d>
   );
 }
@@ -264,6 +339,7 @@ export class CMInstance {
   
   match = /** @type {{ [matcherKey: string]: NPC.ContextMenuMatcher}} */ ({});
   meta = /** @type {Geom.Meta} */ ({});
+  npcKey = /** @type {undefined | string} */ (undefined);
   position = /** @type {[number, number, number]} */ ([0, 0, 0]);
 
   docked = false;
@@ -281,7 +357,11 @@ export class CMInstance {
   /**
    * @param {string} key
    * @param {import('./World').State} w
-   * @param {Partial<ContextMenuUi> & { pinned?: boolean; showKvs?: boolean }} opts
+   * @param {Partial<ContextMenuUi> & {
+   *   npcKey?: string;
+   *   pinned?: boolean;
+   *   showKvs?: boolean;
+   * }} opts
    */
   constructor(key, w, opts) {
     /** @type {string} */ this.key = key;
@@ -291,6 +371,7 @@ export class CMInstance {
     this.pinned = opts.pinned ?? prevOpts.pinned ?? w.smallViewport;
     this.scaled = false,
     this.showKvs = opts.showKvs ?? prevOpts.showKvs ?? false,
+    this.npcKey = opts.npcKey;
 
     /** @type {ContextMenuUi} */ this.ui = {
       kvs: opts.kvs ?? [],
@@ -346,7 +427,21 @@ export class CMInstance {
   onClickLink(e) {
     const button = /** @type {HTMLButtonElement} */ (e.target);
     const linkKey = button.dataset.key ?? 'unknown';
-    this.w.events.next({ key: 'click-link', cmKey: this.key, linkKey }); // 🚧
+
+    this.w.view.rootEl.focus();
+    this.w.events.next({ key: 'click-link', cmKey: this.key, linkKey });
+
+    switch (linkKey) {
+      // case 'delete': w.c.delete(e.cmKey); break;
+      case 'clear-npc': this.setNpc(); break;
+      case 'toggle-docked': this.toggleDocked(); break;
+      case 'toggle-kvs': this.toggleKvs(); break;
+      case 'toggle-pinned': this.togglePinned(); break;
+      case 'toggle-scaled': this.toggleScaled(); break;
+    }
+
+    this.w.c.saveOpts();
+    this.update();
   }
 
   /**
@@ -358,6 +453,12 @@ export class CMInstance {
     this.position = position.toArray();
     this.computeKvsFromMeta(meta);
     this.computeLinks();
+  }
+
+  /** @param {string} [npcKey] */
+  setNpc(npcKey) {
+    this.npcKey = npcKey;
+    this.update();
   }
 
   toggleDocked() {
@@ -387,3 +488,10 @@ export class CMInstance {
 
 const tmpVector1 = new THREE.Vector3();
 function noop() {};
+
+/**
+ * @param {string} npcKey 
+ */
+export function npcKeyToCmKey(npcKey) {
+  return `@${npcKey}`;
+}

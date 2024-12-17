@@ -75,14 +75,10 @@ export const Html3d = React.forwardRef(({
       }
     }), { deps: [distanceFactor, camera, size] });
 
-    state.shouldTranslate = (
-      state.objTarget !== null && state.innerDiv !== null && docked !== true
-    );
-
     React.useImperativeHandle(ref, () => state, []);
 
     // Append to the connected element, which makes HTML work with views
-    state.domTarget = /** @type {HTMLElement} */ ((events.connected || gl.domElement.parentNode));
+    state.domTarget = /** @type {HTMLElement} */ (events.connected || gl.domElement.parentNode);
     state.objTarget = tracked ?? state.group ?? null;
 
     React.useLayoutEffect(() => {
@@ -119,6 +115,8 @@ export const Html3d = React.forwardRef(({
 
       // Force update for (a) paused, (b) window resize
       setTimeout(() => {
+        // just after innerDiv mount
+        state.shouldTranslate = state.objTarget !== null && state.innerDiv !== null && docked !== true;
         state.zoom = 0;
         state.onFrame();
       });

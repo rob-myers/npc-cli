@@ -5,16 +5,21 @@ w npc.spawn '{ npcKey: "rob", point: { x: 0.5 * 1.5, y: 5 * 1.5 }, angle: -1.570
 w npc.spawn '{ npcKey: "will", point: { x: 2.5, y: 3 * 1.5 }, agent: true }' >/dev/null
 w npc.spawn '{ npcKey: "kate", point: { x: 4.5 * 1.5, y: 7 * 1.5 }, agent: true }' >/dev/null
 
-selectedNpcKey="rob"
 w n.rob.showSelector true
+w cm.setNpc rob
+selectedNpcKey="rob"
+
 w n.rob.setLabel Robbo
 w e.changeNpcAccess rob . +
 
 # write selectedNpcKey on click npc
 click | filter meta.npcKey | map '({ meta }, { home, w }) => {
-  w.n[home.selectedNpcKey]?.showSelector(false);
-  w.n[meta.npcKey]?.showSelector(true);
-  home.selectedNpcKey = meta.npcKey;
+  if (meta.npcKey in w.n) {
+    w.n[home.selectedNpcKey]?.showSelector(false);
+    w.n[meta.npcKey].showSelector(true);
+    w.cm.setNpc(meta.npcKey);
+    home.selectedNpcKey = meta.npcKey;
+  }
 }' &
 
 # open door on click
@@ -39,3 +44,6 @@ click | filter meta.floor | map --forever '(input, { w, home }) => {
 
 w update 'w => w.decor.showLabels = true'
 w update 'w => w.view.targetFov = w.smallViewport ? 20 : 30'
+
+setupContextMenu
+events | handleContextMenu &

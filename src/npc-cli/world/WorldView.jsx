@@ -395,6 +395,7 @@ export default function WorldView(props) {
       onPointerMove={state.onPointerMove}
       onPointerUp={state.onPointerUp}
       onPointerLeave={state.onPointerLeave}
+      tabIndex={0}
       {...{ [popUpRootDataAttribute]: true }}
     >
       {props.children}
