@@ -1,5 +1,4 @@
 import React from "react";
-import * as THREE from "three";
 import { Vect } from "../geom";
 import { defaultDoorCloseMs, npcNearUiDist, wallHeight } from "../service/const";
 import { pause, warn, debug } from "../service/generic";
@@ -7,6 +6,7 @@ import { geom } from "../service/geom";
 import { npcToBodyKey } from "../service/rapier";
 import { toV3, toXZ, unitXVector3 } from "../service/three";
 import useStateRef from "../hooks/use-state-ref";
+import { npcKeyToCmKey } from "./ContextMenus";
 
 /**
  * @param {import('./World').State} w
@@ -266,11 +266,6 @@ export default function useHandleEvents(w) {
       const npc = w.n[e.npcKey];
 
       switch (e.key) {
-        // case "click-act":
-        //   const success = state.onClickAct(e);
-        //   // colour act red/green
-        //   w.cm.setSelectedActColor(success ? '#7f7' : 'red');
-        //   break;
         case "enter-collider":
           if (e.type === 'nearby' || e.type === 'inside') {
             state.onEnterDoorCollider(e);
@@ -311,9 +306,8 @@ export default function useHandleEvents(w) {
           } else {
             state.externalNpcs.delete(e.key);
           }
-          // if (w.cm.isTracking(e.npcKey)) {
-          //   w.cm.track(null);
-          // }
+          
+          w.c.delete(npcKeyToCmKey(e.npcKey));
           break;
         }
         // case "started-moving":

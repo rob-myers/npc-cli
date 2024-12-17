@@ -51,7 +51,12 @@
         - clean up
         - handleContextMenu accounts for `cm.npcKey`
     - 🚧 speech bubbles
-      - somehow set cm.tracked as `w.n[npcKey]?.m.group`
+      - ✅ can add for npc `w c.trackNpc rob`
+        - cm.tracked as `w.n[npcKey]?.m.group`
+      - ✅ can remove for npc `w c.delete @rob`
+      - 🚧 always scaled
+      - 🚧 improve styling
+      - 🚧 offset upwards?
   - remove icon generation code from asset.js
 
 - 🚧 pre next.js migration
