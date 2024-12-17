@@ -188,20 +188,6 @@
     - e.g. `spawn rob $( click 1 ) --degrees=90`
     - e.g. `npc rob --showSelector=true --setLabel=Robbo`
 
-- ❌ try creating nav tiles to see if it avoids "steiner points"
-  - ✅ migrate https://github.com/isaac-mason/sketches/blob/main/sketches/recast-navigation/dynamic-tiled-navmesh/src/navigation/dynamic-tiled-navmesh.ts
-    - ✅ dynamic-nav-mesh ts -> js
-    - ✅ build-tile ts -> js
-    - ✅ move worker code into nav.worker
-    - ✅ get demo build working
-    - ✅ show demo navmesh
-  - ❌ decided against it
-
-- ✅ try improve nav by changing tile size
-  - small tile size `0.1` has many Steiner points, yet is pretty good
-
-- 🚧 try avoid nav steiner points via large tile size and using areas
-
 - prevent two different npcs from fading to same do point
 - BUG saw e.npcToDoor missing key
   - ℹ️ maybe physics.worker broke on hmr
@@ -3248,3 +3234,16 @@ done
   - ℹ️ by running quickly many times
   - ℹ️ `w n.rob.agent.velocity` is `{x:0,y:0,z:0}`
   - ✅ seems to be issue with nav mesh (cs too small)
+
+- ❌ try creating nav tiles to see if it avoids "steiner points"
+  - ✅ migrate https://github.com/isaac-mason/sketches/blob/main/sketches/recast-navigation/dynamic-tiled-navmesh/src/navigation/dynamic-tiled-navmesh.ts
+    - ✅ dynamic-nav-mesh ts -> js
+    - ✅ build-tile ts -> js
+    - ✅ move worker code into nav.worker
+    - ✅ get demo build working
+    - ✅ show demo navmesh
+  - ❌ decided against it
+- ✅ try improve nav by changing tile size
+  - small tile size `0.1` has many Steiner points, yet is pretty good
+- ❌ try avoid nav steiner points via large tile size and using areas
+  - too "non-canonical"
