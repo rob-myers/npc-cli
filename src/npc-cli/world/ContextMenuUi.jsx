@@ -55,17 +55,21 @@ export function DefaultContextMenu({ cm, cm: { ui } }) {
  * @param {import("./ContextMenus").ContextMenuProps} props 
  */
 export function NpcContextMenu({ cm }) {
-  return <>
+  return (
+    <div className="bubble">
 
-    <div className="npc-key">
-      <span>{cm.npcKey}</span>
+      <div className="npc-key">
+        {cm.npcKey}
+      </div>
+
+      <div className="speech">
+        {/* 🚧 */}
+        foo bar baz
+        foo bar baz
+      </div>
+
     </div>
-
-    <div className="speech-bubble">
-      {/* 🚧 */}
-    </div>
-
-  </>;
+  );
 }
 
 /** @type {Record<'embedded' | 'docked', NPC.ContextMenuLink[]>} */
@@ -169,16 +173,46 @@ export const npcContextMenuCss = css`
 
   position: absolute;
   top: 0;
-  left: 0;
   left: calc(-1/2 * var(--menu-width));
   transform-origin: 0 0;
   background: transparent !important;
 
   > div {
     transform-origin: calc(+1/2 * var(--menu-width)) 0;
-    color: white;
     width: var(--menu-width);
-    background-color: #99999966;
+    display: flex;
+    justify-content: center;
+  }
+  
+  .bubble {
+    display: flex;
+    align-items: baseline;
+    /* justify-content: space-evenly; */
+    justify-content: center;
+    gap: 4px;
+    
+    /* user-select: auto; */
+    
     padding: 4px 8px;
+    font-size: 0.8rem;
+    color: white;
+    /* background-color: #99999966; */
+    
+    transition: width 300ms;
+    width: 100%;
+  }
+  
+  .npc-key {
+    word-break: break-all;
+    background-color: #99999966;
+    /* border: 1px solid #222; */
+    padding: 0 4px;
+    /* width: 25%; */
+  }
+  
+  .speech {
+    font-weight: lighter;
+    font-style: italic;
+    /* opacity: 0.6; */
   }
 `;

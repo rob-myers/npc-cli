@@ -56,8 +56,9 @@
       - ✅ can remove for npc `w c.delete @rob`
       - ✅ always scaled
         - seems hard-coded cm.baseScale better than "agent-to-camera-distance" when `w c.trackNpc rob`
-      - 🚧 improve styling
-      - 🚧 offset upwards?
+      - ✅ improve styling
+      - ❌ offset upwards
+      - 🚧 can set speech
   - remove icon generation code from asset.js
 
 - 🚧 pre next.js migration
