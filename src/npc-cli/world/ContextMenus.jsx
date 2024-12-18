@@ -20,11 +20,8 @@ export default function ContextMenus() {
     delete(...cmKeys) {
       for (const cmKey of cmKeys) {
         const cm = state.lookup[cmKey];
-        if (cmKey === 'default') {
-          continue; // Cannot delete default
-        }
-        if (cm !== undefined) {
-          cm.tracked = undefined;
+        if (cm !== undefined && cm.key !== 'default') {
+          cm.setTracked();
           delete state.lookup[cmKey];
           update();
           true;
@@ -56,7 +53,7 @@ export default function ContextMenus() {
       if (npcKey in w.n) {
         const cmKey = npcKeyToCmKey(npcKey);
         const cm = state.lookup[cmKey] ??= new CMInstance(cmKey, w, { showKvs: false, pinned: true, npcKey });
-        cm.tracked = w.n[npcKey].m.group;
+        cm.setTracked(w.n[npcKey].m.group);
         cm.open = true;
         update();
       } else {
@@ -110,14 +107,11 @@ function ContextMenu({ cm }) {
     cm.update();
   }, [cm.scaled]);
 
-  // 🚧 10 -> initial distance from camera
-  const baseScale = cm.key === 'default' ? cm.baseScale : 10;
-
   return (
     <Html3d
       ref={cm.html3dRef.bind(cm)}
       className={cm.key === 'default' ? defaultContextMenuCss: npcContextMenuCss}
-      baseScale={baseScale}
+      baseScale={cm.baseScale}
       docked={cm.docked}
       position={cm.position}
       normal={cm.normal}
@@ -279,6 +273,18 @@ export class CMInstance {
   setNpc(npcKey) {
     this.npcKey = npcKey;
     this.update();
+  }
+
+  /**
+   * @param {THREE.Object3D} [input] 
+   */
+  setTracked(input) {
+    this.tracked = input;
+
+    if (input !== undefined) {
+      // this.baseScale = input.position.distanceTo(this.w.r3f.camera.position);
+      this.baseScale = 10;
+    }
   }
 
   toggleDocked() {

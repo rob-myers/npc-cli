@@ -178,7 +178,7 @@ export const npcContextMenuCss = css`
     transform-origin: calc(+1/2 * var(--menu-width)) 0;
     color: white;
     width: var(--menu-width);
-    border: 1px solid #999;
-    padding: 4px;
+    background-color: #99999966;
+    padding: 4px 8px;
   }
 `;

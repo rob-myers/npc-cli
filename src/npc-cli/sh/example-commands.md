@@ -66,6 +66,8 @@ while true; do
   call '({ home }) => home.numPets++'
   w debug.npc.add $( click 1 ) pet-${numPets} cuboid-pet
 done
+
+ w n.rob.position | map '(input, { w }) => w.r3f.camera.position.distanceTo(input)'
 ```
 
 ```sh

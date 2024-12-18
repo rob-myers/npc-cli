@@ -54,7 +54,8 @@
       - ✅ can add for npc `w c.trackNpc rob`
         - cm.tracked as `w.n[npcKey]?.m.group`
       - ✅ can remove for npc `w c.delete @rob`
-      - 🚧 always scaled
+      - ✅ always scaled
+        - seems hard-coded cm.baseScale better than "agent-to-camera-distance" when `w c.trackNpc rob`
       - 🚧 improve styling
       - 🚧 offset upwards?
   - remove icon generation code from asset.js
