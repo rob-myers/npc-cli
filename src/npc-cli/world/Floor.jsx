@@ -150,9 +150,11 @@ export default function Floor(props) {
   React.useEffect(() => {
     state.positionInstances();
     state.addUvs();
-    // 🚧 prefer three.js api (tried w.texFloor.tex.needsUpdate = true)
+  }, [w.mapKey, w.hash.full]);
+  
+  React.useEffect(() => {
     state.draw().then(() => w.update());
-  }, [w.mapKey, w.hash.full, w.texVs.floor]);
+  }, [w.texVs.floor]);
 
   return (
     <instancedMesh
