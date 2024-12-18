@@ -12,8 +12,8 @@ import { longPressMs, pickedTypesInSomeRoom } from "../service/const.js";
 import { emptySceneForPicking, getTempInstanceMesh, hasObjectPickShaderMaterial, pickingRenderTarget, toXZ, unitXVector3, v3Precision } from "../service/three.js";
 import { popUpRootDataAttribute } from "../components/PopUp.jsx";
 import { WorldContext } from "./world-context.js";
-import ContextMenus from "./ContextMenus.jsx";
 import useStateRef from "../hooks/use-state-ref.js";
+import ContextMenus from "./ContextMenus.jsx";
 
 /**
  * @param {Props} props

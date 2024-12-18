@@ -167,6 +167,13 @@ export const helper = {
    */
   isAnimKey(input) {
     return input in helper.fromAnimKey;
+  },
+
+  /**
+  * @param {string} npcKey 
+  */
+  npcKeyToCmKey(npcKey) {
+    return /** @type {const} */ (`@${npcKey}`);
   }
 
 };

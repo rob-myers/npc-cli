@@ -6,7 +6,6 @@ import { geom } from "../service/geom";
 import { npcToBodyKey } from "../service/rapier";
 import { toV3, toXZ, unitXVector3 } from "../service/three";
 import useStateRef from "../hooks/use-state-ref";
-import { npcKeyToCmKey } from "./ContextMenus";
 
 /**
  * @param {import('./World').State} w
@@ -307,7 +306,7 @@ export default function useHandleEvents(w) {
             state.externalNpcs.delete(e.key);
           }
           
-          w.c.delete(npcKeyToCmKey(e.npcKey));
+          w.c.delete(w.lib.npcKeyToCmKey(e.npcKey));
           break;
         }
         // case "started-moving":
