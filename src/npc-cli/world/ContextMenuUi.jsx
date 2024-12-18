@@ -177,6 +177,7 @@ export const npcContextMenuCss = css`
   left: calc(-1/2 * var(--menu-width));
   transform-origin: 0 0;
   background: transparent !important;
+  pointer-events: none;
 
   > div {
     transform-origin: calc(+1/2 * var(--menu-width)) 0;
@@ -204,6 +205,7 @@ export const npcContextMenuCss = css`
   }
   
   .npc-key {
+    pointer-events: all;
     word-break: break-all;
     background-color: #99999966;
     /* border: 1px solid #222; */
@@ -214,6 +216,5 @@ export const npcContextMenuCss = css`
   .speech {
     font-weight: lighter;
     font-style: italic;
-    /* opacity: 0.6; */
   }
 `;

@@ -46,7 +46,9 @@ export default function ContextMenus() {
     setBubbleOpacity(npcKey, opacity) {
       const cmKey = w.lib.npcKeyToCmKey(npcKey);
       const cm = state.lookup[cmKey];
-      cm.html3d.rootDiv.style.opacity = `${opacity}`;
+      if (cm !== undefined) {
+        cm.html3d.rootDiv.style.opacity = `${opacity}`;
+      }
     },
 
   }));
