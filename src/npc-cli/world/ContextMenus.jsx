@@ -1,7 +1,7 @@
 import React from "react";
 
 import { mapValues, tryLocalStorageGetParsed, tryLocalStorageSet } from "../service/generic";
-import { CMInstance } from "../service/cm-instance";
+import { CMInstance } from "./cm-instance";
 import { WorldContext } from "./world-context";
 import useStateRef from "../hooks/use-state-ref";
 import useUpdate from "../hooks/use-update";

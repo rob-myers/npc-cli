@@ -32,7 +32,7 @@ export class CMInstance {
 
   /**
    * @param {string} key
-   * @param {import('../world/World').State} w
+   * @param {import('./World').State} w
    * @param {Partial<ContextMenuUi> & {
    *   npcKey?: string;
    *   pinned?: boolean;
@@ -41,7 +41,7 @@ export class CMInstance {
    */
   constructor(key, w, opts) {
     /** @type {string} */ this.key = key;
-    /** @type {import('../world/World').State} */ this.w = w;
+    /** @type {import('./World').State} */ this.w = w;
 
     const prevOpts = w.c.savedOpts[key] ?? {};
     this.pinned = opts.pinned ?? prevOpts.pinned ?? w.smallViewport;

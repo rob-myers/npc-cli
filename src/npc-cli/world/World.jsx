@@ -151,10 +151,6 @@ export default function World(props) {
       state.door.onTick(deltaMs);
       // console.info(state.r3f.gl.info.render);
 
-      if (state.debug.npc !== null) {
-        state.debug.npc.onTick(deltaMs);
-      }
-
       state.view.onTick(deltaMs);
     },
     trackHmr(nextHmr) {
@@ -356,7 +352,7 @@ export default function World(props) {
                 <Decor />
                 <Npcs />
                 <Debug
-                  // showNavMesh
+                  showNavMesh
                   // showOrigNavPoly
                   // showTestNpcs
                   // showStaticColliders
@@ -420,7 +416,7 @@ export default function World(props) {
  * @property {import("./Doors").State['byKey']} d
  * Shortcut for `w.door.byKey`
  * @property {import("./ContextMenus").State} c
- * @property {import("./ContextMenus").CMInstance} cm
+ * @property {import("./cm-instance").CMInstance} cm
  *
  * @property {TexArray} texFloor
  * @property {TexArray} texCeil

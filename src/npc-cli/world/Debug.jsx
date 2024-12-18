@@ -8,7 +8,6 @@ import { navMeta, decompToXZGeometry, cylinderGeometry, boxGeometry } from "../s
 import { WorldContext } from "./world-context";
 import useStateRef from "../hooks/use-state-ref";
 import useUpdate from "../hooks/use-update";
-import TestNpcs from "./TestNpcs";
 
 /**
  * @param {Props} props 
@@ -19,7 +18,6 @@ export default function Debug(props) {
   const state = useStateRef(/** @returns {State} */ () => ({
     navMesh: /** @type {*} */ (null),
     navPath: /** @type {*} */ (null),
-    npc: /** @type {*} */ (null),
     pick: null,
     physicsLines: new THREE.BufferGeometry(),
     selectedNavPolys: null,
@@ -223,8 +221,6 @@ export default function Debug(props) {
         w={w}
       />
     </group>}
-
-    {props.showTestNpcs === true && <TestNpcs />}
   </>;
 }
 
@@ -234,14 +230,12 @@ export default function Debug(props) {
  * @property {boolean} [showNavMesh]
  * @property {boolean} [showOrigNavPoly]
  * @property {boolean} [showStaticColliders]
- * @property {boolean} [showTestNpcs]
  */
 
 /**
  * @typedef State
  * @property {NavMeshHelper} navMesh
  * @property {THREE.Group} navPath
- * @property {import('./TestNpcs').State} npc
  * @property {null | THREE.BufferGeometry} selectedNavPolys
  * @property {(WW.PhysicDebugItem & { parsedKey: WW.PhysicsParsedBodyKey })[]} staticColliders
  * @property {null | NPC.DownData} pick
