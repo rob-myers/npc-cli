@@ -10,9 +10,9 @@ import useStateRef from '../hooks/use-state-ref';
  * @type {React.ForwardRefExoticComponent<Props & React.RefAttributes<State>>}
  */
 export const Html3d = React.forwardRef(({
+  baseScale,
   children,
   className,
-  distanceFactor,
   docked,
   open,
   tracked,
@@ -22,8 +22,8 @@ export const Html3d = React.forwardRef(({
     const { gl, camera, scene, size, events } = useThree();
 
     const state = useStateRef(/** @returns {State} */ () => ({
+      baseScale: 0,
       delta: [0, 0],
-      distanceFactor: 0,
       domTarget: null,
       group: /** @type {*} */ (null),
       innerDiv: /** @type {*} */ (null),
@@ -57,14 +57,14 @@ export const Html3d = React.forwardRef(({
           Math.abs(state.delta[1] - vec[1]) > eps
         ) {
   
-          const scale = distanceFactor === undefined ? 1 : objectScale(state.group, camera) * distanceFactor
+          const scale = baseScale === undefined ? 1 : objectScale(state.group, camera) * baseScale
           
           state.rootDiv.style.transform = `translate3d(${vec[0]}px,${vec[1]}px,0)`;
           state.rootDiv.style.zIndex = `${zIndex ?? ''}`;
   
-          if (state.distanceFactor !== distanceFactor) {// 🔔 animate resize on unlock
-            state.innerDiv.style.transition = distanceFactor === undefined ? 'transform 300ms' : '';
-            state.distanceFactor = distanceFactor;
+          if (state.baseScale !== baseScale) {// 🔔 animate resize on unlock
+            state.innerDiv.style.transition = baseScale === undefined ? 'transform 300ms' : '';
+            state.baseScale = baseScale;
           }
   
           state.innerDiv.style.transform = `scale(${scale})`;
@@ -73,7 +73,7 @@ export const Html3d = React.forwardRef(({
           state.zoom = camera.zoom;
         }
       }
-    }), { deps: [distanceFactor, camera, size] });
+    }), { deps: [baseScale, camera, size] });
 
     React.useImperativeHandle(ref, () => state, []);
 
@@ -143,7 +143,7 @@ export const Html3d = React.forwardRef(({
 /**
  * @typedef BaseProps
  * @property {boolean} [docked]
- * @property {number} [distanceFactor]
+ * @property {number} [baseScale]
  * @property {THREE.Vector3} [normal]
  * @property {boolean} open
  * @property {THREE.Object3D} [tracked]
@@ -154,7 +154,7 @@ export const Html3d = React.forwardRef(({
 * @typedef State
 * @property {[number, number]} delta 2D translation
 * @property {null | HTMLElement} domTarget
-* @property {number | undefined} distanceFactor
+* @property {number} [baseScale]
 * @property {THREE.Group} group
 * @property {HTMLDivElement} innerDiv
 * @property {null | THREE.Object3D} objTarget

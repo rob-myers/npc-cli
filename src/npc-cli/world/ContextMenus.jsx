@@ -110,13 +110,14 @@ function ContextMenu({ cm }) {
     cm.update();
   }, [cm.scaled]);
 
+  // 🚧 10 -> initial distance from camera
+  const baseScale = cm.key === 'default' ? cm.baseScale : 10;
+
   return (
     <Html3d
       ref={cm.html3dRef.bind(cm)}
       className={cm.key === 'default' ? defaultContextMenuCss: npcContextMenuCss}
-      // distanceFactor={cm.scaled ? cm.scale : undefined}
-      // distanceFactor={10} // 🚧 must match initial camera distance
-      distanceFactor={cm.key === 'default' ? (cm.scaled ? cm.scale : undefined) : 10}
+      baseScale={baseScale}
       docked={cm.docked}
       position={cm.position}
       normal={cm.normal}
@@ -151,7 +152,7 @@ export class CMInstance {
   html3d = /** @type {*} */ (null);
   /** Used to hide context menu when camera direction has positive dot product */
   normal = /** @type {undefined | THREE.Vector3} */ (undefined);
-  scale = 1;
+  baseScale = /** @type {undefined | number} */ (undefined);
   tracked = /** @type {undefined | THREE.Object3D} */ (undefined);
   /** For violating React.memo */
   epochMs = 0;
@@ -295,7 +296,7 @@ export class CMInstance {
   /** Ensure smooth transition when start scaling */
   toggleScaled() {
     this.scaled = !this.scaled;
-    this.scale = this.scaled === true ? 1 / objectScale(this.html3d.group, this.w.r3f.camera) : 1;
+    this.baseScale = this.scaled === true ? 1 / objectScale(this.html3d.group, this.w.r3f.camera) : undefined;
   }
 
   update = noop
