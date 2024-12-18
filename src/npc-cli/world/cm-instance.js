@@ -94,6 +94,15 @@ export class CMInstance {
     this.html3dRef(null);
   }
 
+  /** @param {boolean} [force] */
+  hide(force) {
+    if (this.pinned === true && force !== true) {
+      return;
+    }
+    this.open = false;
+    this.update();
+  }
+
   /** @param {null | import('../components/Html3d').State} html3d */
   html3dRef(html3d) {// @ts-ignore
     return html3d !== null ? this.html3d = html3d : delete this.html3d;
@@ -147,6 +156,15 @@ export class CMInstance {
       // this.baseScale = input.position.distanceTo(this.w.r3f.camera.position);
       this.baseScale = 10;
     }
+  }
+
+  /** @param {NPC.ContextMenuContextDef} [ct] */
+  show(ct) {
+    if (ct !== undefined) {
+      this.setContext(ct);
+    }
+    this.open = true;
+    this.update();
   }
 
   toggleDocked() {

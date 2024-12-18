@@ -81,6 +81,7 @@ const topLinks = {
   ],
   docked: [
     { key: 'toggle-kvs', label: 'meta', test: 'showKvs' },
+    { key: 'toggle-pinned', label: 'pin', test: 'pinned' },
   ],
 };
 

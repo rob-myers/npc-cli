@@ -58,6 +58,7 @@
         - seems hard-coded cm.baseScale better than "agent-to-camera-distance" when `w c.trackNpc rob`
       - ✅ improve styling
       - ❌ offset upwards
+      - ✅ `w c.createBubble rob`
       - 🚧 can set speech
   - remove icon generation code from asset.js
 

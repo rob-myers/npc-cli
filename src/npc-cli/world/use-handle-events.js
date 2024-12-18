@@ -210,7 +210,7 @@ export default function useHandleEvents(w) {
           break;
         }
         case "pointerdown":
-          w.c.hide('default');
+          w.cm.hide();
           break;
         case "pointerup":
           !e.touch && state.onPointerUpMenuDesktop(e);
@@ -519,7 +519,7 @@ export default function useHandleEvents(w) {
       if (lastDown === undefined) {
         return;
       }
-      w.c.show('default', lastDown);
+      w.cm.show(lastDown);
       w.debug.setPickIndicator(lastDown);  
     },
     someNpcInsideDoor(gdKey) {

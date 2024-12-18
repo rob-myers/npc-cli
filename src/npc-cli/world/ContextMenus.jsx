@@ -16,6 +16,17 @@ export default function ContextMenus() {
     lookup: {},
     savedOpts: tryLocalStorageGetParsed(`context-menus@${w.key}`) ?? {},
 
+    createBubble(npcKey) {
+      if (npcKey in w.n) {
+        const cmKey = w.lib.npcKeyToCmKey(npcKey);
+        const cm = state.lookup[cmKey] ??= new CMInstance(cmKey, w, { showKvs: false, pinned: true, npcKey });
+        cm.setTracked(w.n[npcKey].m.group);
+        cm.open = true;
+        update();
+      } else {
+        throw Error(`ContextMenus.trackNpc: npc not found: "${npcKey}"`);
+      }
+    },
     delete(...cmKeys) {
       for (const cmKey of cmKeys) {
         const cm = state.lookup[cmKey];
@@ -27,38 +38,17 @@ export default function ContextMenus() {
         }
       }
     },
-    hide(key, force) {
-      const cm = state.lookup[key];
-      if (cm.pinned === true && force !== true) {
-        return;
-      }
-      cm.open = false;
-      cm.update();
-    },
     saveOpts() {// only need to save default?
       tryLocalStorageSet(`context-menus@${w.key}`, JSON.stringify(
         mapValues(state.lookup, ({ pinned, showKvs, docked }) => ({ pinned, showKvs, docked }))
       ));
     },
-    show(key, ct) {
-      const cm = state.lookup[key];
-      if (ct !== undefined) {
-        cm.setContext(ct);
-      }
-      cm.open = true;
-      cm.update();
+    setBubbleOpacity(npcKey, opacity) {
+      const cmKey = w.lib.npcKeyToCmKey(npcKey);
+      const cm = state.lookup[cmKey];
+      cm.html3d.rootDiv.style.opacity = `${opacity}`;
     },
-    trackNpc(npcKey) {
-      if (npcKey in w.n) {
-        const cmKey = w.lib.npcKeyToCmKey(npcKey);
-        const cm = state.lookup[cmKey] ??= new CMInstance(cmKey, w, { showKvs: false, pinned: true, npcKey });
-        cm.setTracked(w.n[npcKey].m.group);
-        cm.open = true;
-        update();
-      } else {
-        throw Error(`ContextMenus.trackNpc: npc not found: "${npcKey}"`);
-      }
-    },
+
   }));
 
   w.c = state;
@@ -83,11 +73,10 @@ export default function ContextMenus() {
  * @property {{ [cmKey: string]: CMInstance }} lookup
  * @property {{ [cmKey: string]: Pick<CMInstance, 'docked' | 'pinned' | 'showKvs'> }} savedOpts
  *
- * @property {(npcKey: string) => void} trackNpc Add speech bubble for specific npc
+ * @property {(npcKey: string) => void} createBubble Add speech bubble for specific npc
  * @property {(...cmKeys: string[]) => void} delete
- * @property {(cmKey: string, force?: boolean) => void} hide
  * @property {() => void} saveOpts
- * @property {(cmKey: string, ct?: NPC.ContextMenuContextDef) => void} show
+ * @property {(npcKey: string, opacity: number) => void} setBubbleOpacity
  */
 
 /** @type {React.MemoExoticComponent<(props: ContextMenuProps & { epochMs: number }) => JSX.Element>} */
