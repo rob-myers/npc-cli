@@ -352,9 +352,8 @@ export default function World(props) {
                 <Decor />
                 <Npcs />
                 <Debug
-                  showNavMesh
+                  // showNavMesh
                   // showOrigNavPoly
-                  // showTestNpcs
                   // showStaticColliders
                 />
               </>}
