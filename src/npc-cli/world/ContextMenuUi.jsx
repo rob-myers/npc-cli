@@ -63,9 +63,7 @@ export function NpcContextMenu({ cm }) {
       </div>
 
       <div className="speech">
-        {/* 🚧 */}
-        foo bar baz
-        foo bar baz
+        {cm.ui.speech}
       </div>
 
     </div>

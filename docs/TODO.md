@@ -58,8 +58,9 @@
         - seems hard-coded cm.baseScale better than "agent-to-camera-distance" when `w c.trackNpc rob`
       - ✅ improve styling
       - ❌ offset upwards
-      - ✅ `w c.createBubble rob`
-      - 🚧 can set speech
+      - ✅ `w c.create rob`
+      - ✅ can set speech
+        - `w c.lookup.@rob.setSpeech 'foo bar baz'`
       - object pick npc shows bubble, not default context menu
   - remove icon generation code from asset.js
 

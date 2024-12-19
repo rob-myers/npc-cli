@@ -28,6 +28,7 @@ export class CMInstance {
   ui = {
     kvs: [],
     links: [],
+    // speech: undefined,
   }
 
   /**
@@ -146,6 +147,17 @@ export class CMInstance {
     this.update();
   }
 
+  /** @param {number} opacity  */
+  setOpacity(opacity) {
+    this.html3d.rootDiv.style.opacity = `${opacity}`;
+  }
+  
+  /** @param {string} speech  */
+  setSpeech(speech) {
+    this.ui.speech = speech;
+    this.update();
+  }
+
   /**
    * @param {THREE.Object3D} [input] 
    */
@@ -189,11 +201,12 @@ export class CMInstance {
 }
 
 /**
- * 🔔 HMR breaks for function-as-property (e.g. for lexical binding)
+ * Used by "default" and "@{npcKey}"
  * @typedef ContextMenuUi
  * @property {{ k: string; v: string; length: number; }[]} kvs
  * Key values e.g. of last clicked meta
  * @property {NPC.ContextMenuLink[]} links
+ * @property {string} [speech]
  */
 
 const tmpVector1 = new THREE.Vector3();

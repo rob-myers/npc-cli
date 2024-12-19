@@ -306,7 +306,7 @@ export default function useHandleEvents(w) {
             state.externalNpcs.delete(e.key);
           }
           
-          w.c.delete(w.lib.npcKeyToCmKey(e.npcKey));
+          w.c.delete(e.npcKey);
           break;
         }
         // case "started-moving":
