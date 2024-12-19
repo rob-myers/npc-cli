@@ -69,7 +69,7 @@
         ```
       - ✅ object pick npc shows bubble, not default context menu
       - ✅ can close bubble
-  - 🚧 remove icon generation code from asset.js
+  - ✅ remove icon generation code from asset.js
 
 - 🚧 pre next.js migration
   - ✅ finish/close wip todos
@@ -211,7 +211,8 @@
     - e.g. `spawn rob $( click 1 ) --degrees=90`
     - e.g. `npc rob --showSelector=true --setLabel=Robbo`
 
-- fix npc.setLabel: either update every npc in case label uv changed, or use different "monotonic" sprite-sheet strategy 
+- 🚧 fix npc.setLabel
+  - e.g. provide single uniform with all label uvs to every npc
 
 ### On hold
 

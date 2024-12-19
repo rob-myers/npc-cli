@@ -236,9 +236,6 @@ info({ opts });
     const toDecorImg = await createDecorSheetJson(assetsJson, prev);
     await drawDecorSheet(assetsJson, toDecorImg, prev);
     perf('decor');
-    perf('decor', 'creating decor icons');
-    await drawDecorIcons(toDecorImg);
-    perf('decor');
   } else {
     info('skipping decor sprite-sheet');
   }
@@ -345,9 +342,6 @@ info({ opts });
   let pngPaths = [
     ...getObstaclePngPaths(assetsJson),
     ...getDecorPngPaths(assetsJson),
-    ...keys(assetsJson.sheet.decor).flatMap(
-      x => x.startsWith('icon--') ? getDecorIconPngPath(x) : []
-    ),
   ];
   if (!opts.prePush) {
     // Only convert PNG if (i) lacks a WEBP, or (ii) has an "older one"
@@ -723,27 +717,6 @@ async function createDecorSheetJson(assets, prev) {
 }
 
 /**
- * Save those `DecorImgKey` with prefix "icon--" as individual images,
- * e.g. for usage in DOM-based UI.
- * 
- * @param {Partial<Record<Geomorph.DecorImgKey, import('canvas').Image>>} decorImgKeyToImage
- */
-async function drawDecorIcons(decorImgKeyToImage) {
-  const ct = createCanvas(0, 0).getContext('2d');
-
-  for (const decorImgKey of keys(decorImgKeyToImage)) {
-    if (decorImgKey.startsWith('icon--')) {
-      const image = /** @type {import('canvas').Image} */ (decorImgKeyToImage[decorImgKey]);
-      ct.canvas.width = image.width;
-      ct.canvas.height = image.height;
-      ct.drawImage(image, 0, 0);
-      await saveCanvasAsFile(ct.canvas, getDecorIconPngPath(decorImgKey));
-    }
-  }
-
-}
-
-/**
  * Create the actual sprite-sheet PNG(s).
  * 
  * @param {Geomorph.AssetsJson} assets
@@ -792,13 +765,6 @@ async function drawDecorSheet(assets, decorImgKeyToImage, prev) {
 function getDecorPngPaths(assets) {
   const numDecorSheets = assets?.sheet.decorDims.length ?? 0;
   return range(numDecorSheets).map(i => `${baseDecorPath}.${i}.png`);
-}
-
-/**
- * @param {Geomorph.DecorImgKey} decorImgKey
- */
-function getDecorIconPngPath(decorImgKey) {
-  return `${assets2dDir}/${decorImgKey}.png`;
 }
 
 //#endregion
