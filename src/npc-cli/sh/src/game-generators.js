@@ -47,7 +47,7 @@ export async function* click({ api, args, w }) {
     
     const e = await /** @type {Promise<NPC.PointerUpEvent>} */ (new Promise((resolve, reject) => {
       eventsSub = w.events.subscribe({ next(e) {
-        if (e.key !== "pointerup" || e.distancePx > 5 || !api.isRunning()) {
+        if (e.key !== "pointerup" || e.distancePx > (w.smallViewport ? 15 : 5) || !api.isRunning()) {
           return;
         } else if (e.clickId && !clickId) {
           return; // `click {n}` overrides `click`

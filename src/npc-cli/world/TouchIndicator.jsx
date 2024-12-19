@@ -20,7 +20,7 @@ export default function TouchIndicator() {
     },
     touchCircle: /** @type {HTMLDivElement} */ ({}),
     touchRadiusPx: w.smallViewport ? 70 : 35,
-    touchErrorPx: w.smallViewport ? 10 : 5,
+    touchErrorPx: w.smallViewport ? 15 : 5,
     touchFadeSecs: w.smallViewport ? 2 : 0.2,
   }));
 
