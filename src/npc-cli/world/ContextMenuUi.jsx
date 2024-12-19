@@ -220,7 +220,7 @@ export const npcContextMenuCss = css`
     gap: 4px;
     opacity: 0.8;
     font-size: 0.8rem;
-    color: #9999ff;
+    color: #a5a5f9;
 
     button {
       text-decoration: underline;
