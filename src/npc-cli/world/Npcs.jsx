@@ -122,6 +122,7 @@ export default function Npcs(props) {
       update();
     },
     async spawn(e) {
+      e.point = toXZ(e.point);
       if (!(typeof e.npcKey === 'string' && /^[a-z0-9-_]+$/i.test(e.npcKey))) {
         throw Error(`npc key: ${JSON.stringify(e.npcKey)} must match /^[a-z0-9-_]+$/i`);
       } else if (!(typeof e.point?.x === 'number' && typeof e.point.y === 'number')) {
@@ -130,7 +131,6 @@ export default function Npcs(props) {
         throw Error('npc key cannot be "default"');
       }
 
-      e.point = toXZ(e.point);
 
       const dstNav = e.meta?.nav === true || state.isPointInNavmesh(e.point);
       // 🔔 attach agent by default if dst navigable

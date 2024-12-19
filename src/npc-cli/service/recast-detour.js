@@ -34,7 +34,7 @@ export function getTileCacheGeneratorConfig(tileCacheMeshProcess) {
   return {
     // cs: 0.1,
     // tileSize: 10,
-    cs: 0.125,
+    cs: 0.13,
     tileSize: 14,
     ch: 0.001,
     borderSize: 0,
@@ -43,7 +43,7 @@ export function getTileCacheGeneratorConfig(tileCacheMeshProcess) {
     walkableClimb: 0,
     tileCacheMeshProcess,
     // 🔔 avoid npc getting too close to door
-    maxSimplificationError: 0.5,
+    // maxSimplificationError: 0.5,
     // maxSimplificationError: 0,
     walkableRadius: 0,
     // mergeRegionArea: 20,

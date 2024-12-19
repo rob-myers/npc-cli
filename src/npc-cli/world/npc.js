@@ -772,7 +772,7 @@ export class Npc {
 }
 
 const maxAcceleration = 8;
-const staticSeparationWeight = 1;
+const staticSeparationWeight = 2;
 
 /** @type {Partial<import("@recast-navigation/core").CrowdAgentParams>} */
 export const crowdAgentParams = {

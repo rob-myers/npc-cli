@@ -210,6 +210,15 @@
     - e.g. `spawn rob $( click 1 ) --degrees=90`
     - e.g. `npc rob --showSelector=true --setLabel=Robbo`
 
+- not always spawning?
+  ```sh
+  c=0
+  while true; do
+    w npc.spawn "{ npcKey: \"rob_${c}\", point: $( click 1 ) }" >/dev/null
+    call 'x => x.home.c++'
+  done
+  ```
+- sh: multi-line edit using Option+Enter not working
 - update example-commands.md
 - easier way to reboot control scripts
   - ℹ️ currently if edit `click` need to manually kill processes then run PROFILE
