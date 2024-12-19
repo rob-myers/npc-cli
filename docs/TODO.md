@@ -60,6 +60,7 @@
       - ❌ offset upwards
       - ✅ `w c.createBubble rob`
       - 🚧 can set speech
+      - object pick npc shows bubble, not default context menu
   - remove icon generation code from asset.js
 
 - 🚧 pre next.js migration
@@ -202,6 +203,7 @@
     - e.g. `spawn rob $( click 1 ) --degrees=90`
     - e.g. `npc rob --showSelector=true --setLabel=Robbo`
 
+- better texture for cuboid
 - prevent two different npcs from fading to same do point
 - BUG saw e.npcToDoor missing key
   - ℹ️ maybe physics.worker broke on hmr

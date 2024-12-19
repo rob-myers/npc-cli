@@ -206,11 +206,10 @@ export const npcContextMenuCss = css`
   
   .npc-key {
     pointer-events: all;
+    cursor: pointer;
     word-break: break-all;
     background-color: #99999966;
-    /* border: 1px solid #222; */
     padding: 0 4px;
-    /* width: 25%; */
   }
   
   .speech {
