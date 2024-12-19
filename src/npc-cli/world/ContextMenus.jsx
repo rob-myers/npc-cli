@@ -26,7 +26,10 @@ export default function ContextMenus() {
         const cm = state.lookup[npcKey] = new CMInstance(npcKey, w, {
           showKvs: false,
           pinned: true,
-          links: [{ key: 'close', label: 'close' }],
+          links: [
+            { key: 'link', label: 'link' },
+            { key: 'hide', label: 'hide' },
+          ],
           npcKey,
         });
         cm.setTracked(w.n[npcKey].m.group);
@@ -57,8 +60,8 @@ export default function ContextMenus() {
         }
       }
     },
-    say(npcKey, speech) {
-      state.lookup[npcKey]?.say(speech);
+    say(npcKey, ...speech) {
+      state.lookup[npcKey]?.say(...speech);
     },
     saveOpts() {// only need to save default?
       tryLocalStorageSet(`context-menus@${w.key}`, JSON.stringify(
@@ -93,7 +96,7 @@ export default function ContextMenus() {
  * @property {(npcKey: string) => void} create Add speech bubble for specific npc
  * @property {(...npcKeys: string[]) => void} delete
  * @property {(...npcKeys: string[]) => void} ensure
- * @property {(npcKey: string, speech: string) => void} say
+ * @property {(npcKey: string, ...speech: string[]) => void} say
  * @property {() => void} saveOpts
  */
 

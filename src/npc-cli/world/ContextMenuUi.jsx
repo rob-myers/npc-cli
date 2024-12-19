@@ -148,17 +148,8 @@ export function NpcContextMenu({ cm }) {
   return (
     <div className="bubble" onClick={cm.onClickLink.bind(cm)}>
 
-      <div className="main">
-        <button
-          className="npc-key"
-          data-key="npc-key"
-        >
-          {cm.npcKey}
-        </button>
-
-        <div className="speech">
-          {cm.ui.speech}
-        </div>
+      <div className="speech">
+        {cm.ui.speech}
       </div>
 
       <div className="links">
@@ -184,8 +175,9 @@ export const npcContextMenuCss = css`
   top: 0;
   left: calc(-1/2 * var(--menu-width));
   transform-origin: 0 0;
-  background: transparent !important;
+  
   pointer-events: none;
+  background: transparent !important;
 
   > div {
     transform-origin: calc(+1/2 * var(--menu-width)) 0;
@@ -200,34 +192,25 @@ export const npcContextMenuCss = css`
     align-items: center;
     justify-content: center;
     
-    padding: 4px 8px;
     font-size: 1rem;
     color: white;
     /* background-color: #99999966; */
     
     transition: width 300ms;
-    width: 100%;
-  }
-  
-  .main {
-    display: flex;
-    gap: 4px;
   }
 
-  .npc-key {
-    pointer-events: all;
-    cursor: pointer;
-    word-break: break-all;
-    background-color: #33ff3333;
-    font-family: 'Courier New', Courier, monospace;
-    padding: 0 4px;
-  }
-  
   .speech {
     font-weight: lighter;
     font-style: italic;
-  }
+    font-size: 1rem;
 
+    display: -webkit-box;
+    justify-content: center;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical; 
+    overflow: hidden;
+    /* word-break: break-all; */
+  }
 
   .links {
     pointer-events: all;
@@ -235,7 +218,9 @@ export const npcContextMenuCss = css`
 
     display: flex;
     gap: 4px;
-    font-size: 0.7rem;
+    opacity: 0.8;
+    font-size: 0.8rem;
+    color: #9999ff;
 
     button {
       text-decoration: underline;
