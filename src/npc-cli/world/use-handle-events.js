@@ -276,8 +276,9 @@ export default function useHandleEvents(w) {
           }
           break;
         case "spawned": {
-          const { x, y, z } = npc.getPosition();
+
           if (npc.s.spawns === 1) {// 1st spawn
+            const { x, y, z } = npc.getPosition();
             w.physics.worker.postMessage({
               type: 'add-npcs',
               npcs: [{ npcKey: e.npcKey, position: { x, y, z } }],
@@ -288,8 +289,13 @@ export default function useHandleEvents(w) {
               state.roomToNpcs[prevGrId.gmId][prevGrId.roomId]?.delete(npc.key);
             }
           }
+
           state.npcToRoom.set(npc.key, {...e.gmRoomId});
           (state.roomToNpcs[e.gmRoomId.gmId][e.gmRoomId.roomId] ??= new Set()).add(e.npcKey);
+
+          if (w.disabled === true) {
+            w.debugTick();
+          }
           break;
         }
         case "removed-npc": {

@@ -5,6 +5,7 @@ import { filter } from "rxjs/operators";
 import * as THREE from "three";
 import { Timer } from "three-stdlib";
 import { importTileCache, Crowd } from "@recast-navigation/core";
+import debounce from "debounce";
 
 import { Vect } from "../geom";
 import { GmGraphClass } from "../graph/gm-graph";
@@ -108,6 +109,17 @@ export default function World(props) {
     n: /** @type {*} */ ({}), // w.npc.npc
     d: /** @type {*} */ ({}), // w.door.byKey
 
+    advance: debounce(
+      (postAct) => window.setTimeout(() => (state.r3f.advance(Date.now()), postAct?.())),
+      30,
+      { immediate: true },
+    ),
+    debugTick() {
+      state.npc.onTick(1000 / 60);
+      state.advance(// update npc speech balloons
+        () => Object.values(state.c.lookup).forEach(cm => cm.html3d.onFrame())
+      );
+    },
     isReady() {
       const ready = state.crowd !== null && state.decor?.queryStatus === 'success';
 
@@ -133,9 +145,6 @@ export default function World(props) {
         maxAgentRadius: helper.defaults.radius,
       });
       state.npc?.restore();
-    },
-    onDebugTick() {
-      state.npc.onTick(1000 / 60);
     },
     onTick() {
       state.reqAnimId = requestAnimationFrame(state.onTick);
@@ -431,9 +440,10 @@ export default function World(props) {
  * @property {boolean} disconnected
  * @property {boolean} smallViewport
  *
+ * @property {(postAct?: () => void) => void} advance
  * @property {() => boolean} isReady
  * @property {(exportedNavMesh: Uint8Array) => void} loadTiledMesh
- * @property {() => void} onDebugTick
+ * @property {() => void} debugTick
  * @property {() => void} onTick
  * @property {(next: State['hmr']) => Record<keyof State['hmr'], boolean>} trackHmr
  * Has function `createGmsData` changed?

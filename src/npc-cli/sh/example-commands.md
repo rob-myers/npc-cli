@@ -119,6 +119,9 @@ w npc.npc.rob.look -Math.PI/2 # ❌
 
 w n.rob.agent.parameters
 w n.rob.agent.parameters | map updateFlags
+
+# also supported whilst paused
+w npc.spawn '{ npcKey: "rob", point: '$( click 1 )' }' >/dev/null
 ```
 
 ## Local variables
@@ -306,7 +309,6 @@ npc rob do "$( click 1 )" '{ extraParams: [1] }'
   map 'async (input, {api}) => { await new Promise(r => setTimeout(r, 1000)); return input }'
 ```
 
-🚧 test from here
 
 ```sh
 spawn rob $( click 1 ) --zhodani

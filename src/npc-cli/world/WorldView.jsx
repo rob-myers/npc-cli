@@ -108,8 +108,7 @@ export default function WorldView(props) {
         && state.lastDown.longDown === false
         && state.lastDown.screenPoint.distanceTo(getRelativePointer(e)) < 1
       ) {
-        w.onDebugTick();
-        window.setTimeout(() => w.r3f.advance(Date.now()));
+        w.debugTick();
       }
     },
     onChangeControls(e) {

@@ -210,6 +210,7 @@
     - e.g. `spawn rob $( click 1 ) --degrees=90`
     - e.g. `npc rob --showSelector=true --setLabel=Robbo`
 
+- update example-commands.md
 - easier way to reboot control scripts
   - ℹ️ currently if edit `click` need to manually kill processes then run PROFILE
   - sh: can tag process e.g. as part of controls
