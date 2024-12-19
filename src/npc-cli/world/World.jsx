@@ -140,8 +140,8 @@ export default function World(props) {
       }
       Object.assign(state.nav, tiledCacheResult);
       state.crowd = new Crowd(state.nav.navMesh, {
-        maxAgents: 10,
-        // maxAgents: 200,
+        // maxAgents: 10,
+        maxAgents: 200,
         maxAgentRadius: helper.defaults.radius,
       });
       state.npc?.restore();
