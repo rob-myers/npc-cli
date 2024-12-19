@@ -61,6 +61,12 @@
       - ✅ `w c.create rob`
       - ✅ can set speech
         - `w c.lookup.@rob.setSpeech 'foo bar baz'`
+      - ✅ `w c.lookup.rob.say 'foo bar baz'`
+      - ✅ `w c.say rob 'foo bar baz'`
+      - ✅ can show links too
+        ```sh
+        w c.lookup.rob.setLinks "{ key: 'foo', label: 'foo' }" "{ key: 'bar', label: 'bar's }"
+        ```
       - object pick npc shows bubble, not default context menu
   - remove icon generation code from asset.js
 

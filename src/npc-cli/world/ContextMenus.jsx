@@ -10,8 +10,8 @@ import { DefaultContextMenu, defaultContextMenuCss, NpcContextMenu, npcContextMe
 
 /**
  * We support two kinds of context menu:
- * - default context menu (key `default`) a.k.a. `w.cm`
- * - npc speech bubbles (keys `@{npcKey}`)
+ * - "default" i.e. default context menu a.k.a. `w.cm`
+ * - "{npcKey}" i.e. npc speech bubbles
  */
 export default function ContextMenus() {
 
@@ -23,8 +23,7 @@ export default function ContextMenus() {
 
     create(npcKey) {
       if (npcKey in w.n) {
-        const cmKey = w.lib.npcKeyToCmKey(npcKey);
-        const cm = state.lookup[cmKey] ??= new CMInstance(cmKey, w, { showKvs: false, pinned: true, npcKey });
+        const cm = state.lookup[npcKey] ??= new CMInstance(npcKey, w, { showKvs: false, pinned: true, npcKey });
         cm.setTracked(w.n[npcKey].m.group);
         cm.open = true;
         update();
@@ -34,14 +33,16 @@ export default function ContextMenus() {
     },
     delete(...npcKeys) {
       for (const npcKey of npcKeys) {
-        const cmKey = w.lib.npcKeyToCmKey(npcKey);
-        state.lookup[cmKey]?.setTracked();
-        delete state.lookup[cmKey];
+        if (npcKey === 'default') {
+          continue; // cannot delete default context mennu
+        }
+        state.lookup[npcKey]?.setTracked();
+        delete state.lookup[npcKey];
       }
       update();
     },
-    get(npcKey) {
-      return this.lookup[w.lib.npcKeyToCmKey(npcKey)];
+    say(npcKey, speech) {
+      state.lookup[npcKey]?.say(speech);
     },
     saveOpts() {// only need to save default?
       tryLocalStorageSet(`context-menus@${w.key}`, JSON.stringify(
@@ -75,7 +76,7 @@ export default function ContextMenus() {
  *
  * @property {(npcKey: string) => void} create Add speech bubble for specific npc
  * @property {(...cmKeys: string[]) => void} delete
- * @property {(npcKey: string) => void} get Get npc speech bubble
+ * @property {(npcKey: string, speech: string) => void} say
  * @property {() => void} saveOpts
  */
 

@@ -1,7 +1,6 @@
 import React from "react";
 import { css } from "@emotion/css";
 
-
 /**
  * @param {import("./ContextMenus").ContextMenuProps} props 
  */
@@ -25,9 +24,6 @@ export function DefaultContextMenu({ cm, cm: { ui } }) {
           {label}
         </button>
       )}
-    </div>
-
-    <div className="links" onClick={cm.onClickLink.bind(cm)}>
       {ui.links.map(({ key, label, test }) =>
         <button
           key={key}
@@ -51,24 +47,6 @@ export function DefaultContextMenu({ cm, cm: { ui } }) {
   </>;
 }
 
-/**
- * @param {import("./ContextMenus").ContextMenuProps} props 
- */
-export function NpcContextMenu({ cm }) {
-  return (
-    <div className="bubble">
-
-      <div className="npc-key">
-        {cm.npcKey}
-      </div>
-
-      <div className="speech">
-        {cm.ui.speech}
-      </div>
-
-    </div>
-  );
-}
 
 /** @type {Record<'embedded' | 'docked', NPC.ContextMenuLink[]>} */
 const topLinks = {
@@ -106,16 +84,13 @@ export const defaultContextMenuCss = css`
   }
 
   .npc-key {
+    cursor: pointer;
+
     span {
       color: #99ff99;
       pointer-events: none;
     }
     padding: 5px 6px;
-
-    cursor: pointer;
-    /* &:hover span, &:active span {
-      color: #f77;
-    } */
   }
 
   color: #fff;
@@ -140,7 +115,6 @@ export const defaultContextMenuCss = css`
   button.off {
     filter: brightness(0.7);
   }
-
 
   .kvs {
     display: flex;
@@ -167,6 +141,42 @@ export const defaultContextMenuCss = css`
   }
 `;
 
+/**
+ * @param {import("./ContextMenus").ContextMenuProps} props 
+ */
+export function NpcContextMenu({ cm }) {
+  return (
+    <div className="bubble" onClick={cm.onClickLink.bind(cm)}>
+
+      <div className="main">
+        <button
+          className="npc-key"
+          data-key="npc-key"
+        >
+          {cm.npcKey}
+        </button>
+
+        <div className="speech">
+          {cm.ui.speech}
+        </div>
+      </div>
+
+      <div className="links">
+        {cm.ui.links.map(({ key, label, test }) =>
+          <button
+            key={key}
+            data-key={key}
+            className={test !== undefined && !(/** @type {*} */ (cm)[test]) ? 'off' : undefined}
+          >
+            {label}
+          </button>
+        )}
+      </div>
+
+    </div>
+  );
+}
+
 export const npcContextMenuCss = css`
   --menu-width: 200px;
 
@@ -186,12 +196,11 @@ export const npcContextMenuCss = css`
   
   .bubble {
     display: flex;
-    align-items: baseline;
+    flex-direction: column;
+    align-items: center;
     /* justify-content: space-evenly; */
     justify-content: center;
     gap: 4px;
-    
-    /* user-select: auto; */
     
     padding: 4px 8px;
     font-size: 0.8rem;
@@ -202,6 +211,11 @@ export const npcContextMenuCss = css`
     width: 100%;
   }
   
+  .main {
+    display: flex;
+    gap: 4px;
+  }
+
   .npc-key {
     pointer-events: all;
     cursor: pointer;
@@ -213,5 +227,22 @@ export const npcContextMenuCss = css`
   .speech {
     font-weight: lighter;
     font-style: italic;
+  }
+
+
+  .links {
+    pointer-events: all;
+    cursor: pointer;
+
+    display: flex;
+    gap: 4px;
+    font-size: smaller;
+
+    button {
+      text-decoration: underline;
+    }
+    button.off {
+      filter: brightness(0.7);
+    }
   }
 `;

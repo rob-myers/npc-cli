@@ -1,7 +1,11 @@
 import * as THREE from "three";
 import { stringify as javascriptStringify } from 'javascript-stringify';
 import { objectScale } from "../components/Html3d";
+import { warn } from "../service/generic";
 
+/**
+ * 🔔 Avoid `foo = (...bar) => baz` because incompatible with our approach to HMR.
+ */
 export class CMInstance {
 
   /** @type {import('../components/Html3d').State} */
@@ -111,8 +115,12 @@ export class CMInstance {
 
   /** @param {React.MouseEvent} e */
   onClickLink(e) {
-    const button = /** @type {HTMLButtonElement} */ (e.target);
-    const linkKey = button.dataset.key ?? 'unknown';
+    const el = /** @type {HTMLElement} */ (e.target);
+    const linkKey = el.dataset.key;
+
+    if (linkKey === undefined) {
+      return warn(`${'onClick'}: ignored el ${el.tagName} with class ${el.className}`);
+    }
 
     this.w.view.rootEl.focus();
     this.w.events.next({ key: 'click-link', cmKey: this.key, linkKey });
@@ -130,6 +138,12 @@ export class CMInstance {
     this.update();
   }
 
+  /** @param {string} speech  */
+  say(speech) {
+    this.ui.speech = speech;
+    this.update();
+  }
+
   /**
    * Context is world position and meta concerning said position
    * @param {NPC.ContextMenuContextDef} ct 
@@ -139,6 +153,12 @@ export class CMInstance {
     this.position = position.toArray();
     this.computeKvsFromMeta(meta);
     this.computeLinks();
+  }
+
+  /** @param {NPC.ContextMenuLink[]} links  */
+  setLinks(...links) {
+    this.ui.links = Object.values(links.reduce((lookup, link) => ({ ...lookup, [link.key]: link }), /** @type {Record<String, NPC.ContextMenuLink>} */ ({})));
+    this.update();
   }
 
   /** @param {string} [npcKey] */
@@ -151,12 +171,6 @@ export class CMInstance {
   setOpacity(opacity) {
     this.html3d.rootDiv.style.opacity = `${opacity}`;
   }
-  
-  /** @param {string} speech  */
-  setSpeech(speech) {
-    this.ui.speech = speech;
-    this.update();
-  }
 
   /**
    * @param {THREE.Object3D} [input] 
@@ -166,7 +180,7 @@ export class CMInstance {
 
     if (input !== undefined) {
       // this.baseScale = input.position.distanceTo(this.w.r3f.camera.position);
-      this.baseScale = 10;
+      this.baseScale = 8;
     }
   }
 
