@@ -182,6 +182,7 @@ export default function Npcs(props) {
         state.pickUid.toKey.set(npc.def.pickUid, e.npcKey);
 
         npc.initialize(state.gltf[npc.def.classKey]);
+        npc.setLabel(e.npcKey);
       }
 
       if (npc.s.spawns === 0) {

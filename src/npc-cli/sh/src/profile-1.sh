@@ -1,5 +1,7 @@
 awaitWorld
 
+w npc.updateLabels rob will kate # efficiency
+
 # 🚧 introduce `spawn` command
 w npc.spawn '{ npcKey: "rob", point: { x: 0.5 * 1.5, y: 5 * 1.5 }, angle: -1.5707963268 }' >/dev/null
 w npc.spawn '{ npcKey: "will", point: { x: 2.5, y: 3 * 1.5 }, agent: true }' >/dev/null
@@ -9,7 +11,6 @@ w n.rob.showSelector true
 w cm.setNpc rob
 selectedNpcKey="rob"
 
-w n.rob.setLabel Robbo
 w e.changeNpcAccess rob . +
 
 # write selectedNpcKey on click npc
