@@ -50,7 +50,7 @@
         - 🚧 triggered from speech bubble
         - clean up
         - handleContextMenu accounts for `cm.npcKey`
-    - 🚧 speech bubbles
+    - ✅ speech bubbles
       - ✅ can add for npc `w c.trackNpc rob`
         - cm.tracked as `w.n[npcKey]?.m.group`
       - ✅ can remove for npc `w c.delete @rob`
@@ -65,10 +65,11 @@
       - ✅ `w c.say rob 'foo bar baz'`
       - ✅ can show links too
         ```sh
-        w c.lookup.rob.setLinks "{ key: 'foo', label: 'foo' }" "{ key: 'bar', label: 'bar's }"
+        w c.lookup.rob.setLinks "{ key: 'foo', label: 'foo' }" "{ key: 'bar', label: 'bar' }"
         ```
-      - object pick npc shows bubble, not default context menu
-  - remove icon generation code from asset.js
+      - ✅ object pick npc shows bubble, not default context menu
+      - ✅ can close bubble
+  - 🚧 remove icon generation code from asset.js
 
 - 🚧 pre next.js migration
   - ✅ finish/close wip todos

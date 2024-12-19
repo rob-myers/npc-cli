@@ -128,6 +128,7 @@ export class CMInstance {
     switch (linkKey) {
       // case 'delete': w.c.delete(e.cmKey); break;
       case 'clear-npc': this.setNpc(); break;
+      case 'close': this.hide(true); break;
       case 'toggle-docked': this.toggleDocked(); break;
       case 'toggle-kvs': this.toggleKvs(); break;
       case 'toggle-pinned': this.togglePinned(); break;
@@ -180,7 +181,7 @@ export class CMInstance {
 
     if (input !== undefined) {
       // this.baseScale = input.position.distanceTo(this.w.r3f.camera.position);
-      this.baseScale = 8;
+      this.baseScale = 6; // 🚧 hard-coded
     }
   }
 

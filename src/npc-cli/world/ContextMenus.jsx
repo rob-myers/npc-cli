@@ -21,9 +21,14 @@ export default function ContextMenus() {
     lookup: {},
     savedOpts: tryLocalStorageGetParsed(`context-menus@${w.key}`) ?? {},
 
-    create(npcKey) {
+    create(npcKey) {// assumes non-existent
       if (npcKey in w.n) {
-        const cm = state.lookup[npcKey] ??= new CMInstance(npcKey, w, { showKvs: false, pinned: true, npcKey });
+        const cm = state.lookup[npcKey] = new CMInstance(npcKey, w, {
+          showKvs: false,
+          pinned: true,
+          links: [{ key: 'close', label: 'close' }],
+          npcKey,
+        });
         cm.setTracked(w.n[npcKey].m.group);
         cm.open = true;
         update();
@@ -40,6 +45,17 @@ export default function ContextMenus() {
         delete state.lookup[npcKey];
       }
       update();
+    },
+    ensure(...npcKeys) {
+      for (const npcKey of npcKeys) {
+        const cm = state.lookup[npcKey];
+        if (cm === undefined) {
+          state.create(npcKey);
+        } else {
+          cm.open = true;
+          cm.update();
+        }
+      }
     },
     say(npcKey, speech) {
       state.lookup[npcKey]?.say(speech);
@@ -75,7 +91,8 @@ export default function ContextMenus() {
  * @property {{ [cmKey: string]: Pick<CMInstance, 'docked' | 'pinned' | 'showKvs'> }} savedOpts
  *
  * @property {(npcKey: string) => void} create Add speech bubble for specific npc
- * @property {(...cmKeys: string[]) => void} delete
+ * @property {(...npcKeys: string[]) => void} delete
+ * @property {(...npcKeys: string[]) => void} ensure
  * @property {(npcKey: string, speech: string) => void} say
  * @property {() => void} saveOpts
  */

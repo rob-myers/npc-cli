@@ -198,12 +198,10 @@ export const npcContextMenuCss = css`
     display: flex;
     flex-direction: column;
     align-items: center;
-    /* justify-content: space-evenly; */
     justify-content: center;
-    gap: 4px;
     
     padding: 4px 8px;
-    font-size: 0.8rem;
+    font-size: 1rem;
     color: white;
     /* background-color: #99999966; */
     
@@ -220,7 +218,8 @@ export const npcContextMenuCss = css`
     pointer-events: all;
     cursor: pointer;
     word-break: break-all;
-    background-color: #99999966;
+    background-color: #33ff3333;
+    font-family: 'Courier New', Courier, monospace;
     padding: 0 4px;
   }
   
@@ -236,7 +235,7 @@ export const npcContextMenuCss = css`
 
     display: flex;
     gap: 4px;
-    font-size: smaller;
+    font-size: 0.7rem;
 
     button {
       text-decoration: underline;
