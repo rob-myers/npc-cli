@@ -27,10 +27,9 @@ export const Html3d = React.forwardRef(({
       domTarget: null,
       group: /** @type {*} */ (null),
       innerDiv: /** @type {*} */ (null),
-      objTarget: null,
+      objTarget: /** @type {*} */ (null),
       rootDiv: document.createElement('div'),
       reactRoot: /** @type {*} */ (null),
-      sign: 0,
       shouldTranslate: false,
       zoom: 0,
 
@@ -41,15 +40,7 @@ export const Html3d = React.forwardRef(({
   
         camera.updateMatrixWorld()
         state.group.updateWorldMatrix(true, false)
-        const vec = calculatePosition(/** @type {THREE.Object3D} */ (state.objTarget), camera, size)
-  
-        // use props.normal to hide when behind
-        camera.getWorldDirection(cameraNormal);
-        const sign = props.normal !== undefined ? Math.sign(cameraNormal.dot(props.normal)) : -1;
-        if (sign !== state.sign) {
-          state.sign = sign;
-          state.rootDiv.style.display = sign === 1 ? 'none' : 'initial';
-        }
+        const vec = calculatePosition(state.objTarget, camera, size)
   
         if (
           Math.abs(state.zoom - camera.zoom) > eps ||
@@ -57,7 +48,7 @@ export const Html3d = React.forwardRef(({
           Math.abs(state.delta[1] - vec[1]) > eps
         ) {
   
-          const scale = baseScale === undefined ? 1 : objectScale(state.group, camera) * baseScale
+          const scale = baseScale === undefined ? 1 : objectScale(state.objTarget, camera) * baseScale
           
           state.rootDiv.style.transform = `translate3d(${vec[0]}px,${vec[1]}px,0)`;
           state.rootDiv.style.zIndex = `${zIndex ?? ''}`;
@@ -79,7 +70,7 @@ export const Html3d = React.forwardRef(({
 
     // Append to the connected element, which makes HTML work with views
     state.domTarget = /** @type {HTMLElement} */ (events.connected || gl.domElement.parentNode);
-    state.objTarget = tracked ?? state.group ?? null;
+    state.objTarget = tracked ?? state.group;
 
     React.useLayoutEffect(() => {
       if (state.objTarget !== null) {
@@ -157,10 +148,9 @@ export const Html3d = React.forwardRef(({
 * @property {number} [baseScale]
 * @property {THREE.Group} group
 * @property {HTMLDivElement} innerDiv
-* @property {null | THREE.Object3D} objTarget
+* @property {THREE.Object3D} objTarget props.tracked or state.group
 * @property {HTMLDivElement} rootDiv
 * @property {ReactDOM.Root} reactRoot
-* @property {number} sign
 * @property {boolean} shouldTranslate
 * @property {number} zoom
 * @property {(rootState?: import('@react-three/fiber').RootState) => void} onFrame
@@ -246,5 +236,3 @@ function getCSSMatrix(matrix, multipliers, prepend = '') {
  * | 'inherit'
  * )} PointerEventsProperties
  */
-
-const cameraNormal = new THREE.Vector3();
