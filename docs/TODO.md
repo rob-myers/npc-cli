@@ -211,7 +211,11 @@
     - e.g. `spawn rob $( click 1 ) --degrees=90`
     - e.g. `npc rob --showSelector=true --setLabel=Robbo`
 
-- not always spawning?
+- fix npc.setLabel: either update every npc in case label uv changed, or use different "monotonic" sprite-sheet strategy 
+
+### On hold
+
+- put into example-commands
   ```sh
   c=0
   while true; do
@@ -220,7 +224,7 @@
   done
   ```
 - sh: multi-line edit using Option+Enter not working
-- update example-commands.md
+- remove stale examples from example-commands.md
 - easier way to reboot control scripts
   - ℹ️ currently if edit `click` need to manually kill processes then run PROFILE
   - sh: can tag process e.g. as part of controls

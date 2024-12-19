@@ -629,6 +629,7 @@ export class Npc {
   }
 
   /**
+   * 🚧 we need to update other npcs if their uv rect changed
    * Updates label sprite-sheet if necessary.
    * @param {string | null} label
    */

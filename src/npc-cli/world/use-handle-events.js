@@ -283,6 +283,7 @@ export default function useHandleEvents(w) {
               type: 'add-npcs',
               npcs: [{ npcKey: e.npcKey, position: { x, y, z } }],
             });
+            npc.setLabel(e.npcKey);
           } else {// Respawn
             const prevGrId = state.npcToRoom.get(npc.key);
             if (prevGrId !== undefined) {
