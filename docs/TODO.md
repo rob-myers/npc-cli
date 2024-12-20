@@ -212,7 +212,9 @@
     - e.g. `npc rob --showSelector=true --setLabel=Robbo`
 
 - 🚧 fix npc.setLabel
-  - e.g. provide single uniform with all label uvs to every npc
+  - ✅ onchange label sprite-sheet, update *all* effected npc
+  - clarify/clean/simplify service/uv
+  - avoid excessive computation by pre-building `rob_{1..200}`
 
 ### On hold
 

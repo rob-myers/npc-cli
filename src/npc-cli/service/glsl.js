@@ -230,11 +230,8 @@ export const cuboidManShader = {
   uniform float labelHeight;
   uniform vec3 selectorColor;
 
-  uniform int uFaceTexId;
   uniform vec2 uFaceUv[4];
-  uniform int uIconTexId;
   uniform vec2 uIconUv[4];
-  uniform int uLabelTexId;
   uniform vec2 uLabelUv[4];
   // label width/height changes
   uniform vec2 uLabelDim;

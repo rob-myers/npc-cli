@@ -629,22 +629,27 @@ export class Npc {
   }
 
   /**
-   * 🚧 we need to update other npcs if their uv rect changed
    * Updates label sprite-sheet if necessary.
    * @param {string | null} label
    */
   setLabel(label) {
     this.s.label = label;
 
-    if (label === null) {
-      cmUvService.updateLabelQuad(this);
-    } else if (this.w.npc.updateLabels(label) === false) {
-      // if updateLabels noop, need to apply update
-      cmUvService.updateLabelQuad(this);
-    }
+    const changedLabelsSheet = label !== null && this.w.npc.updateLabels(label) === true;
 
-    // may touch every npc via sprite-sheet change
-    this.forceUpdate();
+    if (changedLabelsSheet === true) {
+      // 🔔 might need to update every npc
+      // avoidable by previously ensuring labels
+      Object.values(this.w.n).forEach((npc) => {
+        cmUvService.updateLabelQuad(npc);
+        npc.epochMs = Date.now();
+      });
+    } else {
+      cmUvService.updateLabelQuad(this);
+      this.epochMs = Date.now();
+    }
+    
+    this.w.npc.update();
   }
 
   /** @param {THREE.Vector3Like} dst  */
