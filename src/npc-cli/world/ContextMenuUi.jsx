@@ -209,7 +209,8 @@ export const npcContextMenuCss = css`
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical; 
     overflow: hidden;
-    /* word-break: break-all; */
+
+    text-align: center;
   }
 
   .links {
