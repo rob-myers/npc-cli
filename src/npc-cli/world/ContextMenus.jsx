@@ -28,7 +28,7 @@ export default function ContextMenus() {
           pinned: true,
           links: [
             { key: 'link', label: 'link' },
-            { key: 'hide', label: 'hide' },
+            { key: 'hide', label: 'x' },
           ],
           npcKey,
         });
