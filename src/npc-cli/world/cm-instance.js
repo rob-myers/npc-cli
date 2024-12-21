@@ -201,7 +201,7 @@ export class CMInstance {
   /** Ensure smooth transition when start scaling */
   toggleScaled() {
     this.scaled = !this.scaled;
-    this.baseScale = this.scaled === true ? 1 / objectScale(this.html3d.group, this.w.r3f.camera) : undefined;
+    this.baseScale = this.scaled === true ? 1 / objectScale(this.html3d.objTarget, this.w.r3f.camera) : undefined;
   }
 
   update = noop
