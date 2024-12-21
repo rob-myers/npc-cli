@@ -63,7 +63,7 @@ export const Html3d = React.forwardRef(({
           state.zoom = camera.zoom;
         }
       },
-    }), { deps: [baseScale, camera, size] });
+    }), { deps: [baseScale, camera, size, docked] });
 
     React.useImperativeHandle(ref, () => state, []);
 
