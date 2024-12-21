@@ -65,17 +65,18 @@
       - ✅ default context menu on npc tracks npc
       - 🚧 simplify speech bubbles
         - ✅ no links
-        - `w.c.say {npcKey} {words}` ensures
-        - `w.c.say {npcKey}` deletes
+        - 🚧 `w.c.say {npcKey} {words}` ensures
+        - 🚧 `w.c.say {npcKey}` deletes
       - 🚧 links can be npc-sensitive
         - ✅ `cm.setNpc()` `cm.setNpc('rob')` and show
         - ✅ can remove by clicking it
         - ✅ temp: profile-1: triggered on select npc
         - ✅ triggered via long click npc
+        - ✅ handleContextMenu accounts for `cm.npcKey`
         - 🚧 use custom select instead: choose none or npcKey 
-        - 🚧 handleContextMenu accounts for `cm.npcKey`
         - clean up
   - ✅ remove icon generation code from asset.js
+  - Logger also records speech and provides link options
 
 - 🚧 pre next.js migration
   - ✅ finish/close wip todos
@@ -217,13 +218,14 @@
     - e.g. `spawn rob $( click 1 ) --degrees=90`
     - e.g. `npc rob --showSelector=true --setLabel=Robbo`
 
-- 🚧 fix npc.setLabel
+- ✅ fix npc.setLabel
   - ✅ onchange label sprite-sheet, update *all* effected npc
-  - clarify/clean/simplify service/uv
-  - avoid excessive computation by pre-building `rob_{1..200}`
+  - ℹ️ could share uniforms via DataTexture
+  - ℹ️ could avoid excessive computation by pre-building `rob_{1..200}`
 
 ### On hold
 
+- clarify/clean/simplify service/uv
 - put into example-commands
   ```sh
   c=0
