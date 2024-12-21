@@ -8,17 +8,19 @@ w npc.spawn '{ npcKey: "will", point: { x: 2.5, y: 3 * 1.5 }, agent: true }' >/d
 w npc.spawn '{ npcKey: "kate", point: { x: 4.5 * 1.5, y: 7 * 1.5 }, agent: true }' >/dev/null
 
 w n.rob.showSelector true
-w cm.setNpc rob
 selectedNpcKey="rob"
 
 w e.changeNpcAccess rob . +
 
 # write selectedNpcKey on click npc
-click | filter meta.npcKey | map '({ meta }, { home, w }) => {
-  if (meta.npcKey in w.n) {
+click | filter meta.npcKey | map '({ meta, keys }, { home, w }) => {
+  if (!(meta.npcKey in w.n)) {
+    return;
+  } else if (keys?.includes("ctrl")) {
+    w.cm.setNpc(meta.npcKey);
+  } else {
     w.n[home.selectedNpcKey]?.showSelector(false);
     w.n[meta.npcKey].showSelector(true);
-    w.cm.setNpc(meta.npcKey);
     home.selectedNpcKey = meta.npcKey;
   }
 }' &

@@ -43,32 +43,37 @@
       - ✅ extra links on click door
         - do not support unauth npc inside room i.e. this action corresponds to having a remote key
       - ✅ links take effect e.g. open door
+      - ✅ speech bubbles
+        - ✅ can add for npc `w c.trackNpc rob`
+          - cm.tracked as `w.n[npcKey]?.m.group`
+        - ✅ can remove for npc `w c.delete @rob`
+        - ✅ always scaled
+          - seems hard-coded cm.baseScale better than "agent-to-camera-distance" when `w c.trackNpc rob`
+        - ✅ improve styling
+        - ❌ offset upwards
+        - ✅ `w c.create rob`
+        - ✅ can set speech
+          - `w c.lookup.@rob.setSpeech 'foo bar baz'`
+        - ✅ `w c.lookup.rob.say 'foo bar baz'`
+        - ✅ `w c.say rob 'foo bar baz'`
+        - ✅ can show links too
+          ```sh
+          w c.lookup.rob.setLinks "{ key: 'foo', label: 'foo' }" "{ key: 'bar', label: 'bar' }"
+          ```
+        - ✅ object pick npc shows bubble, not default context menu
+        - ✅ can close bubble
+      - ✅ default context menu on npc tracks npc
+      - 🚧 simplify speech bubbles
+        - ✅ no links
+        - `w.c.say {npcKey} {words}` ensures
+        - `w.c.say {npcKey}` deletes
       - 🚧 links can be npc-sensitive
         - ✅ `cm.setNpc()` `cm.setNpc('rob')` and show
         - ✅ can remove by clicking it
         - ✅ temp: profile-1: triggered on select npc
-        - 🚧 triggered from speech bubble
+        - 🚧 triggered via ctrl-click npc
+        - 🚧 handleContextMenu accounts for `cm.npcKey`
         - clean up
-        - handleContextMenu accounts for `cm.npcKey`
-    - ✅ speech bubbles
-      - ✅ can add for npc `w c.trackNpc rob`
-        - cm.tracked as `w.n[npcKey]?.m.group`
-      - ✅ can remove for npc `w c.delete @rob`
-      - ✅ always scaled
-        - seems hard-coded cm.baseScale better than "agent-to-camera-distance" when `w c.trackNpc rob`
-      - ✅ improve styling
-      - ❌ offset upwards
-      - ✅ `w c.create rob`
-      - ✅ can set speech
-        - `w c.lookup.@rob.setSpeech 'foo bar baz'`
-      - ✅ `w c.lookup.rob.say 'foo bar baz'`
-      - ✅ `w c.say rob 'foo bar baz'`
-      - ✅ can show links too
-        ```sh
-        w c.lookup.rob.setLinks "{ key: 'foo', label: 'foo' }" "{ key: 'bar', label: 'bar' }"
-        ```
-      - ✅ object pick npc shows bubble, not default context menu
-      - ✅ can close bubble
   - ✅ remove icon generation code from asset.js
 
 - 🚧 pre next.js migration

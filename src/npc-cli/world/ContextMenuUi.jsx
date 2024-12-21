@@ -146,24 +146,10 @@ export const defaultContextMenuCss = css`
  */
 export function NpcContextMenu({ cm }) {
   return (
-    <div className="bubble" onClick={cm.onClickLink.bind(cm)}>
-
+    <div className="bubble">
       <div className="speech">
         {cm.ui.speech}
       </div>
-
-      <div className="links">
-        {cm.ui.links.map(({ key, label, test }) =>
-          <button
-            key={key}
-            data-key={key}
-            className={test !== undefined && !(/** @type {*} */ (cm)[test]) ? 'off' : undefined}
-          >
-            {label}
-          </button>
-        )}
-      </div>
-
     </div>
   );
 }
@@ -211,23 +197,5 @@ export const npcContextMenuCss = css`
     overflow: hidden;
 
     text-align: center;
-  }
-
-  .links {
-    pointer-events: all;
-    cursor: pointer;
-
-    display: flex;
-    gap: 4px;
-    opacity: 0.8;
-    font-size: 0.8rem;
-    color: #a5a5f9;
-
-    button {
-      text-decoration: underline;
-    }
-    button.off {
-      filter: brightness(0.7);
-    }
   }
 `;

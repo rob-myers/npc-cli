@@ -180,23 +180,25 @@ export async function* handleContextMenu({ api, w, datum: e }) {
     }
 
     const { meta } = w.cm;
+    const npcKey = w.cm.npcKey;
 
-    switch (e.linkKey) {
-      case "open":
-      case "close": {
-        w.e.toggleDoor(meta.gdKey, { npcKey: undefined, [e.linkKey]: true,
-          // access: meta.inner === true && meta.secure !== true ? true : undefined,
-          // point,
-        });
-        break;
-      }
-      case "lock":
-      case "unlock":{
-        w.e.toggleLock(meta.gdKey, { npcKey: undefined, [e.linkKey]: true,
-          // point,
-        });
-        break;
-      }
+    if (e.linkKey === "open" || e.linkKey === "close") {
+      w.e.toggleDoor(meta.gdKey, {
+        npcKey,
+        [e.linkKey]: true,
+        access: npcKey === undefined || (meta.inner === true && meta.secure !== true)
+          ? true
+          : w.e.npcCanAccess(npcKey, meta.gdKey),
+      });
+    } else if (e.linkKey === "lock" || e.linkKey === "unlock") {
+      w.e.toggleLock(meta.gdKey, {
+        npcKey: undefined,
+        [e.linkKey]: true,
+        access: npcKey === undefined
+          ? true
+          : w.e.npcCanAccess(npcKey, meta.gdKey),
+        // point,
+      });
     }
 
   }

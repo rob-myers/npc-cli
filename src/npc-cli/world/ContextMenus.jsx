@@ -26,13 +26,10 @@ export default function ContextMenus() {
         const cm = state.lookup[npcKey] = new CMInstance(npcKey, w, {
           showKvs: false,
           pinned: true,
-          links: [
-            { key: 'link', label: 'link' },
-            { key: 'hide', label: 'x' },
-          ],
           npcKey,
         });
         cm.setTracked(w.n[npcKey].m.group);
+        cm.baseScale = 4; // 🚧
         cm.open = true;
         update();
       } else {

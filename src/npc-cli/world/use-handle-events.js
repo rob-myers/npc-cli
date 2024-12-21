@@ -200,7 +200,7 @@ export default function useHandleEvents(w) {
           }
 
           if (e.distancePx <= (e.touch ? 20 : 5)) {
-            state.showContextMenu();
+            state.showDefaultContextMenu();
           }
           break;
         }
@@ -507,7 +507,7 @@ export default function useHandleEvents(w) {
     },
     onPointerUpMenuDesktop(e) {
       if (e.rmb && e.distancePx <= 5) {
-        state.showContextMenu();
+        state.showDefaultContextMenu();
       }
     },
     removeFromSensors(npcKey) {
@@ -522,15 +522,19 @@ export default function useHandleEvents(w) {
       state.npcToDoors[npcKey]?.nearby.clear();
       state.npcToDoors[npcKey]?.inside.clear();
     },
-    showContextMenu() {
+    showDefaultContextMenu() {
       const { lastDown } = w.view;
       if (lastDown === undefined) {
         return;
       } else if ('npcKey' in lastDown.meta) {
-        w.c.ensure(lastDown.meta.npcKey);
-      } else {
+        const { npcKey } = lastDown.meta;
+        w.cm.setTracked(w.n[npcKey].m.group);
+        w.debug.setPickIndicator();  
         w.cm.show(lastDown);
+      } else {
+        w.cm.setTracked();
         w.debug.setPickIndicator(lastDown);  
+        w.cm.show(lastDown);
       }
     },
     someNpcInsideDoor(gdKey) {
@@ -648,7 +652,7 @@ export default function useHandleEvents(w) {
  * @property {(npcKey: string, gdKey: Geomorph.GmDoorKey) => boolean} npcNearDoor
  * @property {(e: NPC.PointerUpEvent) => void} onPointerUpMenuDesktop
  * @property {(npcKey: string) => void} removeFromSensors
- * @property {() => void} showContextMenu
+ * @property {() => void} showDefaultContextMenu
  * Default context menu, unless clicked on an npc
  * @property {(gdKey: Geomorph.GmDoorKey) => boolean} someNpcInsideDoor
  * @property {(gdKey: Geomorph.GmDoorKey) => boolean} someNpcNearDoor

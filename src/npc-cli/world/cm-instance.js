@@ -156,12 +156,6 @@ export class CMInstance {
     this.computeLinks();
   }
 
-  /** @param {NPC.ContextMenuLink[]} links  */
-  setLinks(...links) {
-    this.ui.links = Object.values(links.reduce((lookup, link) => ({ ...lookup, [link.key]: link }), /** @type {Record<String, NPC.ContextMenuLink>} */ ({})));
-    this.update();
-  }
-
   /** @param {string} [npcKey] */
   setNpc(npcKey) {
     this.npcKey = npcKey;
@@ -178,11 +172,6 @@ export class CMInstance {
    */
   setTracked(input) {
     this.tracked = input;
-
-    if (input !== undefined) {
-      // this.baseScale = input.position.distanceTo(this.w.r3f.camera.position);
-      this.baseScale = 4; // 🚧 hard-coded
-    }
   }
 
   /** @param {NPC.ContextMenuContextDef} [ct] */
