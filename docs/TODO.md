@@ -71,7 +71,8 @@
         - ✅ `cm.setNpc()` `cm.setNpc('rob')` and show
         - ✅ can remove by clicking it
         - ✅ temp: profile-1: triggered on select npc
-        - 🚧 triggered via ctrl-click npc
+        - ✅ triggered via long click npc
+        - 🚧 use custom select instead: choose none or npcKey 
         - 🚧 handleContextMenu accounts for `cm.npcKey`
         - clean up
   - ✅ remove icon generation code from asset.js

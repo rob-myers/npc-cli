@@ -14,15 +14,9 @@ w e.changeNpcAccess rob . +
 
 # write selectedNpcKey on click npc
 click | filter meta.npcKey | map '({ meta, keys }, { home, w }) => {
-  if (!(meta.npcKey in w.n)) {
-    return;
-  } else if (keys?.includes("ctrl")) {
-    w.cm.setNpc(meta.npcKey);
-  } else {
-    w.n[home.selectedNpcKey]?.showSelector(false);
-    w.n[meta.npcKey].showSelector(true);
-    home.selectedNpcKey = meta.npcKey;
-  }
+  w.n[home.selectedNpcKey]?.showSelector(false);
+  w.n[meta.npcKey].showSelector(true);
+  home.selectedNpcKey = meta.npcKey;
 }' &
 
 # open door on click
@@ -30,12 +24,18 @@ click | map '({meta}, {w}) => {
   meta.door && w.e.toggleDoor(meta.gdKey, {})
 }' &
 
-w | map 'w => w.e.pressMenuFilters.push( (meta) => meta.do || meta.floor )'
+w | map 'w => w.e.pressMenuFilters.push(
+  (meta) => meta.do === true || meta.floor === true || meta.npc === true
+)'
 
-click --long | map --forever 'async (x, {home, w}) => {
-  const npc = w.n[home.selectedNpcKey];
-  if (x.meta.floor === true && !npc.s.doMeta) npc.look(x);
-  else await npc.do(x);
+click --long | map --forever 'async (input, {home, w}) => {
+  if (input.meta.npc === true) {
+    w.cm.setNpc(input.meta.npcKey);
+  } else {
+    const npc = w.n[home.selectedNpcKey];
+    if (input.meta.floor === true && !npc.s.doMeta) npc.look(input);
+    else await npc.do(input);
+  }
 }' &
 
 # click navmesh to move selectedNpcKey
