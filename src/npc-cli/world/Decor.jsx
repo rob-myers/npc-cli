@@ -197,15 +197,7 @@ export default function Decor(props) {
     createLabelMatrix4(d) {
       const { width, height } = state.label.lookup[d.meta.label];
       const scale = sguToWorldScale * (1 / spriteSheetLabelExtraScale);
-      const transform = [
-        width * scale, 0, 0, height * scale,
-        d.x - (width * scale) / 2,
-        d.y - (height * scale) / 2,
-      ];
-      // return geomorph.embedXZMat4(transform, {
-      //   mat4: tmpMatFour1,
-      //   yHeight: wallHeight + 0.1,
-      // });
+      const transform = [width * scale, 0, 0, height * scale, d.x, d.y];
       return tmpMatFour1.set(
         transform[0], 0, 0, transform[4],
         0, transform[3], 0, wallHeight - 0.2,
