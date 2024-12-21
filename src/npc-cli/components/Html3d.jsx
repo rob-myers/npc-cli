@@ -63,7 +63,7 @@ export const Html3d = React.forwardRef(({
           state.delta = vec;
           state.zoom = camera.zoom;
         }
-      }
+      },
     }), { deps: [baseScale, camera, size] });
 
     React.useImperativeHandle(ref, () => state, []);
@@ -93,6 +93,9 @@ export const Html3d = React.forwardRef(({
       if (state.rootDiv) {
         state.rootDiv.style.visibility = open ? 'visible' : 'hidden';
         state.rootDiv.className = cx(className, { docked });
+        if (docked) {
+          state.innerDiv.style.transform = 'scale(1)';
+        }
       }
     }, [state.rootDiv, open, docked, className]);
 
@@ -104,10 +107,10 @@ export const Html3d = React.forwardRef(({
         />
       );
 
-      // Force update for (a) paused, (b) window resize
       setTimeout(() => {
-        // just after innerDiv mount
+        // Compute just after innerDiv mount
         state.shouldTranslate = state.objTarget !== null && state.innerDiv !== null && docked !== true;
+        // Force update when paused, or window resize
         state.zoom = 0;
         state.onFrame();
       });

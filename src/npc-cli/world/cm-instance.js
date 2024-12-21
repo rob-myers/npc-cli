@@ -196,6 +196,9 @@ export class CMInstance {
 
   toggleDocked() {
     this.docked = !this.docked;
+    if (this.docked === true && this.scaled === true) {
+      this.toggleScaled();
+    }
   }
 
   toggleKvs() {
