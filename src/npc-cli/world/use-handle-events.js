@@ -147,7 +147,7 @@ export default function useHandleEvents(w) {
       // warn(`${'decodeObjectPick'}: failed to decode: ${JSON.stringify({ r, g, b, a })}`);
       return null;
     },
-    ensureDoorPolyRefs(door) {
+    ensureDoorPolyRefs(door) {// 🔔 also lazy compute unWalkable queryFilter
       if (door.gdKey in state.doorToPolyRefs) {
         return;
       }
@@ -159,8 +159,9 @@ export default function useHandleEvents(w) {
       );
       state.doorToPolyRefs[door.gdKey] = polyRefs;
 
-      // 🔔 lazily compute unWalkable queryFilter
-      polyRefs.forEach(polyRef => w.nav.navMesh.setPolyFlags(polyRef, w.lib.navPolyFlag.unWalkable));
+      if (door.locked === true || door.auto === false) {
+        polyRefs.forEach(polyRef => w.nav.navMesh.setPolyFlags(polyRef, w.lib.navPolyFlag.unWalkable));
+      }
     },
     getNearbyNpcKeys(gmId, roomId, point) {
       const npcKeys = /** @type {string[]} */ ([]);
