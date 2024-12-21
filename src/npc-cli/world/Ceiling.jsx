@@ -45,9 +45,9 @@ export default function Ceiling(props) {
       const { tops, polyDecals } = w.gmsData[gmKey];
       
       // wall/door tops
-      const black = 'rgb(0, 0, 0)';
+      const black = 'black';
       const grey90 = 'rgb(90, 90, 90)';
-      const wallsColor = '#778';
+      const wallsColor = '#888';
       const hullDoorsColor = '#777';
       const grey100 = 'rgb(100, 100, 100)';
       const thinLineWidth = 0.04;
