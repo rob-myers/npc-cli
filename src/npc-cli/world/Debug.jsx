@@ -177,8 +177,8 @@ export default function Debug(props) {
         rotation={[0, Math.PI/2, 0]}
         renderOrder={1}
       >
-        <circleGeometry args={[0.05, 24]} />
-        <meshBasicMaterial color="green" opacity={0.5} transparent wireframe={false} />
+        <circleGeometry args={[0.08, 24]} />
+        <meshBasicMaterial color="#0f9" opacity={0.5} transparent wireframe={false} />
       </mesh>
     </group>}
 
