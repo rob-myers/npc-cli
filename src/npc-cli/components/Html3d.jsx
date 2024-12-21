@@ -30,11 +30,10 @@ export const Html3d = React.forwardRef(({
       objTarget: /** @type {*} */ (null),
       rootDiv: document.createElement('div'),
       reactRoot: /** @type {*} */ (null),
-      shouldTranslate: false,
       zoom: 0,
 
       onFrame(_rootState) {
-        if (state.shouldTranslate !== true) {
+        if (state.objTarget === null || docked === true || state.innerDiv === null) {
           return;
         }
   
@@ -107,10 +106,7 @@ export const Html3d = React.forwardRef(({
         />
       );
 
-      setTimeout(() => {
-        // Compute just after innerDiv mount
-        state.shouldTranslate = state.objTarget !== null && state.innerDiv !== null && docked !== true;
-        // Force update when paused, or window resize
+      setTimeout(() => {// Force update when paused, or window resize
         state.zoom = 0;
         state.onFrame();
       });
@@ -154,7 +150,6 @@ export const Html3d = React.forwardRef(({
 * @property {THREE.Object3D} objTarget props.tracked or state.group
 * @property {HTMLDivElement} rootDiv
 * @property {ReactDOM.Root} reactRoot
-* @property {boolean} shouldTranslate
 * @property {number} zoom
 * @property {(rootState?: import('@react-three/fiber').RootState) => void} onFrame
 */
