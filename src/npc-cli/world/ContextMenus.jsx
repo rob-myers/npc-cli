@@ -32,6 +32,7 @@ export default function ContextMenus() {
         cm.baseScale = 4; // 🚧
         cm.open = true;
         update();
+        return cm;
       } else {
         throw Error(`ContextMenus.trackNpc: npc not found: "${npcKey}"`);
       }
@@ -46,19 +47,17 @@ export default function ContextMenus() {
       }
       update();
     },
-    ensure(...npcKeys) {
-      for (const npcKey of npcKeys) {
-        const cm = state.lookup[npcKey];
-        if (cm === undefined) {
-          state.create(npcKey);
-        } else {
-          cm.open = true;
-          cm.update();
-        }
+    say(npcKey, ...parts) {// ensure/change/delete
+      const cm = state.lookup[npcKey] || state.create(npcKey);
+      const speech = parts.join(' ').trim();
+
+      if (speech === '') {// delete
+        state.delete(npcKey);
+      } else {// change
+        cm.open = true;
+        cm.ui.speech = speech;
+        cm.update();
       }
-    },
-    say(npcKey, ...speech) {
-      state.lookup[npcKey]?.say(...speech);
     },
     saveOpts() {// only need to save default?
       tryLocalStorageSet(`context-menus@${w.key}`, JSON.stringify(
@@ -90,10 +89,9 @@ export default function ContextMenus() {
  * @property {{ [cmKey: string]: CMInstance }} lookup
  * @property {{ [cmKey: string]: Pick<CMInstance, 'docked' | 'pinned' | 'showKvs'> }} savedOpts
  *
- * @property {(npcKey: string) => void} create Add speech bubble for specific npc
+ * @property {(npcKey: string) => CMInstance} create Add speech bubble for specific npc
  * @property {(...npcKeys: string[]) => void} delete
- * @property {(...npcKeys: string[]) => void} ensure
- * @property {(npcKey: string, ...speech: string[]) => void} say
+ * @property {(npcKey: string, ...parts: string[]) => void} say
  * @property {() => void} saveOpts
  */
 

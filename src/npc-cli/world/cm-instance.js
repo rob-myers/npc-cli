@@ -139,11 +139,6 @@ export class CMInstance {
     this.update();
   }
 
-  /** @param {string[]} speech  */
-  say(...speech) {
-    this.ui.speech = speech.join(' ');
-    this.update();
-  }
 
   /**
    * Context is world position and meta concerning said position

@@ -36,7 +36,7 @@
       - decided only default and speech bubbles
     - ✅ default context menu dock moves to lower left
     - ❌ default context menu can drag
-    - 🚧 extend default via script
+    - ✅ extend default via script
       - ✅ can add/remove named "matchers"
         - ℹ️ w.cm.match.foo = bar
       - ✅ extra links on click switch
@@ -62,19 +62,19 @@
           ```
         - ✅ object pick npc shows bubble, not default context menu
         - ✅ can close bubble
-      - ✅ default context menu on npc tracks npc
-      - 🚧 simplify speech bubbles
-        - ✅ no links
-        - 🚧 `w.c.say {npcKey} {words}` ensures
-        - 🚧 `w.c.say {npcKey}` deletes
-      - 🚧 links can be npc-sensitive
-        - ✅ `cm.setNpc()` `cm.setNpc('rob')` and show
-        - ✅ can remove by clicking it
-        - ✅ temp: profile-1: triggered on select npc
-        - ✅ triggered via long click npc
-        - ✅ handleContextMenu accounts for `cm.npcKey`
-        - 🚧 use custom select instead: choose none or npcKey 
-        - clean up
+    - ✅ default context menu on npc tracks npc
+    - ✅ simplify speech bubbles
+      - ✅ no links
+      - ✅ `w.c.say {npcKey} {words}` ensures
+      - ✅ `w.c.say {npcKey}` deletes
+    - 🚧 links can be npc-sensitive
+      - ✅ `cm.setNpc()` `cm.setNpc('rob')` and show
+      - ✅ can remove by clicking it
+      - ✅ temp: profile-1: triggered on select npc
+      - ✅ triggered via long click npc
+      - ✅ handleContextMenu accounts for `cm.npcKey`
+      - 🚧 use custom select instead: choose none or npcKey 
+      - clean up
   - ✅ remove icon generation code from asset.js
   - Logger also records speech and provides link options
 
@@ -217,11 +217,6 @@
   - 🚧 clean up profile-1
     - e.g. `spawn rob $( click 1 ) --degrees=90`
     - e.g. `npc rob --showSelector=true --setLabel=Robbo`
-
-- ✅ fix npc.setLabel
-  - ✅ onchange label sprite-sheet, update *all* effected npc
-  - ℹ️ could share uniforms via DataTexture
-  - ℹ️ could avoid excessive computation by pre-building `rob_{1..200}`
 
 ### On hold
 
@@ -3301,3 +3296,8 @@ done
   - small tile size `0.1` has many Steiner points, yet is pretty good
 - ❌ try avoid nav steiner points via large tile size and using areas
   - too "non-canonical"
+
+- ✅ fix npc.setLabel
+  - ✅ onchange label sprite-sheet, update *all* effected npc
+  - ℹ️ could share uniforms via DataTexture
+  - ℹ️ could avoid excessive computation by pre-building `rob_{1..200}`
