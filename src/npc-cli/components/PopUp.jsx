@@ -45,39 +45,42 @@ export const PopUp = React.forwardRef(function PopUp(props, ref) {
 
   React.useImperativeHandle(ref, () => state, []);
 
-  return <>
-    <button
-      ref={state.ref('icon')}
-      className={cx("side-note", iconTriggerCss)}
-      onClick={e => {
-        if (state.opened) {
-          state.close();
-        } else {
-          state.open(props.width);
-        }
-      }}
-    >
-      ⋯
-    </button>
-    <span
-      ref={state.ref('bubble')}
-      className={cx("side-note-bubble", {
-        open: state.opened,
-        left: state.left,
-        right: !state.left,
-      }, speechBubbleCss)}
-    >
-      <span className="arrow"/>
-      <span className="info">
-        {props.children}
-      </span>
-    </span>
-  </>;
+  return (
+    <div className={rootPopupCss}>
+      <button
+        ref={state.ref('icon')}
+        className="pop-up"
+        onClick={e => {
+          if (state.opened) {
+            state.close();
+          } else {
+            state.open(props.width);
+          }
+        }}
+      >
+        ⋯
+      </button>
+      <div
+        ref={state.ref('bubble')}
+        className={cx("pop-up-bubble", {
+          open: state.opened,
+          left: state.left,
+          right: !state.left,
+        })}
+      >
+        <div className="arrow"/>
+        <div className={cx("info", props.infoClassName)}>
+          {props.children}
+        </div>
+      </div>
+    </div>
+  );
 });
 
 /**
  * @typedef Props
  * @property {number} [arrowDeltaX]
+ * @property {string} [infoClassName]
  * @property {number} [width]
  */
 
@@ -95,104 +98,97 @@ const defaultArrowDeltaX = 20;
 const defaultInfoWidthPx = 300;
 const rootWidthPx = 16;
 
-const iconTriggerCss = css`
-  width: ${rootWidthPx}px;
-  cursor: pointer;
-  white-space: nowrap;
-  
-  padding: 0 4px;
-  border-radius: 10px;
-  border: 1px solid #aaaaaa;
-  background-color: white;
-  color: black;
-  font-size: 0.95rem;
-  font-style: normal;
-`;
+const rootPopupCss = css`
 
-const speechBubbleCss = css`
-  --info-arrow-color: #ffffff77;
-  --info-arrow-delta-x: ${defaultArrowDeltaX}px;
-  --info-width: ${defaultInfoWidthPx}px;
-
-  position: relative;
-  z-index: ${zIndex.speechBubble};
-  top: ${-rootWidthPx}px;
-  /** Prevents bubble span from wrapping to next line? */
-  display: inline-block;
-
-  font-size: 0.95rem;
-  font-style: normal;
-  text-align: center;
-  white-space: nowrap;
-
-  &.open .arrow,
-  &.open .info
-  {
-    visibility: visible;
-    opacity: 1;
-  }
-  &:not(.open) .info {
-    right: 0; // prevent overflow scroll
+  .pop-up {
+    cursor: pointer;
+    white-space: nowrap;
   }
 
-  .info {
-    visibility: hidden;
-    opacity: 0;
-    transition: opacity 300ms;
-    white-space: normal;
-    position: absolute;
-    width: var(--info-width);
-    margin-left: calc(-0.5 * var(--info-width));
-    /* padding: 16px; */
-    /* line-height: 1.6; */
-
-    background-color: black;
-    color: white;
-    /* border-radius: 4px; */
-    border: 1px solid var(--info-arrow-color);
-
-    a {
-      color: #dd0;
+  .pop-up-bubble {
+    --info-arrow-color: #ffffffaa;
+    --info-arrow-delta-x: ${defaultArrowDeltaX}px;
+    --info-width: ${defaultInfoWidthPx}px;
+    
+    position: relative;
+    z-index: ${zIndex.speechBubble};
+    top: ${-rootWidthPx}px;
+    /** Prevents bubble span from wrapping to next line? */
+    display: inline-block;
+    
+    font-size: 0.95rem;
+    font-style: normal;
+    text-align: center;
+    white-space: nowrap;
+    
+    &.open .arrow,
+    &.open .info
+    {
+      visibility: visible;
+      opacity: 1;
     }
-    code {
-      font-size: inherit;
+    &:not(.open) .info {
+      right: 0; // prevent overflow scroll
     }
-  }
-  .arrow {
-    visibility: hidden;
-    opacity: 0;
-    position: absolute;
-    z-index: 1;
-    width: 0; 
-    height: 0;
-  }
-
-  &.left {
-    left: ${-1.5 * rootWidthPx}px;
+    
     .info {
-      top: -16px;
-      left: calc(-1 * (0.5 * var(--info-width) + var(--info-arrow-delta-x) ));
+      min-height: 60px;
+
+      visibility: hidden;
+      opacity: 0;
+      transition: opacity 300ms;
+      white-space: normal;
+      position: absolute;
+      width: var(--info-width);
+      margin-left: calc(-0.5 * var(--info-width));
+    
+      background-color: black;
+      color: white;
+      border: 1px solid var(--info-arrow-color);
+    
+      a {
+        color: #dd0;
+      }
+      code {
+        font-size: inherit;
+      }
     }
     .arrow {
-      top: 0;
-      left: calc(-1 * var(--info-arrow-delta-x));
-      border-top: 10px solid transparent;
-      border-bottom: 10px solid transparent;
-      border-left: 10px solid var(--info-arrow-color);
+      visibility: hidden;
+      opacity: 0;
+      position: absolute;
+      z-index: 1;
+      width: 0; 
+      height: 0;
     }
-  }
-  &.right {
-    left: ${-rootWidthPx}px;
-    .info {
-      top: -16px;
-      left: calc(${rootWidthPx}px + 0.5 * var(--info-width) + var(--info-arrow-delta-x));
+    
+    &.left {
+      left: ${-1.5 * rootWidthPx}px;
+      .info {
+        top: -16px;
+        left: calc(-1 * (0.5 * var(--info-width) + var(--info-arrow-delta-x) ));
+      }
+      .arrow {
+        top: 0;
+        left: calc(-1 * var(--info-arrow-delta-x));
+        border-top: 10px solid transparent;
+        border-bottom: 10px solid transparent;
+        border-left: 10px solid var(--info-arrow-color);
+      }
     }
-    .arrow {
-      top: 0;
-      left: calc(${rootWidthPx / 2}px + var(--info-arrow-delta-x));
-      border-top: 10px solid transparent;
-      border-bottom: 10px solid transparent;
-      border-right: 10px solid var(--info-arrow-color);
+    &.right {
+      left: ${-rootWidthPx}px;
+      .info {
+        top: -16px;
+        left: calc(${rootWidthPx}px + 0.5 * var(--info-width) + var(--info-arrow-delta-x));
+      }
+      .arrow {
+        top: 0;
+        left: calc(${rootWidthPx / 2}px + var(--info-arrow-delta-x));
+        border-top: 10px solid transparent;
+        border-bottom: 10px solid transparent;
+        border-right: 10px solid var(--info-arrow-color);
+      }
     }
   }
 `;
