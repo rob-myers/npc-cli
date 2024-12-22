@@ -1,5 +1,6 @@
 import React from "react";
 import { css } from "@emotion/css";
+import { PopUp } from "../components/PopUp";
 
 /**
  * @param {import("./ContextMenus").ContextMenuProps} props 
@@ -9,6 +10,11 @@ export function DefaultContextMenu({ cm, cm: { ui } }) {
   return <>
   
     <div className="links" onClick={cm.onClickLink.bind(cm)}>
+
+      <PopUp infoClassName={popUpInfoCss}>
+        🚧 choose an npc...
+      </PopUp>
+
       {cm.npcKey !== undefined && <div className="npc-key" data-key="clear-npc">
         {'['}<span>{cm.npcKey}</span>{']'}
       </div>}
@@ -103,7 +109,6 @@ export const defaultContextMenuCss = css`
     
     line-height: normal;
     gap: 0px;
-    /* padding-left: 4px; */
   }
   
   button {
@@ -140,6 +145,14 @@ export const defaultContextMenuCss = css`
     }
   }
 `;
+
+const popUpInfoCss = css`
+  
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+;`
 
 /**
  * @param {import("./ContextMenus").ContextMenuProps} props 
