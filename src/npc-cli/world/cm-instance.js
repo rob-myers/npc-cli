@@ -10,54 +10,47 @@ export class CMInstance {
 
   /** @type {import('../components/Html3d').State} */
   html3d = /** @type {*} */ (null);
-  /** Used to hide context menu when camera direction has positive dot product */
-  normal = /** @type {undefined | THREE.Vector3} */ (undefined);
   baseScale = /** @type {undefined | number} */ (undefined);
   tracked = /** @type {undefined | THREE.Object3D} */ (undefined);
   /** For violating React.memo */
   epochMs = 0;
   
-  match = /** @type {{ [matcherKey: string]: NPC.ContextMenuMatcher}} */ ({});
-  meta = /** @type {Geom.Meta} */ ({});
-  npcKey = /** @type {undefined | string} */ (undefined);
   position = /** @type {[number, number, number]} */ ([0, 0, 0]);
-
+  
   docked = false;
   open = false;
   pinned = false;
   scaled = false;
   showKvs = false;
 
-  /** @type {ContextMenuUi} */
-  ui = {
-    kvs: [],
-    links: [],
-    // speech: undefined,
-  }
+  //#region default context menu
+  /** @type {ContextMenuUi['kvs']} */
+  kvs = [];
+  /** @type {ContextMenuUi['links']} */
+  links = [];
+  match = /** @type {{ [matcherKey: string]: NPC.ContextMenuMatcher}} */ ({});
+  meta = /** @type {Geom.Meta} */ ({});
+  npcKey = /** @type {undefined | string} */ (undefined);
+  selectNpcOpts = /** @type {any[]} */ ([]); // 🚧
+  //#endregion
+
+  /** @type {ContextMenuUi['speech']} */
+  speech = undefined;
 
   /**
    * @param {string} key
    * @param {import('./World').State} w
-   * @param {Partial<ContextMenuUi> & {
-   *   npcKey?: string;
-   *   pinned?: boolean;
-   *   showKvs?: boolean;
-   * }} opts
+   * @param {Partial<Pick<CMInstance, 'showKvs' | 'npcKey' | 'pinned'>>} opts
    */
   constructor(key, w, opts) {
     /** @type {string} */ this.key = key;
     /** @type {import('./World').State} */ this.w = w;
 
-    const prevOpts = w.c.savedOpts[key] ?? {};
-    this.pinned = opts.pinned ?? prevOpts.pinned ?? w.smallViewport;
+    const savedOpts = w.c.savedOpts[key] ?? {};
+    this.pinned = opts.pinned ?? savedOpts.pinned ?? w.smallViewport;
     this.scaled = false,
-    this.showKvs = opts.showKvs ?? prevOpts.showKvs ?? false,
+    this.showKvs = opts.showKvs ?? savedOpts.showKvs ?? false,
     this.npcKey = opts.npcKey;
-
-    /** @type {ContextMenuUi} */ this.ui = {
-      kvs: opts.kvs ?? [],
-      links: opts.links ?? [],
-    };
   }
 
   /** @param {Geom.Meta} meta */
@@ -69,7 +62,7 @@ export class CMInstance {
       picked: true,
       roomId: 'grKey' in meta,
     });
-    this.ui.kvs = Object.entries(meta ?? {}).flatMap(([k, v]) => {
+    this.kvs = Object.entries(meta ?? {}).flatMap(([k, v]) => {
       if (skip[k] === true) return [];
       const vStr = v === true ? '' : typeof v === 'string' ? v : javascriptStringify(v) ?? '';
       return { k, v: vStr, length: k.length + (vStr === '' ? 0 : 1) + vStr.length };
@@ -88,7 +81,7 @@ export class CMInstance {
       return agg;
     }, /** @type {{ [linkKey: string]: NPC.ContextMenuLink }} */ ({}));
     suppressKeys.forEach(key => delete keyToLink[key]);
-    this.ui.links = Object.values(keyToLink);
+    this.links = Object.values(keyToLink);
   }
 
   dispose() {
@@ -138,7 +131,6 @@ export class CMInstance {
     this.w.c.saveOpts();
     this.update();
   }
-
 
   /**
    * Context is world position and meta concerning said position

@@ -55,7 +55,7 @@ export default function ContextMenus() {
         state.delete(npcKey);
       } else {// change
         cm.open = true;
-        cm.ui.speech = speech;
+        cm.speech = speech;
         cm.update();
       }
     },
@@ -72,7 +72,7 @@ export default function ContextMenus() {
 
   React.useMemo(() => {// HMR
     process.env.NODE_ENV === 'development' && Object.values(state.lookup).forEach(cm => {
-      state.lookup[cm.key] = Object.assign(new CMInstance(cm.key, cm.w, cm.ui), {...cm});
+      state.lookup[cm.key] = Object.assign(new CMInstance(cm.key, cm.w, cm), {...cm});
       cm.dispose();
     });
   }, []);
@@ -118,7 +118,6 @@ function ContextMenu({ cm }) {
       baseScale={cm.baseScale}
       docked={cm.docked}
       position={cm.position}
-      normal={cm.normal}
       open={cm.open}
       tracked={cm.tracked}
       zIndex={cm.key === 'default' ? 1 : undefined}

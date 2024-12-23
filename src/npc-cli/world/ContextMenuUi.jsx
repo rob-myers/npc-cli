@@ -5,14 +5,20 @@ import { PopUp } from "../components/PopUp";
 /**
  * @param {import("./ContextMenus").ContextMenuProps} props 
  */
-export function DefaultContextMenu({ cm, cm: { ui } }) {
+export function DefaultContextMenu({ cm }) {
 
   return <>
   
     <div className="links" onClick={cm.onClickLink.bind(cm)}>
 
       <PopUp infoClassName={popUpInfoCss}>
-        🚧 choose an npc...
+        {/* 🚧 choose an npc, or "no npc" */}
+        <select className="select-npc" defaultValue="foo">
+          <option value="">no npc</option>
+          <option value="foo">foo</option>
+          <option value="bar">bar</option>
+          <option value="baz">baz</option>
+        </select>
       </PopUp>
 
       {cm.npcKey !== undefined && <div className="npc-key" data-key="clear-npc">
@@ -30,7 +36,7 @@ export function DefaultContextMenu({ cm, cm: { ui } }) {
           {label}
         </button>
       )}
-      {ui.links.map(({ key, label, test }) =>
+      {cm.links.map(({ key, label, test }) =>
         <button
           key={key}
           data-key={key}
@@ -42,7 +48,7 @@ export function DefaultContextMenu({ cm, cm: { ui } }) {
     </div>
 
     {cm.showKvs === true && <div className="kvs">
-      {ui.kvs.map(({ k, v }) => (
+      {cm.kvs.map(({ k, v }) => (
         <div key={k} className="kv">
           <span className="key">{k}</span>
           {v !== '' && <span className="value">{v}</span>}
@@ -89,6 +95,11 @@ export const defaultContextMenuCss = css`
     bottom: 0;
   }
 
+  .select-npc {
+    background-color: black;
+    color: white;
+    padding: 4px;
+  }
   .npc-key {
     cursor: pointer;
 
@@ -161,7 +172,7 @@ export function NpcContextMenu({ cm }) {
   return (
     <div className="bubble">
       <div className="speech">
-        {cm.ui.speech}
+        {cm.speech}
       </div>
     </div>
   );

@@ -134,7 +134,6 @@ export const Html3d = React.forwardRef(({
  * @typedef BaseProps
  * @property {boolean} [docked]
  * @property {number} [baseScale]
- * @property {THREE.Vector3} [normal]
  * @property {boolean} open
  * @property {THREE.Object3D} [tracked]
  * @property {number} [zIndex]
