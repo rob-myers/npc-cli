@@ -154,8 +154,9 @@ export default function useHandleEvents(w) {
 
       const { polyRefs } = w.crowd.navMeshQuery.queryPolygons(
         toV3(door.center),
-        // { x: 0.01, y: 0.1, z: 0.01 },
-        { x: wallOutset, y: 0.1, z: wallOutset },
+        { x: 0.01, y: 0.1, z: 0.01 },
+        // { x: wallOutset - 0.05, y: 0.1, z: wallOutset - 0.05 },
+        { maxPolys: 1 },
       );
       state.doorToPolyRefs[door.gdKey] = polyRefs;
 

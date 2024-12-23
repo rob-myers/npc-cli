@@ -14,15 +14,13 @@ export function computeGmInstanceMesh(gm) {
   mesh.updateMatrixWorld();
   
   const customAreaDefs = /** @type {NPC.TileCacheConvexAreaDef[]} */ ([]);
-
-  const { tris, vs, tris: { length } } = gm.navDecomp;
-  const allVerts = vs.map(v => (new THREE.Vector3(v.x, 0, v.y)).applyMatrix4(gm.mat4));
-  for (let i = gm.navDoorwaysOffset; i < length; i++) {
+  gm.doors.forEach(door => {
+    const poly = door.computeDoorway().applyMatrix(gm.matrix).fixOrientationConvex();
     customAreaDefs.push({
       areaId: 1,
-      areas: [ { hmin: 0, hmax: 0.02, verts: tris[i].map(id => allVerts[id]) }],
+      areas: [ { hmin: 0, hmax: 0.02, verts: poly.outline.map(toV3) }],
     });
-  }
+  });
 
   // const navFixPolys = gm.unsorted.filter(x => 'nav-fix' in x.meta).map(x => x.clone());
   // navFixPolys.forEach(poly => {
@@ -67,7 +65,7 @@ export function getTileCacheGeneratorConfig(tileCacheMeshProcess) {
   return {
     // cs: 0.1,
     // tileSize: 10,
-    cs: 0.12,
+    cs: 0.125,
     tileSize: 14,
     ch: 0.001,
     borderSize: 0,
@@ -76,7 +74,7 @@ export function getTileCacheGeneratorConfig(tileCacheMeshProcess) {
     walkableClimb: 0,
     tileCacheMeshProcess,
     // 🔔 avoid npc getting too close to door
-    maxSimplificationError: 0.6,
+    maxSimplificationError: 0.5,
     // maxSimplificationError: 0,
     // walkableRadius: 1,
     // mergeRegionArea: 20,

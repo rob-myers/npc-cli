@@ -286,8 +286,6 @@ declare namespace Geomorph {
     unsorted: P[];
 
     navDecomp: Geom.TriangulationGeneric<V>;
-    /** Index of triangle in `navDecomp.tris` where doorway triangles will begin */
-    navDoorwaysOffset: number;
     /** AABBs of `navPolyWithDoors` i.e. original nav-poly */
     navRects: R[];
   }

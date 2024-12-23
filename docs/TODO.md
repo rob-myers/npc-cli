@@ -8,6 +8,10 @@
 
 ## WIP
 
+- 🚧 try prevent npc from being pushed too close to door
+  - ✅ try extend `doorToPolyRefs`
+  - 🚧 try mutate nav poly around doors
+
 - 🚧 ContextMenu rethink
   - ✅ move object-pick-circle into Debug
   - ✅ lastDown.{normal,quaternion} always defined

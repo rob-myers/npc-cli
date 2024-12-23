@@ -262,44 +262,16 @@ class GeomorphService {
   /**
    * @param {Geom.Poly[]} navPolyWithDoors 
    * @param {Connector[]} doors 
-   * @returns {Pick<Geomorph.Layout, 'navDecomp' | 'navDoorwaysOffset' | 'navRects'>}
+   * @returns {Pick<Geomorph.Layout, 'navDecomp' | 'navRects'>}
    */
   decomposeLayoutNav(navPolyWithDoors, doors) {
-    const navDoorways = doors.map((connector) => connector.computeDoorway());
-    /**
-     * Remove doorways from `navPolyWithDoors`, so we can add them back below (normalization).
-     * For hull doors, the connector doorway only contains half the doorway (to avoid overlap),
-     * so we must additionally remove the rest.
-     */
-    const navPolySansDoorways = Poly.cutOut([
-      ...navDoorways.map(x => x.precision(6)),
-      ...doors.flatMap(x => x.meta.hull ? x.poly : []),
-    ], navPolyWithDoors).map(x => x.cleanFinalReps());
-
-    const navDecomp = geom.joinTriangulations(navPolySansDoorways.map(poly => poly.qualityTriangulate()));
-    // 🔔 earlier precision can break qualityTriangulate
-    navDecomp.vs.forEach(v => v.precision(precision));
-    navDoorways.forEach(poly => poly.precision(precision));
-
-    // add two triangles for each doorway (we dup some verts)
-    const navDoorwaysOffset = navDecomp.tris.length;
-    navDoorways.forEach(doorway => {
-      const vId = navDecomp.vs.length;
-      navDecomp.vs.push(...doorway.outline);
-      navDecomp.tris.push([vId, vId + 1, vId + 2], [vId + 2, vId + 3, vId]);
-    });
-
+    const navDecomp = geom.joinTriangulations(navPolyWithDoors.map(poly => poly.qualityTriangulate()));
     const navRects = navPolyWithDoors.map(x => x.rect.precision(precision));
-    navRects.sort(// Smaller rects 1st, else larger overrides (e.g. 102)
-      (a, b) => a.area < b.area ? -1 : 1
-    );
+    // Smaller rects 1st, else larger overrides (e.g. 102)
+    navRects.sort((a, b) => a.area < b.area ? -1 : 1);
+    // Mutate doors
     doors.forEach(door => door.navRectId = navRects.findIndex(r => r.contains(door.center)));
-
-    return {
-      navDecomp,
-      navDoorwaysOffset,
-      navRects,
-    };
+    return { navDecomp, navRects };
   }
 
   /**
@@ -429,7 +401,6 @@ class GeomorphService {
       unsorted: json.unsorted.map(Poly.from),
 
       navDecomp: { vs: json.navDecomp.vs.map(Vect.from), tris: json.navDecomp.tris },
-      navDoorwaysOffset: json.navDoorwaysOffset,
       navRects: json.navRects.map(Rect.fromJson),
     };
   }
@@ -1245,7 +1216,6 @@ class GeomorphService {
       unsorted: layout.unsorted.map((x) => x.geoJson),
 
       navDecomp: { vs: layout.navDecomp.vs, tris: layout.navDecomp.tris },
-      navDoorwaysOffset: layout.navDoorwaysOffset,
       navRects: layout.navRects,
     };
   }
