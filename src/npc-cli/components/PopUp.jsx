@@ -20,6 +20,7 @@ export const PopUp = React.forwardRef(function PopUp(props, ref) {
       state.opened = false;
       state.left = false;
       state.bubble.style.removeProperty('--info-width');
+      props.onChange?.(state.opened);
       update();
     },
     open(width) {
@@ -32,24 +33,25 @@ export const PopUp = React.forwardRef(function PopUp(props, ref) {
       const pixelsOnLeft = rect.x - rootRect.x;
       state.left = pixelsOnRight < pixelsOnLeft;
       
-      state.bubble.style.setProperty('--info-arrow-delta-x', `${state.left ? 20 : 12}px`);
+      state.bubble.style.setProperty('--info-arrow-delta-x', `${state.left ? 18 : 12}px`);
 
       const maxWidthAvailable = Math.max(pixelsOnLeft, pixelsOnRight);
       width = maxWidthAvailable < (width ?? defaultInfoWidthPx) ? maxWidthAvailable : width;
       width && state.bubble.style.setProperty('--info-width', `${width}px`);
 
       state.icon.focus();
+      props.onChange?.(state.opened);
       update();
     },
-  }));
+  }), { deps: [props.onChange] });
 
   React.useImperativeHandle(ref, () => state, []);
 
   return (
-    <div className={rootPopupCss}>
+    <div className={cx("pop-up", rootPopupCss)}>
       <button
         ref={state.ref('icon')}
-        className="pop-up"
+        className="pop-up-button"
         onClick={e => {
           if (state.opened) {
             state.close();
@@ -82,6 +84,7 @@ export const PopUp = React.forwardRef(function PopUp(props, ref) {
  * @property {number} [arrowDeltaX]
  * @property {string} [infoClassName]
  * @property {number} [width]
+ * @property {(willOpen: boolean) => void} [onChange]
  */
 
 /**
@@ -94,25 +97,26 @@ export const PopUp = React.forwardRef(function PopUp(props, ref) {
  * @property {() => void} close
  */
 
-const defaultArrowDeltaX = 20;
 const defaultInfoWidthPx = 300;
-const rootWidthPx = 16;
 
 const rootPopupCss = css`
+  --top-offset: 16px;
+  --side-offset: 16px;
 
-  .pop-up {
+  --info-arrow-color: #ffffffaa;
+  --info-arrow-delta-x: 0px;
+  --info-width: ${defaultInfoWidthPx}px;
+
+  .pop-up-button {
     cursor: pointer;
     white-space: nowrap;
   }
 
   .pop-up-bubble {
-    --info-arrow-color: #ffffffaa;
-    --info-arrow-delta-x: ${defaultArrowDeltaX}px;
-    --info-width: ${defaultInfoWidthPx}px;
     
     position: relative;
     z-index: ${zIndex.speechBubble};
-    top: ${-rootWidthPx}px;
+    top: calc(-1 * var(--top-offset));
     /** Prevents bubble span from wrapping to next line? */
     display: inline-block;
     
@@ -163,28 +167,24 @@ const rootPopupCss = css`
     }
     
     &.left {
-      left: ${-1.5 * rootWidthPx}px;
       .info {
-        top: -16px;
-        left: calc(-1 * (0.5 * var(--info-width) + var(--info-arrow-delta-x) ));
+        left: calc(-0.5 * var(--info-width) - 2 * var(--info-arrow-delta-x));
       }
       .arrow {
         top: 0;
-        left: calc(-1 * var(--info-arrow-delta-x));
+        left: calc(-2 * var(--info-arrow-delta-x));
         border-top: 10px solid transparent;
         border-bottom: 10px solid transparent;
         border-left: 10px solid var(--info-arrow-color);
       }
     }
     &.right {
-      left: ${-rootWidthPx}px;
       .info {
-        top: -16px;
-        left: calc(${rootWidthPx}px + 0.5 * var(--info-width) + var(--info-arrow-delta-x));
+        left: calc(0.5 * var(--info-width) + var(--info-arrow-delta-x) - 2px);
       }
       .arrow {
         top: 0;
-        left: calc(${rootWidthPx / 2}px + var(--info-arrow-delta-x));
+        left: 0;
         border-top: 10px solid transparent;
         border-bottom: 10px solid transparent;
         border-right: 10px solid var(--info-arrow-color);
