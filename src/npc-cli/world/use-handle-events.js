@@ -1,6 +1,6 @@
 import React from "react";
 import { Vect } from "../geom";
-import { defaultDoorCloseMs, npcNearUiDist, wallHeight } from "../service/const";
+import { defaultDoorCloseMs, npcNearUiDist, wallHeight, wallOutset } from "../service/const";
 import { pause, warn, debug } from "../service/generic";
 import { geom } from "../service/geom";
 import { npcToBodyKey } from "../service/rapier";
@@ -154,8 +154,8 @@ export default function useHandleEvents(w) {
 
       const { polyRefs } = w.crowd.navMeshQuery.queryPolygons(
         toV3(door.center),
-        { x: 0.01, y: 0.1, z: 0.01 },
-        { maxPolys: 1 }, // 🚧 https://github.com/isaac-mason/recast-navigation-js/discussions/444
+        // { x: 0.01, y: 0.1, z: 0.01 },
+        { x: wallOutset, y: 0.1, z: wallOutset },
       );
       state.doorToPolyRefs[door.gdKey] = polyRefs;
 
