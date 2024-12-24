@@ -3,6 +3,7 @@ import { NavMesh, RecastBuildContext, TileCache, TileCacheMeshProcess, freeCompa
 import { getPositionsAndIndices } from "@recast-navigation/three";
 import { createDefaultTileCacheMeshProcess, dtIlog2, dtNextPow2, getBoundingBox, tileCacheGeneratorConfigDefaults } from "@recast-navigation/generators";
 import { decompToXZGeometry, toV3 } from "./three";
+import { wallOutset } from "./const";
 
 /**
  * @param {Geomorph.LayoutInstance} gm
@@ -14,13 +15,13 @@ export function computeGmInstanceMesh(gm) {
   mesh.updateMatrixWorld();
   
   const customAreaDefs = /** @type {NPC.TileCacheConvexAreaDef[]} */ ([]);
-  gm.doors.forEach(door => {
-    const poly = door.computeDoorway().applyMatrix(gm.matrix).fixOrientationConvex();
-    customAreaDefs.push({
-      areaId: 1,
-      areas: [ { hmin: 0, hmax: 0.02, verts: poly.outline.map(toV3) }],
-    });
-  });
+  // gm.doors.forEach(door => {
+  //   const poly = door.computeDoorway().applyMatrix(gm.matrix).fixOrientationConvex();
+  //   customAreaDefs.push({
+  //     areaId: 1,
+  //     areas: [ { hmin: 0, hmax: 0.02, verts: poly.outline.map(toV3) }],
+  //   });
+  // });
 
   // const navFixPolys = gm.unsorted.filter(x => 'nav-fix' in x.meta).map(x => x.clone());
   // navFixPolys.forEach(poly => {
@@ -34,6 +35,27 @@ export function computeGmInstanceMesh(gm) {
   return { mesh, customAreaDefs };
 }
 
+/**
+ * @param {Geomorph.LayoutInstance[]} gms
+ */
+export function computeOffMeshConnectionsParams(gms) {
+  const halfLength = wallOutset + 0.15;
+
+  return gms.flatMap(gm => gm.doors.map(
+    /** @returns {import("recast-navigation").OffMeshConnectionParams} */
+    ({ center, normal }) => {
+      const src = gm.matrix.transformPoint(center.clone().addScaled(normal, halfLength));
+      const dst = gm.matrix.transformPoint(center.clone().addScaled(normal, -halfLength));
+      return {
+        startPosition: { x: src.x, y: 0.001, z: src.y },
+        endPosition: { x: dst.x, y: 0.001, z: dst.y },
+        radius: 0.1,
+        bidirectional: true,
+        // area: 1,
+        // flags: 0 + 2,
+      };
+  }));
+}
 
 /**
  * @param {import("@recast-navigation/core").Crowd} crowd
@@ -46,14 +68,21 @@ export function disposeCrowd(crowd, navMesh) {
 
 /**
  * https://github.com/isaac-mason/recast-navigation-js/blob/d64fa867361a316b53c2da1251820a0bd6567f82/packages/recast-navigation-generators/src/generators/generate-tile-cache.ts#L108
+ * @param {Geomorph.LayoutInstance[]} gms
  */
-export function getBasicTileCacheMeshProcess() {
+export function getTileCacheMeshProcess(gms) {
+
+  const offMeshConnections = computeOffMeshConnectionsParams(gms);
+
   return new TileCacheMeshProcess((navMeshCreateParams, polyAreas, polyFlags) => {
+
     for (let i = 0; i < navMeshCreateParams.polyCount(); ++i) {
       polyAreas.set(i, 0);
       // polyFlags.set(i, 1);
       polyFlags.set(i, 2 ** 1); // walkable ~ 2nd lsb bit high
     }
+
+    navMeshCreateParams.setOffMeshConnections(offMeshConnections);
   });
 }
 
@@ -65,16 +94,16 @@ export function getTileCacheGeneratorConfig(tileCacheMeshProcess) {
   return {
     // cs: 0.1,
     // tileSize: 10,
-    cs: 0.14,
-    tileSize: 14,
+    cs: 0.125,
+    tileSize: 10,
     ch: 0.001,
     borderSize: 0,
     expectedLayersPerTile: 1,
-    detailSampleDist: 0,
+    // detailSampleDist: 0,
     walkableClimb: 0,
     tileCacheMeshProcess,
     // 🔔 avoid npc getting too close to door
-    maxSimplificationError: 0.5,
+    maxSimplificationError: 0.85,
     // maxSimplificationError: 0,
     // walkableRadius: 1,
     // mergeRegionArea: 20,

@@ -1,6 +1,6 @@
 import React from "react";
 import * as THREE from "three";
-import { NavMeshHelper } from "@recast-navigation/three";
+import { NavMeshHelper, OffMeshConnectionsHelper } from "@recast-navigation/three";
 import { Line2, LineGeometry } from "three-stdlib";
 
 import { colliderHeight } from "../service/const";
@@ -8,6 +8,7 @@ import { navMeta, decompToXZGeometry, cylinderGeometry, boxGeometry } from "../s
 import { WorldContext } from "./world-context";
 import useStateRef from "../hooks/use-state-ref";
 import useUpdate from "../hooks/use-update";
+import { computeOffMeshConnectionsParams } from "../service/recast-detour";
 
 /**
  * @param {Props} props 
@@ -17,6 +18,7 @@ export default function Debug(props) {
 
   const state = useStateRef(/** @returns {State} */ () => ({
     navMesh: /** @type {*} */ (null),
+    offMeshConnections: /** @type {*} */ (null),
     navPath: /** @type {*} */ (null),
     pick: null,
     physicsLines: new THREE.BufferGeometry(),
@@ -134,6 +136,11 @@ export default function Debug(props) {
     state.navMesh = new NavMeshHelper(w.nav.navMesh, {
       navMeshMaterial: navPolyMaterial,
     });
+    state.offMeshConnections = new OffMeshConnectionsHelper(computeOffMeshConnectionsParams(w.gms), {
+      lineMaterial: offMeshLineMaterial,
+      entryCircleMaterial: navPolyMaterial,
+      exitCircleMaterial: navPolyMaterial,
+    });
   }, [w.nav.navMesh]);
 
   React.useEffect(() => {// debug colliders via physics.worker
@@ -182,11 +189,18 @@ export default function Debug(props) {
       </mesh>
     </group>}
 
-    {props.showNavMesh === true && <primitive
-      name="nav-mesh-helper"
-      position={[0, 0.01, 0]}
-      object={state.navMesh}
-    />}
+    {props.showNavMesh === true && <>
+      <primitive
+        name="nav-mesh-helper"
+        position={[0, 0.01, 0]}
+        object={state.navMesh}
+      />
+      <primitive
+        name="off-mesh-connection-helper"
+        position={[0, 0.01, 0]}
+        object={state.offMeshConnections}
+      />
+    </>}
 
     {state.selectedNavPolys !== null && <mesh
       name="selected-nav-polys"
@@ -235,6 +249,7 @@ export default function Debug(props) {
 /**
  * @typedef State
  * @property {NavMeshHelper} navMesh
+ * @property {OffMeshConnectionsHelper} offMeshConnections
  * @property {THREE.Group} navPath
  * @property {null | THREE.BufferGeometry} selectedNavPolys
  * @property {(WW.PhysicDebugItem & { parsedKey: WW.PhysicsParsedBodyKey })[]} staticColliders
@@ -261,6 +276,10 @@ const navPolyMaterial = new THREE.MeshBasicMaterial({
   color: "#7f7",
   transparent: true,
   opacity: 1,
+});
+
+const offMeshLineMaterial = new THREE.LineBasicMaterial({
+  color: "#ff7",
 });
 
 const selectedNavPolysMaterial = new THREE.MeshBasicMaterial({

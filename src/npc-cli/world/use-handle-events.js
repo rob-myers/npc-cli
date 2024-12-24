@@ -344,7 +344,7 @@ export default function useHandleEvents(w) {
         }
         case "way-point":
           if (e.index === 0) {// start moving in next frame
-            npc.agent?.updateParameters({ maxSpeed: npc.getMaxSpeed() });
+            // npc.agent?.updateParameters({ maxSpeed: npc.getMaxSpeed() });
           }
           if (e.next === null) {// final
             return;

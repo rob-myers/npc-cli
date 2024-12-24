@@ -382,7 +382,9 @@ export class Npc {
 
     this.agent.updateParameters({
       maxAcceleration,
-      maxSpeed: 0, // don't move until 0th way-point
+      // 🚧 0th way point not triggered?
+      // maxSpeed: 0, // don't move until 0th way-point
+      maxSpeed: this.getMaxSpeed(),
       radius: (this.s.run ? 3 : 2) * helper.defaults.radius, // reset
       collisionQueryRange: 1.5,
       separationWeight: 0.25,
@@ -740,7 +742,8 @@ export class Npc {
       radius: helper.defaults.radius,
       collisionQueryRange: 1.5,
       separationWeight: staticSeparationWeight,
-      queryFilterType: this.w.lib.queryFilterType.excludeDoors,
+      // 🚧
+      // queryFilterType: this.w.lib.queryFilterType.excludeDoors,
     });
     
     this.startAnimation('Idle');

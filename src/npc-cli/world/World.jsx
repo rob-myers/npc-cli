@@ -18,7 +18,7 @@ import { fetchGeomorphsJson, getDecorSheetUrl, getObstaclesSheetUrl, WORLD_QUERY
 import { geomorph } from "../service/geomorph";
 import createGmsData from "../service/create-gms-data";
 import { imageLoader, toV3, toXZ } from "../service/three";
-import { disposeCrowd, getBasicTileCacheMeshProcess } from "../service/recast-detour";
+import { disposeCrowd, getTileCacheMeshProcess } from "../service/recast-detour";
 import { helper } from "../service/helper";
 import { TexArray } from "../service/tex-array";
 import { WorldContext } from "./world-context";
@@ -133,7 +133,7 @@ export default function World(props) {
     },
     loadTiledMesh(exportedNavMesh) {
       const tiledCacheResult = /** @type {NPC.TiledCacheResult} */ (
-        importTileCache(exportedNavMesh, getBasicTileCacheMeshProcess())
+        importTileCache(exportedNavMesh, getTileCacheMeshProcess(state.gms))
       );
       if (state.crowd) {
         disposeCrowd(state.crowd, state.nav.navMesh);
@@ -361,7 +361,7 @@ export default function World(props) {
                 <Decor />
                 <Npcs />
                 <Debug
-                  // showNavMesh
+                  showNavMesh
                   // showOrigNavPoly
                   // showStaticColliders
                 />

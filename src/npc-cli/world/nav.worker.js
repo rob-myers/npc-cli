@@ -3,7 +3,7 @@ import { init as initRecastNav, exportTileCache } from "@recast-navigation/core"
 
 import { error, info, debug, warn, removeDups, range } from "../service/generic";
 import { geomorph } from "../service/geomorph";
-import { customThreeToTileCache, getTileCacheGeneratorConfig, getBasicTileCacheMeshProcess, computeGmInstanceMesh } from "../service/recast-detour";
+import { customThreeToTileCache, getTileCacheGeneratorConfig, getTileCacheMeshProcess, computeGmInstanceMesh } from "../service/recast-detour";
 import { fetchGeomorphsJson } from "../service/fetch-assets";
 
 /** @type {WW.WorkerGeneric<WW.MsgFromNavWorker, WW.MsgToNavWorker>} */
@@ -27,12 +27,19 @@ async function handleMessages(e) {
 
 /** @param {string} mapKey  */
 async function onRequestNav(mapKey) {
-  const { meshes, customAreaDefs } = await computeGeomorphMeshes(mapKey);
+
+  const geomorphs = geomorph.deserializeGeomorphs(await fetchGeomorphsJson());
+  const map = geomorphs.map[mapKey ?? "demo-map-1"];
+  const gms = map.gms.map(({ gmKey, transform }, gmId) =>
+    geomorph.computeLayoutInstance(geomorphs.layout[gmKey], gmId, transform)
+  );
+
+  const { meshes, customAreaDefs } = await computeGeomorphMeshes(gms);
   await initRecastNav();
 
   const result = customThreeToTileCache(
     meshes,
-    getTileCacheGeneratorConfig(getBasicTileCacheMeshProcess()),
+    getTileCacheGeneratorConfig(getTileCacheMeshProcess(gms)),
     { areas: customAreaDefs.flatMap(x => x) },
   );
   
@@ -54,20 +61,14 @@ async function onRequestNav(mapKey) {
 }
 
 
-/** @param {string} mapKey  */
-async function computeGeomorphMeshes(mapKey) {
-  const geomorphs = geomorph.deserializeGeomorphs(await fetchGeomorphsJson());
-  const map = geomorphs.map[mapKey ?? "demo-map-1"];
-  const gms = map.gms.map(({ gmKey, transform }, gmId) =>
-    geomorph.computeLayoutInstance(geomorphs.layout[gmKey], gmId, transform)
-  );
-
+/** @param {Geomorph.LayoutInstance[]} gms  */
+async function computeGeomorphMeshes(gms) {
   const meshes = /** @type {THREE.Mesh[]} */ ([]);
   const customAreaDefs = /** @type {NPC.TileCacheConvexAreaDef[]} */ ([]);
-  gms.map(computeGmInstanceMesh).forEach((x) => {
-    meshes.push(x.mesh);
-    customAreaDefs.push(...x.customAreaDefs);
-  });
+  for (const { mesh, customAreaDefs } of gms.map(computeGmInstanceMesh)) {
+    meshes.push(mesh);
+    customAreaDefs.push(...customAreaDefs);
+  }
 
   debug('🤖 nav.worker', {
     'total vertices': meshes.reduce((agg, mesh) => agg + (mesh.geometry.getAttribute('position')?.count ?? 0), 0),

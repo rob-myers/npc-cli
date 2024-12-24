@@ -81,8 +81,8 @@
 - 🚧 try "off-mesh-connections" again, except hull doors
   - ℹ️ fix push-other-npc-thru-door via separation weight
   - ℹ️ fix lockers in bridge, fix diagonal doors
-  - 🚧 add off-mesh connections and visualise them
-  - detect when off-mesh connection reached
+  - ✅ add off-mesh connections and visualise them
+  - 🚧 detect when off-mesh connection reached
   - remove agent from crowd and move linearly
 
 
