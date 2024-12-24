@@ -8,14 +8,12 @@ import { warn } from "../service/generic";
  */
 export class CMInstance {
 
-  /** @type {import('../components/Html3d').State} */
-  html3d = /** @type {*} */ (null);
   baseScale = /** @type {undefined | number} */ (undefined);
-  tracked = /** @type {undefined | THREE.Object3D} */ (undefined);
   /** For violating React.memo */
   epochMs = 0;
   
   position = /** @type {[number, number, number]} */ ([0, 0, 0]);
+  tracked = /** @type {undefined | THREE.Object3D} */ (undefined);
   
   docked = false;
   open = false;
@@ -24,6 +22,11 @@ export class CMInstance {
   showKvs = false;
 
   //#region default context menu
+  /** @type {import('../components/Html3d').State} */
+  html3d = /** @type {*} */ (null);
+  /** @type {import('../components/PopUp').State} */
+  popUp = /** @type {*} */ (null);
+
   /** @type {ContextMenuUi['kvs']} */
   kvs = [];
   /** @type {ContextMenuUi['links']} */
@@ -102,8 +105,10 @@ export class CMInstance {
   }
 
   /** @param {null | import('../components/Html3d').State} html3d */
-  html3dRef(html3d) {// @ts-ignore
-    return html3d !== null ? this.html3d = html3d : delete this.html3d;
+  html3dRef(html3d) {
+    return html3d !== null
+      ? this.html3d = html3d // @ts-ignore
+      : delete this.html3d;
   }
 
   /** @param {React.MouseEvent} e */
@@ -130,6 +135,13 @@ export class CMInstance {
 
     this.w.c.saveOpts();
     this.update();
+  }
+
+  /** @param {null | import('../components/PopUp').State} popUp */
+  popUpRef(popUp) {
+    return popUp !== null
+      ? this.popUp = popUp // @ts-ignore
+      : delete this.popUp;
   }
 
   /**
@@ -172,8 +184,9 @@ export class CMInstance {
 
   toggleDocked() {
     this.docked = !this.docked;
-    if (this.docked === true && this.scaled === true) {
-      this.toggleScaled();
+    if (this.docked === true) {
+      this.scaled === true && this.toggleScaled();
+      this.popUp?.close();
     }
   }
 

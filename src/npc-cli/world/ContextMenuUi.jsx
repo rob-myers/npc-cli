@@ -11,7 +11,7 @@ export function DefaultContextMenu({ cm }) {
   
     <div className="links" onClick={cm.onClickLink.bind(cm)}>
 
-      <PopUp infoClassName={popUpInfoCss}>
+      <PopUp ref={cm.popUpRef.bind(cm)} infoClassName={popUpInfoCss}>
         {/* 🚧 choose an npc, or "no npc" */}
         <select className="select-npc" defaultValue="foo">
           <option value="">no npc</option>
