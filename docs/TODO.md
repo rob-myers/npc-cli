@@ -78,12 +78,13 @@
   - ✅ remove icon generation code from asset.js
   - Logger also records speech and provides link options
 
-- next branch will adjust geomorphs for better nav
-  - `improve-geomorph-nav`
-  - e.g. fix push-other-npc-thru-door via separation weight
-  - e.g. fix lockers in bridge, fix diagonal doors
-  - e.g. thicker doors, extra corridors, more space
-  - ✅ try extend `doorToPolyRefs`
+- 🚧 try "off-mesh-connections" again, except hull doors
+  - ℹ️ fix push-other-npc-thru-door via separation weight
+  - ℹ️ fix lockers in bridge, fix diagonal doors
+  - 🚧 add off-mesh connections and visualise them
+  - detect when off-mesh connection reached
+  - remove agent from crowd and move linearly
+
 
 - 🚧 pre next.js migration
   - ✅ finish/close wip todos

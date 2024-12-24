@@ -267,8 +267,11 @@ class GeomorphService {
    * @returns {Pick<Geomorph.Layout, 'navDecomp' | 'navRects'>}
    */
   decomposeLayoutNav(navPolyWithDoors, doors) {
-    const navDecomp = geom.joinTriangulations(navPolyWithDoors.map(poly => poly.qualityTriangulate()));
-    const navRects = navPolyWithDoors.map(x => x.rect.precision(precision));
+    const navDoorways = doors.flatMap(x => x.meta.hull ? [] : x.computeDoorway());
+    // 🚧 remove all doorways... we'll use offMeshConnections instead
+    const navPolySansDoors = Poly.cutOut(navDoorways, navPolyWithDoors);
+    const navDecomp = geom.joinTriangulations(navPolySansDoors.map(poly => poly.qualityTriangulate()));
+    const navRects = navPolySansDoors.map(x => x.rect.precision(precision));
     // Smaller rects 1st, else larger overrides (e.g. 102)
     navRects.sort((a, b) => a.area < b.area ? -1 : 1);
     // Mutate doors
@@ -1400,9 +1403,10 @@ export class Connector {
    *   (a) `wallOutset` for hull doors.
    *   (b) `2 * wallOutset` for non-hull doors.
    * @param {number} [extrudeDoorDepth]
+   * @param {number} [halfWidth]
    * @returns {Geom.Poly}
    */
-  computeDoorway(extrudeDoorDepth = wallOutset) {
+  computeDoorway(extrudeDoorDepth = wallOutset, halfWidth) {
     const doorHalfDepth = 0.5 * (this.meta.hull ? hullDoorDepth : doorDepth);
     const inwardsExtrude = extrudeDoorDepth;
     /**
@@ -1414,7 +1418,9 @@ export class Connector {
     const normal = this.normal;
     const delta = tmpVect1.copy(this.seg[1]).sub(this.seg[0]);
     const length = delta.length;
-    const offset = (length/2 - wallOutset) / length;
+    
+    halfWidth ??= length / 2 - wallOutset;
+    const offset = halfWidth / length;
 
     return new Poly([
       new Vect(

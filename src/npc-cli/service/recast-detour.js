@@ -65,7 +65,7 @@ export function getTileCacheGeneratorConfig(tileCacheMeshProcess) {
   return {
     // cs: 0.1,
     // tileSize: 10,
-    cs: 0.125,
+    cs: 0.14,
     tileSize: 14,
     ch: 0.001,
     borderSize: 0,
