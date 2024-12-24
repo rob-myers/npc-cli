@@ -95,10 +95,12 @@ class GeomorphService {
       ...decor.filter(this.isDecorCuboid).filter(d => d.meta.nav === true).map(d =>
         geom.applyUnitQuadTransformWithOutset(tmpMat1.feedFromArray(d.transform), obstacleOutset)
       ),
-    ], hullOutline).filter((poly) => 
-      // Ignore nav-mesh if AABB ≤ 1m², or poly intersects `ignoreNavPoints`
-      poly.rect.area > 1 && !ignoreNavPoints.some(p => poly.contains(p))
-    ).map((x) => x.cleanFinalReps().precision(precision));
+    ], hullOutline).filter(
+      poly => poly.rect.area > 1 && !ignoreNavPoints.some(p => poly.contains(p))
+    ).map(
+      poly => poly.cleanFinalReps().precision(precision)
+    );
+
 
     // 🔔 connector.roomIds will be computed in browser
     const doors = symbol.doors.map(x => new Connector(x));
@@ -1397,17 +1399,17 @@ export class Connector {
    * - They are deeper then the door by
    *   (a) `wallOutset` for hull doors.
    *   (b) `2 * wallOutset` for non-hull doors.
-   * @param {boolean} [thin]
+   * @param {number} [extrudeDoorDepth]
    * @returns {Geom.Poly}
    */
-  computeDoorway(thin = false) {
+  computeDoorway(extrudeDoorDepth = wallOutset) {
     const doorHalfDepth = 0.5 * (this.meta.hull ? hullDoorDepth : doorDepth);
-    const inwardsExtrude = thin === true ? 0 : wallOutset;
+    const inwardsExtrude = extrudeDoorDepth;
     /**
      * For hull doors, normals point outwards from geomorphs,
      * and we exclude "outer part" of doorway to fix doorway normalization.
      */
-    const outwardsExtrude = thin === true || this.meta.hull === true ? 0 : wallOutset;
+    const outwardsExtrude = this.meta.hull === true ? 0 : extrudeDoorDepth;
 
     const normal = this.normal;
     const delta = tmpVect1.copy(this.seg[1]).sub(this.seg[0]);

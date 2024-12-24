@@ -8,10 +8,6 @@
 
 ## WIP
 
-- 🚧 try prevent npc from being pushed too close to door
-  - ✅ try extend `doorToPolyRefs`
-  - 🚧 try mutate nav poly around doors
-
 - 🚧 ContextMenu rethink
   - ✅ move object-pick-circle into Debug
   - ✅ lastDown.{normal,quaternion} always defined
@@ -81,6 +77,13 @@
       - clean up
   - ✅ remove icon generation code from asset.js
   - Logger also records speech and provides link options
+
+- next branch will adjust geomorphs for better nav
+  - `improve-geomorph-nav`
+  - e.g. fix push-other-npc-thru-door via separation weight
+  - e.g. fix lockers in bridge, fix diagonal doors
+  - e.g. thicker doors, extra corridors, more space
+  - ✅ try extend `doorToPolyRefs`
 
 - 🚧 pre next.js migration
   - ✅ finish/close wip todos

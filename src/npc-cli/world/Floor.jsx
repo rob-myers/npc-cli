@@ -94,7 +94,7 @@ export default function Floor(props) {
 
       // cover hull doorway z-fighting (visible from certain angles)
       gm.hullDoors.forEach(hullDoor => {
-        const poly = hullDoor.computeDoorway(true);
+        const poly = hullDoor.computeDoorway(0);
         const [p, q, r, s] = poly.outline;
         drawPolygons(ct, poly, ['#000', '#333', 0.025]);
         ct.strokeStyle = '#777';
