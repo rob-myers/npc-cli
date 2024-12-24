@@ -268,8 +268,8 @@ class GeomorphService {
    */
   decomposeLayoutNav(navPolyWithDoors, doors) {
     // 🚧 remove all doorways... we'll use offMeshConnections instead
-    const navDoorways = doors.map(x => x.computeDoorway());
-    const navPolySansDoors = Poly.cutOut(navDoorways, navPolyWithDoors);
+    const navDoorways = doors.map(x => x.computeDoorway().precision(precision).cleanFinalReps());
+    const navPolySansDoors = Poly.cutOut(navDoorways, navPolyWithDoors).map(x => x.cleanFinalReps());
     const navDecomp = geom.joinTriangulations(navPolySansDoors.map(poly => poly.qualityTriangulate()));
     const navRects = navPolySansDoors.map(x => x.rect.precision(precision));
     // Smaller rects 1st, else larger overrides (e.g. 102)

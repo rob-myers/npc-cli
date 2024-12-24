@@ -64,33 +64,30 @@ export default function Floor(props) {
     drawGmKey(gmKey) {
       const { ct } = w.texFloor;
       const gm = w.geomorphs.layout[gmKey];
-      const { pngRect, hullPoly, navDecomp, walls } = gm;
 
       ct.clearRect(0, 0, ct.canvas.width, ct.canvas.height);
       ct.fillStyle = 'red';
       ct.strokeStyle = 'green';
 
-      ct.setTransform(worldToCanvas, 0, 0, worldToCanvas, -pngRect.x * worldToCanvas, -pngRect.y * worldToCanvas);
+      ct.setTransform(worldToCanvas, 0, 0, worldToCanvas, -gm.pngRect.x * worldToCanvas, -gm.pngRect.y * worldToCanvas);
 
       // Floor
-      drawPolygons(ct, hullPoly.map(x => x.clone().removeHoles()), ['#222', null]);
-      // drawPolygons(ct, hullPoly.map(x => x.clone().removeHoles()), ['#fff', null]);
+      drawPolygons(ct, gm.hullPoly.map(x => x.clone().removeHoles()), ['#222', null]);
 
       // Nav-mesh
-      const triangles = navDecomp.tris.map(tri => new Poly(tri.map(i => navDecomp.vs[i])));
-      const navPoly = Poly.union(triangles);
-      // drawPolygons(ct, navPoly, ['#202029', '#777', 0.025]);
+      const triangles = gm.navDecomp.tris.map(tri => new Poly(tri.map(i => gm.navDecomp.vs[i])));
+      const navPoly = Poly.union(triangles.concat(gm.doors.map(x => x.computeDoorway()))); // 🚧 move to create-gms-data
       drawPolygons(ct, navPoly, ['#191921', '#99999977', 0.03]);
       
       // drawPolygons(ct, triangles, [null, 'rgba(200, 200, 200, 0.3)', 0.01]); // outlines
 
       // draw grid
-      ct.setTransform(1, 0, 0, 1, -pngRect.x * worldToCanvas, -pngRect.y * worldToCanvas);
+      ct.setTransform(1, 0, 0, 1, -gm.pngRect.x * worldToCanvas, -gm.pngRect.y * worldToCanvas);
       ct.fillStyle = state.grid;
       ct.fillRect(0, 0, ct.canvas.width, ct.canvas.height);
       ct.fillStyle = state.largeGrid;
       ct.fillRect(0, 0, ct.canvas.width, ct.canvas.height);
-      ct.setTransform(worldToCanvas, 0, 0, worldToCanvas, -pngRect.x * worldToCanvas, -pngRect.y * worldToCanvas);
+      ct.setTransform(worldToCanvas, 0, 0, worldToCanvas, -gm.pngRect.x * worldToCanvas, -gm.pngRect.y * worldToCanvas);
 
       // cover hull doorway z-fighting (visible from certain angles)
       gm.hullDoors.forEach(hullDoor => {
@@ -102,7 +99,7 @@ export default function Floor(props) {
         ct.beginPath(); ct.moveTo(s.x, s.y); ct.lineTo(p.x, p.y); ct.stroke();
       });
 
-      drawPolygons(ct, walls, ['black', null]);
+      drawPolygons(ct, gm.walls, ['black', null]);
 
       // drop shadows (avoid doubling e.g. bunk bed, overlapping tables)
       const shadowColor = 'rgba(0, 0, 0, 0.25)'
