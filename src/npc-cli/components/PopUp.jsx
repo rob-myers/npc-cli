@@ -105,6 +105,7 @@ const rootPopupCss = css`
 
   --info-arrow-color: #ffffffaa;
   --info-arrow-delta-x: 0px;
+  --info-arrow-height: 20px;
   --info-width: ${defaultInfoWidthPx}px;
 
   .pop-up-button {
@@ -169,6 +170,7 @@ const rootPopupCss = css`
     &.left {
       .info {
         left: calc(-0.5 * var(--info-width) - 2 * var(--info-arrow-delta-x));
+        bottom: calc(-1 * var(--info-arrow-height));
       }
       .arrow {
         top: 0;
@@ -181,6 +183,7 @@ const rootPopupCss = css`
     &.right {
       .info {
         left: calc(0.5 * var(--info-width) + var(--info-arrow-delta-x) - 2px);
+        bottom: calc(-1 * var(--info-arrow-height));
       }
       .arrow {
         top: 0;
