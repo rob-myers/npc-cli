@@ -84,6 +84,7 @@
   - ✅ add off-mesh connections and visualise them
   - 🚧 detect when off-mesh connection reached
   - remove agent from crowd and move linearly
+  - navRectId --> connectedComponentId in gmGraph
 
 
 - 🚧 pre next.js migration

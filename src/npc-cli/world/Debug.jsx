@@ -197,7 +197,7 @@ export default function Debug(props) {
       />
       <primitive
         name="off-mesh-connection-helper"
-        position={[0, 0.01, 0]}
+        position={[0, 0.02, 0]}
         object={state.offMeshConnections}
       />
     </>}

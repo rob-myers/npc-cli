@@ -15,8 +15,8 @@ export function computeGmInstanceMesh(gm) {
   mesh.updateMatrixWorld();
   
   const customAreaDefs = /** @type {NPC.TileCacheConvexAreaDef[]} */ ([]);
-  // gm.doors.forEach(door => {
-  //   const poly = door.computeDoorway().applyMatrix(gm.matrix).fixOrientationConvex();
+  // gm.hullDoors.forEach(door => {
+  //   const poly = door.computeDoorway().applyMatrix(gm.matrix);
   //   customAreaDefs.push({
   //     areaId: 1,
   //     areas: [ { hmin: 0, hmax: 0.02, verts: poly.outline.map(toV3) }],
@@ -41,20 +41,24 @@ export function computeGmInstanceMesh(gm) {
 export function computeOffMeshConnectionsParams(gms) {
   const halfLength = wallOutset + 0.15;
 
-  return gms.flatMap(gm => gm.doors.map(
-    /** @returns {import("recast-navigation").OffMeshConnectionParams} */
-    ({ center, normal }) => {
+  
+  return gms.flatMap(gm => gm.doors.flatMap(/** @returns {import("recast-navigation").OffMeshConnectionParams[]} */
+    ({ center, normal, meta }) => {
+      const offsets = meta.hull === true ? [-0.7, 0, 0.7] : [-0.2, 0.2];
       const src = gm.matrix.transformPoint(center.clone().addScaled(normal, halfLength));
       const dst = gm.matrix.transformPoint(center.clone().addScaled(normal, -halfLength));
-      return {
-        startPosition: { x: src.x, y: 0.001, z: src.y },
-        endPosition: { x: dst.x, y: 0.001, z: dst.y },
-        radius: 0.1,
-        bidirectional: true,
-        // area: 1,
-        // flags: 0 + 2,
-      };
-  }));
+      const tangent = { x: -normal.y, y: normal.x };
+      
+      return offsets.map(offset => ({
+          startPosition: { x: src.x + offset * tangent.x, y: 0.001, z: src.y + offset * tangent.y },
+          endPosition: { x: dst.x + offset * tangent.x, y: 0.001, z: dst.y + offset * tangent.y },
+          radius: 0.1,
+          bidirectional: true,
+          // area: 1,
+          // flags: 0 + 2,
+      }));
+
+    }));
 }
 
 /**
@@ -92,10 +96,8 @@ export function getTileCacheMeshProcess(gms) {
  */
 export function getTileCacheGeneratorConfig(tileCacheMeshProcess) {
   return {
-    // cs: 0.1,
-    // tileSize: 10,
-    cs: 0.125,
-    tileSize: 10,
+    cs: 0.15,
+    tileSize: 12,
     ch: 0.001,
     borderSize: 0,
     expectedLayersPerTile: 1,

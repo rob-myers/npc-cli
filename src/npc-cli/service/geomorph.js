@@ -267,8 +267,8 @@ class GeomorphService {
    * @returns {Pick<Geomorph.Layout, 'navDecomp' | 'navRects'>}
    */
   decomposeLayoutNav(navPolyWithDoors, doors) {
-    const navDoorways = doors.flatMap(x => x.meta.hull ? [] : x.computeDoorway());
     // 🚧 remove all doorways... we'll use offMeshConnections instead
+    const navDoorways = doors.map(x => x.computeDoorway());
     const navPolySansDoors = Poly.cutOut(navDoorways, navPolyWithDoors);
     const navDecomp = geom.joinTriangulations(navPolySansDoors.map(poly => poly.qualityTriangulate()));
     const navRects = navPolySansDoors.map(x => x.rect.precision(precision));
