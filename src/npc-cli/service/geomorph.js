@@ -271,7 +271,9 @@ class GeomorphService {
     const navDoorways = doors.map(x => x.computeDoorway().precision(precision).cleanFinalReps());
     const navPolySansDoors = Poly.cutOut(navDoorways, navPolyWithDoors).map(x => x.cleanFinalReps());
     const navDecomp = geom.joinTriangulations(navPolySansDoors.map(poly => poly.qualityTriangulate()));
-    const navRects = navPolySansDoors.map(x => x.rect.precision(precision));
+    
+    // include doors to infer "connected components"
+    const navRects = navPolyWithDoors.map(x => x.rect.precision(precision));
     // Smaller rects 1st, else larger overrides (e.g. 102)
     navRects.sort((a, b) => a.area < b.area ? -1 : 1);
     // Mutate doors
