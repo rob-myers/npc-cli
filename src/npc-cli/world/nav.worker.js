@@ -54,6 +54,7 @@ async function onRequestNav(mapKey) {
     type: "nav-mesh-response",
     mapKey,
     exportedNavMesh: exportTileCache(result.navMesh, result.tileCache),
+    offMeshLookup: result.offMeshLookup,
   });
 
   result.tileCache.destroy();

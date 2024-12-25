@@ -4,6 +4,7 @@ import { getPositionsAndIndices } from "@recast-navigation/three";
 import { createDefaultTileCacheMeshProcess, dtIlog2, dtNextPow2, getBoundingBox, tileCacheGeneratorConfigDefaults } from "@recast-navigation/generators";
 import { decompToXZGeometry, toV3 } from "./three";
 import { wallOutset } from "./const";
+import { range, toPrecision } from "./generic";
 
 /**
  * @param {Geomorph.LayoutInstance} gm
@@ -44,7 +45,8 @@ export function computeOffMeshConnectionsParams(gms) {
   
   return gms.flatMap(gm => gm.doors.flatMap(/** @returns {import("recast-navigation").OffMeshConnectionParams[]} */
     ({ center, normal, meta }) => {
-      const offsets = meta.hull === true ? [-0.7, 0, 0.7] : [-0.2, 0.2];
+      // const offsets = meta.hull === true ? [-0.7, 0, 0.7] : [-0.2, 0.2];
+      const offsets = meta.hull === true ? [-0.7, 0, 0.7] : [0];
       const src = gm.matrix.transformPoint(center.clone().addScaled(normal, halfLength));
       const dst = gm.matrix.transformPoint(center.clone().addScaled(normal, -halfLength));
       const tangent = { x: -normal.y, y: normal.x };
@@ -56,6 +58,7 @@ export function computeOffMeshConnectionsParams(gms) {
           bidirectional: true,
           // area: 1,
           // flags: 0 + 2,
+          // userId,
       }));
 
     }));
@@ -131,7 +134,10 @@ export function customThreeToTileCache(meshes, navMeshGeneratorConfig = {}, opti
  * @param {ArrayLike<number>} indices 
  * @param {Partial<TileCacheGeneratorConfig>} [navMeshGeneratorConfig ]
  * @param {TileCacheCustomOptions} [options]
- * @returns {TileCacheGeneratorResult}
+ * @returns {(
+ *   | TileCacheGeneratorFailResult
+ *   | (TileCacheGeneratorSuccessResult & { offMeshLookup: NPC.OffMeshLookup })
+ * )}
  */
 export function customGenerateTileCache(
   positions,
@@ -606,6 +612,25 @@ export function customGenerateTileCache(
     }
   }
 
+  // offMeshConnections lookup:
+  // `{tile.bmin.x},{tile.bmin.z}` -> `{ offMeshRefs }`
+  const offMeshLookup = /** @type {NPC.OffMeshLookup} */ ({});
+  for (let tileIndex = 0; tileIndex < navMesh.getMaxTiles(); tileIndex++) {
+    const tile = navMesh.getTile(tileIndex), header = tile?.header();
+    if (!header) continue;
+
+    const offMeshCons = range(header.offMeshConCount()).map(i => tile.raw.get_offMeshCons(i));
+    const offMeshPolyRefs = offMeshCons.map(x => navMesh.encodePolyId(tile.salt(), tileIndex, x.poly));
+    // const offMeshPolys = offMeshPolyRefs.map(x => navMesh.getOffMeshConnectionByRef(x));
+
+    if (offMeshCons.length > 0) {
+      // console.log({ tileIndex, offMeshCons, offMeshPolyRefs });
+      offMeshLookup[`${toPrecision(header.bmin(0))},${toPrecision(header.bmin(2))}`] = {
+        offMeshRefs: offMeshPolyRefs,
+      };
+    }
+  }
+
   cleanup();
 
   return {
@@ -613,12 +638,19 @@ export function customGenerateTileCache(
     tileCache,
     navMesh,
     intermediates,
+    offMeshLookup,
   };
 
 }
 
 /**
  * @typedef {import("@recast-navigation/generators").TileCacheGeneratorConfig} TileCacheGeneratorConfig
+ */
+/**
+ * @typedef {Extract<import("@recast-navigation/generators").TileCacheGeneratorResult, { success: false }>} TileCacheGeneratorFailResult
+ */
+/**
+ * @typedef {Extract<import("@recast-navigation/generators").TileCacheGeneratorResult, { success: true }>} TileCacheGeneratorSuccessResult
  */
 /**
  * @typedef {import("@recast-navigation/generators").TileCacheGeneratorResult} TileCacheGeneratorResult
@@ -633,14 +665,6 @@ export function customGenerateTileCache(
  * @typedef {import("@recast-navigation/wasm").default.UnsignedCharArray} UnsignedCharArray
  */
 
-/**
- * @typedef TileCacheGeneratorFailResult
- * @property {undefined} tileCache
- * @property {undefined} navMesh
- * @property {false} success
- * @property {string} error
- * @property {TileCacheGeneratorIntermediates} intermediates
- */
 
 /**
  * @typedef TileCacheCustomOptions

@@ -131,7 +131,7 @@ export default function World(props) {
 
       return ready;
     },
-    loadTiledMesh(exportedNavMesh) {
+    loadTiledMesh(exportedNavMesh, offMeshLookup) {
       const tiledCacheResult = /** @type {NPC.TiledCacheResult} */ (
         importTileCache(exportedNavMesh, getTileCacheMeshProcess(state.gms))
       );
@@ -145,6 +145,9 @@ export default function World(props) {
         maxAgentRadius: helper.defaults.radius,
       });
       state.npc?.restore();
+      console.log({// 🚧
+        offMeshLookup,
+      })
     },
     onTick() {
       state.reqAnimId = requestAnimationFrame(state.onTick);
@@ -442,7 +445,7 @@ export default function World(props) {
  *
  * @property {(postAct?: () => void) => void} advance
  * @property {() => boolean} isReady
- * @property {(exportedNavMesh: Uint8Array) => void} loadTiledMesh
+ * @property {(exportedNavMesh: Uint8Array, offMeshPolyRefs: NPC.OffMeshLookup) => void} loadTiledMesh
  * @property {() => void} debugTick
  * @property {() => void} onTick
  * @property {(next: State['hmr']) => Record<keyof State['hmr'], boolean>} trackHmr

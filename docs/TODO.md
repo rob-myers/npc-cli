@@ -82,9 +82,19 @@
   - ℹ️ fix push-other-npc-thru-door via separation weight
   - ℹ️ fix lockers in bridge, fix diagonal doors
   - ✅ add off-mesh connections and visualise them
-  - 🚧 detect when off-mesh connection reached
-  - remove agent from crowd and move linearly
-  - navRectId --> connectedComponentId in gmGraph
+  - 🚧 detect when off-mesh connection reached, and which is reached
+    - ✅ detect when over (`agent.state() === 2`)
+    - get off-mesh-connection
+    - can detect src or dst
+  - ✅ check separation weight cannot push agent into connection
+  - ✅ nav.worker iterates through all off-mesh connections
+  - ✅ nav.worker provides lookup from `{tile.minX},{tile.minZ}` to `{ offMeshPolysIds }`
+  - could remove agent from crowd and move linearly
+  - could lerp whilst agent on off-mesh-connection
+  - could close off-mesh connection while in use
+  - door opens before going through
+  - ❌ navRectId --> connectedComponentId in gmGraph
+    - fixed by computing navRectId using navPolyWithDoors
 
 
 - 🚧 pre next.js migration

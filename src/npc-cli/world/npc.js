@@ -47,6 +47,7 @@ export class Npc {
   /** State */
   s = {
     act: /** @type {NPC.AnimKey} */ ('Idle'),
+    agentState: /** @type {null | number} */ (null),
     cancels: 0,
     doMeta: /** @type {null | Geom.Meta} */ (null),
     faceId: /** @type {null | NPC.UvQuadId} */ (null),
@@ -555,15 +556,24 @@ export class Npc {
   onTickAgent(deltaMs, agent) {
     const pos = agent.position();
     const vel = agent.velocity();
-    const speed = Math.sqrt(vel.x ** 2 + vel.z ** 2);
+    const state = agent.state();
+    const speed = vel.x ** 2 + vel.z ** 2;
     
     this.position.copy(pos);
+
+    if (state !== this.s.agentState) {
+      if (state === 2) {
+        // 🚧 find off-mesh-connection via current tile bmin and offMeshLookup
+        this.w.events.next({ key: 'entered-off-mesh' });
+      }
+      this.s.agentState = state;
+    }
 
     if (this.s.target === null) {
       return;
     }
 
-    if (speed > 0.2) {
+    if (speed > 0.2 ** 2) {
       this.s.lookAngleDst = this.getEulerAngle(Math.atan2(-vel.z, vel.x));
     } 
 

@@ -129,6 +129,7 @@ declare namespace NPC {
     | { key: "pre-setup-physics" }
     | { key: "nav-updated" }
     | { key: 'click-link'; cmKey: string; linkKey: string }
+    | { key: 'entered-off-mesh' }
     // ...
   );
 
@@ -197,6 +198,10 @@ declare namespace NPC {
   }
 
   type CrowdAgent = import("@recast-navigation/core").CrowdAgent;
+
+  type OffMeshLookup = {
+    [tileBMinXZ in `${number},${number}`]: { offMeshRefs: number[] }
+  };
 
   type Obstacle = {
     id: number;
