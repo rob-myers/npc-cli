@@ -131,23 +131,25 @@ export default function World(props) {
 
       return ready;
     },
-    loadTiledMesh(exportedNavMesh, offMeshLookup) {
+    loadTiledMesh({ exportedNavMesh, offMeshLookup }) {
       const tiledCacheResult = /** @type {NPC.TiledCacheResult} */ (
         importTileCache(exportedNavMesh, getTileCacheMeshProcess(state.gms))
       );
+      
+      Object.assign(state.nav, tiledCacheResult);
+      state.nav.offMeshLookup = offMeshLookup;
+      // console.log({ offMeshLookup }) // 🚧
+
       if (state.crowd) {
         disposeCrowd(state.crowd, state.nav.navMesh);
       }
-      Object.assign(state.nav, tiledCacheResult);
       state.crowd = new Crowd(state.nav.navMesh, {
         // maxAgents: 10,
         maxAgents: 200,
         maxAgentRadius: helper.defaults.radius,
       });
+
       state.npc?.restore();
-      console.log({// 🚧
-        offMeshLookup,
-      })
     },
     onTick() {
       state.reqAnimId = requestAnimationFrame(state.onTick);
@@ -404,7 +406,7 @@ export default function World(props) {
  * @property {import("@react-three/fiber").RootState & { camera: THREE.PerspectiveCamera }} r3f
  * @property {Timer} timer
  *
- * @property {{ worker: WW.NavWorker } & NPC.TiledCacheResult} nav
+ * @property {{ worker: WW.NavWorker; offMeshLookup: NPC.OffMeshLookup; } & NPC.TiledCacheResult} nav
  * @property {{ worker: WW.PhysicsWorker; rebuilds: number; } & import("../service/rapier").PhysicsBijection} physics
  *
  * @property {import('./WorldView').State} view
@@ -445,7 +447,7 @@ export default function World(props) {
  *
  * @property {(postAct?: () => void) => void} advance
  * @property {() => boolean} isReady
- * @property {(exportedNavMesh: Uint8Array, offMeshPolyRefs: NPC.OffMeshLookup) => void} loadTiledMesh
+ * @property {(e: WW.NavMeshResponse) => void} loadTiledMesh
  * @property {() => void} debugTick
  * @property {() => void} onTick
  * @property {(next: State['hmr']) => Record<keyof State['hmr'], boolean>} trackHmr

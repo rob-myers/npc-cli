@@ -27,7 +27,7 @@ export default function WorldWorkers() {
       if (msg.type === "nav-mesh-response") {
         w.menu.measure('request-nav');
         await initRecastNav();
-        w.loadTiledMesh(msg.exportedNavMesh, msg.offMeshLookup);
+        w.loadTiledMesh(msg);
         w.update(); // for w.npc
         w.events.next({ key: 'nav-updated' });
       }

@@ -563,8 +563,21 @@ export class Npc {
 
     if (state !== this.s.agentState) {
       if (state === 2) {
-        // 🚧 find off-mesh-connection via current tile bmin and offMeshLookup
-        this.w.events.next({ key: 'entered-off-mesh' });
+        // find off-mesh-connection via lookup
+        const lookupResult = (
+          this.w.nav.offMeshLookup[geom.to2DString(agent.raw.get_cornerVerts(0), agent.raw.get_cornerVerts(2))]
+          ?? this.w.nav.offMeshLookup[geom.to2DString(agent.raw.get_cornerVerts(3), agent.raw.get_cornerVerts(5))]
+          ?? this.w.nav.offMeshLookup[geom.to2DString(agent.raw.get_cornerVerts(6), agent.raw.get_cornerVerts(8))]
+          ?? null
+        );
+        // console.log({ lookupResult });
+
+        if (lookupResult !== null) {
+          this.w.events.next({ key: 'enter-off-mesh', ...lookupResult });
+        } else {
+          agent.teleport(pos);
+          warn(`${this.key}: bailed out of unknown offMeshConnection: ${JSON.stringify(pos)}`);
+        }
       }
       this.s.agentState = state;
     }

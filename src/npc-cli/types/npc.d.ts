@@ -129,7 +129,7 @@ declare namespace NPC {
     | { key: "pre-setup-physics" }
     | { key: "nav-updated" }
     | { key: 'click-link'; cmKey: string; linkKey: string }
-    | { key: 'entered-off-mesh' }
+    | { key: 'enter-off-mesh'; offMeshRef: number; src: import('three').Vector3Like; dst: import('three').Vector3Like;  }
     // ...
   );
 
@@ -200,7 +200,7 @@ declare namespace NPC {
   type CrowdAgent = import("@recast-navigation/core").CrowdAgent;
 
   type OffMeshLookup = {
-    [tileBMinXZ in `${number},${number}`]: { offMeshRefs: number[] }
+    [xz2DString: `${number},${number}`]: { offMeshRef: number; src: import('three').Vector3Like; dst: import('three').Vector3Like; }
   };
 
   type Obstacle = {

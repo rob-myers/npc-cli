@@ -1051,6 +1051,14 @@ class geomServiceClass {
   }
 
   /**
+   * @param {number} x 
+   * @param {number} y 
+   */
+  to2DString(x, y, dp = 2) {
+    return /** @type {`${number},${number}`} */ (`${x.toFixed(dp)},${y.toFixed(dp)}`);
+  }
+
+  /**
    * @param {Geom.Triangulation} decomp
    * @returns {Geom.Poly[]}
    */
