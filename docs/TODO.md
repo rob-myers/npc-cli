@@ -85,10 +85,12 @@
   - ✅ check separation weight cannot push agent into connection
   - ✅ nav.worker iterates through all off-mesh connections
   - ✅ nav.worker provides lookup from `{tile.minX},{tile.minZ}` to `{ offMeshPolysIds }`
-  - 🚧 detect when off-mesh connection reached, and which is reached
+  - ✅ detect off-mesh connection enter/exit
+    - ✅ `enter-off-mesh`
     - ✅ detect when over (`agent.state() === 2`)
     - ✅ get off-mesh-connection
     - ✅ can detect src --> dst
+    - ✅ `exit-off-mesh`
   - could remove agent from crowd and move linearly
   - could lerp whilst agent on off-mesh-connection
   - could close off-mesh connection while in use

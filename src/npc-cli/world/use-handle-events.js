@@ -1,10 +1,10 @@
 import React from "react";
 import { Vect } from "../geom";
-import { defaultDoorCloseMs, npcNearUiDist, wallHeight, wallOutset } from "../service/const";
+import { defaultDoorCloseMs, npcNearUiDist, wallHeight } from "../service/const";
 import { pause, warn, debug } from "../service/generic";
 import { geom } from "../service/geom";
 import { npcToBodyKey } from "../service/rapier";
-import { toV3, toXZ, unitXVector3 } from "../service/three";
+import { toV3, toXZ } from "../service/three";
 import useStateRef from "../hooks/use-state-ref";
 
 /**

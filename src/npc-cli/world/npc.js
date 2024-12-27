@@ -56,6 +56,7 @@ export class Npc {
     label: /** @type {null | string} */ (null),
     /** Desired look angle (rotation.y) */
     lookAngleDst: /** @type {null | number} */ (null),
+    offMesh: /** @type {null | { offMeshRef: number; src: THREE.Vector3Like; dst: THREE.Vector3Like; }} */ (null),
     opacity: 1,
     /** Desired opacity */
     opacityDst: /** @type {null | number} */ (null),
@@ -82,7 +83,7 @@ export class Npc {
    * - We stop slightly before final corner. 
    */
   nextCorner = new THREE.Vector3();
-  
+
   resolve = {
     fade: /** @type {undefined | ((value?: any) => void)} */ (undefined),
     move: /** @type {undefined | ((value?: any) => void)} */ (undefined),
@@ -446,6 +447,35 @@ export class Npc {
   }
 
   /**
+   * @param {import('@recast-navigation/core').CrowdAgent} agent
+   * @param {number} next
+   */
+  onChangeAgentState(agent, next) {
+    if (next === 2) {// enter offMeshConnection
+      this.s.offMesh = (// find off-mesh-connection via lookup
+        this.w.nav.offMeshLookup[geom.to2DString(agent.raw.get_cornerVerts(0), agent.raw.get_cornerVerts(2))]
+        ?? this.w.nav.offMeshLookup[geom.to2DString(agent.raw.get_cornerVerts(3), agent.raw.get_cornerVerts(5))]
+        ?? this.w.nav.offMeshLookup[geom.to2DString(agent.raw.get_cornerVerts(6), agent.raw.get_cornerVerts(8))]
+        ?? null
+      );
+      if (this.s.offMesh !== null) {
+        this.w.events.next({ key: 'enter-off-mesh', ...this.s.offMesh });
+      } else {
+        agent.teleport(this.position);
+        warn(`${this.key}: bailed out of unknown offMeshConnection: ${JSON.stringify(this.position)}`);
+      }
+    } else if (this.s.agentState === 2) {
+      if (this.s.offMesh !== null) {
+        this.w.events.next({ key: 'exit-off-mesh', ...this.s.offMesh });
+        this.s.offMesh = null;
+      } else {
+        warn(`${this.key}: left offMeshConnection state but this.s.offMesh already null`);
+      }
+    }
+    this.s.agentState = next;
+  }
+
+  /**
    * @param {Geom.MaybeMeta<Geom.VectJson>} point 
    * @param {object} opts
    * @param {boolean} [opts.preferSpawn]
@@ -562,24 +592,7 @@ export class Npc {
     this.position.copy(pos);
 
     if (state !== this.s.agentState) {
-      if (state === 2) {
-        // find off-mesh-connection via lookup
-        const lookupResult = (
-          this.w.nav.offMeshLookup[geom.to2DString(agent.raw.get_cornerVerts(0), agent.raw.get_cornerVerts(2))]
-          ?? this.w.nav.offMeshLookup[geom.to2DString(agent.raw.get_cornerVerts(3), agent.raw.get_cornerVerts(5))]
-          ?? this.w.nav.offMeshLookup[geom.to2DString(agent.raw.get_cornerVerts(6), agent.raw.get_cornerVerts(8))]
-          ?? null
-        );
-        // console.log({ lookupResult });
-
-        if (lookupResult !== null) {
-          this.w.events.next({ key: 'enter-off-mesh', ...lookupResult });
-        } else {
-          agent.teleport(pos);
-          warn(`${this.key}: bailed out of unknown offMeshConnection: ${JSON.stringify(pos)}`);
-        }
-      }
-      this.s.agentState = state;
+      this.onChangeAgentState(agent, state);
     }
 
     if (this.s.target === null) {

@@ -5,7 +5,7 @@ import { createDefaultTileCacheMeshProcess, dtIlog2, dtNextPow2, getBoundingBox,
 import { geom } from "./geom";
 import { decompToXZGeometry } from "./three";
 import { wallOutset } from "./const";
-import { range } from "./generic";
+import { range, toPrecision } from "./generic";
 
 /**
  * @param {Geomorph.LayoutInstance} gm
@@ -52,16 +52,17 @@ export function computeOffMeshConnectionsParams(gms) {
       const tangent = { x: -normal.y, y: normal.x };
       
       return offsets.map(offset => ({
-        startPosition: { x: src.x + offset * tangent.x, y: 0.001, z: src.y + offset * tangent.y },
-        endPosition: { x: dst.x + offset * tangent.x, y: 0.001, z: dst.y + offset * tangent.y },
-        radius: 0.05,
+        startPosition: { x: toPrecision(src.x + offset * tangent.x), y: 0.001, z: toPrecision(src.y + offset * tangent.y) },
+        endPosition: { x: toPrecision(dst.x + offset * tangent.x), y: 0.001, z: toPrecision(dst.y + offset * tangent.y) },
+        radius: 0.04,
         bidirectional: true,
         // area: 1,
         // flags: 0 + 2,
         // userId,
       }));
 
-    }));
+    })
+  );
 }
 
 /**

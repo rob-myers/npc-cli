@@ -218,6 +218,7 @@ export default function Npcs(props) {
       
       npc.s.spawns++;
       npc.s.doMeta = e.meta?.do === true ? e.meta : null;
+      npc.s.offMesh = null;
       w.events.next({ key: 'spawned', npcKey: npc.key, gmRoomId });
 
       return npc;
