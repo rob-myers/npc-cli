@@ -91,10 +91,30 @@
     - ✅ get off-mesh-connection
     - ✅ can detect src --> dst
     - ✅ `exit-off-mesh`
-  - could remove agent from crowd and move linearly
+  - ✅ can pause agent by temp setting maxSpeed 0 on exit offMeshConnection,
+    - `w n.rob.agent.updateParameters '{ maxSpeed: 0 }'`
+    - `w n.rob.agent.updateParameters '{ maxSpeed: 2 }'`
+  - ❌ can cancel just before traverse offMeshConnection?
+    - ℹ️ once agent has changed state we can't stop it
+    - ℹ️ https://github.com/isaac-mason/recast-navigation-js/discussions/458
+    - ℹ️ taking new approach i.e. forking recastnavigation
+    ```json
+    "@recast-navigation/core": "../recast-navigation-js/packages/recast-navigation-core",
+    "@recast-navigation/generators": "../recast-navigation-js/packages/recast-navigation-generators",
+    "@recast-navigation/three": "../recast-navigation-js/packages/recast-navigation-three",
+    "@recast-navigation/wasm": "../recast-navigation-js/packages/recast-navigation-wasm",
+    ```
+    ```json
+    "@recast-navigation/core": "npm:@rob-myers/recast-navigation__core@0.38.0",
+    "@recast-navigation/generators": "npm:@rob-myers/recast-navigation__generators@0.38.0",
+    "@recast-navigation/three": "npm:@rob-myers/recast-navigation__three@0.38.0",
+    "@recast-navigation/wasm": "npm:@rob-myers/recast-navigation__wasm@0.38.0",
+    ```
+  - door opens before going through offMeshConnection
   - could lerp whilst agent on off-mesh-connection
   - could close off-mesh connection while in use
-  - door opens before going through
+  - could remove agent from crowd and move linearly
+  - review door opening
   - ❌ navRectId --> connectedComponentId in gmGraph
     - fixed by computing navRectId using navPolyWithDoors
 
