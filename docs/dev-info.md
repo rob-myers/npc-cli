@@ -1,31 +1,31 @@
 
 ## Bits and pieces
 
-### SVG transformation
+### Developing WASM / C++ locally with `recast-navigation-js` and `recastnavigation`
 
-An example of advanced SVG manipulation without writing e.g. a Node.js script with a DOM parser.
+Download parallel repos:
+- https://github.com/recastnavigation/recastnavigation
+- https://github.com/isaac-mason/recast-navigation-js
 
-```js
-/**
- * $0 is a particular <g> containing symbols <use>
- * (could be manually duplicated via Chrome DevTools context menu)
- * @type {SVGGElement}
- */
-symGrp = $0
+See https://github.com/isaac-mason/recast-navigation-js/blob/main/DEVELOPMENT.md.
 
-function matToPrecision(mat) {
-    let { a, b, c, d, e, f } = mat;
-    [a, b, c, d, e, f] = [a, b, c, d, e, f].map(x => Number(x.toPrecision(6)))
-    Object.assign(mat, { a, b, c, d, e, f });
-    return mat;
+> For example, my `~/.bash_profile` contains:
+
+```sh
+export PATH=/Users/robmyers/coding/emsdk:$PATH
+export PATH=/Users/robmyers/coding/emsdk/upstream/emscripten:$PATH
+export EMSDK=/Users/robmyers/coding/emsdk
+```
+
+Extend "paths" in tsconfig.json:
+
+```json
+"paths": {
+    "@recast-navigation/core": ["../recast-navigation-js/packages/recast-navigation-core"],
+    "@recast-navigation/generators": ["../recast-navigation-js/packages/recast-navigation-generators"],
+    "@recast-navigation/three": ["../recast-navigation-js/packages/recast-navigation-three"],
+    "@recast-navigation/wasm": ["../recast-navigation-js/packages/recast-navigation-wasm"]
 }
-
-Array.from(symGrp.children).filter(n => n.tagName === 'use').forEach(n => {
-    n.setAttribute("width", Number(n.getAttribute("width")) * 5);
-    n.setAttribute("height", Number(n.getAttribute("height")) * 5);
-    n.setAttribute("transform", matToPrecision(new DOMMatrix(n.getAttribute("transform")).scale(1 / 5)).toString());
-});
-
 ```
 
 ### Chrome DevTool filtering

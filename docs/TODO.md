@@ -110,6 +110,32 @@
     "@recast-navigation/three": "npm:@rob-myers/recast-navigation__three@0.38.0",
     "@recast-navigation/wasm": "npm:@rob-myers/recast-navigation__wasm@0.38.0",
     ```
+  - ✅ can see recastnavigation change on prod
+  - ✅ use tsconfig.json to alias @recast-navigation/*
+    ```js
+    "paths": {
+        "@recast-navigation/core": ["../recast-navigation-js/packages/recast-navigation-core"],
+        "@recast-navigation/generators": ["../recast-navigation-js/packages/recast-navigation-generators"],
+        "@recast-navigation/three": ["../recast-navigation-js/packages/recast-navigation-three"],
+        "@recast-navigation/wasm": ["../recast-navigation-js/packages/recast-navigation-wasm"]
+    },
+    ```
+  - ✅ alter recastnavigation, so offMeshConnection are traversed more slowly
+    - ℹ️ faster to directly alter recast-navigation-js/packages/recast-navigation-wasm/recastnavigation then move the changes to recastnavigation repo before commit
+    - ✅ rebuild via `cd packages/recast-navigation-wasm && yarn build`
+    - ✅ improve both segments of path
+    - ✅ publish `@rob-myers/recast-navigation__wasm@0.38.1`:
+```sh
+# recast-navigation-js repo
+# manually change version/dep-versions (core,generators,three,wasm) in package.json to 0.38.1
+yarn publish
+
+# this repo
+rm -rf .cache
+npm i
+yarn dev
+```
+  - ✅ bump versions in this repo and verify local build
   - door opens before going through offMeshConnection
   - could lerp whilst agent on off-mesh-connection
   - could close off-mesh connection while in use
