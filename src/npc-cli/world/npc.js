@@ -459,20 +459,23 @@ export class Npc {
         ?? null
       );
       if (this.s.offMesh !== null) {
-        this.w.events.next({ key: 'enter-off-mesh', ...this.s.offMesh });
+        this.w.events.next({ key: 'enter-off-mesh', npcKey: this.key, ...this.s.offMesh });
       } else {
         agent.teleport(this.position);
         warn(`${this.key}: bailed out of unknown offMeshConnection: ${JSON.stringify(this.position)}`);
       }
-    } else if (this.s.agentState === 2) {
+      return;
+    }
+    
+    if (this.s.agentState === 2) {// exit offMeshConnection
       if (this.s.offMesh !== null) {
-        this.w.events.next({ key: 'exit-off-mesh', ...this.s.offMesh });
+        this.w.events.next({ key: 'exit-off-mesh', npcKey: this.key, ...this.s.offMesh });
         this.s.offMesh = null;
       } else {
         warn(`${this.key}: left offMeshConnection state but this.s.offMesh already null`);
       }
+      return;
     }
-    this.s.agentState = next;
   }
 
   /**
@@ -593,6 +596,7 @@ export class Npc {
 
     if (state !== this.s.agentState) {
       this.onChangeAgentState(agent, state);
+      this.s.agentState = state;
     }
 
     if (this.s.target === null) {
