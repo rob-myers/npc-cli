@@ -642,45 +642,24 @@ export class Npc {
 
     // ✅ cache anim
     // ❌ smooth steering via calcSmoothSteerDirection
-    // 🚧 smooth steering via linear bezier
+    // ✅ smooth inbound steering via linear bezier
     // 🚧 clean
     if (this.s.offMesh !== null) {
       const anim = /** @type {dtCrowdAgentAnimation} */ (this.agentAnim);
-
-      // if (anim.t < anim.tmid) {
-      //   this.s.lookAngleDst = this.getEulerAngle(Math.atan2(-(anim.get_startPos(2) - anim.get_initPos(2)), anim.get_startPos(0) - anim.get_initPos(0)));
-      // } else {
-      //   this.s.lookAngleDst = this.getEulerAngle(Math.atan2(-(anim.get_endPos(2) - anim.get_startPos(2)), anim.get_endPos(0) - anim.get_startPos(0)));
-      // }
-
       const dir = tempVec1;
       
       if (anim.t < anim.tmid) {
-        // this.s.lookAngleDst = this.getEulerAngle(Math.atan2(-(anim.get_startPos(2) - anim.get_initPos(2)), anim.get_startPos(0) - anim.get_initPos(0)));
         dir.set(
-          (anim.get_startPos(0) - anim.get_initPos(0)) + (anim.t / anim.tmid) * (
+          (anim.get_startPos(0) - anim.get_initPos(0)) + (anim.t / anim.tmid)**1.5 * (
               (anim.get_endPos(0) - anim.get_startPos(0))
             - (anim.get_startPos(0) - anim.get_initPos(0))
           ),
-          (anim.get_startPos(2) - anim.get_initPos(2)) + (anim.t / anim.tmid) * (
+          (anim.get_startPos(2) - anim.get_initPos(2)) + (anim.t / anim.tmid)**1.5 * (
               (anim.get_endPos(2) - anim.get_startPos(2))
             - (anim.get_startPos(2) - anim.get_initPos(2))
           ),
         );
       } else {
-        // 🚧 assume "next" corner is 3rd corner
-        // dir.set(
-        //   (anim.get_endPos(0) - anim.get_startPos(0)) + 0.5 * ((anim.t - anim.tmid) / (anim.tmax - anim.tmid)) * (
-        //       // (agent.raw.get_cornerVerts(2*3 + 0) - anim.get_endPos(0))
-        //       (agent.raw.get_cornerVerts(2*3 + 0) - anim.get_startPos(0))
-        //     - (anim.get_endPos(0) - anim.get_startPos(0))
-        //   ),
-        //   (anim.get_endPos(2) - anim.get_startPos(2)) + 0.5 * ((anim.t - anim.tmid) / (anim.tmax - anim.tmid)) * (
-        //     // (agent.raw.get_cornerVerts(2*3 + 2) - anim.get_endPos(2))
-        //     (agent.raw.get_cornerVerts(2*3 + 2) - anim.get_startPos(2))
-        //     - (anim.get_endPos(2) - anim.get_startPos(2))
-        //   ),
-        // );
         dir.set(
           anim.get_endPos(0) - anim.get_startPos(0),
           anim.get_endPos(2) - anim.get_startPos(2),

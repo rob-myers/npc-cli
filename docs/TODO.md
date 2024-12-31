@@ -132,6 +132,13 @@
     - ✅ publish new version `0.38.2`
   - 🚧 fix npc turn target for offMeshConnection
     - ✅ works smoothly
+    - ✅ even smoother
+      - ℹ️ agent.raw.get_cornerVerts(0..2) is "src" even after entered
+      - ℹ️ "calcSmoothSteerDirection approach" does not seem to work
+        - uses next two corners relative to current position
+        - maybe it's making assumptions about how we steer
+      - 🚧 linear incoming bezier
+      - ❌ could change final desired velocity in C++
     - clean e.g. only update dst angle "twice"
   - agent stops if door inaccessible on `enter-off-mesh` event
   - door opens before going through offMeshConnection
