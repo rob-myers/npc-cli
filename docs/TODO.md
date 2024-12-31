@@ -142,7 +142,8 @@
     - clean e.g. only update dst angle "twice"
   - 🚧 agent stops if door inaccessible on `enter-off-mesh` event
   - 🚧 door opens before going through offMeshConnection
-  - could close off-mesh connection while in use
+  - in use off-mesh connection cannot be used by another
+  - in use off-mesh connection with door open cannot be closed
   - review door opening
   - to avoid offMeshConnection backtracking could set `anim->startPoint` to be closest point on edge `startPoint -> endPoint`
   - ❌ could lerp whilst agent on off-mesh-connection

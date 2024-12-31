@@ -265,9 +265,10 @@ export default function useHandleEvents(w) {
           
           // 🚧 clean enter/exit-room event
           
+          const door = w.door.byKey[e.gdKey];
           if (state.npcCanAccess(e.npcKey, e.gdKey) === true) {
-            state.toggleDoor(e.gdKey, { open: true, access: true });
-          } else {
+            w.door.toggleDoorRaw(door, { open: true, access: true });
+          } else if (door.open === false) {
             const agent = /** @type {NPC.CrowdAgent} */ (npc.agent);
             const agentAnim = w.crowd.raw.getAgentAnimation(agent.agentIndex);
             agentAnim.set_active(false);
