@@ -131,6 +131,8 @@
     - ✅ try specifying max velocity on leave
     - ✅ publish new version `0.38.2`
   - 🚧 fix npc turn target for offMeshConnection
+    - ✅ works smoothly
+    - clean e.g. only update dst angle "twice"
   - agent stops if door inaccessible on `enter-off-mesh` event
   - door opens before going through offMeshConnection
   - could close off-mesh connection while in use

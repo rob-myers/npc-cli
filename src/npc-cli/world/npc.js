@@ -71,6 +71,8 @@ export class Npc {
   
   /** @type {null | NPC.CrowdAgent} */
   agent = null;
+  /** @type {null | dtCrowdAgentAnimation} */
+  agentAnim = null;
   
   /**
    * - Current target (if moving)
@@ -120,11 +122,13 @@ export class Npc {
   }
 
   attachAgent() {
-    return this.agent ??= this.w.crowd.addAgent(this.position, {
+    this.agent ??= this.w.crowd.addAgent(this.position, {
       ...crowdAgentParams,
       maxSpeed: this.s.run ? helper.defaults.runSpeed : helper.defaults.walkSpeed,
       queryFilterType: this.w.lib.queryFilterType.excludeDoors,
     });
+    this.agentAnim = this.w.crowd.raw.getAgentAnimation(this.agent.agentIndex) ?? null;
+    return this.agent;
   }
 
   async cancel() {
@@ -588,9 +592,7 @@ export class Npc {
    */
   onTickAgent(deltaMs, agent) {
     const pos = agent.position();
-    const vel = agent.velocity();
     const state = agent.state();
-    const speed = vel.x ** 2 + vel.z ** 2;
     
     this.position.copy(pos);
 
@@ -603,9 +605,7 @@ export class Npc {
       return;
     }
 
-    if (speed > 0.2 ** 2) {
-      this.s.lookAngleDst = this.getEulerAngle(Math.atan2(-vel.z, vel.x));
-    } 
+    this.onTickAgentTurn(agent);
 
     const distance = this.s.target.distanceTo(pos);
 
@@ -628,10 +628,36 @@ export class Npc {
     }
   }
 
+  /**
+   * @param {import('@recast-navigation/core').CrowdAgent} agent
+   */
+  onTickAgentTurn(agent) {
+    const vel = agent.velocity();
+    const speedSqr = vel.x ** 2 + vel.z ** 2;
+
+    if (speedSqr > 0.2 ** 2) {
+      this.s.lookAngleDst = this.getEulerAngle(Math.atan2(-vel.z, vel.x));
+      return;
+    }
+
+    // ✅ cache anim
+    // 🚧 only need to set "twice"
+    if (this.s.offMesh !== null) {
+      // const anim = this.w.crowd.raw.getAgentAnimation(agent.agentIndex);
+      const anim = /** @type {dtCrowdAgentAnimation} */ (this.agentAnim);
+      if (anim.t < anim.tmid) {
+        this.s.lookAngleDst = this.getEulerAngle(Math.atan2(-(anim.get_startPos(2) - anim.get_initPos(2)), anim.get_startPos(0) - anim.get_initPos(0)));
+      } else {
+        this.s.lookAngleDst = this.getEulerAngle(Math.atan2(-(anim.get_endPos(2) - anim.get_startPos(2)), anim.get_endPos(0) - anim.get_startPos(0)));
+      }
+    }
+  }
+
   removeAgent() {
     if (this.agent !== null) {
       this.w.crowd.removeAgent(this.agent.agentIndex);
       this.agent = null;
+      this.agentAnim = null;
     }
   }
 
@@ -838,3 +864,9 @@ export const crowdAgentParams = {
 };
 
 const showLastNavPath = false;
+
+/**
+ * @typedef {ReturnType<
+ *  import('@recast-navigation/core').Crowd['raw']['getAgentAnimation']
+ * >} dtCrowdAgentAnimation
+ */
