@@ -2,10 +2,11 @@ import * as THREE from "three";
 import { NavMesh, RecastBuildContext, TileCache, TileCacheMeshProcess, freeCompactHeightfield, freeHeightfield, TileCacheData, freeHeightfieldLayerSet, VerticesArray, TrianglesArray, ChunkIdsArray, TriangleAreasArray, createRcConfig, calcGridSize, DetourTileCacheParams, Raw, vec3, NavMeshParams, RecastChunkyTriMesh, cloneRcConfig, allocHeightfield, createHeightfield, markWalkableTriangles, rasterizeTriangles, filterLowHangingWalkableObstacles, filterLedgeSpans, filterWalkableLowHeightSpans, allocCompactHeightfield, buildCompactHeightfield, erodeWalkableArea, allocHeightfieldLayerSet, buildHeightfieldLayers, getHeightfieldLayerHeights, getHeightfieldLayerAreas, getHeightfieldLayerCons, buildTileCacheLayer,  markConvexPolyArea, Crowd } from "@recast-navigation/core";
 import { getPositionsAndIndices } from "@recast-navigation/three";
 import { createDefaultTileCacheMeshProcess, dtIlog2, dtNextPow2, getBoundingBox, tileCacheGeneratorConfigDefaults } from "@recast-navigation/generators";
-import { geom } from "./geom";
-import { decompToXZGeometry } from "./three";
 import { wallOutset } from "./const";
 import { range, toPrecision } from "./generic";
+import { geom } from "./geom";
+import { decompToXZGeometry } from "./three";
+import { helper } from "./helper";
 
 /**
  * @param {Geomorph.LayoutInstance} gm
@@ -43,8 +44,8 @@ export function computeGmInstanceMesh(gm) {
 export function computeOffMeshConnectionsParams(gms) {
   const halfLength = wallOutset + 0.15 * 2;
   
-  return gms.flatMap(gm => gm.doors.flatMap(/** @returns {import("recast-navigation").OffMeshConnectionParams[]} */
-    ({ center, normal, meta }) => {
+  return gms.flatMap((gm, gmId) => gm.doors.flatMap(/** @returns {import("recast-navigation").OffMeshConnectionParams[]} */
+    ({ center, normal, meta }, doorId) => {
       // const offsets = meta.hull === true ? [-0.7, 0, 0.7] : [-0.2, 0.2];
       const offsets = meta.hull === true ? [-0.7, 0, 0.7] : [0];
       const src = gm.matrix.transformPoint(center.clone().addScaled(normal, halfLength));
@@ -56,9 +57,10 @@ export function computeOffMeshConnectionsParams(gms) {
         endPosition: { x: toPrecision(dst.x + offset * tangent.x), y: 0.001, z: toPrecision(dst.y + offset * tangent.y) },
         radius: 0.04,
         bidirectional: true,
+        // 🔔 Encode (gmId, doorId) assuming 0 ≤ gmId, doorId ≤ 255
+        userId: gmId + (doorId << 8),
         // area: 1,
         // flags: 0 + 2,
-        // userId,
       }));
 
     })
@@ -613,7 +615,7 @@ export function customGenerateTileCache(
     }
   }
 
-  // lookup: `endpoint.xz` -> { offMeshRef, src, dst }
+  // Build lookup from `endpoint.xz` to { offMeshRef, src, dst }
   const offMeshLookup = /** @type {NPC.OffMeshLookup} */ ({});
   for (let tileIndex = 0; tileIndex < navMesh.getMaxTiles(); tileIndex++) {
     const tile = navMesh.getTile(tileIndex);
@@ -625,10 +627,13 @@ export function customGenerateTileCache(
     
     offMeshCons.forEach(c => {
       const offMeshRef = navMesh.encodePolyId(salt, tileIndex, c.poly);
+      const gmId = c.userId & 255;
+      const doorId = (c.userId >> 8) & 255;
+      const gdId = helper.getGmDoorId(gmId, doorId);
       const src = { x: c.get_pos(0), y: 0, z: c.get_pos(2) };
       const dst = { x: c.get_pos(3), y: 0, z: c.get_pos(5) };
-      offMeshLookup[geom.to2DString(src.x, src.z)] = { src, dst, offMeshRef };
-      offMeshLookup[geom.to2DString(dst.x, dst.z)] = { src: dst, dst: src, offMeshRef };
+      offMeshLookup[geom.to2DString(src.x, src.z)] = { src, dst, offMeshRef, ...gdId };
+      offMeshLookup[geom.to2DString(dst.x, dst.z)] = { src: dst, dst: src, offMeshRef, ...gdId };
     });
   }
 

@@ -158,7 +158,6 @@ declare namespace Geomorph {
     gdKey: GmDoorKey;
     gmId: number;
     doorId: number;
-    // other?: { gmId: number; doorId: number };
   }
 
   interface GmRoomId {

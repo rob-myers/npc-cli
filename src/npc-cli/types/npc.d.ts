@@ -129,8 +129,8 @@ declare namespace NPC {
     | { key: "pre-setup-physics" }
     | { key: "nav-updated" }
     | { key: 'click-link'; cmKey: string; linkKey: string }
-    | { key: 'enter-off-mesh'; npcKey: string; offMeshRef: number; src: import('three').Vector3Like; dst: import('three').Vector3Like; }
-    | { key: 'exit-off-mesh'; npcKey: string; offMeshRef: number; src: import('three').Vector3Like; dst: import('three').Vector3Like; }
+    | ({ key: 'enter-off-mesh'; npcKey: string; offMeshRef: number; src: import('three').Vector3Like; dst: import('three').Vector3Like; } & Geomorph.GmDoorId)
+    | ({ key: 'exit-off-mesh'; npcKey: string; offMeshRef: number; src: import('three').Vector3Like; dst: import('three').Vector3Like; } & Geomorph.GmDoorId)
     // ...
   );
 
@@ -201,7 +201,11 @@ declare namespace NPC {
   type CrowdAgent = import("@recast-navigation/core").CrowdAgent;
 
   type OffMeshLookup = {
-    [xz2DString: `${number},${number}`]: { offMeshRef: number; src: import('three').Vector3Like; dst: import('three').Vector3Like; }
+    [xz2DString: `${number},${number}`]: Geomorph.GmDoorId & {
+      offMeshRef: number;
+      src: import('three').Vector3Like;
+      dst: import('three').Vector3Like;
+    }
   };
 
   type Obstacle = {

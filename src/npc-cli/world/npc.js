@@ -56,7 +56,7 @@ export class Npc {
     label: /** @type {null | string} */ (null),
     /** Desired look angle (rotation.y) */
     lookAngleDst: /** @type {null | number} */ (null),
-    offMesh: /** @type {null | { offMeshRef: number; src: THREE.Vector3Like; dst: THREE.Vector3Like; }} */ (null),
+    offMesh: /** @type {null | NPC.OffMeshLookup[*]} */ (null),
     opacity: 1,
     /** Desired opacity */
     opacityDst: /** @type {null | number} */ (null),

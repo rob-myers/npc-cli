@@ -99,12 +99,6 @@
     - ℹ️ https://github.com/isaac-mason/recast-navigation-js/discussions/458
     - ℹ️ taking new approach i.e. forking recastnavigation
     ```json
-    "@recast-navigation/core": "../recast-navigation-js/packages/recast-navigation-core",
-    "@recast-navigation/generators": "../recast-navigation-js/packages/recast-navigation-generators",
-    "@recast-navigation/three": "../recast-navigation-js/packages/recast-navigation-three",
-    "@recast-navigation/wasm": "../recast-navigation-js/packages/recast-navigation-wasm",
-    ```
-    ```json
     "@recast-navigation/core": "npm:@rob-myers/recast-navigation__core@0.38.0",
     "@recast-navigation/generators": "npm:@rob-myers/recast-navigation__generators@0.38.0",
     "@recast-navigation/three": "npm:@rob-myers/recast-navigation__three@0.38.0",
@@ -125,22 +119,18 @@
     - ✅ rebuild via `cd packages/recast-navigation-wasm && yarn build`
     - ✅ improve both segments of path
     - ✅ publish `@rob-myers/recast-navigation__wasm@0.38.1`:
-```sh
-# recast-navigation-js repo
-# manually change version/dep-versions (core,generators,three,wasm) in package.json to 0.38.1
-yarn publish
-
-# this repo
-rm -rf .cache
-npm i
-yarn dev
-```
+      - at recast-navigation-js repo, manually change version/dep-versions (core,generators,three,wasm) in package.json to 0.38.1
+      - then in repo root `yarn publish`
+      - then in this repo `rm -rf .cache` `npm i` and `yarn dev`
   - ✅ bump versions in this repo and verify local build
+  - ✅ can stop agent smoothly on enter-off-mesh
+    - thanks to smoothening of off-mesh traversal and `crowd.raw.getAgentAnimation(agent.agentId)`
+  - fix npc turn target for offMeshConnection
   - door opens before going through offMeshConnection
   - could lerp whilst agent on off-mesh-connection
   - could close off-mesh connection while in use
-  - could remove agent from crowd and move linearly
   - review door opening
+  - ❌ could remove agent from crowd and move linearly
   - ❌ navRectId --> connectedComponentId in gmGraph
     - fixed by computing navRectId using navPolyWithDoors
 
