@@ -81,8 +81,7 @@ async function computeGeomorphMeshes(gms) {
 }
 
 /**
- * 
- * @param {import('recast-navigation').NavMesh} navMesh 
+ * @param {import('@recast-navigation/core').NavMesh} navMesh 
  */
 function logTileCount(navMesh) {
   const polysPerTile = range(navMesh.getMaxTiles()).flatMap((i) =>

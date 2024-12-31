@@ -125,11 +125,13 @@
   - ✅ bump versions in this repo and verify local build
   - ✅ can stop agent smoothly on enter-off-mesh
     - thanks to smoothening of off-mesh traversal and `crowd.raw.getAgentAnimation(agent.agentId)`
-  - fix npc turn target for offMeshConnection
+  - 🚧 fix npc turn target for offMeshConnection
+  - agent stops if door inaccessible on `enter-off-mesh` event
   - door opens before going through offMeshConnection
-  - could lerp whilst agent on off-mesh-connection
   - could close off-mesh connection while in use
   - review door opening
+  - to avoid offMeshConnection backtracking could set `anim->startPoint` to be closest point on edge `startPoint -> endPoint`
+  - ❌ could lerp whilst agent on off-mesh-connection
   - ❌ could remove agent from crowd and move linearly
   - ❌ navRectId --> connectedComponentId in gmGraph
     - fixed by computing navRectId using navPolyWithDoors

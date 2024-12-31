@@ -42,10 +42,10 @@ export function computeGmInstanceMesh(gm) {
  * @param {Geomorph.LayoutInstance[]} gms
  */
 export function computeOffMeshConnectionsParams(gms) {
-  const halfLength = wallOutset + 0.15 * 2;
   
   return gms.flatMap((gm, gmId) => gm.doors.flatMap(/** @returns {import("recast-navigation").OffMeshConnectionParams[]} */
-    ({ center, normal, meta }, doorId) => {
+  ({ center, normal, meta }, doorId) => {
+      const halfLength = wallOutset + (meta.hull === true ? 0.25 : 0.25);
       // const offsets = meta.hull === true ? [-0.7, 0, 0.7] : [-0.2, 0.2];
       const offsets = meta.hull === true ? [-0.7, 0, 0.7] : [0];
       const src = gm.matrix.transformPoint(center.clone().addScaled(normal, halfLength));
@@ -110,7 +110,6 @@ export function getTileCacheGeneratorConfig(tileCacheMeshProcess) {
     // detailSampleDist: 0,
     walkableClimb: 0,
     tileCacheMeshProcess,
-    // 🔔 avoid npc getting too close to door
     maxSimplificationError: 0.85,
     // maxSimplificationError: 0,
     // walkableRadius: 1,

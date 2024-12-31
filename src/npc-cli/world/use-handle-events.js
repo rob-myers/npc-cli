@@ -277,6 +277,18 @@ export default function useHandleEvents(w) {
             state.onExitDoorCollider(e);
           }
           break;
+        case "enter-off-mesh": {
+          // ✅ event should contain door gdKey
+          // 🚧 stop traversal if not accessible
+          // const agent = /** @type {NPC.CrowdAgent} */ (npc.agent);
+          // const agentAnim = w.crowd.raw.getAgentAnimation(agent.agentIndex);
+          // agentAnim.set_active(false);
+          // npc.stopMoving();
+          break;
+        }
+        // case "exit-off-mesh":
+        //   npc.agent?.updateParameters({ maxSpeed: 0 }); // 🚧
+        //   break;
         case "spawned": {
 
           if (npc.s.spawns === 1) {// 1st spawn
@@ -342,7 +354,7 @@ export default function useHandleEvents(w) {
           }
           break;
         }
-        case "way-point":
+        case "way-point": // 🚧 remove
           if (e.index === 0) {// start moving in next frame
             // npc.agent?.updateParameters({ maxSpeed: npc.getMaxSpeed() });
           }
