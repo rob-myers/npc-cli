@@ -56,6 +56,7 @@ export class Npc {
     label: /** @type {null | string} */ (null),
     /** Desired look angle (rotation.y) */
     lookAngleDst: /** @type {null | number} */ (null),
+    lookSecs: 0.3,
     offMesh: /** @type {null | NPC.OffMeshLookup[*]} */ (null),
     opacity: 1,
     /** Desired opacity */
@@ -63,7 +64,6 @@ export class Npc {
     run: false,
     spawns: 0,
     target: /** @type {null | THREE.Vector3} */ (null),
-    lookSecs: 0.3,
     selectorColor: /** @type {[number, number, number]} */ ([0.6, 0.6, 1]),
     showSelector: false,
     wayIndex: 0,
@@ -641,15 +641,53 @@ export class Npc {
     }
 
     // ✅ cache anim
-    // 🚧 only need to set "twice"
+    // ❌ smooth steering via calcSmoothSteerDirection
+    // 🚧 smooth steering via linear bezier
+    // 🚧 clean
     if (this.s.offMesh !== null) {
-      // const anim = this.w.crowd.raw.getAgentAnimation(agent.agentIndex);
       const anim = /** @type {dtCrowdAgentAnimation} */ (this.agentAnim);
+
+      // if (anim.t < anim.tmid) {
+      //   this.s.lookAngleDst = this.getEulerAngle(Math.atan2(-(anim.get_startPos(2) - anim.get_initPos(2)), anim.get_startPos(0) - anim.get_initPos(0)));
+      // } else {
+      //   this.s.lookAngleDst = this.getEulerAngle(Math.atan2(-(anim.get_endPos(2) - anim.get_startPos(2)), anim.get_endPos(0) - anim.get_startPos(0)));
+      // }
+
+      const dir = tempVec1;
+      
       if (anim.t < anim.tmid) {
-        this.s.lookAngleDst = this.getEulerAngle(Math.atan2(-(anim.get_startPos(2) - anim.get_initPos(2)), anim.get_startPos(0) - anim.get_initPos(0)));
+        // this.s.lookAngleDst = this.getEulerAngle(Math.atan2(-(anim.get_startPos(2) - anim.get_initPos(2)), anim.get_startPos(0) - anim.get_initPos(0)));
+        dir.set(
+          (anim.get_startPos(0) - anim.get_initPos(0)) + (anim.t / anim.tmid) * (
+              (anim.get_endPos(0) - anim.get_startPos(0))
+            - (anim.get_startPos(0) - anim.get_initPos(0))
+          ),
+          (anim.get_startPos(2) - anim.get_initPos(2)) + (anim.t / anim.tmid) * (
+              (anim.get_endPos(2) - anim.get_startPos(2))
+            - (anim.get_startPos(2) - anim.get_initPos(2))
+          ),
+        );
       } else {
-        this.s.lookAngleDst = this.getEulerAngle(Math.atan2(-(anim.get_endPos(2) - anim.get_startPos(2)), anim.get_endPos(0) - anim.get_startPos(0)));
+        // 🚧 assume "next" corner is 3rd corner
+        // dir.set(
+        //   (anim.get_endPos(0) - anim.get_startPos(0)) + 0.5 * ((anim.t - anim.tmid) / (anim.tmax - anim.tmid)) * (
+        //       // (agent.raw.get_cornerVerts(2*3 + 0) - anim.get_endPos(0))
+        //       (agent.raw.get_cornerVerts(2*3 + 0) - anim.get_startPos(0))
+        //     - (anim.get_endPos(0) - anim.get_startPos(0))
+        //   ),
+        //   (anim.get_endPos(2) - anim.get_startPos(2)) + 0.5 * ((anim.t - anim.tmid) / (anim.tmax - anim.tmid)) * (
+        //     // (agent.raw.get_cornerVerts(2*3 + 2) - anim.get_endPos(2))
+        //     (agent.raw.get_cornerVerts(2*3 + 2) - anim.get_startPos(2))
+        //     - (anim.get_endPos(2) - anim.get_startPos(2))
+        //   ),
+        // );
+        dir.set(
+          anim.get_endPos(0) - anim.get_startPos(0),
+          anim.get_endPos(2) - anim.get_startPos(2),
+        );
       }
+      
+      this.s.lookAngleDst = this.getEulerAngle(Math.atan2(-dir.y, dir.x));
     }
   }
 
@@ -864,6 +902,7 @@ export const crowdAgentParams = {
 };
 
 const showLastNavPath = false;
+const tempVec1 = new Vect();
 
 /**
  * @typedef {ReturnType<
