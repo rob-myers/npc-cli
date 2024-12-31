@@ -137,11 +137,11 @@
       - ℹ️ "calcSmoothSteerDirection approach" does not seem to work
         - uses next two corners relative to current position
         - maybe it's making assumptions about how we steer
-      - 🚧 linear incoming bezier
-      - ❌ could change final desired velocity in C++
+      - ✅ linear incoming bezier
+    - could change final desired velocity in C++
     - clean e.g. only update dst angle "twice"
-  - agent stops if door inaccessible on `enter-off-mesh` event
-  - door opens before going through offMeshConnection
+  - 🚧 agent stops if door inaccessible on `enter-off-mesh` event
+  - 🚧 door opens before going through offMeshConnection
   - could close off-mesh connection while in use
   - review door opening
   - to avoid offMeshConnection backtracking could set `anim->startPoint` to be closest point on edge `startPoint -> endPoint`
