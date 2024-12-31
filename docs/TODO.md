@@ -107,6 +107,8 @@
   - ✅ can see recastnavigation change on prod
   - ✅ use tsconfig.json to alias @recast-navigation/*
     ```js
+    // 🔔 might need to `rm -rf .cache` and `yarn build` to see changes,
+    //   at least when first switching to this approach
     "paths": {
         "@recast-navigation/core": ["../recast-navigation-js/packages/recast-navigation-core"],
         "@recast-navigation/generators": ["../recast-navigation-js/packages/recast-navigation-generators"],
@@ -125,6 +127,9 @@
   - ✅ bump versions in this repo and verify local build
   - ✅ can stop agent smoothly on enter-off-mesh
     - thanks to smoothening of off-mesh traversal and `crowd.raw.getAgentAnimation(agent.agentId)`
+  - ✅ fix slight jerk when exit offMeshConnection
+    - ✅ try specifying max velocity on leave
+    - ✅ publish new version `0.38.2`
   - 🚧 fix npc turn target for offMeshConnection
   - agent stops if door inaccessible on `enter-off-mesh` event
   - door opens before going through offMeshConnection
