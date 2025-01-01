@@ -201,11 +201,22 @@ declare namespace NPC {
   type CrowdAgent = import("@recast-navigation/core").CrowdAgent;
 
   type OffMeshLookup = {
-    [xz2DString: `${number},${number}`]: Geomorph.GmDoorId & {
-      offMeshRef: number;
-      src: import('three').Vector3Like;
-      dst: import('three').Vector3Like;
-    }
+    [xz2DString: `${number},${number}`]: OffMeshLookupValue;
+  };
+
+  type OffMeshLookupValue = Geomorph.GmDoorId & {
+    offMeshRef: number;
+    src: import('three').Vector3Like;
+    dst: import('three').Vector3Like;
+  };
+
+  type OffMeshCurrent = OffMeshLookupValue & {
+    /** The `init` segment leads from npc's current position to the `main` segment (src, dst)  */
+    seg: 'init' | 'main';
+    /** Segment from "initial npc position" to "offMeshConnection src" */
+    init: Geom.VectJson;
+    /** Segment from "offMeshConnection src" to "offMeshConnection dst" */
+    main: Geom.VectJson;
   };
 
   type Obstacle = {

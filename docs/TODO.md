@@ -78,7 +78,7 @@
   - ✅ remove icon generation code from asset.js
   - Logger also records speech and provides link options
 
-- 🚧 try "off-mesh-connections" again, except hull doors
+- 🚧 try "off-mesh-connections" again
   - ℹ️ fix push-other-npc-thru-door via separation weight
   - ℹ️ fix lockers in bridge, fix diagonal doors
   - ✅ add off-mesh connections and visualise them
@@ -130,7 +130,7 @@
   - ✅ fix slight jerk when exit offMeshConnection
     - ✅ try specifying max velocity on leave
     - ✅ publish new version `0.38.2`
-  - 🚧 fix npc turn target for offMeshConnection
+  - ✅ fix npc turn target for offMeshConnection
     - ✅ works smoothly
     - ✅ even smoother
       - ℹ️ agent.raw.get_cornerVerts(0..2) is "src" even after entered
@@ -140,7 +140,8 @@
       - ✅ linear incoming bezier
     - ❌ could change final desired velocity in C++
     - ℹ️ straightness of offMeshConnection lacks smoothness of original approach, but has many advantages
-    - clean
+    - ✅ clean
+      - npc.s.offMesh.seg is `initial` or `main`
   - ✅ fix auto hull doors
     - ✅ not opening when traversing offMeshConnection
     - ✅ some npcs get stopped
@@ -299,6 +300,7 @@
 
 ### On hold
 
+- try align tiles with geomorph squares by extending navMesh slightly
 - clarify/clean/simplify service/uv
 - put into example-commands
   ```sh

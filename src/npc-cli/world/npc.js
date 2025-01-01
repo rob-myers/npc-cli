@@ -57,7 +57,7 @@ export class Npc {
     /** Desired look angle (rotation.y) */
     lookAngleDst: /** @type {null | number} */ (null),
     lookSecs: 0.3,
-    offMesh: /** @type {null | NPC.OffMeshLookup[*]} */ (null),
+    offMesh: /** @type {null | NPC.OffMeshCurrent} */ (null),
     opacity: 1,
     /** Desired opacity */
     opacityDst: /** @type {null | number} */ (null),
@@ -456,12 +456,22 @@ export class Npc {
    */
   onChangeAgentState(agent, next) {
     if (next === 2) {// enter offMeshConnection
-      this.s.offMesh = (// find off-mesh-connection via lookup
+      // find off-mesh-connection via lookup
+      const offMesh = (
         this.w.nav.offMeshLookup[geom.to2DString(agent.raw.get_cornerVerts(0), agent.raw.get_cornerVerts(2))]
         ?? this.w.nav.offMeshLookup[geom.to2DString(agent.raw.get_cornerVerts(3), agent.raw.get_cornerVerts(5))]
         ?? this.w.nav.offMeshLookup[geom.to2DString(agent.raw.get_cornerVerts(6), agent.raw.get_cornerVerts(8))]
         ?? null
       );
+
+      // stateful i.e. npc is on 'init' segment or 'main' segment
+      this.s.offMesh = offMesh === null ? null : {
+        ...offMesh,
+        seg: 'init',
+        init: { x: offMesh.src.x - this.position.x, y: offMesh.src.z - this.position.z },
+        main: { x: offMesh.dst.x - offMesh.src.x, y: offMesh.dst.z - offMesh.src.z },
+      };
+
       if (this.s.offMesh !== null) {
         this.w.events.next({ key: 'enter-off-mesh', npcKey: this.key, ...this.s.offMesh });
       } else {
@@ -640,34 +650,25 @@ export class Npc {
       return;
     }
 
-    // ✅ cache anim
-    // ❌ smooth steering via calcSmoothSteerDirection
-    // ✅ smooth inbound steering via linear bezier
-    // 🚧 clean
-    if (this.s.offMesh !== null) {
-      const anim = /** @type {dtCrowdAgentAnimation} */ (this.agentAnim);
-      const dir = tempVec1;
-      
-      if (anim.t < anim.tmid) {
-        dir.set(
-          (anim.get_startPos(0) - anim.get_initPos(0)) + (anim.t / anim.tmid)**2 * (
-              (anim.get_endPos(0) - anim.get_startPos(0))
-            - (anim.get_startPos(0) - anim.get_initPos(0))
-          ),
-          (anim.get_startPos(2) - anim.get_initPos(2)) + (anim.t / anim.tmid)**2 * (
-              (anim.get_endPos(2) - anim.get_startPos(2))
-            - (anim.get_startPos(2) - anim.get_initPos(2))
-          ),
-        );
-      } else {
-        dir.set(
-          anim.get_endPos(0) - anim.get_startPos(0),
-          anim.get_endPos(2) - anim.get_startPos(2),
-        );
-      }
-      
-      this.s.lookAngleDst = this.getEulerAngle(Math.atan2(-dir.y, dir.x));
+    if (this.s.offMesh === null) {
+      return;
     }
+    
+    const { offMesh } = this.s;
+    const anim = /** @type {dtCrowdAgentAnimation} */ (this.agentAnim);
+    offMesh.seg = anim.t < anim.tmid ? 'init' : 'main'; // also for external use?
+    
+    let dirX = 0, dirY = 0;
+    if (offMesh.seg === 'init') {
+      // 🤔 should init/main be unit vectors?
+      dirX = offMesh.init.x + (anim.t / anim.tmid)**2 * (offMesh.main.x - offMesh.init.x);
+      dirY = offMesh.init.y + (anim.t / anim.tmid)**2 * (offMesh.main.y - offMesh.init.y);
+    } else {
+      dirX = offMesh.main.x;
+      dirY = offMesh.main.y;
+    }
+    
+    this.s.lookAngleDst = this.getEulerAngle(Math.atan2(-dirY, dirX));
   }
 
   removeAgent() {
@@ -881,7 +882,6 @@ export const crowdAgentParams = {
 };
 
 const showLastNavPath = false;
-const tempVec1 = new Vect();
 
 /**
  * @typedef {ReturnType<
