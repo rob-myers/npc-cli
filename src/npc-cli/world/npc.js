@@ -580,7 +580,7 @@ export class Npc {
 
     this.onTickAgent(deltaMs, this.agent);
 
-    if (this.agent.raw.dvel !== 0) {
+    if (this.agent.raw.dvel !== 0 || this.s.offMesh !== null) {
       const { x, y, z } = this.position;
       positions.push(this.bodyUid, x, y, z);
     }

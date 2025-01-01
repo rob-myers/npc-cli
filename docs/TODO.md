@@ -139,9 +139,11 @@
         - maybe it's making assumptions about how we steer
       - ✅ linear incoming bezier
     - ❌ could change final desired velocity in C++
-    - ℹ️ straightness of offMeshConnection lacks smoothness of original approach,
-      but it has way too many advantages
+    - ℹ️ straightness of offMeshConnection lacks smoothness of original approach, but has many advantages
     - clean
+  - ✅ fix auto hull doors
+    - ✅ not opening when traversing offMeshConnection
+    - ✅ some npcs get stopped
   - 🚧 agent stops if door inaccessible on `enter-off-mesh` event
     - maybe temp (a) set edge unwalkable and (b) stop any `enter-off-mesh` to this connection
   - ✅ door opens before going through offMeshConnection

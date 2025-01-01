@@ -266,19 +266,24 @@ export default function useHandleEvents(w) {
           // 🚧 clean enter/exit-room event
           
           const door = w.door.byKey[e.gdKey];
-          if (state.npcCanAccess(e.npcKey, e.gdKey) === true) {
+
+          if (
+            door.open === true ||
+            (door.auto === true && door.locked === false) ||
+            state.npcCanAccess(e.npcKey, e.gdKey) === true
+          ) {
             w.door.toggleDoorRaw(door, { open: true, access: true });
-          } else if (door.open === false) {
+          } else {
             const agent = /** @type {NPC.CrowdAgent} */ (npc.agent);
             const agentAnim = w.crowd.raw.getAgentAnimation(agent.agentIndex);
             agentAnim.set_active(false);
             npc.stopMoving();
           }
+
           break;
         // case "exit-off-mesh":
         //   break;
         case "spawned": {
-
           if (npc.s.spawns === 1) {// 1st spawn
             const { x, y, z } = npc.getPosition();
             w.physics.worker.postMessage({
@@ -318,58 +323,6 @@ export default function useHandleEvents(w) {
           w.c.delete(e.npcKey);
           break;
         }
-        // case "started-moving":
-        case "stopped-moving": {
-          const doorMeta = state.npcToDoors[e.npcKey];
-
-          if (doorMeta?.inside.size > 0) {// npc stays in doorway
-            npc.agent?.updateParameters({
-              collisionQueryRange: 1,
-              separationWeight: 0.5,
-              queryFilterType: w.lib.queryFilterType.default,
-            });
-          } else {// prevent npc from moving through doors
-            npc.agent?.updateParameters({
-              collisionQueryRange: 1,
-              separationWeight: 4,
-              queryFilterType: w.lib.queryFilterType.excludeDoors,
-            });
-          }
-
-          for (const gdKey of doorMeta?.nearby ?? []) {
-            const door = w.door.byKey[gdKey];
-            door.open === true && state.tryCloseDoor(door.gmId, door.doorId);
-          }
-          break;
-        }
-        case "way-point": // 🚧 remove
-          // if (e.index === 0) {// start moving in next frame
-          //   // npc.agent?.updateParameters({ maxSpeed: npc.getMaxSpeed() });
-          // }
-          // if (e.next === null) {// final
-          //   return;
-          // }
-          
-          // for (const gdKey of state.npcToDoors[e.npcKey]?.nearby ?? []) {
-          //   const door = w.door.byKey[gdKey];
-          //   if (door.open === true || state.navSegIntersectsDoorway(e, e.next, door) === false) {
-          //     continue;
-          //   }
-
-          //   // trigger auto-open doors which have been manually closed
-          //   if (door.auto === true && door.locked === false) {
-          //     w.door.toggleDoorRaw(door, { open: true, access: true });
-          //     continue;
-          //   }
-            
-          //   // incoming closed door
-          //   if (state.npcCanAccess(e.npcKey, door.gdKey) === true) {
-          //     w.door.toggleDoorRaw(door, { open: true, access: true });
-          //   } else {
-          //     npc.stopMoving();
-          //   }
-          // }
-          break;
       }
     },
     navSegIntersectsDoorway(u, v, door) {
