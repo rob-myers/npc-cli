@@ -11,6 +11,12 @@ export function DefaultContextMenu({ cm }) {
   
     <div className="links" onClick={cm.onClickLink.bind(cm)}>
 
+      {cm.npcKey !== undefined && <div className="npc-key" data-key="clear-npc">
+        {'['}<span>{cm.npcKey}</span>{']'}
+      </div>}
+
+      <button data-key="toggle-docked">{cm.docked ? 'embed' : 'dock'}</button>
+
       <PopUp ref={cm.popUpRef.bind(cm)} infoClassName={popUpInfoCss}>
         {/* 🚧 choose an npc, or "no npc" */}
         <select className="select-npc" defaultValue="foo">
@@ -20,12 +26,6 @@ export function DefaultContextMenu({ cm }) {
           <option value="baz">baz</option>
         </select>
       </PopUp>
-
-      {cm.npcKey !== undefined && <div className="npc-key" data-key="clear-npc">
-        {'['}<span>{cm.npcKey}</span>{']'}
-      </div>}
-
-      <button data-key="toggle-docked">{cm.docked ? 'embed' : 'dock'}</button>
 
       {(cm.docked ? topLinks.docked : topLinks.embedded).map(({ key, label, test }) =>
         <button
