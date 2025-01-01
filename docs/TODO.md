@@ -138,10 +138,13 @@
         - uses next two corners relative to current position
         - maybe it's making assumptions about how we steer
       - ✅ linear incoming bezier
-    - could change final desired velocity in C++
-    - clean e.g. only update dst angle "twice"
+    - ❌ could change final desired velocity in C++
+    - ℹ️ straightness of offMeshConnection lacks smoothness of original approach,
+      but it has way too many advantages
+    - clean
   - 🚧 agent stops if door inaccessible on `enter-off-mesh` event
-  - 🚧 door opens before going through offMeshConnection
+    - maybe temp (a) set edge unwalkable and (b) stop any `enter-off-mesh` to this connection
+  - ✅ door opens before going through offMeshConnection
   - in use off-mesh connection cannot be used by another
   - in use off-mesh connection with door open cannot be closed
   - review door opening

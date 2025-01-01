@@ -45,7 +45,7 @@ export function computeOffMeshConnectionsParams(gms) {
   
   return gms.flatMap((gm, gmId) => gm.doors.flatMap(/** @returns {import("recast-navigation").OffMeshConnectionParams[]} */
   ({ center, normal, meta }, doorId) => {
-      const halfLength = wallOutset + (meta.hull === true ? 0.25 : 0.25);
+      const halfLength = wallOutset + (meta.hull === true ? 0.25 : 0.125);
       // const offsets = meta.hull === true ? [-0.7, 0, 0.7] : [-0.2, 0.2];
       const offsets = meta.hull === true ? [-0.7, 0, 0.7] : [0];
       const src = gm.matrix.transformPoint(center.clone().addScaled(normal, halfLength));
@@ -102,8 +102,8 @@ export function getTileCacheMeshProcess(gms) {
  */
 export function getTileCacheGeneratorConfig(tileCacheMeshProcess) {
   return {
-    cs: 0.15,
-    tileSize: 12,
+    cs: 0.1,
+    tileSize: 15,
     ch: 0.001,
     borderSize: 0,
     expectedLayersPerTile: 1,

@@ -650,11 +650,11 @@ export class Npc {
       
       if (anim.t < anim.tmid) {
         dir.set(
-          (anim.get_startPos(0) - anim.get_initPos(0)) + (anim.t / anim.tmid)**1.5 * (
+          (anim.get_startPos(0) - anim.get_initPos(0)) + (anim.t / anim.tmid)**2 * (
               (anim.get_endPos(0) - anim.get_startPos(0))
             - (anim.get_startPos(0) - anim.get_initPos(0))
           ),
-          (anim.get_startPos(2) - anim.get_initPos(2)) + (anim.t / anim.tmid)**1.5 * (
+          (anim.get_startPos(2) - anim.get_initPos(2)) + (anim.t / anim.tmid)**2 * (
               (anim.get_endPos(2) - anim.get_startPos(2))
             - (anim.get_startPos(2) - anim.get_initPos(2))
           ),
