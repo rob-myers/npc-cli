@@ -76,6 +76,7 @@ export default function Floor(props) {
 
       // Nav-mesh
       const triangles = gm.navDecomp.tris.map(tri => new Poly(tri.map(i => gm.navDecomp.vs[i])));
+      // const navPoly = Poly.union(triangles);
       const navPoly = Poly.union(triangles.concat(gm.doors.map(x => x.computeDoorway()))); // 🚧 move to create-gms-data
       drawPolygons(ct, navPoly, ['#191921', '#99999977', 0.03]);
       
