@@ -43,9 +43,15 @@ npx patch-package some-package
 git add patches/some-package+$version.patch
 ```
 
-### Convert to GIF
+### Convert to MP4 or GIF
 
 ```sh
+# Convert mov to mp4
+ffmpeg -i ~/Desktop/but-it-exists.mov -qscale 0 but-it-exists.mp4
+ffmpeg -i ~/Desktop/but-it-exists.mov -filter_complex "[0:v] fps=10" -b:v 0 -crf 25 but-it-exists.mp4
+ffmpeg -i ~/Desktop/but-it-exists.mov -filter_complex "[0:v] fps=60" -b:v 0 -crf 25 but-it-exists.mp4
+
+# Convert mov to gif
 ffmpeg -i ~/Desktop/boxy-svg-slow-save.mov -filter_complex "[0:v] fps=10,scale=1600:-1" output.gif
 ```
 
