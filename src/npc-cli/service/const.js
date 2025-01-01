@@ -331,7 +331,7 @@ export const npcClassToMeta = {
     timeScale: { 'Idle': 0.2, 'Walk': 0.5 },
     // 🚧
     radius: 0.5,
-    walkSpeed: 2,
+    walkSpeed: 2.5,
     runSpeed: 4,
   },
   'cuboid-pet': {
