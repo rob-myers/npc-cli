@@ -88,8 +88,8 @@ export function getTileCacheMeshProcess(gms) {
 
     for (let i = 0; i < navMeshCreateParams.polyCount(); ++i) {
       polyAreas.set(i, 0);
-      // polyFlags.set(i, 1);
-      polyFlags.set(i, 2 ** 1); // walkable ~ 2nd lsb bit high
+      // polyFlags.set(i, helper.navPolyFlag.unWalkable); // 2^0
+      polyFlags.set(i, helper.navPolyFlag.walkable); // 2^1
     }
 
     navMeshCreateParams.setOffMeshConnections(offMeshConnections);
@@ -105,19 +105,12 @@ export function getTileCacheGeneratorConfig(tileCacheMeshProcess) {
     /** `cs * tileSize` should be 1.5 i.e. Geomorph grid size (meters) */
     cs: 0.1,
     tileSize: 15,
-
     ch: 0.001,
     borderSize: 0,
     expectedLayersPerTile: 1,
-    // detailSampleDist: 0,
     walkableClimb: 0,
     tileCacheMeshProcess,
     maxSimplificationError: 0.85,
-    // maxSimplificationError: 0,
-    // walkableRadius: 1,
-    // mergeRegionArea: 20,
-    // detailSampleMaxError: 0,
-    // maxVertsPerPoly: 3,
   };
 }
 
@@ -233,8 +226,7 @@ export function customGenerateTileCache(
 
   config.minRegionArea = config.minRegionArea * config.minRegionArea; // Note: area = size*size
   config.mergeRegionArea = config.mergeRegionArea * config.mergeRegionArea; // Note: area = size*size
-  config.detailSampleDist =
-    config.detailSampleDist < 0.9 ? 0 : config.cs * config.detailSampleDist;
+  config.detailSampleDist = config.detailSampleDist < 0.9 ? 0 : config.cs * config.detailSampleDist;
   config.detailSampleMaxError = config.ch * config.detailSampleMaxError;
 
   const tileSize = Math.floor(config.tileSize);
