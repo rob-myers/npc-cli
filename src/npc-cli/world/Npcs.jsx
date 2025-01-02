@@ -81,7 +81,7 @@ export default function Npcs(props) {
     },
     isPointInNavmesh(input) {
       const v3 = toV3(input);
-      const { success, point } = w.crowd.navMeshQuery.findClosestPoint(v3, { halfExtents: { x: 0, y: 0.05, z: 0 } });
+      const { success, point } = w.crowd.navMeshQuery.findClosestPoint(v3, { halfExtents: { x: 0.001, y: 0.001, z: 0.001 } });
       return success === true && Math.abs(point.x - v3.x) < 0.001 && Math.abs(point.z - v3.z) < 0.001;
     },
     onTick(deltaMs) {
