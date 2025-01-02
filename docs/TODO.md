@@ -145,19 +145,21 @@
   - ✅ fix auto hull doors
     - ✅ not opening when traversing offMeshConnection
     - ✅ some npcs get stopped
+  - ✅ door opens before going through offMeshConnection
   - 🚧 agent stops if door inaccessible on `enter-off-mesh` event
     - 🚧 temp set edge unwalkable
       - `w nav.navMesh.setPolyFlags 4341761 1`
     - temp stop any `enter-off-mesh` to this connection
-  - ✅ door opens before going through offMeshConnection
   - in use off-mesh connection cannot be used by another
   - in use off-mesh connection with door open cannot be closed
-  - review door opening
-  - to avoid offMeshConnection backtracking could set `anim->startPoint` to be closest point on edge `startPoint -> endPoint`
+    - without relying on "inside" sensor
+    - remove "inside" sensor
   - ❌ could lerp whilst agent on off-mesh-connection
   - ❌ could remove agent from crowd and move linearly
   - ❌ navRectId --> connectedComponentId in gmGraph
     - fixed by computing navRectId using navPolyWithDoors
+  - ❌ to avoid offMeshConnection backtracking could set `anim->startPoint` to be
+    closest point on edge `startPoint -> endPoint`
 
 
 - 🚧 pre next.js migration
@@ -304,7 +306,7 @@
 
 - npc stops on try nav to inaccessible-via-off-mesh-connection room
   - eventually?
-- try align tiles with geomorph grid by extending navMesh slightly
+- ✅ try align tiles with geomorph grid by extending navMesh slightly
 - clarify/clean/simplify service/uv
 - put into example-commands
   ```sh

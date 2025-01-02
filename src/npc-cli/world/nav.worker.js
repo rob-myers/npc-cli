@@ -5,6 +5,7 @@ import { error, info, debug, warn, removeDups, range } from "../service/generic"
 import { geomorph } from "../service/geomorph";
 import { customThreeToTileCache, getTileCacheGeneratorConfig, getTileCacheMeshProcess, computeGmInstanceMesh } from "../service/recast-detour";
 import { fetchGeomorphsJson } from "../service/fetch-assets";
+import { getQuadGeometryXZ } from "../service/three";
 
 /** @type {WW.WorkerGeneric<WW.MsgFromNavWorker, WW.MsgToNavWorker>} */
 const worker = (/** @type {*} */ (self));
@@ -70,6 +71,23 @@ async function computeGeomorphMeshes(gms) {
     meshes.push(mesh);
     customAreaDefs.push(...customAreaDefs);
   }
+
+  /**
+   * Add mesh to align Recast-Detour tiles with Geomorph grid.
+   *
+   * We assume `tileSize * cs = 1.5` i.e. Geomorph grid size,
+   * e.g. `cs === 0.1` and `tileSize === 15`.
+   */
+  const boxAll = new THREE.Box3();
+  const box = new THREE.Box3();
+  meshes.forEach(mesh => boxAll.union(box.setFromObject(mesh)));
+  const dx = boxAll.min.x < 0 ? (boxAll.min.x % 1.5 + 1.5) : (boxAll.min.x % 1.5);
+  const dz = boxAll.min.z < 0 ? (boxAll.min.z % 1.5 + 1.5) : (boxAll.min.z % 1.5);
+  const navAlignerQuad = new THREE.Mesh(getQuadGeometryXZ('nav-aligner-quad'));
+  navAlignerQuad.position.x = boxAll.min.x - dx - 1.5;
+  navAlignerQuad.position.z = boxAll.min.z - dz - 1.5;
+  navAlignerQuad.scale.set(1.5, 1, 1.5);
+  meshes.push(navAlignerQuad);
 
   debug('🤖 nav.worker', {
     'total vertices': meshes.reduce((agg, mesh) => agg + (mesh.geometry.getAttribute('position')?.count ?? 0), 0),
