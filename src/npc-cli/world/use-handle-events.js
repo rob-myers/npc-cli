@@ -313,6 +313,7 @@ export default function useHandleEvents(w) {
             bodyKeys: [npcToBodyKey(e.npcKey)],
           });
           state.removeFromSensors(e.npcKey);
+
           const gmRoomId = state.npcToRoom.get(e.npcKey);
           if (gmRoomId !== undefined) {
             state.npcToRoom.delete(e.npcKey);

@@ -4,7 +4,7 @@ import { damp, dampAngle } from "maath/easing";
 
 import { Vect } from '../geom';
 import { defaultAgentUpdateFlags, defaultNpcInteractRadius, glbFadeIn, glbFadeOut, npcClassToMeta } from '../service/const';
-import { info, warn } from '../service/generic';
+import { error, info, warn } from '../service/generic';
 import { geom } from '../service/geom';
 import { buildObjectLookup, emptyAnimationMixer, emptyGroup, getParentBones, tmpVectThree1, toV3, toXZ } from '../service/three';
 import { helper } from '../service/helper';
@@ -57,7 +57,7 @@ export class Npc {
     /** Desired look angle (rotation.y) */
     lookAngleDst: /** @type {null | number} */ (null),
     lookSecs: 0.3,
-    offMesh: /** @type {null | NPC.OffMeshCurrent} */ (null),
+    offMesh: /** @type {null | NPC.OffMeshLookupValue} */ (null),
     opacity: 1,
     /** Desired opacity */
     opacityDst: /** @type {null | number} */ (null),
@@ -464,29 +464,36 @@ export class Npc {
         ?? null
       );
 
-      // stateful i.e. npc is on 'init' segment or 'main' segment
-      this.s.offMesh = offMesh === null ? null : {
-        ...offMesh,
+      if (offMesh === null) {
+        agent.teleport(this.position);
+        return error(`${this.key}: bailed out of unknown offMeshConnection: ${JSON.stringify(this.position)}`);
+      }
+      
+      if (offMesh.state !== undefined) {
+        agent.teleport(this.position);
+        return error(`${this.key}: offMeshConnection already in use: ${JSON.stringify(offMesh)}`);
+      }
+
+      offMesh.state = {
+        npcKey: this.key,
         seg: 'init',
         init: { x: offMesh.src.x - this.position.x, y: offMesh.src.z - this.position.z },
         main: { x: offMesh.dst.x - offMesh.src.x, y: offMesh.dst.z - offMesh.src.z },
       };
-
-      if (this.s.offMesh !== null) {
-        this.w.events.next({ key: 'enter-off-mesh', npcKey: this.key, ...this.s.offMesh });
-      } else {
-        agent.teleport(this.position);
-        warn(`${this.key}: bailed out of unknown offMeshConnection: ${JSON.stringify(this.position)}`);
-      }
+      
+      this.s.offMesh = offMesh;
+      this.w.events.next({ key: 'enter-off-mesh', npcKey: this.key, ...offMesh });
       return;
     }
     
     if (this.s.agentState === 2) {// exit offMeshConnection
       if (this.s.offMesh !== null) {
-        this.w.events.next({ key: 'exit-off-mesh', npcKey: this.key, ...this.s.offMesh });
+        const offMesh = this.s.offMesh;
         this.s.offMesh = null;
+        offMesh.state = undefined;
+        this.w.events.next({ key: 'exit-off-mesh', npcKey: this.key, ...offMesh });
       } else {
-        warn(`${this.key}: left offMeshConnection state but this.s.offMesh already null`);
+        warn(`${this.key}: exited offMeshConnection but this.s.offMesh already null`);
       }
       return;
     }
@@ -654,28 +661,35 @@ export class Npc {
       return;
     }
     
-    const { offMesh } = this.s;
+    const state = /** @type {NPC.OffMeshState} */ (this.s.offMesh.state);
     const anim = /** @type {dtCrowdAgentAnimation} */ (this.agentAnim);
-    offMesh.seg = anim.t < anim.tmid ? 'init' : 'main'; // also for external use?
+    state.seg = anim.t < anim.tmid ? 'init' : 'main'; // also for external use?
     
     let dirX = 0, dirY = 0;
-    if (offMesh.seg === 'init') {
+    if (state.seg === 'init') {
       // 🤔 should init/main be unit vectors?
-      dirX = offMesh.init.x + (anim.t / anim.tmid)**2 * (offMesh.main.x - offMesh.init.x);
-      dirY = offMesh.init.y + (anim.t / anim.tmid)**2 * (offMesh.main.y - offMesh.init.y);
+      dirX = state.init.x + (anim.t / anim.tmid)**2 * (state.main.x - state.init.x);
+      dirY = state.init.y + (anim.t / anim.tmid)**2 * (state.main.y - state.init.y);
     } else {
-      dirX = offMesh.main.x;
-      dirY = offMesh.main.y;
+      dirX = state.main.x;
+      dirY = state.main.y;
     }
     
     this.s.lookAngleDst = this.getEulerAngle(Math.atan2(-dirY, dirX));
   }
 
   removeAgent() {
-    if (this.agent !== null) {
-      this.w.crowd.removeAgent(this.agent.agentIndex);
-      this.agent = null;
-      this.agentAnim = null;
+    if (this.agent === null) {
+      return;
+    }
+
+    this.w.crowd.removeAgent(this.agent.agentIndex);
+    
+    this.agent = null;
+    this.agentAnim = null;
+    if (this.s.offMesh !== null) {
+      this.s.offMesh.state = undefined;
+      this.s.offMesh = null;
     }
   }
 

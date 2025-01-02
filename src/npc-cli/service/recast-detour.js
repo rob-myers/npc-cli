@@ -105,7 +105,6 @@ export function getTileCacheGeneratorConfig(tileCacheMeshProcess) {
     /** `cs * tileSize` should be 1.5 i.e. Geomorph grid size (meters) */
     cs: 0.1,
     tileSize: 15,
-
     ch: 0.001,
     borderSize: 0,
     expectedLayersPerTile: 1,

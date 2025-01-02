@@ -147,9 +147,11 @@
     - ✅ some npcs get stopped
   - ✅ door opens before going through offMeshConnection
   - 🚧 agent stops if door inaccessible on `enter-off-mesh` event
-    - 🚧 temp set edge unwalkable
+    - ✅ can temp set edge unwalkable
       - `w nav.navMesh.setPolyFlags 4341761 1`
-    - temp stop any `enter-off-mesh` to this connection
+    - 🚧 track when offMeshConnection in use
+    - set edge unwalkable while in use
+    - stop any `enter-off-mesh` while in use
   - in use off-mesh connection cannot be used by another
   - in use off-mesh connection with door open cannot be closed
     - without relying on "inside" sensor

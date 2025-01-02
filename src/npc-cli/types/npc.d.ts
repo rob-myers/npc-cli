@@ -208,9 +208,13 @@ declare namespace NPC {
     offMeshRef: number;
     src: import('three').Vector3Like;
     dst: import('three').Vector3Like;
+    /** Defined iff a unique npc is using this offMeshConnection. */
+    state?: NPC.OffMeshState;
   };
 
-  type OffMeshCurrent = OffMeshLookupValue & {
+  type OffMeshState = {
+    /** The unique npc using this offMeshConnection. */
+    npcKey: string;
     /** The `init` segment leads from npc's current position to the `main` segment (src, dst)  */
     seg: 'init' | 'main';
     /** Segment from "initial npc position" to "offMeshConnection src" */
