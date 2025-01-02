@@ -22,9 +22,10 @@ export const helper = {
 
   /** Global over all `queryFilter`s */
   navPolyFlag: /** @type {const} */ ({
-    walkable: 0,
     /** `2^0` */
     unWalkable: 1,
+    /** `2^1` */
+    walkable: 2,
   }),
 
   /** Recast-Detour */

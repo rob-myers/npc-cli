@@ -190,7 +190,8 @@ export default function useHandleEvents(w) {
         }
         case "nav-updated": {
           const excludeDoorsFilter = w.crowd.getFilter(w.lib.queryFilterType.excludeDoors);
-          excludeDoorsFilter.excludeFlags = w.lib.navPolyFlag.unWalkable;
+          // walkable only, not unwalkable
+          excludeDoorsFilter.includeFlags = 2 ** 1;
           break;
         }
         case "pointerdown":

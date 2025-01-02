@@ -146,7 +146,9 @@
     - ✅ not opening when traversing offMeshConnection
     - ✅ some npcs get stopped
   - 🚧 agent stops if door inaccessible on `enter-off-mesh` event
-    - maybe temp (a) set edge unwalkable and (b) stop any `enter-off-mesh` to this connection
+    - 🚧 temp set edge unwalkable
+      - `w nav.navMesh.setPolyFlags 4341761 1`
+    - temp stop any `enter-off-mesh` to this connection
   - ✅ door opens before going through offMeshConnection
   - in use off-mesh connection cannot be used by another
   - in use off-mesh connection with door open cannot be closed
@@ -300,7 +302,9 @@
 
 ### On hold
 
-- try align tiles with geomorph squares by extending navMesh slightly
+- npc stops on try nav to inaccessible-via-off-mesh-connection room
+  - eventually?
+- try align tiles with geomorph grid by extending navMesh slightly
 - clarify/clean/simplify service/uv
 - put into example-commands
   ```sh

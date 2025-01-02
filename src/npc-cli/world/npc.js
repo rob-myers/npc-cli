@@ -388,13 +388,13 @@ export class Npc {
 
     this.agent.updateParameters({
       maxAcceleration,
-      // 🚧 0th way point not triggered?
-      // maxSpeed: 0, // don't move until 0th way-point
       maxSpeed: this.getMaxSpeed(),
       radius: (this.s.run ? 3 : 2) * helper.defaults.radius, // reset
       collisionQueryRange: 1.5,
       separationWeight: 0.25,
-      queryFilterType: this.w.lib.queryFilterType.default,
+      // 🚧
+      // queryFilterType: this.w.lib.queryFilterType.default,
+      queryFilterType: this.w.lib.queryFilterType.excludeDoors,
     });
     this.agent.requestMoveTarget(closest);
     this.s.target = this.lastTarget.copy(closest);

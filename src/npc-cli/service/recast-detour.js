@@ -60,7 +60,7 @@ export function computeOffMeshConnectionsParams(gms) {
         // 🔔 Encode (gmId, doorId) assuming 0 ≤ gmId, doorId ≤ 255
         userId: gmId + (doorId << 8),
         // area: 1,
-        // flags: 0 + 2,
+        flags: helper.navPolyFlag.walkable,
       }));
 
     })
