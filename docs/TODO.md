@@ -156,8 +156,11 @@
     - ✅ w.e.npcToOffMesh[npcKey]
     - ✅ set edge unwalkable while in use
     - ❌ stop any `enter-off-mesh` while in use
-  - do not navigate on `WARN getClosestNavigable failed:`
-  - try stop agent on `enter-off-mesh` rather than setting flags on poly offMeshRef
+  - ❌ do not navigate on `WARN getClosestNavigable failed:`
+    - irrelevant i.e. if click room inaccessible via queryFiltered offMeshConnection,
+      `findClosestPoint` will still successfully "find" this point
+  - ✅ w.e.npcToOffMesh -> w.e.doorToOffMesh
+  - 🚧 try stop agent on `enter-off-mesh` rather than setting flags on poly offMeshRef
     - ℹ️ setting flag has issues e.g. moveTo midway
     - ...
   - in use off-mesh connection with door open cannot be closed

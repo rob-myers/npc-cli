@@ -687,10 +687,7 @@ export class Npc {
     
     this.agent = null;
     this.agentAnim = null;
-    if (this.s.offMesh !== null) {
-      this.s.offMesh.state = undefined;
-      this.s.offMesh = null;
-    }
+    this.s.offMesh = null;
   }
 
   setupMixer() {
