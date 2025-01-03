@@ -60,12 +60,13 @@ export default function Npcs(props) {
     getClosestNavigable(p, maxDelta = 0.5) {
       const { success, point: closest } = w.crowd.navMeshQuery.findClosestPoint(p, {
         halfExtents: new THREE.Vector3(maxDelta / 2, maxDelta / 2, maxDelta / 2),
+        // filter: w.crowd.getFilter(w.lib.queryFilterType.excludeDoors),
       });
-      if (success === false) {
+      if (success === false || p.distanceTo(closest) > maxDelta) {
         warn(`${'getClosestNavigable'} failed: ${JSON.stringify(p)}`);
         return null;
       } else {
-        return p.distanceTo(closest) < maxDelta ? toV3(closest) : null;
+        return toV3(closest);
       }
     },
     getNpc(npcKey, processApi) {
