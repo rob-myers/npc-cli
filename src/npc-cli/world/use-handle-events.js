@@ -14,10 +14,10 @@ export default function useHandleEvents(w) {
 
   const state = useStateRef(/** @returns {State} */ () => ({
     doorToNpcs: {},
-    // doorToPolyRefs: {},
     externalNpcs: new Set(),
     npcToAccess: {},
     npcToDoors: {},
+    npcToOffMesh: {},
     npcToRoom: new Map(),
     roomToNpcs: [],
     pressMenuFilters: [],
@@ -260,30 +260,40 @@ export default function useHandleEvents(w) {
             state.onExitDoorCollider(e);
           }
           break;
-        case "enter-off-mesh":
+        case "enter-off-mesh":{
           // ✅ event should contain door gdKey
           // ✅ stop traversal if not accessible
-          
           // 🚧 clean enter/exit-room event
-          
-          const door = w.door.byKey[e.gdKey];
+
+          const { offMesh } = e;
+          const door = w.door.byKey[offMesh.gdKey];
 
           if (
-            door.open === true ||
-            (door.auto === true && door.locked === false) ||
-            state.npcCanAccess(e.npcKey, e.gdKey) === true
+            door.open !== true &&
+            !(door.auto === true && door.locked === false) &&
+            state.npcCanAccess(e.npcKey, offMesh.gdKey) === false
           ) {
-            w.door.toggleDoorRaw(door, { open: true, access: true });
-          } else {
+            // cancel traversal
             const agent = /** @type {NPC.CrowdAgent} */ (npc.agent);
             const agentAnim = w.crowd.raw.getAgentAnimation(agent.agentIndex);
             agentAnim.set_active(false);
             npc.stopMoving();
+            return;
           }
+          
+          // continue traversal
+          w.door.toggleDoorRaw(door, { open: true, access: true });
+          state.npcToOffMesh[e.npcKey] = offMesh;
+          w.nav.navMesh.setPolyFlags(state.npcToOffMesh[e.npcKey].offMeshRef, w.lib.navPolyFlag.unWalkable);
 
           break;
-        // case "exit-off-mesh":
-        //   break;
+        }
+        case "exit-off-mesh":
+          if (state.npcToOffMesh[e.npcKey] !== undefined) {
+            w.nav.navMesh.setPolyFlags(state.npcToOffMesh[e.npcKey].offMeshRef, w.lib.navPolyFlag.walkable);
+            delete state.npcToOffMesh[e.npcKey];
+          }
+          break;
         case "spawned": {
           if (npc.s.spawns === 1) {// 1st spawn
             const { x, y, z } = npc.getPosition();
@@ -321,7 +331,12 @@ export default function useHandleEvents(w) {
           } else {
             state.externalNpcs.delete(e.key);
           }
-          
+
+          if (state.npcToOffMesh[e.npcKey] !== undefined) {
+            w.nav.navMesh.setPolyFlags(state.npcToOffMesh[e.npcKey].offMeshRef, w.lib.navPolyFlag.walkable);
+            delete state.npcToOffMesh[e.npcKey];
+          }
+
           w.c.delete(e.npcKey);
           break;
         }
@@ -568,6 +583,7 @@ export default function useHandleEvents(w) {
  * Relates `npcKey` to strings defining RegExp's matching `Geomorph.GmDoorKey`s
  * @property {{ [npcKey: string]: Record<'nearby' | 'inside', Set<Geomorph.GmDoorKey>> }} npcToDoors
  * Relate `npcKey` to nearby `Geomorph.GmDoorKey`s
+ * @property {{ [npcKey: string]: NPC.OffMeshLookupValue }} npcToOffMesh
  * @property {((lastDownMeta: Geom.Meta) => boolean)[]} pressMenuFilters
  * Prevent ContextMenu on long press if any of these return `true`.
  * @property {Map<string, Geomorph.GmRoomId>} npcToRoom npcKey to gmRoomId

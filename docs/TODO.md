@@ -146,13 +146,20 @@
     - ✅ not opening when traversing offMeshConnection
     - ✅ some npcs get stopped
   - ✅ door opens before going through offMeshConnection
-  - 🚧 agent stops if door inaccessible on `enter-off-mesh` event
+  - ✅ agent stops if door inaccessible on `enter-off-mesh` event
     - ✅ can temp set edge unwalkable
       - `w nav.navMesh.setPolyFlags 4341761 1`
-    - 🚧 track when offMeshConnection in use
-    - set edge unwalkable while in use
-    - stop any `enter-off-mesh` while in use
-  - in use off-mesh connection cannot be used by another
+      - `w nav.navMesh.setPolyFlags 4317185 1`
+    - ✅ track when offMeshConnection in use
+      - locally `npc.s.offMesh`
+      - globally in `w.nav.offMeshLookup`
+    - ✅ w.e.npcToOffMesh[npcKey]
+    - ✅ set edge unwalkable while in use
+    - ❌ stop any `enter-off-mesh` while in use
+  - do not navigate on `WARN getClosestNavigable failed:`
+  - try stop agent on `enter-off-mesh` rather than setting flags on poly offMeshRef
+    - ℹ️ setting flag has issues e.g. moveTo midway
+    - ...
   - in use off-mesh connection with door open cannot be closed
     - without relying on "inside" sensor
     - remove "inside" sensor

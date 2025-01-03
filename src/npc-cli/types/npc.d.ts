@@ -129,8 +129,8 @@ declare namespace NPC {
     | { key: "pre-setup-physics" }
     | { key: "nav-updated" }
     | { key: 'click-link'; cmKey: string; linkKey: string }
-    | ({ key: 'enter-off-mesh'; npcKey: string; offMeshRef: number; src: import('three').Vector3Like; dst: import('three').Vector3Like; } & Geomorph.GmDoorId)
-    | ({ key: 'exit-off-mesh'; npcKey: string; offMeshRef: number; src: import('three').Vector3Like; dst: import('three').Vector3Like; } & Geomorph.GmDoorId)
+    | { key: 'enter-off-mesh'; npcKey: string; offMesh: NPC.OffMeshLookupValue }
+    | { key: 'exit-off-mesh'; npcKey: string; offMesh: NPC.OffMeshLookupValue }
     // ...
   );
 

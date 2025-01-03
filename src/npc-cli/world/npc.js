@@ -373,7 +373,7 @@ export class Npc {
       throw new Error(`${this.key}: npc lacks agent`);
     }
 
-    const closest = this.w.npc.getClosestNavigable(toV3(dst));
+    const closest = this.w.npc.getClosestNavigable(toV3(dst), 0.05);
     if (closest === null) {
       throw new Error(`${this.key}: not navigable: ${JSON.stringify(dst)}`);
     }
@@ -482,7 +482,7 @@ export class Npc {
       };
       
       this.s.offMesh = offMesh;
-      this.w.events.next({ key: 'enter-off-mesh', npcKey: this.key, ...offMesh });
+      this.w.events.next({ key: 'enter-off-mesh', npcKey: this.key, offMesh });
       return;
     }
     
@@ -491,7 +491,7 @@ export class Npc {
         const offMesh = this.s.offMesh;
         this.s.offMesh = null;
         offMesh.state = undefined;
-        this.w.events.next({ key: 'exit-off-mesh', npcKey: this.key, ...offMesh });
+        this.w.events.next({ key: 'exit-off-mesh', npcKey: this.key, offMesh });
       } else {
         warn(`${this.key}: exited offMeshConnection but this.s.offMesh already null`);
       }

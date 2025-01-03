@@ -3,14 +3,16 @@ awaitWorld
 w npc.updateLabels rob will kate # efficiency
 
 # 🚧 introduce `spawn` command
-w npc.spawn '{ npcKey: "rob", point: { x: 0.5 * 1.5, y: 5 * 1.5 }, angle: -1.5707963268 }' >/dev/null
-w npc.spawn '{ npcKey: "will", point: { x: 2.5, y: 3 * 1.5 }, agent: true }' >/dev/null
+w npc.spawn '{ npcKey: "rob", point: { x: 0.5 * 1.5, y: 5 * 1.5 + 0.2 }, angle: -1.5707963268 }' >/dev/null
+w npc.spawn '{ npcKey: "will", point: { x: 2.5, y: 3 * 1.5 + 0.2 }, agent: true }' >/dev/null
 w npc.spawn '{ npcKey: "kate", point: { x: 4.5 * 1.5, y: 7 * 1.5 }, agent: true }' >/dev/null
 
 w n.rob.showSelector true
 selectedNpcKey="rob"
 
 w e.changeNpcAccess rob . +
+# temp debug doors:
+w e.changeNpcAccess will . +
 
 # write selectedNpcKey on click npc
 click | filter meta.npcKey | map '({ meta, keys }, { home, w }) => {
