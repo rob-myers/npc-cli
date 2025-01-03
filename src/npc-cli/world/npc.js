@@ -469,14 +469,14 @@ export class Npc {
         return error(`${this.key}: bailed out of unknown offMeshConnection: ${JSON.stringify(this.position)}`);
       }
       
-      if (offMesh.state !== undefined) {
-        agent.teleport(this.position);
-        return error(`${this.key}: offMeshConnection already in use: ${JSON.stringify(offMesh)}`);
-      }
-
+      // if (offMesh.state !== undefined) {
+      //   // agent.teleport(this.position);
+      //   // return error(`${this.key}: offMeshConnection already in use: ${jsStringify(offMesh)}`);
+      //   return warn(`${this.key}: offMeshConnection already in use: ${jsStringify(offMesh)}`);
+      // }
       
       this.s.offMesh = offMesh;
-      this.w.events.next({ key: 'enter-off-mesh', npcKey: this.key, offMesh });
+      this.w.events.next({ key: 'enter-off-mesh', npcKey: this.key, offMesh, revOffMesh: this.w.nav.offMeshLookup[offMesh.reverseKey] });
       return;
     }
     
@@ -484,8 +484,8 @@ export class Npc {
       if (this.s.offMesh !== null) {
         const offMesh = this.s.offMesh;
         this.s.offMesh = null;
-        offMesh.state = undefined;
-        this.w.events.next({ key: 'exit-off-mesh', npcKey: this.key, offMesh });
+        // offMesh.state = undefined;
+        this.w.events.next({ key: 'exit-off-mesh', npcKey: this.key, offMesh, revOffMesh: this.w.nav.offMeshLookup[offMesh.reverseKey] });
       } else {
         warn(`${this.key}: exited offMeshConnection but this.s.offMesh already null`);
       }

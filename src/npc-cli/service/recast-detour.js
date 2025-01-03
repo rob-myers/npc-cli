@@ -625,13 +625,10 @@ export function customGenerateTileCache(
       const gdId = helper.getGmDoorId(gmId, doorId);
       const src = { x: c.get_pos(0), y: 0, z: c.get_pos(2) };
       const dst = { x: c.get_pos(3), y: 0, z: c.get_pos(5) };
-      
-      const offMeshSrcToDst = /** @type {NPC.OffMeshLookupValue} */ ({ src, dst, offMeshRef, ...gdId });
-      const offMeshDstToSrc = /** @type {NPC.OffMeshLookupValue} */ ({ src: dst, dst: src, offMeshRef, ...gdId });
-      offMeshSrcToDst.reverse = offMeshDstToSrc;
-      offMeshDstToSrc.reverse = offMeshSrcToDst;
-      offMeshLookup[geom.to2DString(src.x, src.z)] = offMeshSrcToDst;
-      offMeshLookup[geom.to2DString(dst.x, dst.z)] = offMeshDstToSrc;
+      const srcKey = geom.to2DString(src.x, src.z);
+      const dstKey = geom.to2DString(dst.x, dst.z);
+      offMeshLookup[srcKey] = { src, dst, offMeshRef, reverseKey: dstKey, ...gdId };
+      offMeshLookup[dstKey] = { src: dst, dst: src, offMeshRef, reverseKey: srcKey, ...gdId };
     });
   }
 

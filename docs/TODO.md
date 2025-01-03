@@ -165,6 +165,7 @@
     - ✅ offMesh.reverse is offMesh lookup value in "reverse direction"
     - ✅ `enter-off-mesh` stops agent if offMeshConnection in use
     - 🚧 `enter-off-mesh` permits "one agent after another"
+  - ✅ fix events: must avoid "circular" offMesh values
   - in use off-mesh connection with door open cannot be closed
     - without relying on "inside" sensor
     - remove "inside" sensor

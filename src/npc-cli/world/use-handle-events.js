@@ -265,12 +265,12 @@ export default function useHandleEvents(w) {
           // ✅ stop traversal if not accessible
           // 🚧 clean enter/exit-room event
 
-          const { offMesh } = e;
+          const { offMesh, revOffMesh } = e;
           const door = w.door.byKey[offMesh.gdKey];
 
           if (
             offMesh.state !== undefined // in use
-            || offMesh.reverse.state !== undefined // in use
+            || revOffMesh.state !== undefined // in use
             || (
               door.open === false &&
               state.toggleDoor(offMesh.gdKey, { open: true, npcKey: e.npcKey }) === false
@@ -303,7 +303,10 @@ export default function useHandleEvents(w) {
         }
         case "exit-off-mesh": {
           const { offMesh } = e;
-          offMesh.state = undefined;
+          // 🚧 WIP
+          if (offMesh.state?.npcKey === e.npcKey) {
+            offMesh.state = undefined;
+          }
           delete state.doorToOffMesh[e.offMesh.gdKey];
           // w.nav.navMesh.setPolyFlags(state.npcToOffMesh[e.npcKey].offMeshRef, w.lib.navPolyFlag.walkable);
           break;

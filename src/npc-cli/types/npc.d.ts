@@ -129,8 +129,8 @@ declare namespace NPC {
     | { key: "pre-setup-physics" }
     | { key: "nav-updated" }
     | { key: 'click-link'; cmKey: string; linkKey: string }
-    | { key: 'enter-off-mesh'; npcKey: string; offMesh: NPC.OffMeshLookupValue }
-    | { key: 'exit-off-mesh'; npcKey: string; offMesh: NPC.OffMeshLookupValue }
+    | { key: 'enter-off-mesh'; npcKey: string; offMesh: NPC.OffMeshLookupValue; revOffMesh: NPC.OffMeshLookupValue; }
+    | { key: 'exit-off-mesh'; npcKey: string; offMesh: NPC.OffMeshLookupValue; revOffMesh: NPC.OffMeshLookupValue; }
     // ...
   );
 
@@ -208,8 +208,11 @@ declare namespace NPC {
     offMeshRef: number;
     src: import('three').Vector3Like;
     dst: import('three').Vector3Like;
-    /** The value in the opposite direction */
-    reverse: OffMeshLookupValue;
+    /**
+     * Key of value in reverse direction.
+     * We avoid providing reverse directly to keep events serializable.
+     */
+    reverseKey: keyof OffMeshLookup;
     /** Defined iff a unique npc is using this offMeshConnection. */
     state?: NPC.OffMeshState;
   };
