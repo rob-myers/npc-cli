@@ -526,14 +526,11 @@ export default function useHandleEvents(w) {
       // clear if already closed and offMeshConnection free
       opts.clear = door.open === false || state.doorToOffMesh[gdKey] === undefined;
       
-      if (opts.npcKey === undefined) {
-        // e.g. npc hits "inside" sensor
-        // e.g. npc with access enters doorway
-        // e.g. game master i.e. no npc
-        return w.door.toggleDoorRaw(door, opts);
-      }
-
-      opts.access ??= state.npcCanAccess(opts.npcKey, gdKey);
+      opts.access ??= (
+        opts.npcKey === undefined
+        || (door.auto === true && door.locked === false)
+        || state.npcCanAccess(opts.npcKey, gdKey)
+      );
 
       return w.door.toggleDoorRaw(door, opts);
     },
