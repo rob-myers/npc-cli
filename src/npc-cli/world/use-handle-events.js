@@ -269,9 +269,15 @@ export default function useHandleEvents(w) {
           const door = w.door.byKey[offMesh.gdKey];
 
           if (
-            door.open !== true &&
-            !(door.auto === true && door.locked === false) &&
-            state.npcCanAccess(e.npcKey, offMesh.gdKey) === false
+            offMesh.state !== undefined // in use
+            || offMesh.reverse.state !== undefined // in use
+            || (
+              door.open === false &&
+              state.toggleDoor(offMesh.gdKey, { open: true, npcKey: e.npcKey }) === false
+            )
+            // door.open !== true &&
+            // !(door.auto === true && door.locked === false) &&
+            // state.npcCanAccess(e.npcKey, offMesh.gdKey) === false
           ) {
             // cancel traversal
             const agent = /** @type {NPC.CrowdAgent} */ (npc.agent);
@@ -282,18 +288,26 @@ export default function useHandleEvents(w) {
           }
           
           // continue traversal
+          offMesh.state = {
+            npcKey: e.npcKey,
+            seg: 'init',
+            init: { x: offMesh.src.x - npc.position.x, y: offMesh.src.z - npc.position.z },
+            main: { x: offMesh.dst.x - offMesh.src.x, y: offMesh.dst.z - offMesh.src.z },
+          };
+
           w.door.toggleDoorRaw(door, { open: true, access: true });
           state.doorToOffMesh[offMesh.gdKey] = offMesh;
           // w.nav.navMesh.setPolyFlags(state.npcToOffMesh[e.npcKey].offMeshRef, w.lib.navPolyFlag.unWalkable);
 
           break;
         }
-        case "exit-off-mesh":
-          if (state.doorToOffMesh[e.offMesh.gdKey] !== undefined) {
-            // w.nav.navMesh.setPolyFlags(state.npcToOffMesh[e.npcKey].offMeshRef, w.lib.navPolyFlag.walkable);
-            delete state.doorToOffMesh[e.offMesh.gdKey];
-          }
+        case "exit-off-mesh": {
+          const { offMesh } = e;
+          offMesh.state = undefined;
+          delete state.doorToOffMesh[e.offMesh.gdKey];
+          // w.nav.navMesh.setPolyFlags(state.npcToOffMesh[e.npcKey].offMeshRef, w.lib.navPolyFlag.walkable);
           break;
+        }
         case "spawned": {
           if (npc.s.spawns === 1) {// 1st spawn
             const { x, y, z } = npc.getPosition();
@@ -500,27 +514,20 @@ export default function useHandleEvents(w) {
         w.cm.show(lastDown);
       }
     },
-    someNpcInsideDoor(gdKey) {
-      return state.doorToNpcs[gdKey]?.inside.size > 0;
-    },
     someNpcNearDoor(gdKey) {
       return state.doorToNpcs[gdKey]?.nearby.size > 0;
     },
     toggleDoor(gdKey, opts) {
       const door = w.door.byKey[gdKey];
 
-      // clear if already closed
-      opts.clear = door.open === false ? true : state.someNpcInsideDoor(gdKey) === false;
-
-      if (opts.point === undefined || opts.npcKey === undefined) {
+      // clear if already closed and offMeshConnection free
+      opts.clear = door.open === false || state.doorToOffMesh[gdKey] === undefined;
+      
+      if (opts.npcKey === undefined) {
         // e.g. npc hits "inside" sensor
         // e.g. npc with access enters doorway
         // e.g. game master i.e. no npc
         return w.door.toggleDoorRaw(door, opts);
-      }
-
-      if (tmpVect1.copy(opts.point).distanceTo(w.n[opts.npcKey].getPoint()) > 1.5) {
-        return false; // e.g. button not close enough
       }
 
       opts.access ??= state.npcCanAccess(opts.npcKey, gdKey);
@@ -615,9 +622,8 @@ export default function useHandleEvents(w) {
  * @property {(npcKey: string) => void} removeFromSensors
  * @property {() => void} showDefaultContextMenu
  * Default context menu, unless clicked on an npc
- * @property {(gdKey: Geomorph.GmDoorKey) => boolean} someNpcInsideDoor
  * @property {(gdKey: Geomorph.GmDoorKey) => boolean} someNpcNearDoor
- * @property {(gdKey: Geomorph.GmDoorKey, opts: { npcKey?: string; point?: Geom.VectJson; } & Geomorph.ToggleDoorOpts) => boolean} toggleDoor
+ * @property {(gdKey: Geomorph.GmDoorKey, opts: { npcKey?: string; } & Geomorph.ToggleDoorOpts) => boolean} toggleDoor
  * Returns `true` iff successful.
  * @property {(gdKey: Geomorph.GmDoorKey, opts: { npcKey?: string; point?: Geom.VectJson; } & Geomorph.ToggleLockOpts) => boolean} toggleLock
  * Returns `true` iff successful.

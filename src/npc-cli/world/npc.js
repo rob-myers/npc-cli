@@ -474,12 +474,6 @@ export class Npc {
         return error(`${this.key}: offMeshConnection already in use: ${JSON.stringify(offMesh)}`);
       }
 
-      offMesh.state = {
-        npcKey: this.key,
-        seg: 'init',
-        init: { x: offMesh.src.x - this.position.x, y: offMesh.src.z - this.position.z },
-        main: { x: offMesh.dst.x - offMesh.src.x, y: offMesh.dst.z - offMesh.src.z },
-      };
       
       this.s.offMesh = offMesh;
       this.w.events.next({ key: 'enter-off-mesh', npcKey: this.key, offMesh });

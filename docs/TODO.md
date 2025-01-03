@@ -159,10 +159,12 @@
   - ❌ do not navigate on `WARN getClosestNavigable failed:`
     - irrelevant i.e. if click room inaccessible via queryFiltered offMeshConnection,
       `findClosestPoint` will still successfully "find" this point
-  - ✅ w.e.npcToOffMesh -> w.e.doorToOffMesh
   - 🚧 try stop agent on `enter-off-mesh` rather than setting flags on poly offMeshRef
     - ℹ️ setting flag has issues e.g. moveTo midway
-    - ...
+    - ✅ w.e.npcToOffMesh -> w.e.doorToOffMesh
+    - ✅ offMesh.reverse is offMesh lookup value in "reverse direction"
+    - ✅ `enter-off-mesh` stops agent if offMeshConnection in use
+    - 🚧 `enter-off-mesh` permits "one agent after another"
   - in use off-mesh connection with door open cannot be closed
     - without relying on "inside" sensor
     - remove "inside" sensor

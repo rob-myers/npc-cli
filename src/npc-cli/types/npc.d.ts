@@ -208,6 +208,8 @@ declare namespace NPC {
     offMeshRef: number;
     src: import('three').Vector3Like;
     dst: import('three').Vector3Like;
+    /** The value in the opposite direction */
+    reverse: OffMeshLookupValue;
     /** Defined iff a unique npc is using this offMeshConnection. */
     state?: NPC.OffMeshState;
   };
