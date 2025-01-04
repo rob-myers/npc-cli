@@ -260,25 +260,16 @@ export default function useHandleEvents(w) {
             state.onExitDoorCollider(e);
           }
           break;
-        case "enter-off-mesh":{
-          // ✅ event should contain door gdKey
-          // ✅ stop traversal if not accessible
-          // 🚧 clean enter/exit-room event
+        case "enter-off-mesh": {
 
           const { offMesh, revOffMesh } = e;
           const door = w.door.byKey[offMesh.gdKey];
+          const doorInUse = offMesh.state !== undefined || revOffMesh.state !== undefined;
 
-          if (
-            offMesh.state !== undefined // in use
-            || revOffMesh.state !== undefined // in use
-            || (
-              door.open === false &&
-              state.toggleDoor(offMesh.gdKey, { open: true, npcKey: e.npcKey }) === false
-            )
-            // door.open !== true &&
-            // !(door.auto === true && door.locked === false) &&
-            // state.npcCanAccess(e.npcKey, offMesh.gdKey) === false
-          ) {
+          if (doorInUse || (
+            door.open === false &&
+            state.toggleDoor(offMesh.gdKey, { open: true, npcKey: e.npcKey }) === false
+          )) {
             // cancel traversal
             const agent = /** @type {NPC.CrowdAgent} */ (npc.agent);
             const agentAnim = w.crowd.raw.getAgentAnimation(agent.agentIndex);
@@ -287,18 +278,17 @@ export default function useHandleEvents(w) {
             return;
           }
           
-          // continue traversal
+          // register traversal
           offMesh.state = {
             npcKey: e.npcKey,
             seg: 'init',
             init: { x: offMesh.src.x - npc.position.x, y: offMesh.src.z - npc.position.z },
             main: { x: offMesh.dst.x - offMesh.src.x, y: offMesh.dst.z - offMesh.src.z },
           };
-
-          w.door.toggleDoorRaw(door, { open: true, access: true });
           state.doorToOffMesh[offMesh.gdKey] = offMesh;
-          // w.nav.navMesh.setPolyFlags(state.npcToOffMesh[e.npcKey].offMeshRef, w.lib.navPolyFlag.unWalkable);
 
+          // force open door
+          w.door.toggleDoorRaw(door, { open: true, access: true });
           break;
         }
         case "exit-off-mesh": {
