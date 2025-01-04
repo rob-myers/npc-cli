@@ -173,6 +173,7 @@
     - remove "inside" sensor
   - clean
     - enter/exit-room event
+    - careful about hull door duplicate offMeshConnection
   - ❌ could lerp whilst agent on off-mesh-connection
   - ❌ could remove agent from crowd and move linearly
   - ❌ navRectId --> connectedComponentId in gmGraph

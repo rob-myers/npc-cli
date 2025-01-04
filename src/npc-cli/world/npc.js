@@ -57,7 +57,7 @@ export class Npc {
     /** Desired look angle (rotation.y) */
     lookAngleDst: /** @type {null | number} */ (null),
     lookSecs: 0.3,
-    offMesh: /** @type {null | NPC.OffMeshLookupValue} */ (null),
+    offMesh: /** @type {null | NPC.OffMeshState} */ (null),
     opacity: 1,
     /** Desired opacity */
     opacityDst: /** @type {null | number} */ (null),
@@ -469,23 +469,23 @@ export class Npc {
         return error(`${this.key}: bailed out of unknown offMeshConnection: ${JSON.stringify(this.position)}`);
       }
       
-      // if (offMesh.state !== undefined) {
-      //   // agent.teleport(this.position);
-      //   // return error(`${this.key}: offMeshConnection already in use: ${jsStringify(offMesh)}`);
-      //   return warn(`${this.key}: offMeshConnection already in use: ${jsStringify(offMesh)}`);
-      // }
       
-      this.s.offMesh = offMesh;
-      this.w.events.next({ key: 'enter-off-mesh', npcKey: this.key, offMesh, revOffMesh: this.w.nav.offMeshLookup[offMesh.reverseKey] });
+      // this.s.offMesh = {
+      //   orig: offMesh,
+      //   seg: 'init',
+      //   init: { x: offMesh.src.x - this.position.x, y: offMesh.src.z - this.position.z },
+      //   main: { x: offMesh.dst.x - offMesh.src.x, y: offMesh.dst.z - offMesh.src.z },
+      // };
+      // 🔔 this.s.offMesh set in useHandleEvents
+      this.w.events.next({ key: 'enter-off-mesh', npcKey: this.key, offMesh });
       return;
     }
     
     if (this.s.agentState === 2) {// exit offMeshConnection
       if (this.s.offMesh !== null) {
-        const offMesh = this.s.offMesh;
-        this.s.offMesh = null;
-        // offMesh.state = undefined;
-        this.w.events.next({ key: 'exit-off-mesh', npcKey: this.key, offMesh, revOffMesh: this.w.nav.offMeshLookup[offMesh.reverseKey] });
+        const { orig } = this.s.offMesh;
+        // this.s.offMesh = null; // 🚧
+        this.w.events.next({ key: 'exit-off-mesh', npcKey: this.key, offMesh: orig  });
       } else {
         warn(`${this.key}: exited offMeshConnection but this.s.offMesh already null`);
       }
@@ -651,22 +651,22 @@ export class Npc {
       return;
     }
 
-    if (this.s.offMesh === null) {
+    const { offMesh } = this.s;
+    if (offMesh === null) {
       return;
     }
     
-    const state = /** @type {NPC.OffMeshState} */ (this.s.offMesh.state);
     const anim = /** @type {dtCrowdAgentAnimation} */ (this.agentAnim);
-    state.seg = anim.t < anim.tmid ? 'init' : 'main'; // also for external use?
+    offMesh.seg = anim.t < anim.tmid ? 'init' : 'main'; // also for external use?
     
     let dirX = 0, dirY = 0;
-    if (state.seg === 'init') {
+    if (offMesh.seg === 'init') {
       // 🤔 should init/main be unit vectors?
-      dirX = state.init.x + (anim.t / anim.tmid)**2 * (state.main.x - state.init.x);
-      dirY = state.init.y + (anim.t / anim.tmid)**2 * (state.main.y - state.init.y);
+      dirX = offMesh.init.x + (anim.t / anim.tmid)**2 * (offMesh.main.x - offMesh.init.x);
+      dirY = offMesh.init.y + (anim.t / anim.tmid)**2 * (offMesh.main.y - offMesh.init.y);
     } else {
-      dirX = state.main.x;
-      dirY = state.main.y;
+      dirX = offMesh.main.x;
+      dirY = offMesh.main.y;
     }
     
     this.s.lookAngleDst = this.getEulerAngle(Math.atan2(-dirY, dirX));

@@ -262,19 +262,20 @@ export default function useHandleEvents(w) {
           break;
         case "enter-off-mesh": {
 
-          const { offMesh, revOffMesh } = e;
-          const door = w.door.byKey[offMesh.gdKey];
+          const { offMesh } = e;
+          const { gdKey } = offMesh;
+
+          const door = w.door.byKey[gdKey];
           // 🚧 ignore "in use" if (a) same direction, (b) ≥ half way
           // const otherAnim = offMesh.state === undefined ? null : w.n[offMesh.state.npcKey].agentAnim;
           // otherAnim !== null && (otherAnim.t >= 0.5 * (otherAnim.tmid + otherAnim.tmax))
           
-          const doorInUse = (
-            offMesh.state !== undefined
-          ) || revOffMesh.state !== undefined;
+          // const doorInUse = offMesh.state !== undefined || revOffMesh.state !== undefined;
+          const doorInUse = state.doorToOffMesh[gdKey]?.length > 0;
 
           if (doorInUse || (
             door.open === false &&
-            state.toggleDoor(offMesh.gdKey, { open: true, npcKey: e.npcKey }) === false
+            state.toggleDoor(gdKey, { open: true, npcKey: e.npcKey }) === false
           )) {
             // cancel traversal
             const agent = /** @type {NPC.CrowdAgent} */ (npc.agent);
@@ -285,25 +286,25 @@ export default function useHandleEvents(w) {
           }
           
           // register traversal
-          offMesh.state = {
+          npc.s.offMesh = {
             npcKey: e.npcKey,
             seg: 'init',
             init: { x: offMesh.src.x - npc.position.x, y: offMesh.src.z - npc.position.z },
             main: { x: offMesh.dst.x - offMesh.src.x, y: offMesh.dst.z - offMesh.src.z },
+            orig: offMesh,
           };
-          state.doorToOffMesh[offMesh.gdKey] = offMesh;
+          // 🚧 just npcKeys instead?
+          (state.doorToOffMesh[gdKey] ??= []).push(npc.s.offMesh);
 
           // force open door
           w.door.toggleDoorRaw(door, { open: true, access: true });
           break;
         }
         case "exit-off-mesh": {
-          const { offMesh } = e;
-          // 🚧 WIP
-          if (offMesh.state?.npcKey === e.npcKey) {
-            offMesh.state = undefined;
-          }
-          delete state.doorToOffMesh[e.offMesh.gdKey];
+          npc.s.offMesh = null;
+          state.doorToOffMesh[e.offMesh.gdKey] = state.doorToOffMesh[e.offMesh.gdKey].filter(
+            x => x.npcKey !== e.npcKey
+          );
           // w.nav.navMesh.setPolyFlags(state.npcToOffMesh[e.npcKey].offMeshRef, w.lib.navPolyFlag.walkable);
           break;
         }
@@ -348,11 +349,10 @@ export default function useHandleEvents(w) {
           }
 
           for (const gdKey of nearbyGdKeys) {
-            if (state.doorToOffMesh[gdKey]?.state?.npcKey === e.npcKey) {
-              // 🔔 cannot set undefined earlier (see line above)
-              state.doorToOffMesh[gdKey].state = undefined;
-              delete state.doorToOffMesh[gdKey];
-              break;
+            const index = state.doorToOffMesh[gdKey]?.findIndex(x => x.npcKey === e.npcKey);
+            if (index >= 0) {
+              state.doorToOffMesh[gdKey].splice(index, 1);
+              break; // e.npcKey in at most one door
             }
           }
 
@@ -592,7 +592,8 @@ export default function useHandleEvents(w) {
  * Relates `npcKey` to strings defining RegExp's matching `Geomorph.GmDoorKey`s
  * @property {{ [npcKey: string]: Record<'nearby' | 'inside', Set<Geomorph.GmDoorKey>> }} npcToDoors
  * Relate `npcKey` to nearby `Geomorph.GmDoorKey`s
- * @property {{ [gdKey: Geomorph.GmDoorKey]: NPC.OffMeshLookupValue }} doorToOffMesh
+ * @property {{ [gdKey: Geomorph.GmDoorKey]: NPC.OffMeshState[] }} doorToOffMesh
+ * Either 0, 1 or 2 agents can traverse a single offMeshConnection in the same direction.
  * @property {((lastDownMeta: Geom.Meta) => boolean)[]} pressMenuFilters
  * Prevent ContextMenu on long press if any of these return `true`.
  * @property {Map<string, Geomorph.GmRoomId>} npcToRoom npcKey to gmRoomId

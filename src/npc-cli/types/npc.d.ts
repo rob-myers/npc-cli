@@ -129,8 +129,8 @@ declare namespace NPC {
     | { key: "pre-setup-physics" }
     | { key: "nav-updated" }
     | { key: 'click-link'; cmKey: string; linkKey: string }
-    | { key: 'enter-off-mesh'; npcKey: string; offMesh: NPC.OffMeshLookupValue; revOffMesh: NPC.OffMeshLookupValue; }
-    | { key: 'exit-off-mesh'; npcKey: string; offMesh: NPC.OffMeshLookupValue; revOffMesh: NPC.OffMeshLookupValue; }
+    | { key: 'enter-off-mesh'; npcKey: string; offMesh: NPC.OffMeshLookupValue }
+    | { key: 'exit-off-mesh'; npcKey: string; offMesh: NPC.OffMeshLookupValue }
     // ...
   );
 
@@ -212,13 +212,13 @@ declare namespace NPC {
     key: keyof OffMeshLookup;
     /** Key of connection in reverse direction. */
     reverseKey: keyof OffMeshLookup;
-    /** Defined iff a npc is using this offMeshConnection. */
-    state?: NPC.OffMeshState;
   };
 
   type OffMeshState = {
     /** The npc using this offMeshConnection. */
     npcKey: string;
+    /** Original connection */
+    orig: OffMeshLookupValue;
     /** The `init` segment leads from npc's current position to the `main` segment (src, dst)  */
     seg: 'init' | 'main';
     /** Segment from "initial npc position" to "offMeshConnection src" */
