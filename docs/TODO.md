@@ -159,16 +159,20 @@
   - ❌ do not navigate on `WARN getClosestNavigable failed:`
     - irrelevant i.e. if click room inaccessible via queryFiltered offMeshConnection,
       `findClosestPoint` will still successfully "find" this point
-  - 🚧 try stop agent on `enter-off-mesh` rather than setting flags on poly offMeshRef
+  - ✅ try stop agent on `enter-off-mesh` rather than setting flags on poly offMeshRef
     - ℹ️ setting flag has issues e.g. moveTo midway
     - ✅ w.e.npcToOffMesh -> w.e.doorToOffMesh
     - ✅ offMesh.reverse is offMesh lookup value in "reverse direction"
     - ✅ `enter-off-mesh` stops agent if offMeshConnection in use
-    - 🚧 `enter-off-mesh` permits "one agent after another"
   - ✅ fix events: must avoid "circular" offMesh values
+  - 🚧 `enter-off-mesh` permits "one agent after another"
+    - ℹ️ cannot overwrite `offMesh.state` with 2 npcs traversing e.g. because used by `onTickAgentTurn`
+    - 🚧 `offMesh.state` -> `npc.s.offMesh`
   - in use off-mesh connection with door open cannot be closed
     - without relying on "inside" sensor
     - remove "inside" sensor
+  - clean
+    - enter/exit-room event
   - ❌ could lerp whilst agent on off-mesh-connection
   - ❌ could remove agent from crowd and move linearly
   - ❌ navRectId --> connectedComponentId in gmGraph

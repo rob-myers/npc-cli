@@ -208,17 +208,16 @@ declare namespace NPC {
     offMeshRef: number;
     src: import('three').Vector3Like;
     dst: import('three').Vector3Like;
-    /**
-     * Key of value in reverse direction.
-     * We avoid providing reverse directly to keep events serializable.
-     */
+    /** Key of connection in lookup. */
+    key: keyof OffMeshLookup;
+    /** Key of connection in reverse direction. */
     reverseKey: keyof OffMeshLookup;
-    /** Defined iff a unique npc is using this offMeshConnection. */
+    /** Defined iff a npc is using this offMeshConnection. */
     state?: NPC.OffMeshState;
   };
 
   type OffMeshState = {
-    /** The unique npc using this offMeshConnection. */
+    /** The npc using this offMeshConnection. */
     npcKey: string;
     /** The `init` segment leads from npc's current position to the `main` segment (src, dst)  */
     seg: 'init' | 'main';

@@ -264,7 +264,13 @@ export default function useHandleEvents(w) {
 
           const { offMesh, revOffMesh } = e;
           const door = w.door.byKey[offMesh.gdKey];
-          const doorInUse = offMesh.state !== undefined || revOffMesh.state !== undefined;
+          // 🚧 ignore "in use" if (a) same direction, (b) ≥ half way
+          // const otherAnim = offMesh.state === undefined ? null : w.n[offMesh.state.npcKey].agentAnim;
+          // otherAnim !== null && (otherAnim.t >= 0.5 * (otherAnim.tmid + otherAnim.tmax))
+          
+          const doorInUse = (
+            offMesh.state !== undefined
+          ) || revOffMesh.state !== undefined;
 
           if (doorInUse || (
             door.open === false &&
