@@ -122,26 +122,51 @@ export function getTileCacheGeneratorConfig(tileCacheMeshProcess) {
  */
 export function customThreeToTileCache(meshes, navMeshGeneratorConfig = {}, options) {
   const [positions, indices] = getPositionsAndIndices(meshes);
-  return customGenerateTileCache(positions, indices, navMeshGeneratorConfig, options);
+
+  /**
+   * Compute TileCache origin to align with Geomorph grid.
+   *
+   * We assume `tileSize * cs = 1.5` i.e. Geomorph grid size,
+   * e.g. `cs === 0.1` and `tileSize === 15`.
+   */
+  const boxAll = new THREE.Box3();
+  const box = new THREE.Box3();
+  meshes.forEach(mesh => boxAll.union(box.setFromObject(mesh)));
+  const dx = boxAll.min.x < 0 ? (boxAll.min.x % 1.5 + 1.5) : (boxAll.min.x % 1.5);
+  const dz = boxAll.min.z < 0 ? (boxAll.min.z % 1.5 + 1.5) : (boxAll.min.z % 1.5);
+  /** @type {THREE.Vector3Tuple} */
+  const origin = [boxAll.min.x - dx - 1.5, 0, boxAll.min.z - dz - 1.5];
+
+  return customGenerateTileCache({
+    positions,
+    indices,
+    navMeshGeneratorConfig,
+    origin,
+    ...options
+  });
 }
 
 /**
  * 
- * @param {ArrayLike<number>} positions 
- * @param {ArrayLike<number>} indices 
- * @param {Partial<TileCacheGeneratorConfig>} [navMeshGeneratorConfig ]
- * @param {TileCacheCustomOptions} [options]
+ * @param {{
+ *   positions: ArrayLike<number>;
+ *   indices: ArrayLike<number>;
+ *   navMeshGeneratorConfig?: Partial<TileCacheGeneratorConfig>;
+ *   origin: THREE.Vector3Tuple;
+ * } & TileCacheCustomOptions} config
  * @returns {(
  *   | TileCacheGeneratorFailResult
  *   | (TileCacheGeneratorSuccessResult & { offMeshLookup: NPC.OffMeshLookup })
  * )}
  */
-export function customGenerateTileCache(
+export function customGenerateTileCache({
   positions,
   indices,
   navMeshGeneratorConfig = {},
-  options = {}
-) {
+  origin,
+  areas,
+  keepIntermediates,
+}) {
 
   const buildContext = new RecastBuildContext();
 
@@ -157,7 +182,7 @@ export function customGenerateTileCache(
   const navMesh = new NavMesh();
 
   function cleanup() {
-    if (!options.keepIntermediates) {
+    if (!keepIntermediates) {
       for (let i = 0; i < intermediates.tileIntermediates.length; i++) {
         const tileIntermediate = intermediates.tileIntermediates[i];
 
@@ -208,7 +233,12 @@ export function customGenerateTileCache(
   const trisArray = new TrianglesArray();
   trisArray.copy(tris);
 
-  const { bbMin, bbMax } = getBoundingBox(positions, indices);
+  // Can override bounding box minimum with specific origin,
+  // in order to align the TileCache.
+  let { bbMin, bbMax } = getBoundingBox(positions, indices);
+  if (origin) {
+    bbMin = origin;
+  }
 
   const { expectedLayersPerTile, maxObstacles, ...recastConfig } = {
     ...tileCacheGeneratorConfigDefaults,
@@ -457,7 +487,7 @@ export function customGenerateTileCache(
       return { n: 0 };
     }
 
-    if (!options.keepIntermediates) {
+    if (!keepIntermediates) {
       freeHeightfield(tileIntermediates.heightfield);
       tileIntermediates.heightfield = undefined;
     }
@@ -473,8 +503,8 @@ export function customGenerateTileCache(
       return { n: 0 };
     }
 
-    for (const { areaId, areas } of options.areas ?? []) {
-      for (const { hmin, hmax, verts } of areas) {
+    for (const { areaId, areas: convexAreas } of areas ?? []) {
+      for (const { hmin, hmax, verts } of convexAreas) {
         const vertsArray = new VerticesArray();
         const numVerts = verts.length;
         vertsArray.copy(verts.flatMap(v => [v.x, v.y, v.z]));
@@ -503,7 +533,7 @@ export function customGenerateTileCache(
       return { n: 0 };
     }
 
-    if (!options.keepIntermediates) {
+    if (!keepIntermediates) {
       freeCompactHeightfield(compactHeightfield);
       tileIntermediates.compactHeightfield = undefined;
     }
@@ -564,7 +594,7 @@ export function customGenerateTileCache(
       tiles.push(tile);
     }
 
-    if (!options.keepIntermediates) {
+    if (!keepIntermediates) {
       freeHeightfieldLayerSet(heightfieldLayerSet);
       tileIntermediates.heightfieldLayerSet = undefined;
     }
