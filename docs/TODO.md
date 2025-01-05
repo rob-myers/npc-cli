@@ -165,10 +165,11 @@
     - ✅ offMesh.reverse is offMesh lookup value in "reverse direction"
     - ✅ `enter-off-mesh` stops agent if offMeshConnection in use
   - ✅ fix events: must avoid "circular" offMesh values
-  - 🚧 `enter-off-mesh` permits "one agent after another"
+  - ✅ `enter-off-mesh` permits "one agent after another"
     - ℹ️ cannot overwrite `offMesh.state` with 2 npcs traversing e.g. because used by `onTickAgentTurn`
-    - 🚧 `offMesh.state` -> `npc.s.offMesh`
-  - in use off-mesh connection with door open cannot be closed
+    - ✅ `offMesh.state` -> `npc.s.offMesh`
+    - ✅ permit traverse in same direction if most recent npc on main segment and doesn't currently collide
+  - 🚧 in use off-mesh connection with door open cannot be closed
     - without relying on "inside" sensor
     - remove "inside" sensor
   - clean

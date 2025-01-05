@@ -261,21 +261,20 @@ export default function useHandleEvents(w) {
           }
           break;
         case "enter-off-mesh": {
-
           const { offMesh } = e;
-          const { gdKey } = offMesh;
-
-          const door = w.door.byKey[gdKey];
-          // 🚧 ignore "in use" if (a) same direction, (b) ≥ half way
-          // const otherAnim = offMesh.state === undefined ? null : w.n[offMesh.state.npcKey].agentAnim;
-          // otherAnim !== null && (otherAnim.t >= 0.5 * (otherAnim.tmid + otherAnim.tmax))
+          const door = w.door.byKey[offMesh.gdKey];
           
-          // const doorInUse = offMesh.state !== undefined || revOffMesh.state !== undefined;
-          const doorInUse = state.doorToOffMesh[gdKey]?.length > 0;
+          /** Current and most recent user of offMeshConnection (if any) */
+          const other = state.doorToOffMesh[offMesh.gdKey]?.at(-1);
+          const doorInUse = other !== undefined && (
+            other.orig !== offMesh // opposite direction
+            || other.seg === 'init' // other hasn't reached main segment
+            || w.n[other.npcKey].position.distanceTo(npc.position) < 1.2 * npc.getRadius()
+          );
 
           if (doorInUse || (
             door.open === false &&
-            state.toggleDoor(gdKey, { open: true, npcKey: e.npcKey }) === false
+            state.toggleDoor(offMesh.gdKey, { open: true, npcKey: e.npcKey }) === false
           )) {
             // cancel traversal
             const agent = /** @type {NPC.CrowdAgent} */ (npc.agent);
@@ -293,8 +292,7 @@ export default function useHandleEvents(w) {
             main: { x: offMesh.dst.x - offMesh.src.x, y: offMesh.dst.z - offMesh.src.z },
             orig: offMesh,
           };
-          // 🚧 just npcKeys instead?
-          (state.doorToOffMesh[gdKey] ??= []).push(npc.s.offMesh);
+          (state.doorToOffMesh[offMesh.gdKey] ??= []).push(npc.s.offMesh);
 
           // force open door
           w.door.toggleDoorRaw(door, { open: true, access: true });
@@ -599,7 +597,7 @@ export default function useHandleEvents(w) {
  * @property {{ [npcKey: string]: Record<'nearby' | 'inside', Set<Geomorph.GmDoorKey>> }} npcToDoors
  * Relate `npcKey` to nearby `Geomorph.GmDoorKey`s
  * @property {{ [gdKey: Geomorph.GmDoorKey]: NPC.OffMeshState[] }} doorToOffMesh
- * Either 0, 1 or 2 agents can traverse a single offMeshConnection in the same direction.
+ * Multiple agents can traverse a single offMeshConnection in the same direction at same direction.
  * @property {((lastDownMeta: Geom.Meta) => boolean)[]} pressMenuFilters
  * Prevent ContextMenu on long press if any of these return `true`.
  * @property {Map<string, Geomorph.GmRoomId>} npcToRoom npcKey to gmRoomId

@@ -124,6 +124,23 @@ w n.rob.agent.parameters | map updateFlags
 w npc.spawn '{ npcKey: "rob", point: '$( click 1 )' }' >/dev/null
 ```
 
+```sh
+# two agents "rob" and "will" in untransformed 301
+
+p=$( expr '{"x":1.703,"y":0,"z":3.672,"meta":{"picked":"floor","gmId":0,"floor":true,"instanceId":0,"roomId":1,"grKey":"g0r1","nav":true},"xz":{"x":1.703,"y":3.672}}' )
+q=$( expr '{x:2.298,y:0,z:3.315,meta:{picked:"floor",gmId:0,floor:true,instanceId:0,roomId:1,grKey:"g0r1",nav:true},xz:{x:2.298,y:3.315}}' )
+r=$( expr '{x:1.381,y:0,z:7.845,meta:{picked:"floor",gmId:0,floor:true,instanceId:0,roomId:2,grKey:"g0r2",nav:true},xz:{x:1.381,y:7.845}}' )
+s=$( expr '{x:3.36,y:0,z:7.882,meta:{picked:"floor",gmId:0,floor:true,instanceId:0,roomId:2,grKey:"g0r2",nav:true},xz:{x:3.36,y:7.882}}' )
+
+# one
+w n.rob.moveTo ${p} & w n.will.moveTo ${q} &
+# two
+w n.rob.moveTo ${r} & w n.will.moveTo ${s} &
+
+# sometimes 2nd agent gets blocked, but usually not because
+# pushed out of the way before starts offMeshConnection
+```
+
 ## Local variables
 
 ```sh
