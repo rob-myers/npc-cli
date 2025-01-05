@@ -15,9 +15,15 @@ export function DefaultContextMenu({ cm }) {
         {'['}<span>{cm.npcKey}</span>{']'}
       </div>}
 
-      <button data-key="toggle-docked">{cm.docked ? 'embed' : 'dock'}</button>
+      <button data-key="toggle-docked">
+        {cm.docked ? 'embed' : 'dock'}
+      </button>
 
-      <PopUp ref={cm.popUpRef.bind(cm)} infoClassName={popUpInfoCss}>
+      <PopUp
+        ref={cm.popUpRef.bind(cm)}
+        infoClassName={popUpInfoCss}
+        label="opts"
+      >
         {/* 🚧 choose an npc, or "no npc" */}
         <select className="select-npc" defaultValue="foo">
           <option value="">no npc</option>
@@ -25,6 +31,9 @@ export function DefaultContextMenu({ cm }) {
           <option value="bar">bar</option>
           <option value="baz">baz</option>
         </select>
+        <button>
+          refresh
+        </button>
       </PopUp>
 
       {(cm.docked ? topLinks.docked : topLinks.embedded).map(({ key, label, test }) =>
@@ -122,13 +131,16 @@ export const defaultContextMenuCss = css`
     gap: 0px;
   }
   
-  button {
+  .links > * {
+    flex: 1;
+  }
+
+  .links button {
     text-decoration: underline;
     color: #aaf;
     padding: 5px 6px;
-    flex: 1;
   }
-  button.off {
+  .links button.off {
     filter: brightness(0.7);
   }
 
@@ -160,8 +172,12 @@ export const defaultContextMenuCss = css`
 const popUpInfoCss = css`
   
   display: flex;
-  justify-content: center;
+  justify-content: space-around;
   align-items: center;
+
+  select {
+    border: 1px solid #555;
+  }
 
 ;`
 

@@ -60,7 +60,7 @@ export const PopUp = React.forwardRef(function PopUp(props, ref) {
           }
         }}
       >
-        ⋯
+        {props.label ?? '⋯'}
       </button>
       <div
         ref={state.ref('bubble')}
@@ -83,6 +83,7 @@ export const PopUp = React.forwardRef(function PopUp(props, ref) {
  * @typedef Props
  * @property {number} [arrowDeltaX]
  * @property {string} [infoClassName]
+ * @property {string} [label]
  * @property {number} [width]
  * @property {(willOpen: boolean) => void} [onChange]
  */
