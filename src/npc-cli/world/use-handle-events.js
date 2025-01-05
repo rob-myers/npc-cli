@@ -265,7 +265,7 @@ export default function useHandleEvents(w) {
           const { offMesh } = e;
           const door = w.door.byKey[offMesh.gdKey];
           
-          /** Current and most recent user of offMeshConnection (if any) */
+          /** Current most recent user of offMeshConnection (if any) */
           const other = state.doorToOffMesh[offMesh.gdKey]?.at(-1);
           const doorInUse = other !== undefined && (
             other.orig !== offMesh // opposite direction
@@ -296,10 +296,8 @@ export default function useHandleEvents(w) {
           (state.doorToOffMesh[offMesh.gdKey] ??= []).push(npc.s.offMesh);
           (state.npcToDoors[e.npcKey] ??= { inside: null, nearby: new Set() }).inside = offMesh.gdKey;
 
-          // force open door
-          w.door.toggleDoorRaw(door, { open: true, access: true });
-
-          // 🚧 trigger exit-room
+          w.door.toggleDoorRaw(door, { open: true, access: true }); // force open door
+          w.events.next({ key: 'exit-room', npcKey: e.npcKey, ...w.lib.getGmRoomId(e.offMesh.srcGrKey) });
           break;
         }
         case "exit-off-mesh": {
@@ -308,20 +306,20 @@ export default function useHandleEvents(w) {
             x => x.npcKey !== e.npcKey
           );
           (state.npcToDoors[e.npcKey] ??= { inside: null, nearby: new Set() }).inside = null;
+          
           // w.nav.navMesh.setPolyFlags(state.npcToOffMesh[e.npcKey].offMeshRef, w.lib.navPolyFlag.walkable);
-
-          // 🚧 trigger enter-room
-          // const next = w.gmGraph.getOtherGmRoomId(door, prev.roomId);
-          // const gmRoomId = state.npcToRoom.get(e.npcKey);
-          // if (gmRoomId !== undefined) {
-          //   state.roomToNpcs[gmRoomId.gmId][gmRoomId.roomId].delete(e.npcKey);
-          // }
-          // state.npcToRoom.set(e.npcKey, next);
-          // (state.roomToNpcs[next.gmId][next.roomId] ??= new Set()).add(e.npcKey);
-
-          // w.events.next({ key: 'exit-room', npcKey: e.npcKey, ...prev });
-          // w.events.next({ key: 'enter-room', npcKey: e.npcKey, ...next });
-
+          w.events.next({ key: 'enter-room', npcKey: e.npcKey, ...w.lib.getGmRoomId(e.offMesh.dstGrKey) });
+          break;
+        }
+        case "enter-room": {
+          const { npcKey, gmId, roomId, grKey } = e;
+          state.npcToRoom.set(npcKey, { gmId, roomId, grKey });
+          (state.roomToNpcs[gmId][roomId] ??= new Set()).add(npcKey);
+          break;
+        }
+        case "exit-room": {
+          state.npcToRoom.delete(e.npcKey);
+          state.roomToNpcs[e.gmId][e.roomId].delete(e.npcKey);
           break;
         }
         case "spawned": {
@@ -381,10 +379,6 @@ export default function useHandleEvents(w) {
           break;
         }
       }
-    },
-    navSegIntersectsDoorway(u, v, door) {
-      // 🤔 more efficient approach?
-      return geom.lineSegIntersectsPolygon(u, v, door.collidePoly);
     },
     npcCanAccess(npcKey, gdKey) {
       for (const regexDef of state.npcToAccess[npcKey] ?? []) {
@@ -459,48 +453,48 @@ export default function useHandleEvents(w) {
         return;
       }
       
-      if (e.type === 'inside') {// 🚧 remove once exit/enter-room has been migrated
-        if (npc === undefined) {
-          return; // npc was removed
-        }
+      // if (e.type === 'inside') {// 🚧 remove once exit/enter-room has been migrated
+      //   if (npc === undefined) {
+      //     return; // npc was removed
+      //   }
 
-        // npc entered room
-        // state.npcToDoors[e.npcKey].inside.delete(e.gdKey);
-        // state.doorToNpcs[e.gdKey].inside.delete(e.npcKey);
+      //   // npc entered room
+      //   // state.npcToDoors[e.npcKey].inside.delete(e.gdKey);
+      //   // state.doorToNpcs[e.gdKey].inside.delete(e.npcKey);
 
-        const prev = state.npcToRoom.get(e.npcKey);
-        if (door.gmId !== prev?.gmId) {
-          return; // hull doors have 2 sensors, so can ignore one
-        }
+      //   const prev = state.npcToRoom.get(e.npcKey);
+      //   if (door.gmId !== prev?.gmId) {
+      //     return; // hull doors have 2 sensors, so can ignore one
+      //   }
 
-        // w.events.next({ key: 'exit-doorway', npcKey: e.npcKey, gmId: door.gmId, doorId: door.doorId, gdKey: door.gdKey });
+      //   // w.events.next({ key: 'exit-doorway', npcKey: e.npcKey, gmId: door.gmId, doorId: door.doorId, gdKey: door.gdKey });
 
-        const onOtherSide = w.gmGraph.isOnOtherSide(door, prev.roomId, npc.getPoint());
-        if (onOtherSide === false) {
-          return; // stayed in same room
-        }
+      //   const onOtherSide = w.gmGraph.isOnOtherSide(door, prev.roomId, npc.getPoint());
+      //   if (onOtherSide === false) {
+      //     return; // stayed in same room
+      //   }
         
-        const next = w.gmGraph.getOtherGmRoomId(door, prev.roomId);
-        if (next === null) {
-          return warn(`${e.npcKey}: expected non-null next room (${door.gdKey})`);
-        }
+      //   const next = w.gmGraph.getOtherGmRoomId(door, prev.roomId);
+      //   if (next === null) {
+      //     return warn(`${e.npcKey}: expected non-null next room (${door.gdKey})`);
+      //   }
 
-        // 🚧 enter/exit-off-mesh should have srcGrKey, dstGrKey
-        // 🚧 exit-room, enter-room should be triggered by exit-off-mesh
+      //   // 🚧 enter/exit-off-mesh should have srcGrKey, dstGrKey
+      //   // 🚧 exit-room, enter-room should be triggered by exit-off-mesh
 
-        // ℹ️ trigger exit-room and enter-room on exit doorway
-        setTimeout(() => {
-          const gmRoomId = state.npcToRoom.get(e.npcKey);
-          if (gmRoomId !== undefined) {
-            state.roomToNpcs[gmRoomId.gmId][gmRoomId.roomId].delete(e.npcKey);
-          }
-          state.npcToRoom.set(e.npcKey, next);
-          (state.roomToNpcs[next.gmId][next.roomId] ??= new Set()).add(e.npcKey);
+      //   // ℹ️ trigger exit-room and enter-room on exit doorway
+      //   setTimeout(() => {
+      //     const gmRoomId = state.npcToRoom.get(e.npcKey);
+      //     if (gmRoomId !== undefined) {
+      //       state.roomToNpcs[gmRoomId.gmId][gmRoomId.roomId].delete(e.npcKey);
+      //     }
+      //     state.npcToRoom.set(e.npcKey, next);
+      //     (state.roomToNpcs[next.gmId][next.roomId] ??= new Set()).add(e.npcKey);
 
-          w.events.next({ key: 'exit-room', npcKey: e.npcKey, ...prev });
-          w.events.next({ key: 'enter-room', npcKey: e.npcKey, ...next });
-        });
-      }
+      //     w.events.next({ key: 'exit-room', npcKey: e.npcKey, ...prev });
+      //     w.events.next({ key: 'enter-room', npcKey: e.npcKey, ...next });
+      //   });
+      // }
     },
     onPointerUpMenuDesktop(e) {
       if (e.rmb && e.distancePx <= 5) {
@@ -614,14 +608,13 @@ export default function useHandleEvents(w) {
  * @property {{ [npcKey: string]: { inside: null | Geomorph.GmDoorKey; nearby: Set<Geomorph.GmDoorKey> }}} npcToDoors
  * Relate `npcKey` to (a) doorway we're inside, (b) nearby `Geomorph.GmDoorKey`s
  * @property {Map<string, Geomorph.GmRoomId>} npcToRoom npcKey to gmRoomId
- * Relates `npcKey` to current room
+ * Relates `npcKey` to current room, unless in a doorway (offMeshConnection)
  * @property {((lastDownMeta: Geom.Meta) => boolean)[]} pressMenuFilters
  * Prevent ContextMenu on long press if any of these return `true`.
  * @property {{[roomId: number]: Set<string>}[]} roomToNpcs
  * The "inverse" of npcToRoom i.e. `roomToNpc[gmId][roomId]` is a set of `npcKey`s
  *
  * @property {(door: Geomorph.DoorState) => boolean} canCloseDoor
- * @property {(u: Geom.VectJson, v: Geom.VectJson, door: Geomorph.DoorState) => boolean} navSegIntersectsDoorway
  * @property {(npcKey: string, gdKey: Geomorph.GmDoorKey) => boolean} npcCanAccess
  * @property {(npcKey: string, regexDef: string, act?: '+' | '-') => void} changeNpcAccess
  * @property {(r: number, g: number, b: number, a: number) => null | NPC.DecodedObjectPick} decodeObjectPick

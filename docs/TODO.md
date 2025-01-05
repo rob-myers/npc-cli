@@ -171,11 +171,11 @@
     - ✅ permit traverse in same direction if most recent npc on main segment and doesn't currently collide
   - 🚧 in use off-mesh connection with door open cannot be closed
     - ✅ offMeshConnection has srcGrKey and dstGrKey for exit/enter-room
-    - 🚧 migrate exit/enter-room
+    - ✅ migrate exit/enter-room
     - 🚧 remove "inside" sensor
   - clean
-    - enter/exit-room event
-    - careful about hull door duplicate offMeshConnection
+    - ✅ enter/exit-room event
+    - ✅ careful about hull door duplicate offMeshConnection
   - ❌ could lerp whilst agent on off-mesh-connection
   - ❌ could remove agent from crowd and move linearly
   - ❌ navRectId --> connectedComponentId in gmGraph
