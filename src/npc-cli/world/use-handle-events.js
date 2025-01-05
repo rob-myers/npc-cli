@@ -398,103 +398,36 @@ export default function useHandleEvents(w) {
         1.5, // 🚧 hard-coded
       );
     },
-    onEnterDoorCollider(e) {
-      if (e.type === 'nearby') {
-        (state.npcToDoors[e.npcKey] ??= { nearby: new Set(), inside: null }).nearby.add(e.gdKey);
-        (state.doorToNearbyNpcs[e.gdKey] ??= new Set()).add(e.npcKey);
-        
-        const door = w.d[e.gdKey];
-        if (door.open === true) {
-          return; // door already open
-        }
-
-        if (door.auto === true && door.locked === false) {
-          state.toggleDoor(e.gdKey, { open: true, npcKey: e.npcKey });
-          return; // opened auto unlocked door
-        }
-      }
+    onEnterDoorCollider(e) {// e.type === 'nearby'
+      (state.npcToDoors[e.npcKey] ??= { nearby: new Set(), inside: null }).nearby.add(e.gdKey);
+      (state.doorToNearbyNpcs[e.gdKey] ??= new Set()).add(e.npcKey);
       
-      // if (e.type === 'inside') {
-      //   (state.npcToDoors[e.npcKey] ??= { nearby: new Set(), inside: new Set() }).inside.add(e.gdKey);
-      //   (state.doorToNpcs[e.gdKey] ??= { nearby: new Set(), inside: new Set() }).inside.add(e.npcKey);
+      const door = w.d[e.gdKey];
+      if (door.open === true) {
+        return; // door already open
+      }
 
-      //   const door = w.door.byKey[e.gdKey];
-      //   const npc = w.n[e.npcKey];
-      //   if (
-      //     door.open === false
-      //     && state.npcCanAccess(e.npcKey, e.gdKey) === true
-      //     // && state.navSegIntersectsDoorway(npc.getPoint(), { x: npc.nextCorner.x, y: npc.nextCorner.z }, door)
-      //   ) {
-      //     state.toggleDoor(e.gdKey, { open: true, npcKey: e.npcKey });
-      //   }
-
-      //   w.events.next({ key: 'enter-doorway', npcKey: e.npcKey, gmId: e.gmId, doorId: e.doorId, gdKey: e.gdKey });
-      //   return;
-      // }
+      if (door.auto === true && door.locked === false) {
+        state.toggleDoor(e.gdKey, { open: true, npcKey: e.npcKey });
+        return; // opened auto unlocked door
+      }
     },
-    onExitDoorCollider(e) {
+    onExitDoorCollider(e) {// e.type === 'nearby'
       const door = w.door.byKey[e.gdKey];
-      const npc = w.npc.npc[e.npcKey]; // undefined on removal
 
-      if (e.type === 'nearby') {
-        state.npcToDoors[e.npcKey].nearby.delete(e.gdKey);
-        const closeNpcs = state.doorToNearbyNpcs[e.gdKey];
-        closeNpcs.delete(e.npcKey);
+      state.npcToDoors[e.npcKey].nearby.delete(e.gdKey);
+      const closeNpcs = state.doorToNearbyNpcs[e.gdKey];
+      closeNpcs.delete(e.npcKey);
 
-        // ℹ️ try close door under conditions
-        if (door.open === true) {
-          return;
-        } else if (door.locked === true) {
-          state.tryCloseDoor(door.gmId, door.doorId)
-        } else if (door.auto === true && closeNpcs.size === 0) {
-          // if auto and none nearby, try close 
-          state.tryCloseDoor(door.gmId, door.doorId);
-        }
+      // ℹ️ try close door under conditions
+      if (door.open === true) {
         return;
+      } else if (door.locked === true) {
+        state.tryCloseDoor(door.gmId, door.doorId)
+      } else if (door.auto === true && closeNpcs.size === 0) {
+        // if auto and none nearby, try close 
+        state.tryCloseDoor(door.gmId, door.doorId);
       }
-      
-      // if (e.type === 'inside') {// 🚧 remove once exit/enter-room has been migrated
-      //   if (npc === undefined) {
-      //     return; // npc was removed
-      //   }
-
-      //   // npc entered room
-      //   // state.npcToDoors[e.npcKey].inside.delete(e.gdKey);
-      //   // state.doorToNpcs[e.gdKey].inside.delete(e.npcKey);
-
-      //   const prev = state.npcToRoom.get(e.npcKey);
-      //   if (door.gmId !== prev?.gmId) {
-      //     return; // hull doors have 2 sensors, so can ignore one
-      //   }
-
-      //   // w.events.next({ key: 'exit-doorway', npcKey: e.npcKey, gmId: door.gmId, doorId: door.doorId, gdKey: door.gdKey });
-
-      //   const onOtherSide = w.gmGraph.isOnOtherSide(door, prev.roomId, npc.getPoint());
-      //   if (onOtherSide === false) {
-      //     return; // stayed in same room
-      //   }
-        
-      //   const next = w.gmGraph.getOtherGmRoomId(door, prev.roomId);
-      //   if (next === null) {
-      //     return warn(`${e.npcKey}: expected non-null next room (${door.gdKey})`);
-      //   }
-
-      //   // 🚧 enter/exit-off-mesh should have srcGrKey, dstGrKey
-      //   // 🚧 exit-room, enter-room should be triggered by exit-off-mesh
-
-      //   // ℹ️ trigger exit-room and enter-room on exit doorway
-      //   setTimeout(() => {
-      //     const gmRoomId = state.npcToRoom.get(e.npcKey);
-      //     if (gmRoomId !== undefined) {
-      //       state.roomToNpcs[gmRoomId.gmId][gmRoomId.roomId].delete(e.npcKey);
-      //     }
-      //     state.npcToRoom.set(e.npcKey, next);
-      //     (state.roomToNpcs[next.gmId][next.roomId] ??= new Set()).add(e.npcKey);
-
-      //     w.events.next({ key: 'exit-room', npcKey: e.npcKey, ...prev });
-      //     w.events.next({ key: 'enter-room', npcKey: e.npcKey, ...next });
-      //   });
-      // }
     },
     onPointerUpMenuDesktop(e) {
       if (e.rmb && e.distancePx <= 5) {
@@ -622,8 +555,8 @@ export default function useHandleEvents(w) {
  * Get possible meta acts e.g. may not be possible because npc not close enough
  * @property {(e: NPC.Event) => void} handleEvents
  * @property {(e: Extract<NPC.Event, { npcKey?: string }>) => void} handleNpcEvents
- * @property {(e: Extract<NPC.Event, { key: 'enter-collider'; type: 'nearby' | 'inside' }>) => void} onEnterDoorCollider
- * @property {(e: Extract<NPC.Event, { key: 'exit-collider'; type: 'nearby' | 'inside' }>) => void} onExitDoorCollider
+ * @property {(e: Extract<NPC.Event, { key: 'enter-collider'; type: 'nearby' }>) => void} onEnterDoorCollider
+ * @property {(e: Extract<NPC.Event, { key: 'exit-collider'; type: 'nearby' }>) => void} onExitDoorCollider
  * @property {(npcKey: string, gdKey: Geomorph.GmDoorKey) => boolean} npcNearDoor
  * @property {(e: NPC.PointerUpEvent) => void} onPointerUpMenuDesktop
  * @property {(npcKey: string) => void} removeFromSensors

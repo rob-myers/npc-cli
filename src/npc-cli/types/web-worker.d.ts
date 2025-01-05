@@ -131,7 +131,6 @@ declare namespace WW {
 
   type PhysicsBodyKey = (
     | `circle ${string}` // custom cylindrical collider
-    | `inside ${Geomorph.GmDoorKey}` // door cuboid
     | `npc ${string}` // npc {npcKey}
     | `nearby ${Geomorph.GmDoorKey}` // door neighbourhood
     | `rect ${string}` // custom cuboid collider (possibly angled)

@@ -37,7 +37,6 @@ export function npcToBodyKey(npcKey) {
 * - `['circle', decorKey]`
 * - `['rect', decorKey]`
 * - `['nearby', gmDoorKey]`
-* - `['inside', gmDoorKey]`
  */
 export function parsePhysicsBodyKey(bodyKey) {
   return /** @type {*} */ (

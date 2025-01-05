@@ -212,9 +212,7 @@ async function setupOrRebuildWorld(mapKey, npcs) {
 }
 
 /**
- * - door sensors: nearby, inside
- * - hull door nearby ~ 2x2 grid
- * - non-hull door nearby ~ 1x1 grid
+ * "nearby" door sensors: one per door.
  */
 function createDoorSensors() {
   return state.gms.map((gm, gmId) => gm.doors.flatMap((door, doorId) => {
@@ -222,7 +220,7 @@ function createDoorSensors() {
     const angle = gm.matrix.transformAngle(door.angle);
     const gdKey = helper.getGmDoorKey(gmId, doorId);
     const nearbyKey = /** @type {const} */ (`nearby ${gdKey}`);
-    const insideKey = /** @type {const} */ (`inside ${gdKey}`);
+    // const insideKey = /** @type {const} */ (`inside ${gdKey}`);
 
     const nearbyDef = {
       width: door.baseRect.width,
@@ -230,11 +228,11 @@ function createDoorSensors() {
       // height: door.baseRect.height + 2 * wallOutset,
       angle,
     };
-    const insideDef = {
-      width: (door.baseRect.width - 2 * wallOutset),
-      height: door.baseRect.height,
-      angle,
-    };
+    // const insideDef = {
+    //   width: (door.baseRect.width - 2 * wallOutset),
+    //   height: door.baseRect.height,
+    //   angle,
+    // };
 
     return [
       createRigidBody({
@@ -255,25 +253,7 @@ function createDoorSensors() {
           angle,
         },
       }),
-      // 🚧 remove inside sensor
-      // createRigidBody({
-      //   type: RAPIER.RigidBodyType.Fixed,
-      //   geomDef: {
-      //     type: 'rect',
-      //     width: insideDef.width,
-      //     height: insideDef.height,
-      //   },
-      //   position: { x: center.x, y: wallHeight/2, z: center.y },
-      //   angle,
-      //   userData: {
-      //     bodyKey: insideKey,
-      //     bodyUid: addBodyKeyUidRelation(insideKey, state),
-      //     type: 'cuboid',
-      //     width: insideDef.width,
-      //     depth: insideDef.height,
-      //     angle,
-      //   },
-      // }),
+      // 🔔 originally had "inside door sensor" here, but now use offMeshConnections
     ]
   }));
 }
