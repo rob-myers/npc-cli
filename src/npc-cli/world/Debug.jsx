@@ -136,7 +136,17 @@ export default function Debug(props) {
     state.navMesh = new NavMeshHelper(w.nav.navMesh, {
       navMeshMaterial: navPolyMaterial,
     });
-    state.offMeshConnections = new OffMeshConnectionsHelper(computeOffMeshConnectionsParams(w.gms), {
+
+    /** Use offMeshLookup to exclude non-existent ones through isolated hull doors  */
+    const offMeshParams = Object.values(w.nav.offMeshLookup).map(x => ({
+        startPosition: x.src,
+        endPosition: x.dst,
+        radius: 0.04,
+        bidirectional: true,
+    }));
+    // const offMeshParams = computeOffMeshConnectionsParams(w.gms);
+
+    state.offMeshConnections = new OffMeshConnectionsHelper(offMeshParams, {
       lineMaterial: offMeshLineMaterial,
       entryCircleMaterial: navPolyMaterial,
       exitCircleMaterial: navPolyMaterial,
