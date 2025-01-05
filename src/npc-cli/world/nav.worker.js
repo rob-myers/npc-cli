@@ -1,11 +1,11 @@
 import * as THREE from "three";
 import { init as initRecastNav, exportTileCache } from "@recast-navigation/core";
 
+import { GmGraphClass } from "../graph/gm-graph";
 import { error, info, debug, warn, removeDups, range } from "../service/generic";
 import { geomorph } from "../service/geomorph";
 import { customThreeToTileCache, getTileCacheGeneratorConfig, getTileCacheMeshProcess, computeGmInstanceMesh } from "../service/recast-detour";
 import { fetchGeomorphsJson } from "../service/fetch-assets";
-import { getQuadGeometryXZ } from "../service/three";
 
 /** @type {WW.WorkerGeneric<WW.MsgFromNavWorker, WW.MsgToNavWorker>} */
 const worker = (/** @type {*} */ (self));
@@ -34,13 +34,14 @@ async function onRequestNav(mapKey) {
   const gms = map.gms.map(({ gmKey, transform }, gmId) =>
     geomorph.computeLayoutInstance(geomorphs.layout[gmKey], gmId, transform)
   );
+  const gmGraph = GmGraphClass.fromGms(gms, { permitErrors: true });
 
   const { meshes, customAreaDefs } = await computeGeomorphMeshes(gms);
   await initRecastNav();
 
   const result = customThreeToTileCache(
     meshes,
-    getTileCacheGeneratorConfig(getTileCacheMeshProcess(gms)),
+    getTileCacheGeneratorConfig(getTileCacheMeshProcess(gms, gmGraph)),
     { areas: customAreaDefs.flatMap(x => x) },
   );
   

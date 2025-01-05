@@ -40,11 +40,26 @@ export function computeGmInstanceMesh(gm) {
 
 /**
  * @param {Geomorph.LayoutInstance[]} gms
+ * @param {Graph.GmGraph} gmGraph
  */
-export function computeOffMeshConnectionsParams(gms) {
+export function computeOffMeshConnectionsParams(gms, gmGraph) {
   
+  // ignore isolated hull doors
+  // ignore 2nd identified hull door
+  const ignoreGdKeys = /** @type {Set<Geomorph.GmDoorKey>} */ (new Set());
+
   return gms.flatMap((gm, gmId) => gm.doors.flatMap(/** @returns {import("recast-navigation").OffMeshConnectionParams[]} */
-  ({ center, normal, meta }, doorId) => {
+    ({ center, normal, meta }, doorId) => {
+
+      if (meta.hull === true) {
+        const adj = gmGraph.getAdjacentRoomCtxt(gmId, doorId);
+        if (ignoreGdKeys.has(`g${gmId}d${doorId}`) === true || adj === null) {
+          return [];
+        } else {
+          ignoreGdKeys.add(`g${adj.adjGmId}d${adj.adjDoorId}`);
+        }
+      }
+
       const halfLength = wallOutset + (meta.hull === true ? 0.25 : 0.125);
       // const offsets = meta.hull === true ? [-0.7, 0, 0.7] : [-0.25, 0, 0.25];
       const offsets = meta.hull === true ? [-0.7, 0, 0.7] : [0];
@@ -59,7 +74,6 @@ export function computeOffMeshConnectionsParams(gms) {
         bidirectional: true,
         // 🔔 Encode (gmId, doorId) assuming 0 ≤ gmId, doorId ≤ 255
         userId: gmId + (doorId << 8),
-        // area: 1,
         flags: helper.navPolyFlag.walkable,
       }));
 
@@ -79,10 +93,11 @@ export function disposeCrowd(crowd, navMesh) {
 /**
  * https://github.com/isaac-mason/recast-navigation-js/blob/d64fa867361a316b53c2da1251820a0bd6567f82/packages/recast-navigation-generators/src/generators/generate-tile-cache.ts#L108
  * @param {Geomorph.LayoutInstance[]} gms
+ * @param {Graph.GmGraph} gmGraph
  */
-export function getTileCacheMeshProcess(gms) {
+export function getTileCacheMeshProcess(gms, gmGraph) {
 
-  const offMeshConnections = computeOffMeshConnectionsParams(gms);
+  const offMeshConnections = computeOffMeshConnectionsParams(gms, gmGraph);
 
   return new TileCacheMeshProcess((navMeshCreateParams, polyAreas, polyFlags) => {
 

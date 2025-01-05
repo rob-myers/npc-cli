@@ -8,7 +8,6 @@ import { navMeta, decompToXZGeometry, cylinderGeometry, boxGeometry } from "../s
 import { WorldContext } from "./world-context";
 import useStateRef from "../hooks/use-state-ref";
 import useUpdate from "../hooks/use-update";
-import { computeOffMeshConnectionsParams } from "../service/recast-detour";
 
 /**
  * @param {Props} props 

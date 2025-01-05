@@ -73,10 +73,10 @@
       - ✅ temp: profile-1: triggered on select npc
       - ✅ triggered via long click npc
       - ✅ handleContextMenu accounts for `cm.npcKey`
+      - 🚧 separate classes for DefaultContextMenu and SpeechBubble
       - 🚧 use custom select instead
         - choose none or npcKey
         - can refresh via button "refresh"
-      - 🚧 separate classes for DefaultContextMenu and SpeechBubble
       - clean
   - ✅ remove icon generation code from asset.js
   - Fix npc speech height: sit, lie
@@ -224,7 +224,8 @@
 
 ### On hold
 
-- npc stops on try nav to inaccessible-via-off-mesh-connection room
+- ✅ allow multiple npcs through hull doors via different offMeshConnections
+- ❌ npc stops on try nav to inaccessible-via-off-mesh-connection room
   - eventually?
 - ✅ try align tiles with geomorph grid by extending navMesh slightly
 - clarify/clean/simplify service/uv

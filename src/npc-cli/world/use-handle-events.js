@@ -244,8 +244,10 @@ export default function useHandleEvents(w) {
           const { offMesh } = e;
           const door = w.door.byKey[offMesh.gdKey];
           
-          /** Current most recent user of offMeshConnection (if any) */
-          const other = state.doorToOffMesh[offMesh.gdKey]?.at(-1);
+          /** Most recent user of offMeshConnection (if any) */
+          const other = state.doorToOffMesh[offMesh.gdKey]?.findLast(x =>
+            x.orig.key === offMesh.key || x.orig.key === offMesh.reverseKey
+          );
           const doorInUse = other !== undefined && (
             other.orig !== offMesh // opposite direction
             || other.seg === 'init' // other hasn't reached main segment

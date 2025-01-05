@@ -133,7 +133,7 @@ export default function World(props) {
     },
     loadTiledMesh({ exportedNavMesh, offMeshLookup }) {
       const tiledCacheResult = /** @type {NPC.TiledCacheResult} */ (
-        importTileCache(exportedNavMesh, getTileCacheMeshProcess(state.gms))
+        importTileCache(exportedNavMesh, getTileCacheMeshProcess(state.gms, state.gmGraph))
       );
       
       Object.assign(state.nav, tiledCacheResult);
