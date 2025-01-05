@@ -359,6 +359,12 @@ export default function useHandleEvents(w) {
           w.c.delete(e.npcKey);
           break;
         }
+        case "way-point": {
+          if (e.index !== 0 && npc.position.distanceTo(npc.lastTarget) < 1.5) {
+            npc.s.lookSecs = 0.3; // 🔔 slower final turn
+          }
+          break;
+        }
       }
     },
     navSegIntersectsDoorway(u, v, door) {

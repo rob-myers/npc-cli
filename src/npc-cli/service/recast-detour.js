@@ -46,7 +46,7 @@ export function computeOffMeshConnectionsParams(gms) {
   return gms.flatMap((gm, gmId) => gm.doors.flatMap(/** @returns {import("recast-navigation").OffMeshConnectionParams[]} */
   ({ center, normal, meta }, doorId) => {
       const halfLength = wallOutset + (meta.hull === true ? 0.25 : 0.125);
-      // const offsets = meta.hull === true ? [-0.7, 0, 0.7] : [-0.2, 0.2];
+      // const offsets = meta.hull === true ? [-0.7, 0, 0.7] : [-0.25, 0, 0.25];
       const offsets = meta.hull === true ? [-0.7, 0, 0.7] : [0];
       const src = gm.matrix.transformPoint(center.clone().addScaled(normal, halfLength));
       const dst = gm.matrix.transformPoint(center.clone().addScaled(normal, -halfLength));
