@@ -13,7 +13,7 @@ import useStateRef from "../hooks/use-state-ref";
 export default function useHandleEvents(w) {
 
   const state = useStateRef(/** @returns {State} */ () => ({
-    doorToNpcs: {},
+    doorToNearbyNpcs: {},
     doorToOffMesh: {},
     externalNpcs: new Set(),
     npcToAccess: {},
@@ -23,18 +23,19 @@ export default function useHandleEvents(w) {
     pressMenuFilters: [],
 
     canCloseDoor(door) {
-      const closeNpcs = state.doorToNpcs[door.gdKey];
+      const closeNpcs = state.doorToNearbyNpcs[door.gdKey];
       if (closeNpcs === undefined) {
         return true;
-      } else if (closeNpcs.inside.size > 0) {
+      // } else if (closeNpcs.inside.size > 0) {
+      } else if (state.doorToOffMesh[door.gdKey]?.length > 0) {
         return false;
-      } else if (closeNpcs.nearby.size === 0) {
+      } else if (closeNpcs.size === 0) {
         return true;
       } else if (door.auto === true && door.locked === false) {
         return false;
       }
 
-      for (const npcKey of closeNpcs.nearby) {
+      for (const npcKey of closeNpcs) {
         if (w.n[npcKey]?.s.target !== null)
           return false;
       }
@@ -238,7 +239,7 @@ export default function useHandleEvents(w) {
         }
         case "pre-setup-physics":
           // ℹ️ dev should handle partial correctness e.g. by pausing
-          state.doorToNpcs = {};
+          state.doorToNearbyNpcs = {};
           state.npcToDoors = {};
           break;
         case "try-close-door":
@@ -251,12 +252,12 @@ export default function useHandleEvents(w) {
 
       switch (e.key) {
         case "enter-collider":
-          if (e.type === 'nearby' || e.type === 'inside') {
+          if (e.type === 'nearby') {
             state.onEnterDoorCollider(e);
           }
           break;
         case "exit-collider":
-          if (e.type === 'nearby' || e.type === 'inside') {
+          if (e.type === 'nearby') {
             state.onExitDoorCollider(e);
           }
           break;
@@ -297,16 +298,32 @@ export default function useHandleEvents(w) {
 
           // force open door
           w.door.toggleDoorRaw(door, { open: true, access: true });
+
+          // 🚧 trigger exit-room
           break;
         }
-        case "exit-off-mesh": 
+        case "exit-off-mesh": {
           npc.s.offMesh = null;
           state.doorToOffMesh[e.offMesh.gdKey] = state.doorToOffMesh[e.offMesh.gdKey].filter(
             x => x.npcKey !== e.npcKey
           );
           (state.npcToDoors[e.npcKey] ??= { inside: null, nearby: new Set() }).inside = null;
           // w.nav.navMesh.setPolyFlags(state.npcToOffMesh[e.npcKey].offMeshRef, w.lib.navPolyFlag.walkable);
+
+          // 🚧 trigger enter-room
+          // const next = w.gmGraph.getOtherGmRoomId(door, prev.roomId);
+          // const gmRoomId = state.npcToRoom.get(e.npcKey);
+          // if (gmRoomId !== undefined) {
+          //   state.roomToNpcs[gmRoomId.gmId][gmRoomId.roomId].delete(e.npcKey);
+          // }
+          // state.npcToRoom.set(e.npcKey, next);
+          // (state.roomToNpcs[next.gmId][next.roomId] ??= new Set()).add(e.npcKey);
+
+          // w.events.next({ key: 'exit-room', npcKey: e.npcKey, ...prev });
+          // w.events.next({ key: 'enter-room', npcKey: e.npcKey, ...next });
+
           break;
+        }
         case "spawned": {
           if (npc.s.spawns === 1) {// 1st spawn
             const { x, y, z } = npc.getPosition();
@@ -390,7 +407,7 @@ export default function useHandleEvents(w) {
     onEnterDoorCollider(e) {
       if (e.type === 'nearby') {
         (state.npcToDoors[e.npcKey] ??= { nearby: new Set(), inside: null }).nearby.add(e.gdKey);
-        (state.doorToNpcs[e.gdKey] ??= { nearby: new Set(), inside: new Set() }).nearby.add(e.npcKey);
+        (state.doorToNearbyNpcs[e.gdKey] ??= new Set()).add(e.npcKey);
         
         const door = w.d[e.gdKey];
         if (door.open === true) {
@@ -427,15 +444,15 @@ export default function useHandleEvents(w) {
 
       if (e.type === 'nearby') {
         state.npcToDoors[e.npcKey].nearby.delete(e.gdKey);
-        const closeNpcs = state.doorToNpcs[e.gdKey];
-        closeNpcs.nearby.delete(e.npcKey);
+        const closeNpcs = state.doorToNearbyNpcs[e.gdKey];
+        closeNpcs.delete(e.npcKey);
 
         // ℹ️ try close door under conditions
         if (door.open === true) {
           return;
         } else if (door.locked === true) {
           state.tryCloseDoor(door.gmId, door.doorId)
-        } else if (door.auto === true && closeNpcs.nearby.size === 0) {
+        } else if (door.auto === true && closeNpcs.size === 0) {
           // if auto and none nearby, try close 
           state.tryCloseDoor(door.gmId, door.doorId);
         }
@@ -514,7 +531,7 @@ export default function useHandleEvents(w) {
       }
     },
     someNpcNearDoor(gdKey) {
-      return state.doorToNpcs[gdKey]?.nearby.size > 0;
+      return state.doorToNearbyNpcs[gdKey]?.size > 0;
     },
     toggleDoor(gdKey, opts) {
       const door = w.door.byKey[gdKey];
@@ -586,22 +603,22 @@ export default function useHandleEvents(w) {
 
 /**
  * @typedef State
- * @property {{ [gdKey: Geomorph.GmDoorKey]: Record<'nearby' | 'inside', Set<string>> }} doorToNpcs
+ * @property {{ [gdKey: Geomorph.GmDoorKey]: Set<string> }} doorToNearbyNpcs
  * Relates `Geomorph.GmDoorKey` to nearby/inside `npcKey`s
+ * @property {{ [gdKey: Geomorph.GmDoorKey]: NPC.OffMeshState[] }} doorToOffMesh
+ * Multiple agents can traverse a single offMeshConnection in the same direction at same direction.
+ * @property {Set<string>} externalNpcs
+ * `npcKey`s not inside any room
  * @property {{ [npcKey: string]: Set<string> }} npcToAccess
  * Relates `npcKey` to strings defining RegExp's matching `Geomorph.GmDoorKey`s
  * @property {{ [npcKey: string]: { inside: null | Geomorph.GmDoorKey; nearby: Set<Geomorph.GmDoorKey> }}} npcToDoors
  * Relate `npcKey` to (a) doorway we're inside, (b) nearby `Geomorph.GmDoorKey`s
- * @property {{ [gdKey: Geomorph.GmDoorKey]: NPC.OffMeshState[] }} doorToOffMesh
- * Multiple agents can traverse a single offMeshConnection in the same direction at same direction.
- * @property {((lastDownMeta: Geom.Meta) => boolean)[]} pressMenuFilters
- * Prevent ContextMenu on long press if any of these return `true`.
  * @property {Map<string, Geomorph.GmRoomId>} npcToRoom npcKey to gmRoomId
  * Relates `npcKey` to current room
+ * @property {((lastDownMeta: Geom.Meta) => boolean)[]} pressMenuFilters
+ * Prevent ContextMenu on long press if any of these return `true`.
  * @property {{[roomId: number]: Set<string>}[]} roomToNpcs
  * The "inverse" of npcToRoom i.e. `roomToNpc[gmId][roomId]` is a set of `npcKey`s
- * @property {Set<string>} externalNpcs
- * `npcKey`s not inside any room
  *
  * @property {(door: Geomorph.DoorState) => boolean} canCloseDoor
  * @property {(u: Geom.VectJson, v: Geom.VectJson, door: Geomorph.DoorState) => boolean} navSegIntersectsDoorway

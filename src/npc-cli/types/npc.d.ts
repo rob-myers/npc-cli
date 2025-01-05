@@ -141,7 +141,7 @@ declare namespace NPC {
 
   type BaseColliderEvent = (
     | { type: 'circle' | 'rect'; decorKey: string }
-    | { type: 'nearby' | 'inside' } & Geomorph.GmDoorId
+    | { type: 'nearby' } & Geomorph.GmDoorId
   );
 
   type PointerUpEvent = Pretty<BasePointerEvent & {
