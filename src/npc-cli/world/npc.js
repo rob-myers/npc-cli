@@ -469,13 +469,6 @@ export class Npc {
         return error(`${this.key}: bailed out of unknown offMeshConnection: ${JSON.stringify(this.position)}`);
       }
       
-      
-      // this.s.offMesh = {
-      //   orig: offMesh,
-      //   seg: 'init',
-      //   init: { x: offMesh.src.x - this.position.x, y: offMesh.src.z - this.position.z },
-      //   main: { x: offMesh.dst.x - offMesh.src.x, y: offMesh.dst.z - offMesh.src.z },
-      // };
       // 🔔 this.s.offMesh set in useHandleEvents
       this.w.events.next({ key: 'enter-off-mesh', npcKey: this.key, offMesh });
       return;
@@ -483,9 +476,7 @@ export class Npc {
     
     if (this.s.agentState === 2) {// exit offMeshConnection
       if (this.s.offMesh !== null) {
-        const { orig } = this.s.offMesh;
-        // this.s.offMesh = null; // 🚧
-        this.w.events.next({ key: 'exit-off-mesh', npcKey: this.key, offMesh: orig  });
+        this.w.events.next({ key: 'exit-off-mesh', npcKey: this.key, offMesh: this.s.offMesh.orig  });
       } else {
         warn(`${this.key}: exited offMeshConnection but this.s.offMesh already null`);
       }

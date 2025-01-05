@@ -4,7 +4,6 @@ import { defaultDoorCloseMs, npcNearUiDist, wallHeight } from "../service/const"
 import { pause, warn, debug } from "../service/generic";
 import { geom } from "../service/geom";
 import { npcToBodyKey } from "../service/rapier";
-import { toV3, toXZ } from "../service/three";
 import useStateRef from "../hooks/use-state-ref";
 
 /**
@@ -19,25 +18,19 @@ export default function useHandleEvents(w) {
     npcToAccess: {},
     npcToDoors: {},
     npcToRoom: new Map(),
-    roomToNpcs: [],
     pressMenuFilters: [],
+    roomToNpcs: [],
 
     canCloseDoor(door) {
       const closeNpcs = state.doorToNearbyNpcs[door.gdKey];
       if (closeNpcs === undefined) {
         return true;
-      // } else if (closeNpcs.inside.size > 0) {
       } else if (state.doorToOffMesh[door.gdKey]?.length > 0) {
-        return false;
+        return false; // nope: npc(s) using doorway
       } else if (closeNpcs.size === 0) {
         return true;
       } else if (door.auto === true && door.locked === false) {
-        return false;
-      }
-
-      for (const npcKey of closeNpcs) {
-        if (w.n[npcKey]?.s.target !== null)
-          return false;
+        return false; // nope: npc(s) trigger sensor
       }
       return true;
     },
@@ -148,20 +141,6 @@ export default function useHandleEvents(w) {
       // warn(`${'decodeObjectPick'}: failed to decode: ${JSON.stringify({ r, g, b, a })}`);
       return null;
     },
-    getNearbyNpcKeys(gmId, roomId, point) {
-      const npcKeys = /** @type {string[]} */ ([]);
-      try {
-        for (const npcKey of state.roomToNpcs[gmId][roomId] ?? []) {
-          const npcPoint = w.n[npcKey].getPoint();
-          if (Math.abs(npcPoint.x - point.x) < npcNearUiDist && Math.abs(npcPoint.y - point.y) < npcNearUiDist) {
-            npcKeys.push(npcKey);
-          }
-        }
-      } catch (e) {
-        console.error('getNearbyNpcKeys failed', e);
-      }
-      return npcKeys;
-    },
     async handleEvents(e) {
       // debug('useHandleEvents', e);
 
@@ -190,9 +169,8 @@ export default function useHandleEvents(w) {
           break;
         }
         case "nav-updated": {
-          const excludeDoorsFilter = w.crowd.getFilter(w.lib.queryFilterType.excludeDoors);
-          // walkable only, not unwalkable
-          excludeDoorsFilter.includeFlags = 2 ** 1;
+          // const excludeDoorsFilter = w.crowd.getFilter(w.lib.queryFilterType.excludeDoors);
+          // excludeDoorsFilter.includeFlags = 2 ** 1; // walkable only, not unwalkable
           break;
         }
         case "pointerdown":
@@ -240,6 +218,7 @@ export default function useHandleEvents(w) {
         case "pre-setup-physics":
           // ℹ️ dev should handle partial correctness e.g. by pausing
           state.doorToNearbyNpcs = {};
+          state.doorToOffMesh = {};
           state.npcToDoors = {};
           break;
         case "try-close-door":
@@ -323,14 +302,16 @@ export default function useHandleEvents(w) {
           break;
         }
         case "spawned": {
-          if (npc.s.spawns === 1) {// 1st spawn
+          if (npc.s.spawns === 1) {
+            // 1st spawn
             const { x, y, z } = npc.getPosition();
             w.physics.worker.postMessage({
               type: 'add-npcs',
               npcs: [{ npcKey: e.npcKey, position: { x, y, z } }],
             });
             npc.setLabel(e.npcKey);
-          } else {// Respawn
+          } else {
+            // Respawn
             const prevGrId = state.npcToRoom.get(npc.key);
             if (prevGrId !== undefined) {
               state.roomToNpcs[prevGrId.gmId][prevGrId.roomId]?.delete(npc.key);
@@ -551,8 +532,6 @@ export default function useHandleEvents(w) {
  * @property {(npcKey: string, gdKey: Geomorph.GmDoorKey) => boolean} npcCanAccess
  * @property {(npcKey: string, regexDef: string, act?: '+' | '-') => void} changeNpcAccess
  * @property {(r: number, g: number, b: number, a: number) => null | NPC.DecodedObjectPick} decodeObjectPick
- * @property {(gmId: number, roomId: number, point: Geom.VectJson) => string[]} getNearbyNpcKeys
- * Get possible meta acts e.g. may not be possible because npc not close enough
  * @property {(e: NPC.Event) => void} handleEvents
  * @property {(e: Extract<NPC.Event, { npcKey?: string }>) => void} handleNpcEvents
  * @property {(e: Extract<NPC.Event, { key: 'enter-collider'; type: 'nearby' }>) => void} onEnterDoorCollider

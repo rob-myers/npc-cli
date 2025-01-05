@@ -78,111 +78,6 @@
   - ✅ remove icon generation code from asset.js
   - Logger also records speech and provides link options
 
-- 🚧 try "off-mesh-connections" again
-  - ℹ️ fix push-other-npc-thru-door via separation weight
-  - ℹ️ fix lockers in bridge, fix diagonal doors
-  - ✅ add off-mesh connections and visualise them
-  - ✅ check separation weight cannot push agent into connection
-  - ✅ nav.worker iterates through all off-mesh connections
-  - ✅ nav.worker provides lookup from `{tile.minX},{tile.minZ}` to `{ offMeshPolysIds }`
-  - ✅ detect off-mesh connection enter/exit
-    - ✅ `enter-off-mesh`
-    - ✅ detect when over (`agent.state() === 2`)
-    - ✅ get off-mesh-connection
-    - ✅ can detect src --> dst
-    - ✅ `exit-off-mesh`
-  - ✅ can pause agent by temp setting maxSpeed 0 on exit offMeshConnection,
-    - `w n.rob.agent.updateParameters '{ maxSpeed: 0 }'`
-    - `w n.rob.agent.updateParameters '{ maxSpeed: 2 }'`
-  - ❌ can cancel just before traverse offMeshConnection?
-    - ℹ️ once agent has changed state we can't stop it
-    - ℹ️ https://github.com/isaac-mason/recast-navigation-js/discussions/458
-    - ℹ️ taking new approach i.e. forking recastnavigation
-    ```json
-    "@recast-navigation/core": "npm:@rob-myers/recast-navigation__core@0.38.0",
-    "@recast-navigation/generators": "npm:@rob-myers/recast-navigation__generators@0.38.0",
-    "@recast-navigation/three": "npm:@rob-myers/recast-navigation__three@0.38.0",
-    "@recast-navigation/wasm": "npm:@rob-myers/recast-navigation__wasm@0.38.0",
-    ```
-  - ✅ can see recastnavigation change on prod
-  - ✅ use tsconfig.json to alias @recast-navigation/*
-    ```js
-    // 🔔 might need to `rm -rf .cache` and `yarn build` to see changes,
-    //   at least when first switching to this approach
-    "paths": {
-        "@recast-navigation/core": ["../recast-navigation-js/packages/recast-navigation-core"],
-        "@recast-navigation/generators": ["../recast-navigation-js/packages/recast-navigation-generators"],
-        "@recast-navigation/three": ["../recast-navigation-js/packages/recast-navigation-three"],
-        "@recast-navigation/wasm": ["../recast-navigation-js/packages/recast-navigation-wasm"]
-    },
-    ```
-  - ✅ alter recastnavigation, so offMeshConnection are traversed more slowly
-    - ℹ️ faster to directly alter recast-navigation-js/packages/recast-navigation-wasm/recastnavigation then move the changes to recastnavigation repo before commit
-    - ✅ rebuild via `cd packages/recast-navigation-wasm && yarn build`
-    - ✅ improve both segments of path
-    - ✅ publish `@rob-myers/recast-navigation__wasm@0.38.1`:
-      - at recast-navigation-js repo, manually change version/dep-versions (core,generators,three,wasm) in package.json to 0.38.1
-      - then in repo root `yarn publish`
-      - then in this repo `rm -rf .cache` `npm i` and `yarn dev`
-  - ✅ bump versions in this repo and verify local build
-  - ✅ can stop agent smoothly on enter-off-mesh
-    - thanks to smoothening of off-mesh traversal and `crowd.raw.getAgentAnimation(agent.agentId)`
-  - ✅ fix slight jerk when exit offMeshConnection
-    - ✅ try specifying max velocity on leave
-    - ✅ publish new version `0.38.2`
-  - ✅ fix npc turn target for offMeshConnection
-    - ✅ works smoothly
-    - ✅ even smoother
-      - ℹ️ agent.raw.get_cornerVerts(0..2) is "src" even after entered
-      - ℹ️ "calcSmoothSteerDirection approach" does not seem to work
-        - uses next two corners relative to current position
-        - maybe it's making assumptions about how we steer
-      - ✅ linear incoming bezier
-    - ❌ could change final desired velocity in C++
-    - ℹ️ straightness of offMeshConnection lacks smoothness of original approach, but has many advantages
-    - ✅ clean
-      - npc.s.offMesh.seg is `initial` or `main`
-  - ✅ fix auto hull doors
-    - ✅ not opening when traversing offMeshConnection
-    - ✅ some npcs get stopped
-  - ✅ door opens before going through offMeshConnection
-  - ✅ agent stops if door inaccessible on `enter-off-mesh` event
-    - ✅ can temp set edge unwalkable
-      - `w nav.navMesh.setPolyFlags 4341761 1`
-      - `w nav.navMesh.setPolyFlags 4317185 1`
-    - ✅ track when offMeshConnection in use
-      - locally `npc.s.offMesh`
-      - globally in `w.nav.offMeshLookup`
-    - ✅ w.e.npcToOffMesh[npcKey]
-    - ✅ set edge unwalkable while in use
-    - ❌ stop any `enter-off-mesh` while in use
-  - ❌ do not navigate on `WARN getClosestNavigable failed:`
-    - irrelevant i.e. if click room inaccessible via queryFiltered offMeshConnection,
-      `findClosestPoint` will still successfully "find" this point
-  - ✅ try stop agent on `enter-off-mesh` rather than setting flags on poly offMeshRef
-    - ℹ️ setting flag has issues e.g. moveTo midway
-    - ✅ w.e.npcToOffMesh -> w.e.doorToOffMesh
-    - ✅ offMesh.reverse is offMesh lookup value in "reverse direction"
-    - ✅ `enter-off-mesh` stops agent if offMeshConnection in use
-  - ✅ fix events: must avoid "circular" offMesh values
-  - ✅ `enter-off-mesh` permits "one agent after another"
-    - ℹ️ cannot overwrite `offMesh.state` with 2 npcs traversing e.g. because used by `onTickAgentTurn`
-    - ✅ `offMesh.state` -> `npc.s.offMesh`
-    - ✅ permit traverse in same direction if most recent npc on main segment and doesn't currently collide
-  - ✅ in use off-mesh connection with door open cannot be closed
-    - ✅ offMeshConnection has srcGrKey and dstGrKey for exit/enter-room
-    - ✅ migrate exit/enter-room
-    - ✅ remove "inside" sensor
-  - 🚧 clean
-    - ✅ enter/exit-room event
-    - ✅ careful about hull door duplicate offMeshConnection
-  - ❌ could lerp whilst agent on off-mesh-connection
-  - ❌ could remove agent from crowd and move linearly
-  - ❌ navRectId --> connectedComponentId in gmGraph
-    - fixed by computing navRectId using navPolyWithDoors
-  - ❌ to avoid offMeshConnection backtracking could set `anim->startPoint` to be
-    closest point on edge `startPoint -> endPoint`
-
 
 - 🚧 pre next.js migration
   - ✅ finish/close wip todos
@@ -3410,3 +3305,109 @@ done
   - ✅ onchange label sprite-sheet, update *all* effected npc
   - ℹ️ could share uniforms via DataTexture
   - ℹ️ could avoid excessive computation by pre-building `rob_{1..200}`
+
+- ✅ try "off-mesh-connections" again
+  - ℹ️ fix push-other-npc-thru-door via separation weight
+  - ℹ️ fix lockers in bridge, fix diagonal doors
+  - ✅ add off-mesh connections and visualise them
+  - ✅ check separation weight cannot push agent into connection
+  - ✅ nav.worker iterates through all off-mesh connections
+  - ✅ nav.worker provides lookup from `{tile.minX},{tile.minZ}` to `{ offMeshPolysIds }`
+  - ✅ detect off-mesh connection enter/exit
+    - ✅ `enter-off-mesh`
+    - ✅ detect when over (`agent.state() === 2`)
+    - ✅ get off-mesh-connection
+    - ✅ can detect src --> dst
+    - ✅ `exit-off-mesh`
+  - ✅ can pause agent by temp setting maxSpeed 0 on exit offMeshConnection,
+    - `w n.rob.agent.updateParameters '{ maxSpeed: 0 }'`
+    - `w n.rob.agent.updateParameters '{ maxSpeed: 2 }'`
+  - ❌ can cancel just before traverse offMeshConnection?
+    - ℹ️ once agent has changed state we can't stop it
+    - ℹ️ https://github.com/isaac-mason/recast-navigation-js/discussions/458
+    - ℹ️ taking new approach i.e. forking recastnavigation
+    ```json
+    "@recast-navigation/core": "npm:@rob-myers/recast-navigation__core@0.38.0",
+    "@recast-navigation/generators": "npm:@rob-myers/recast-navigation__generators@0.38.0",
+    "@recast-navigation/three": "npm:@rob-myers/recast-navigation__three@0.38.0",
+    "@recast-navigation/wasm": "npm:@rob-myers/recast-navigation__wasm@0.38.0",
+    ```
+  - ✅ can see recastnavigation change on prod
+  - ✅ use tsconfig.json to alias @recast-navigation/*
+    ```js
+    // 🔔 might need to `rm -rf .cache` and `yarn build` to see changes,
+    //   at least when first switching to this approach
+    "paths": {
+        "@recast-navigation/core": ["../recast-navigation-js/packages/recast-navigation-core"],
+        "@recast-navigation/generators": ["../recast-navigation-js/packages/recast-navigation-generators"],
+        "@recast-navigation/three": ["../recast-navigation-js/packages/recast-navigation-three"],
+        "@recast-navigation/wasm": ["../recast-navigation-js/packages/recast-navigation-wasm"]
+    },
+    ```
+  - ✅ alter recastnavigation, so offMeshConnection are traversed more slowly
+    - ℹ️ faster to directly alter recast-navigation-js/packages/recast-navigation-wasm/recastnavigation then move the changes to recastnavigation repo before commit
+    - ✅ rebuild via `cd packages/recast-navigation-wasm && yarn build`
+    - ✅ improve both segments of path
+    - ✅ publish `@rob-myers/recast-navigation__wasm@0.38.1`:
+      - at recast-navigation-js repo, manually change version/dep-versions (core,generators,three,wasm) in package.json to 0.38.1
+      - then in repo root `yarn publish`
+      - then in this repo `rm -rf .cache` `npm i` and `yarn dev`
+  - ✅ bump versions in this repo and verify local build
+  - ✅ can stop agent smoothly on enter-off-mesh
+    - thanks to smoothening of off-mesh traversal and `crowd.raw.getAgentAnimation(agent.agentId)`
+  - ✅ fix slight jerk when exit offMeshConnection
+    - ✅ try specifying max velocity on leave
+    - ✅ publish new version `0.38.2`
+  - ✅ fix npc turn target for offMeshConnection
+    - ✅ works smoothly
+    - ✅ even smoother
+      - ℹ️ agent.raw.get_cornerVerts(0..2) is "src" even after entered
+      - ℹ️ "calcSmoothSteerDirection approach" does not seem to work
+        - uses next two corners relative to current position
+        - maybe it's making assumptions about how we steer
+      - ✅ linear incoming bezier
+    - ❌ could change final desired velocity in C++
+    - ℹ️ straightness of offMeshConnection lacks smoothness of original approach, but has many advantages
+    - ✅ clean
+      - npc.s.offMesh.seg is `initial` or `main`
+  - ✅ fix auto hull doors
+    - ✅ not opening when traversing offMeshConnection
+    - ✅ some npcs get stopped
+  - ✅ door opens before going through offMeshConnection
+  - ✅ agent stops if door inaccessible on `enter-off-mesh` event
+    - ✅ can temp set edge unwalkable
+      - `w nav.navMesh.setPolyFlags 4341761 1`
+      - `w nav.navMesh.setPolyFlags 4317185 1`
+    - ✅ track when offMeshConnection in use
+      - locally `npc.s.offMesh`
+      - globally in `w.nav.offMeshLookup`
+    - ✅ w.e.npcToOffMesh[npcKey]
+    - ✅ set edge unwalkable while in use
+    - ❌ stop any `enter-off-mesh` while in use
+  - ❌ do not navigate on `WARN getClosestNavigable failed:`
+    - irrelevant i.e. if click room inaccessible via queryFiltered offMeshConnection,
+      `findClosestPoint` will still successfully "find" this point
+  - ✅ try stop agent on `enter-off-mesh` rather than setting flags on poly offMeshRef
+    - ℹ️ setting flag has issues e.g. moveTo midway
+    - ✅ w.e.npcToOffMesh -> w.e.doorToOffMesh
+    - ✅ offMesh.reverse is offMesh lookup value in "reverse direction"
+    - ✅ `enter-off-mesh` stops agent if offMeshConnection in use
+  - ✅ fix events: must avoid "circular" offMesh values
+  - ✅ `enter-off-mesh` permits "one agent after another"
+    - ℹ️ cannot overwrite `offMesh.state` with 2 npcs traversing e.g. because used by `onTickAgentTurn`
+    - ✅ `offMesh.state` -> `npc.s.offMesh`
+    - ✅ permit traverse in same direction if most recent npc on main segment and doesn't currently collide
+  - ✅ in use off-mesh connection with door open cannot be closed
+    - ✅ offMeshConnection has srcGrKey and dstGrKey for exit/enter-room
+    - ✅ migrate exit/enter-room
+    - ✅ remove "inside" sensor
+  - ✅ clean
+    - ✅ enter/exit-room event
+    - ✅ careful about hull door duplicate offMeshConnection
+  - ❌ could lerp whilst agent on off-mesh-connection
+  - ❌ could remove agent from crowd and move linearly
+  - ❌ navRectId --> connectedComponentId in gmGraph
+    - fixed by computing navRectId using navPolyWithDoors
+  - ❌ to avoid offMeshConnection backtracking could set `anim->startPoint` to be
+    closest point on edge `startPoint -> endPoint`
+
