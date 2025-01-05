@@ -212,6 +212,10 @@ declare namespace NPC {
     key: keyof OffMeshLookup;
     /** Key of connection in reverse direction. */
     reverseKey: keyof OffMeshLookup;
+    /** Room corresponding to `src` */
+    srcGrKey: Geomorph.GmRoomKey;
+    /** Room corresponding to `dst` */
+    dstGrKey: Geomorph.GmRoomKey;
   };
 
   type OffMeshState = {

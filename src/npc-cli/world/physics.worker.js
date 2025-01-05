@@ -255,24 +255,25 @@ function createDoorSensors() {
           angle,
         },
       }),
-      createRigidBody({
-        type: RAPIER.RigidBodyType.Fixed,
-        geomDef: {
-          type: 'rect',
-          width: insideDef.width,
-          height: insideDef.height,
-        },
-        position: { x: center.x, y: wallHeight/2, z: center.y },
-        angle,
-        userData: {
-          bodyKey: insideKey,
-          bodyUid: addBodyKeyUidRelation(insideKey, state),
-          type: 'cuboid',
-          width: insideDef.width,
-          depth: insideDef.height,
-          angle,
-        },
-      }),
+      // 🚧 remove inside sensor
+      // createRigidBody({
+      //   type: RAPIER.RigidBodyType.Fixed,
+      //   geomDef: {
+      //     type: 'rect',
+      //     width: insideDef.width,
+      //     height: insideDef.height,
+      //   },
+      //   position: { x: center.x, y: wallHeight/2, z: center.y },
+      //   angle,
+      //   userData: {
+      //     bodyKey: insideKey,
+      //     bodyUid: addBodyKeyUidRelation(insideKey, state),
+      //     type: 'cuboid',
+      //     width: insideDef.width,
+      //     depth: insideDef.height,
+      //     angle,
+      //   },
+      // }),
     ]
   }));
 }

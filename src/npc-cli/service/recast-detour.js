@@ -608,7 +608,10 @@ export function customGenerateTileCache(
     }
   }
 
-  // Build lookup from `endpoint.xz` to { offMeshRef, src, dst }
+  /**
+   * offMeshConnection lookup,
+   * e.g. `1.5,3.5` -> `{ src, dst, offMeshRef, ... }`
+   */
   const offMeshLookup = /** @type {NPC.OffMeshLookup} */ ({});
   for (let tileIndex = 0; tileIndex < navMesh.getMaxTiles(); tileIndex++) {
     const tile = navMesh.getTile(tileIndex);
@@ -620,15 +623,21 @@ export function customGenerateTileCache(
     
     offMeshCons.forEach(c => {
       const offMeshRef = navMesh.encodePolyId(salt, tileIndex, c.poly);
+      // decode (gmId, doorId) from userId
       const gmId = c.userId & 255;
       const doorId = (c.userId >> 8) & 255;
       const gdId = helper.getGmDoorId(gmId, doorId);
       const src = { x: c.get_pos(0), y: 0, z: c.get_pos(2) };
       const dst = { x: c.get_pos(3), y: 0, z: c.get_pos(5) };
+      
       const srcKey = geom.to2DString(src.x, src.z);
       const dstKey = geom.to2DString(dst.x, dst.z);
-      offMeshLookup[srcKey] = { src, dst, offMeshRef, key: srcKey, reverseKey: dstKey, ...gdId };
-      offMeshLookup[dstKey] = { src: dst, dst: src, offMeshRef, key: dstKey, reverseKey: srcKey, ...gdId };
+      // 🔔 computed later in main thread
+      const srcGrKey = /** @type {Geomorph.GmRoomKey} */ ('');
+      const dstGrKey = /** @type {Geomorph.GmRoomKey} */ ('');
+
+      offMeshLookup[srcKey] = { src, dst, offMeshRef, key: srcKey, reverseKey: dstKey, ...gdId, srcGrKey, dstGrKey };
+      offMeshLookup[dstKey] = { src: dst, dst: src, offMeshRef, key: dstKey, reverseKey: srcKey, ...gdId, srcGrKey, dstGrKey };
     });
   }
 

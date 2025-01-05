@@ -170,7 +170,8 @@
     - ✅ `offMesh.state` -> `npc.s.offMesh`
     - ✅ permit traverse in same direction if most recent npc on main segment and doesn't currently collide
   - 🚧 in use off-mesh connection with door open cannot be closed
-    - 🚧 offMeshConnection has srcGrKey and dstGrKey for exit/enter-room
+    - ✅ offMeshConnection has srcGrKey and dstGrKey for exit/enter-room
+    - 🚧 migrate exit/enter-room
     - 🚧 remove "inside" sensor
   - clean
     - enter/exit-room event

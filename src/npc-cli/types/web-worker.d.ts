@@ -139,7 +139,7 @@ declare namespace WW {
 
   type PhysicsParsedBodyKey = (
     | ['npc' | 'circle' | 'rect', string]
-    | ['nearby' | 'inside', Geomorph.GmDoorKey]
+    | ['nearby', Geomorph.GmDoorKey]
   );
 
   type PhysicsBodyGeom = (
