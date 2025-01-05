@@ -293,19 +293,20 @@ export default function useHandleEvents(w) {
             orig: offMesh,
           };
           (state.doorToOffMesh[offMesh.gdKey] ??= []).push(npc.s.offMesh);
+          (state.npcToDoors[e.npcKey] ??= { inside: null, nearby: new Set() }).inside = offMesh.gdKey;
 
           // force open door
           w.door.toggleDoorRaw(door, { open: true, access: true });
           break;
         }
-        case "exit-off-mesh": {
+        case "exit-off-mesh": 
           npc.s.offMesh = null;
           state.doorToOffMesh[e.offMesh.gdKey] = state.doorToOffMesh[e.offMesh.gdKey].filter(
             x => x.npcKey !== e.npcKey
           );
+          (state.npcToDoors[e.npcKey] ??= { inside: null, nearby: new Set() }).inside = null;
           // w.nav.navMesh.setPolyFlags(state.npcToOffMesh[e.npcKey].offMeshRef, w.lib.navPolyFlag.walkable);
           break;
-        }
         case "spawned": {
           if (npc.s.spawns === 1) {// 1st spawn
             const { x, y, z } = npc.getPosition();
@@ -330,8 +331,6 @@ export default function useHandleEvents(w) {
           break;
         }
         case "removed-npc": {
-          const nearbyGdKeys = Array.from(state.npcToDoors[e.npcKey]?.nearby ?? []);
-
           w.physics.worker.postMessage({
             type: 'remove-bodies',
             bodyKeys: [npcToBodyKey(e.npcKey)],
@@ -346,12 +345,13 @@ export default function useHandleEvents(w) {
             state.externalNpcs.delete(e.key);
           }
 
-          for (const gdKey of nearbyGdKeys) {
-            const index = state.doorToOffMesh[gdKey]?.findIndex(x => x.npcKey === e.npcKey);
-            if (index >= 0) {
-              state.doorToOffMesh[gdKey].splice(index, 1);
-              break; // e.npcKey in at most one door
-            }
+          // npc might have been inside a doorway
+          const gdKey = state.npcToDoors[e.npcKey]?.inside;
+          if (typeof gdKey === 'string') {
+            state.npcToDoors[e.npcKey].inside = null;
+            state.doorToOffMesh[gdKey] = (state.doorToOffMesh[gdKey] ?? []).filter(
+              x => x.npcKey !== e.npcKey
+            );
           }
 
           w.c.delete(e.npcKey);
@@ -389,7 +389,7 @@ export default function useHandleEvents(w) {
     },
     onEnterDoorCollider(e) {
       if (e.type === 'nearby') {
-        (state.npcToDoors[e.npcKey] ??= { nearby: new Set(), inside: new Set() }).nearby.add(e.gdKey);
+        (state.npcToDoors[e.npcKey] ??= { nearby: new Set(), inside: null }).nearby.add(e.gdKey);
         (state.doorToNpcs[e.gdKey] ??= { nearby: new Set(), inside: new Set() }).nearby.add(e.npcKey);
         
         const door = w.d[e.gdKey];
@@ -495,12 +495,8 @@ export default function useHandleEvents(w) {
       for (const gdKey of closeDoors?.nearby ?? []) {// npc may never have been close to any door
         const door = w.door.byKey[gdKey];
         state.onExitDoorCollider({ key: 'exit-collider', type: 'nearby', gdKey, gmId: door.gmId, doorId: door.doorId, npcKey });
-        if (closeDoors.inside.delete(gdKey) === true) {
-          state.onExitDoorCollider({ key: 'exit-collider', type: 'inside', gdKey, gmId: door.gmId, doorId: door.doorId, npcKey });
-        }
       }
       state.npcToDoors[npcKey]?.nearby.clear();
-      state.npcToDoors[npcKey]?.inside.clear();
     },
     showDefaultContextMenu() {
       const { lastDown } = w.view;
@@ -524,7 +520,7 @@ export default function useHandleEvents(w) {
       const door = w.door.byKey[gdKey];
 
       // clear if already closed and offMeshConnection free
-      opts.clear = door.open === false || state.doorToOffMesh[gdKey] === undefined;
+      opts.clear = door.open === false || !(state.doorToOffMesh[gdKey]?.length > 0);
       
       opts.access ??= (
         opts.npcKey === undefined
@@ -594,8 +590,8 @@ export default function useHandleEvents(w) {
  * Relates `Geomorph.GmDoorKey` to nearby/inside `npcKey`s
  * @property {{ [npcKey: string]: Set<string> }} npcToAccess
  * Relates `npcKey` to strings defining RegExp's matching `Geomorph.GmDoorKey`s
- * @property {{ [npcKey: string]: Record<'nearby' | 'inside', Set<Geomorph.GmDoorKey>> }} npcToDoors
- * Relate `npcKey` to nearby `Geomorph.GmDoorKey`s
+ * @property {{ [npcKey: string]: { inside: null | Geomorph.GmDoorKey; nearby: Set<Geomorph.GmDoorKey> }}} npcToDoors
+ * Relate `npcKey` to (a) doorway we're inside, (b) nearby `Geomorph.GmDoorKey`s
  * @property {{ [gdKey: Geomorph.GmDoorKey]: NPC.OffMeshState[] }} doorToOffMesh
  * Multiple agents can traverse a single offMeshConnection in the same direction at same direction.
  * @property {((lastDownMeta: Geom.Meta) => boolean)[]} pressMenuFilters
