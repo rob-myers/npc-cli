@@ -429,7 +429,7 @@ export default function World(props) {
  * @property {import("./Doors").State['byKey']} d
  * Shortcut for `w.door.byKey`
  * @property {import("./ContextMenus").State} c
- * @property {import("./cm-instance").CMInstance} cm
+ * @property {NPC.DefaultContextMenuType} cm
  *
  * @property {TexArray} texFloor
  * @property {TexArray} texCeil

@@ -3,14 +3,10 @@ import { stringify as javascriptStringify } from 'javascript-stringify';
 import { objectScale } from "../components/Html3d";
 import { warn } from "../service/generic";
 
-// 🚧 BaseContextMenu
-// 🚧 DefaultContextMenu extends BaseContextMenu
-// 🚧 NpcSpeechBubble extends BaseContextMenu
-
 /**
  * 🔔 Avoid `foo = (...bar) => baz` because incompatible with our approach to HMR.
  */
-export class CMInstance {
+class BaseContextMenu {
 
   baseScale = /** @type {undefined | number} */ (undefined);
   /** For violating React.memo */
@@ -47,7 +43,7 @@ export class CMInstance {
   /**
    * @param {string} key
    * @param {import('./World').State} w
-   * @param {Partial<Pick<CMInstance, 'showKvs' | 'npcKey' | 'pinned'>>} opts
+   * @param {Partial<Pick<BaseContextMenu, 'showKvs' | 'npcKey' | 'pinned'>>} opts
    */
   constructor(key, w, opts) {
     /** @type {string} */ this.key = key;
@@ -211,6 +207,21 @@ export class CMInstance {
   update = noop
 }
 
+export class DefaultContextMenu extends BaseContextMenu {
+  // 🚧
+}
+
+export class NpcSpeechBubble extends BaseContextMenu {
+  // 🚧
+}
+
+/**
+ * @typedef {(
+ *   | DefaultContextMenu
+ *   | NpcSpeechBubble
+ * )} ContextMenuType
+ */
+
 /**
  * Used by "default" and "@{npcKey}"
  * @typedef ContextMenuUi
@@ -220,5 +231,4 @@ export class CMInstance {
  * @property {string} [speech]
  */
 
-const tmpVector1 = new THREE.Vector3();
 function noop() {};

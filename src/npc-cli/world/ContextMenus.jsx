@@ -1,7 +1,7 @@
 import React from "react";
 
 import { mapValues, tryLocalStorageGetParsed, tryLocalStorageSet } from "../service/generic";
-import { CMInstance } from "./cm-instance";
+import { DefaultContextMenu, NpcSpeechBubble } from "./context-menu";
 import { WorldContext } from "./world-context";
 import useStateRef from "../hooks/use-state-ref";
 import useUpdate from "../hooks/use-update";
@@ -23,7 +23,7 @@ export default function ContextMenus() {
 
     create(npcKey) {// assumes non-existent
       if (npcKey in w.n) {
-        const cm = state.lookup[npcKey] = new CMInstance(npcKey, w, {
+        const cm = state.lookup[npcKey] = new NpcSpeechBubble(npcKey, w, {
           showKvs: false,
           pinned: true,
           npcKey,
@@ -68,11 +68,14 @@ export default function ContextMenus() {
   }));
 
   w.c = state;
-  w.cm = state.lookup.default ??= new CMInstance('default', w, { showKvs: true });
+  w.cm = state.lookup.default ??= new DefaultContextMenu('default', w, { showKvs: true });
 
   React.useMemo(() => {// HMR
     process.env.NODE_ENV === 'development' && Object.values(state.lookup).forEach(cm => {
-      state.lookup[cm.key] = Object.assign(new CMInstance(cm.key, cm.w, cm), {...cm});
+      state.lookup[cm.key] = cm instanceof DefaultContextMenu
+        ? Object.assign(new DefaultContextMenu(cm.key, cm.w, cm), {...cm})
+        : Object.assign(new NpcSpeechBubble(cm.key, cm.w, cm), {...cm})
+      ;
       cm.dispose();
     });
   }, []);
@@ -86,10 +89,10 @@ export default function ContextMenus() {
 
 /**
  * @typedef State
- * @property {{ [cmKey: string]: CMInstance }} lookup
- * @property {{ [cmKey: string]: Pick<CMInstance, 'docked' | 'pinned' | 'showKvs'> }} savedOpts
+ * @property {{ [cmKey: string]: NPC.ContextMenuType }} lookup
+ * @property {{ [cmKey: string]: Pick<NPC.ContextMenuType, 'docked' | 'pinned' | 'showKvs'> }} savedOpts
  *
- * @property {(npcKey: string) => CMInstance} create Add speech bubble for specific npc
+ * @property {(npcKey: string) => NpcSpeechBubble} create Add speech bubble for specific npc
  * @property {(...npcKeys: string[]) => void} delete
  * @property {(npcKey: string, ...parts: string[]) => void} say
  * @property {() => void} saveOpts
@@ -132,5 +135,5 @@ function ContextMenu({ cm }) {
 
 /**
  * @typedef ContextMenuProps
- * @property {CMInstance} cm
+ * @property {NPC.ContextMenuType} cm
  */
