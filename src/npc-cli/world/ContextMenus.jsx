@@ -47,8 +47,11 @@ export default function ContextMenus() {
       }
       update();
     },
+    get(npcKey) {
+      return /** @type {NpcSpeechBubble} */ (state.lookup[npcKey]);
+    },
     say(npcKey, ...parts) {// ensure/change/delete
-      const cm = state.lookup[npcKey] || state.create(npcKey);
+      const cm = state.get(npcKey) || state.create(npcKey);
       const speech = parts.join(' ').trim();
 
       if (speech === '') {// delete
@@ -68,7 +71,9 @@ export default function ContextMenus() {
   }));
 
   w.c = state;
-  w.cm = state.lookup.default ??= new DefaultContextMenu('default', w, { showKvs: true });
+  w.cm = /** @type {DefaultContextMenu} */ (
+    state.lookup.default ??= new DefaultContextMenu('default', w, { showKvs: true })
+  );
 
   React.useMemo(() => {// HMR
     process.env.NODE_ENV === 'development' && Object.values(state.lookup).forEach(cm => {
@@ -94,6 +99,7 @@ export default function ContextMenus() {
  *
  * @property {(npcKey: string) => NpcSpeechBubble} create Add speech bubble for specific npc
  * @property {(...npcKeys: string[]) => void} delete
+ * @property {(npcKey: string) => NpcSpeechBubble} get
  * @property {(npcKey: string, ...parts: string[]) => void} say
  * @property {() => void} saveOpts
  */
@@ -125,7 +131,7 @@ function ContextMenu({ cm }) {
       tracked={cm.tracked}
       zIndex={cm.key === 'default' ? 1 : undefined}
     >
-      {cm.key === 'default'
+      {cm instanceof DefaultContextMenu
         ? <DefaultContextMenuUi cm={cm} />
         : <NpcSpeechBubbleUi cm={cm} />
       }

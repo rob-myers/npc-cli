@@ -432,12 +432,14 @@ export default function useHandleEvents(w) {
       } else if ('npcKey' in lastDown.meta) {
         const { npcKey } = lastDown.meta;
         w.cm.setTracked(w.n[npcKey].m.group);
-        w.debug.setPickIndicator();  
-        w.cm.show(lastDown);
+        w.debug.setPickIndicator();
+        w.cm.setContext(lastDown);
+        w.cm.show();
       } else {
         w.cm.setTracked();
-        w.debug.setPickIndicator(lastDown);  
-        w.cm.show(lastDown);
+        w.debug.setPickIndicator(lastDown);
+        w.cm.setContext(lastDown);
+        w.cm.show();
       }
     },
     someNpcNearDoor(gdKey) {

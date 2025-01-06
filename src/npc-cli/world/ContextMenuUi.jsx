@@ -3,7 +3,7 @@ import { css } from "@emotion/css";
 import { PopUp } from "../components/PopUp";
 
 /**
- * @param {import("./ContextMenus").ContextMenuProps} props 
+ * @param {{ cm: NPC.DefaultContextMenuType }} props 
  */
 export function DefaultContextMenuUi({ cm }) {
 
@@ -182,7 +182,7 @@ const popUpInfoCss = css`
 ;`
 
 /**
- * @param {import("./ContextMenus").ContextMenuProps} props 
+ * @param {{ cm: NPC.NpcSpeechBubbleType }} props 
  */
 export function NpcSpeechBubbleUi({ cm }) {
   return (

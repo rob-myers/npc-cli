@@ -21,24 +21,8 @@ class BaseContextMenu {
   scaled = false;
   showKvs = false;
 
-  //#region default context menu
   /** @type {import('../components/Html3d').State} */
   html3d = /** @type {*} */ (null);
-  /** @type {import('../components/PopUp').State} */
-  popUp = /** @type {*} */ (null);
-
-  /** @type {ContextMenuUi['kvs']} */
-  kvs = [];
-  /** @type {ContextMenuUi['links']} */
-  links = [];
-  match = /** @type {{ [matcherKey: string]: NPC.ContextMenuMatcher}} */ ({});
-  meta = /** @type {Geom.Meta} */ ({});
-  npcKey = /** @type {undefined | string} */ (undefined);
-  selectNpcOpts = /** @type {any[]} */ ([]); // 🚧
-  //#endregion
-
-  /** @type {ContextMenuUi['speech']} */
-  speech = undefined;
 
   /**
    * @param {string} key
@@ -51,9 +35,8 @@ class BaseContextMenu {
 
     const savedOpts = w.c.savedOpts[key] ?? {};
     this.pinned = opts.pinned ?? savedOpts.pinned ?? w.smallViewport;
-    this.scaled = false,
-    this.showKvs = opts.showKvs ?? savedOpts.showKvs ?? false,
-    this.npcKey = opts.npcKey;
+    this.scaled = false;
+    this.showKvs = opts.showKvs ?? savedOpts.showKvs ?? false;
   }
 
   /** @param {Geom.Meta} meta */
@@ -70,21 +53,6 @@ class BaseContextMenu {
       const vStr = v === true ? '' : typeof v === 'string' ? v : javascriptStringify(v) ?? '';
       return { k, v: vStr, length: k.length + (vStr === '' ? 0 : 1) + vStr.length };
     }).sort((a, b) => a.length < b.length ? -1 : 1);
-  }
-
-  /**
-   * Apply matchers, assuming `this.meta` is up-to-date.
-   */
-  computeLinks() {
-    let suppressKeys = /** @type {string[]} */ ([]);
-    const keyToLink = Object.values(this.match).reduce((agg, matcher) => {
-      const { showLinks, hideKeys } = matcher(this);
-      showLinks?.forEach(link => agg[link.key] = link);
-      suppressKeys.push(...hideKeys ?? []);
-      return agg;
-    }, /** @type {{ [linkKey: string]: NPC.ContextMenuLink }} */ ({}));
-    suppressKeys.forEach(key => delete keyToLink[key]);
-    this.links = Object.values(keyToLink);
   }
 
   dispose() {
@@ -144,26 +112,10 @@ class BaseContextMenu {
       : delete this.popUp;
   }
 
-  /**
-   * Context is world position and meta concerning said position
-   * @param {NPC.ContextMenuContextDef} ct 
-   */
-  setContext({ position, meta }) {
-    this.meta = meta;
-    this.position = position.toArray();
-    this.computeKvsFromMeta(meta);
-    this.computeLinks();
-  }
-
   /** @param {string} [npcKey] */
   setNpc(npcKey) {
     this.npcKey = npcKey;
     this.update();
-  }
-
-  /** @param {number} opacity  */
-  setOpacity(opacity) {
-    this.html3d.rootDiv.style.opacity = `${opacity}`;
   }
 
   /**
@@ -171,15 +123,6 @@ class BaseContextMenu {
    */
   setTracked(input) {
     this.tracked = input;
-  }
-
-  /** @param {NPC.ContextMenuContextDef} [ct] */
-  show(ct) {
-    if (ct !== undefined) {
-      this.setContext(ct);
-    }
-    this.open = true;
-    this.update();
   }
 
   toggleDocked() {
@@ -208,11 +151,71 @@ class BaseContextMenu {
 }
 
 export class DefaultContextMenu extends BaseContextMenu {
-  // 🚧
+  /** @type {import('../components/PopUp').State} */
+  popUp = /** @type {*} */ (null);
+
+  /** @type {ContextMenuUi['kvs']} */
+  kvs = [];
+  /** @type {ContextMenuUi['links']} */
+  links = [];
+  match = /** @type {{ [matcherKey: string]: NPC.ContextMenuMatcher}} */ ({});
+  meta = /** @type {Geom.Meta} */ ({});
+  npcKey = /** @type {undefined | string} */ (undefined);
+
+  selectNpcOpts = /** @type {any[]} */ ([]); // 🚧
+
+  /**
+   * @param {string} key
+   * @param {import('./World').State} w
+   * @param {Partial<Pick<BaseContextMenu, 'showKvs' | 'npcKey' | 'pinned'>>} opts
+   */
+  constructor(key, w, opts) {
+    super(key, w, opts);
+
+    this.npcKey = opts.npcKey;
+  }
+
+  /**
+   * Apply matchers, assuming `this.meta` is up-to-date.
+   */
+  computeLinks() {
+    let suppressKeys = /** @type {string[]} */ ([]);
+    const keyToLink = Object.values(this.match).reduce((agg, matcher) => {
+      const { showLinks, hideKeys } = matcher(this);
+      showLinks?.forEach(link => agg[link.key] = link);
+      suppressKeys.push(...hideKeys ?? []);
+      return agg;
+    }, /** @type {{ [linkKey: string]: NPC.ContextMenuLink }} */ ({}));
+    
+    suppressKeys.forEach(key => delete keyToLink[key]);
+    this.links = Object.values(keyToLink);
+  }
+
+  /**
+   * Context is world position and meta concerning said position
+   * @param {NPC.ContextMenuContextDef} ct 
+   */
+  setContext({ position, meta }) {
+    this.meta = meta;
+    this.position = position.toArray();
+    this.computeKvsFromMeta(meta);
+    this.computeLinks();
+  }
+
+  /** @param {number} opacity  */
+  setOpacity(opacity) {
+    this.html3d.rootDiv.style.opacity = `${opacity}`;
+  }
+
+  show() {
+    this.open = true;
+    this.update();
+  }
 }
 
 export class NpcSpeechBubble extends BaseContextMenu {
-  // 🚧
+  /** @type {string | undefined} */
+  speech = undefined;
 }
 
 /**
