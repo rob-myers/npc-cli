@@ -67,17 +67,18 @@
       - ✅ no links
       - ✅ `w.c.say {npcKey} {words}` ensures
       - ✅ `w.c.say {npcKey}` deletes
-    - 🚧 links can be npc-sensitive
+    - ❌ links can be npc-sensitive
       - ✅ `cm.setNpc()` `cm.setNpc('rob')` and show
       - ✅ can remove by clicking it
       - ✅ temp: profile-1: triggered on select npc
       - ✅ triggered via long click npc
       - ✅ handleContextMenu accounts for `cm.npcKey`
-      - 🚧 separate classes for DefaultContextMenu and SpeechBubble
-      - 🚧 use custom select instead
-        - choose none or npcKey
-        - can refresh via button "refresh"
-      - clean
+      - will use custom select instead
+    - 🚧 separate classes for DefaultContextMenu and SpeechBubble
+    - 🚧 use custom select instead
+      - choose none or npcKey
+      - can refresh via button "refresh"
+    - clean
   - ✅ remove icon generation code from asset.js
   - Fix npc speech height: sit, lie
   - Logger also records speech and provides link options

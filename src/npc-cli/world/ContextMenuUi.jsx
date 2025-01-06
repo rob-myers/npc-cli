@@ -5,7 +5,7 @@ import { PopUp } from "../components/PopUp";
 /**
  * @param {import("./ContextMenus").ContextMenuProps} props 
  */
-export function DefaultContextMenu({ cm }) {
+export function DefaultContextMenuUi({ cm }) {
 
   return <>
   
@@ -184,7 +184,7 @@ const popUpInfoCss = css`
 /**
  * @param {import("./ContextMenus").ContextMenuProps} props 
  */
-export function NpcContextMenu({ cm }) {
+export function NpcSpeechBubbleUi({ cm }) {
   return (
     <div className="bubble">
       <div className="speech">

@@ -3,6 +3,10 @@ import { stringify as javascriptStringify } from 'javascript-stringify';
 import { objectScale } from "../components/Html3d";
 import { warn } from "../service/generic";
 
+// 🚧 BaseContextMenu
+// 🚧 DefaultContextMenu extends BaseContextMenu
+// 🚧 NpcSpeechBubble extends BaseContextMenu
+
 /**
  * 🔔 Avoid `foo = (...bar) => baz` because incompatible with our approach to HMR.
  */

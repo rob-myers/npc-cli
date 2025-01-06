@@ -6,7 +6,7 @@ import { WorldContext } from "./world-context";
 import useStateRef from "../hooks/use-state-ref";
 import useUpdate from "../hooks/use-update";
 import { Html3d } from "../components/Html3d";
-import { DefaultContextMenu, defaultContextMenuCss, NpcContextMenu, npcContextMenuCss } from "./ContextMenuUi";
+import { DefaultContextMenuUi, defaultContextMenuCss, NpcSpeechBubbleUi, npcContextMenuCss } from "./ContextMenuUi";
 
 /**
  * We support two kinds of context menu:
@@ -123,8 +123,8 @@ function ContextMenu({ cm }) {
       zIndex={cm.key === 'default' ? 1 : undefined}
     >
       {cm.key === 'default'
-        ? <DefaultContextMenu cm={cm} />
-        : <NpcContextMenu cm={cm} />
+        ? <DefaultContextMenuUi cm={cm} />
+        : <NpcSpeechBubbleUi cm={cm} />
       }
     </Html3d>
   );
