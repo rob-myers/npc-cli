@@ -6,12 +6,13 @@ import { WorldContext } from "./world-context";
 import useStateRef from "../hooks/use-state-ref";
 import useUpdate from "../hooks/use-update";
 import { Html3d } from "../components/Html3d";
-import { DefaultContextMenuUi, defaultContextMenuCss, NpcSpeechBubbleUi, npcContextMenuCss } from "./ContextMenuUi";
+import { DefaultContextMenu as DefaultContextMenuUi, defaultContextMenuCss } from "./DefaultContextMenu";
+import { NpcSpeechBubble as NpcSpeechBubbleUi, npcContextMenuCss } from "./NpcSpeechBubble";
 
 /**
  * We support two kinds of context menu:
- * - "default" i.e. default context menu a.k.a. `w.cm`
- * - "{npcKey}" i.e. npc speech bubbles
+ * - default context menu, key=default, path=`w.cm`
+ * - npc speech bubble, key={npcKey}, path=`w.c.lookup.{npcKey}`
  */
 export default function ContextMenus() {
 
@@ -104,9 +105,6 @@ export default function ContextMenus() {
  * @property {() => void} saveOpts
  */
 
-/** @type {React.MemoExoticComponent<(props: ContextMenuProps & { epochMs: number }) => JSX.Element>} */
-const MemoizedContextMenu = React.memo(ContextMenu);
-
 /**
  * @param {ContextMenuProps} props
  */
@@ -143,3 +141,6 @@ function ContextMenu({ cm }) {
  * @typedef ContextMenuProps
  * @property {NPC.ContextMenuType} cm
  */
+
+/** @type {React.MemoExoticComponent<(props: ContextMenuProps & { epochMs: number }) => JSX.Element>} */
+const MemoizedContextMenu = React.memo(ContextMenu);
