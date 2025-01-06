@@ -1,5 +1,5 @@
 import React from "react";
-import { css } from "@emotion/css";
+import { css, cx } from "@emotion/css";
 import { PopUp } from "../components/PopUp";
 
 /**
@@ -7,13 +7,13 @@ import { PopUp } from "../components/PopUp";
  */
 export function DefaultContextMenu({ cm }) {
 
-  return <>
-  
-    <div className="links" onClick={cm.onClickLink.bind(cm)}>
+  return <div onClick={cm.onClickLink.bind(cm)}>
 
-      {cm.npcKey !== undefined && <div className="npc-key" data-key="clear-npc">
-        {'['}<span>{cm.npcKey}</span>{']'}
-      </div>}
+    <div className={cx({ hidden: cm.npcKey === undefined }, "npc-key")} data-key="clear-npc">
+      @<span>{cm.npcKey}</span>
+    </div>
+  
+    <div className="links">
 
       <button data-key="toggle-docked">
         {cm.docked ? 'embed' : 'dock'}
@@ -23,15 +23,23 @@ export function DefaultContextMenu({ cm }) {
         ref={cm.popUpRef.bind(cm)}
         infoClassName={popUpInfoCss}
         label="opts"
+        onChange={cm.onTogglePopup.bind(cm)}
+        width={200}
       >
-        {/* 🚧 choose an npc, or "no npc" */}
-        <select className="select-npc" defaultValue="foo">
+
+        <select
+          className="select-npc"
+          defaultValue=""
+          onChange={cm.onSelectNpc.bind(cm)}
+          value={cm.npcKey ?? ""}
+        >
           <option value="">no npc</option>
-          <option value="foo">foo</option>
-          <option value="bar">bar</option>
-          <option value="baz">baz</option>
+          {cm.selectNpcKeys.map(npcKey => 
+            <option value={npcKey}>{npcKey}</option>
+          )}
         </select>
-        <button>
+
+        <button onClick={cm.refreshPopup.bind(cm)}>
           refresh
         </button>
       </PopUp>
@@ -65,9 +73,8 @@ export function DefaultContextMenu({ cm }) {
       ))}
     </div>}
 
-  </>;
+  </div>;
 }
-
 
 /** @type {Record<'embedded' | 'docked', NPC.ContextMenuLink[]>} */
 const topLinks = {
@@ -98,6 +105,24 @@ export const defaultContextMenuCss = css`
     border: 1px solid #dddddd77;
   }
 
+  .npc-key {
+    cursor: pointer;
+    position: absolute;
+    top: -24px;
+    height: 24px;
+
+    background-color: black;
+    border: 1px solid #dddddd77;
+    span {
+      color: #99ff99;
+      pointer-events: none;
+    }
+    padding: 0 5px;
+  }
+  .npc-key.hidden {
+    display: none;
+  }
+
   &.docked {
     transform: unset !important;
     top: unset;
@@ -108,15 +133,6 @@ export const defaultContextMenuCss = css`
     background-color: black;
     color: white;
     padding: 4px;
-  }
-  .npc-key {
-    cursor: pointer;
-
-    span {
-      color: #99ff99;
-      pointer-events: none;
-    }
-    padding: 5px 6px;
   }
 
   color: #fff;
@@ -174,6 +190,7 @@ const popUpInfoCss = css`
   display: flex;
   justify-content: space-around;
   align-items: center;
+  font-size: small;
 
   select {
     border: 1px solid #555;

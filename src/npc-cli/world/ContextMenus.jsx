@@ -78,7 +78,7 @@ export default function ContextMenus() {
 
   React.useMemo(() => {// HMR
     process.env.NODE_ENV === 'development' && Object.values(state.lookup).forEach(cm => {
-      state.lookup[cm.key] = cm instanceof DefaultContextMenu
+      state.lookup[cm.key] = cm.key === 'default'
         ? Object.assign(new DefaultContextMenu(cm.key, cm.w, cm), {...cm})
         : Object.assign(new NpcSpeechBubble(cm.key, cm.w, cm), {...cm})
       ;

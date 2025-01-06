@@ -74,11 +74,12 @@
       - ✅ triggered via long click npc
       - ✅ handleContextMenu accounts for `cm.npcKey`
       - will use custom select instead
-    - 🚧 separate classes for DefaultContextMenu and SpeechBubble
-    - 🚧 use custom select instead
+    - ✅ separate classes for DefaultContextMenu and SpeechBubble
+    - ✅ use custom select instead
       - choose none or npcKey
       - can refresh via button "refresh"
-    - clean
+      - profile-1 `handleContextMenu` takes npcKey into account
+    - 🚧 clean
   - ✅ remove icon generation code from asset.js
   - Fix npc speech height: sit, lie
   - Logger also records speech and provides link options

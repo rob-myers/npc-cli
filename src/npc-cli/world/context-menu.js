@@ -162,7 +162,7 @@ export class DefaultContextMenu extends BaseContextMenu {
   meta = /** @type {Geom.Meta} */ ({});
   npcKey = /** @type {undefined | string} */ (undefined);
 
-  selectNpcOpts = /** @type {any[]} */ ([]); // 🚧
+  selectNpcKeys = /** @type {string[]} */ ([]);
 
   /**
    * @param {string} key
@@ -189,6 +189,27 @@ export class DefaultContextMenu extends BaseContextMenu {
     
     suppressKeys.forEach(key => delete keyToLink[key]);
     this.links = Object.values(keyToLink);
+  }
+
+  /**
+   * @param {React.ChangeEvent<HTMLSelectElement> } e 
+   */
+  onSelectNpc(e) {
+    const { value } = e.currentTarget;
+    this.npcKey = value in this.w.n ? value : undefined;
+    this.refreshPopup();
+  }
+
+  /** @param {boolean} willOpen  */
+  onTogglePopup(willOpen) {
+    if (willOpen) {
+      this.refreshPopup();
+    }
+  }
+  
+  refreshPopup() {
+    this.selectNpcKeys = Object.keys(this.w.n);
+    this.update();
   }
 
   /**
