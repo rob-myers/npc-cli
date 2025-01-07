@@ -104,7 +104,6 @@ export default function WorldWorkers() {
 
   React.useEffect(() => {// restart workers
     if (w.threeReady && w.hash.full) {
-      w.nav.offMeshDefs = computeOffMeshConnectionsParams(w.gms, w.gmGraph);
       w.nav.worker = new Worker(new URL("./nav.worker", import.meta.url), { type: "module" });
       w.nav.worker.addEventListener("message", state.handleNavWorkerMessage);
 
@@ -128,6 +127,7 @@ export default function WorldWorkers() {
         || next.mapGmHashes[gmId] !== prev.mapGmHashes[gmId] // geomorph instance changed
       );
       
+      w.nav.offMeshDefs = computeOffMeshConnectionsParams(w.gms, w.gmGraph);
       w.events.next({ key: 'pre-request-nav', changedGmIds });
       w.menu.measure('request-nav');
       w.nav.worker.postMessage({ type: "request-nav", mapKey: w.mapKey, offMeshDefs: w.nav.offMeshDefs });
