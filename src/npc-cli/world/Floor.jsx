@@ -54,14 +54,14 @@ export default function Floor(props) {
     async draw() {
       w.menu.measure('floor.draw');
       for (const [texId, gmKey] of w.gmsData.seenGmKeys.entries()) {
-        state.drawGmKey(gmKey);
+        state.drawGm(gmKey);
         w.texFloor.updateIndex(texId);
         await pause();
       }
       w.texFloor.update();
       w.menu.measure('floor.draw');
     },
-    drawGmKey(gmKey) {
+    drawGm(gmKey) {
       const { ct } = w.texFloor;
       const gm = w.geomorphs.layout[gmKey];
 
@@ -192,7 +192,7 @@ export default function Floor(props) {
  *
  * @property {() => void} addUvs
  * @property {() => Promise<void>} draw
- * @property {(gmKey: Geomorph.GeomorphKey) => void} drawGmKey
+ * @property {(gmKey: Geomorph.GeomorphKey) => void} drawGm
  * @property {() => void} positionInstances
  */
 

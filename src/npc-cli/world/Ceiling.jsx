@@ -24,14 +24,14 @@ export default function Ceiling(props) {
     async draw() {
       w.menu.measure('ceil.draw');
       for (const [texId, gmKey] of w.gmsData.seenGmKeys.entries()) {
-        state.drawGmKey(gmKey);
+        state.drawGm(gmKey);
         w.texCeil.updateIndex(texId);
         await pause();
       }
       w.texCeil.update();
       w.menu.measure('ceil.draw');
     },
-    drawGmKey(gmKey) {
+    drawGm(gmKey) {
       const { ct } = w.texCeil;
       const layout = w.geomorphs.layout[gmKey];
       const { pngRect } = layout;
@@ -124,6 +124,6 @@ export default function Ceiling(props) {
  * @property {THREE.BufferGeometry} quad
  *
  * @property {() => Promise<void>} draw
- * @property {(gmKey: Geomorph.GeomorphKey) => void} drawGmKey
+ * @property {(gmKey: Geomorph.GeomorphKey) => void} drawGm
  * @property {() => void} positionInstances
  */
