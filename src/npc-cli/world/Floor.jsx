@@ -18,7 +18,7 @@ export default function Floor(props) {
   const w = React.useContext(WorldContext);
 
   const state = useStateRef(/** @returns {State} */ () => ({
-    grid: getGridPattern(1/5 * geomorphGridMeters * worldToCanvas, 'rgba(100, 110, 110, 0.1)'),
+    grid: getGridPattern(1/5 * geomorphGridMeters * worldToCanvas, 'rgba(100, 110, 110, 0.05)'),
     largeGrid: getGridPattern(geomorphGridMeters * worldToCanvas, 'rgba(100, 100, 100, 0.2)'),
     inst: /** @type {*} */ (null),
     quad: getQuadGeometryXZ(`${w.key}-multi-tex-floor-xz`),

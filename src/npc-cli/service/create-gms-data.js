@@ -58,9 +58,12 @@ export default function createGmsData() {
         broad: gm.walls.filter(x => x.meta.broad === true),
         door: gm.hullDoors.map(door => door.computeThinPoly()),
         window: gm.windows.map(window => geom.createInset(window.poly, 0.005)[0]),
-        nonHull: Poly.union(nonHullWallsTouchCeil)
+        // nonHull: Poly.union(nonHullWallsTouchCeil)
+        //   .concat(gm.doors.map(door => door.computeThinPoly()))
+        //   .flatMap(x => geom.createInset(x, 0.01)),
+        nonHull: Poly.union(nonHullWallsTouchCeil
           .concat(gm.doors.map(door => door.computeThinPoly()))
-          .flatMap(x => geom.createInset(x, 0.005)),
+        ).flatMap(x => geom.createInset(x, 0.01)),
       };
 
       // canvas for quick "point -> roomId", "point -> doorId" computation

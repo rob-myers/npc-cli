@@ -163,6 +163,7 @@
 
 ### On hold
 
+- avoid line rendering issues of Ceiling at large distances
 - ✅ avoid creating gmGraph in nav.worker
   - create offMeshDefs in main thread and send
 - change npc label height onchange animation
