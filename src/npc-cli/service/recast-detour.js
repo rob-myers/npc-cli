@@ -92,12 +92,10 @@ export function disposeCrowd(crowd, navMesh) {
 
 /**
  * https://github.com/isaac-mason/recast-navigation-js/blob/d64fa867361a316b53c2da1251820a0bd6567f82/packages/recast-navigation-generators/src/generators/generate-tile-cache.ts#L108
- * @param {Geomorph.LayoutInstance[]} gms
- * @param {Graph.GmGraph} gmGraph
+ * @param {import("recast-navigation").OffMeshConnectionParams[]} offMeshDefs
+ * The offMeshConnection definitions are created in main thread and sent to nav.worker.
  */
-export function getTileCacheMeshProcess(gms, gmGraph) {
-
-  const offMeshConnections = computeOffMeshConnectionsParams(gms, gmGraph);
+export function getTileCacheMeshProcess(offMeshDefs) {
 
   return new TileCacheMeshProcess((navMeshCreateParams, polyAreas, polyFlags) => {
 
@@ -107,7 +105,7 @@ export function getTileCacheMeshProcess(gms, gmGraph) {
       polyFlags.set(i, helper.navPolyFlag.walkable); // 2^1
     }
 
-    navMeshCreateParams.setOffMeshConnections(offMeshConnections);
+    navMeshCreateParams.setOffMeshConnections(offMeshDefs);
   });
 }
 

@@ -21,27 +21,26 @@ async function handleMessages(e) {
   debug("🤖 nav.worker received", JSON.stringify(msg.type));
 
   if (msg.type === 'request-nav') {
-    onRequestNav(msg.mapKey);
+    onRequestNav(msg);
   }
 
 }
 
-/** @param {string} mapKey  */
-async function onRequestNav(mapKey) {
+/** @param {WW.RequestNavMesh} msg  */
+async function onRequestNav(msg) {
 
   const geomorphs = geomorph.deserializeGeomorphs(await fetchGeomorphsJson());
-  const map = geomorphs.map[mapKey ?? "demo-map-1"];
+  const map = geomorphs.map[msg.mapKey ?? "demo-map-1"];
   const gms = map.gms.map(({ gmKey, transform }, gmId) =>
     geomorph.computeLayoutInstance(geomorphs.layout[gmKey], gmId, transform)
   );
-  const gmGraph = GmGraphClass.fromGms(gms, { permitErrors: true });
 
   const { meshes, customAreaDefs } = await computeGeomorphMeshes(gms);
   await initRecastNav();
 
   const result = customThreeToTileCache(
     meshes,
-    getTileCacheGeneratorConfig(getTileCacheMeshProcess(gms, gmGraph)),
+    getTileCacheGeneratorConfig(getTileCacheMeshProcess(msg.offMeshDefs)),
     { areas: customAreaDefs.flatMap(x => x) },
   );
   
@@ -54,7 +53,7 @@ async function onRequestNav(mapKey) {
   logTileCount(result.navMesh);
   worker.postMessage({
     type: "nav-mesh-response",
-    mapKey,
+    mapKey: msg.mapKey,
     exportedNavMesh: exportTileCache(result.navMesh, result.tileCache),
     offMeshLookup: result.offMeshLookup,
   });

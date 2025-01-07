@@ -158,6 +158,8 @@
 
 ### On hold
 
+- ✅ avoid creating gmGraph in nav.worker
+  - create offMeshDefs in main thread and send
 - change npc label height onchange animation
 - smaller npc label
 - ✅ allow multiple npcs through hull doors via different offMeshConnections

@@ -15,6 +15,7 @@ declare namespace WW {
   interface RequestNavMesh {
     type: "request-nav";
     mapKey: string;
+    offMeshDefs: import('recast-navigation').OffMeshConnectionParams[];
   }
 
   interface NavMeshResponse {

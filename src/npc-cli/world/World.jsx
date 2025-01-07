@@ -133,7 +133,7 @@ export default function World(props) {
     },
     loadTiledMesh({ exportedNavMesh, offMeshLookup }) {
       const tiledCacheResult = /** @type {NPC.TiledCacheResult} */ (
-        importTileCache(exportedNavMesh, getTileCacheMeshProcess(state.gms, state.gmGraph))
+        importTileCache(exportedNavMesh, getTileCacheMeshProcess(state.nav.offMeshDefs))
       );
       
       Object.assign(state.nav, tiledCacheResult);
@@ -406,7 +406,11 @@ export default function World(props) {
  * @property {import("@react-three/fiber").RootState & { camera: THREE.PerspectiveCamera }} r3f
  * @property {Timer} timer
  *
- * @property {{ worker: WW.NavWorker; offMeshLookup: NPC.OffMeshLookup; } & NPC.TiledCacheResult} nav
+ * @property {{
+ *   worker: WW.NavWorker;
+ *   offMeshDefs: import("recast-navigation").OffMeshConnectionParams[];
+ *   offMeshLookup: NPC.OffMeshLookup;
+ * } & NPC.TiledCacheResult} nav
  * @property {{ worker: WW.PhysicsWorker; rebuilds: number; } & import("../service/rapier").PhysicsBijection} physics
  *
  * @property {import('./WorldView').State} view

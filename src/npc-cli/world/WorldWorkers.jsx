@@ -2,8 +2,8 @@ import React from 'react';
 import { init as initRecastNav } from "@recast-navigation/core";
 
 import { isDevelopment, warn, debug, testNever } from '../service/generic';
-import { toXZ } from '../service/three';
 import { parsePhysicsBodyKey } from '../service/rapier';
+import { computeOffMeshConnectionsParams } from '../service/recast-detour';
 import { WorldContext } from './world-context';
 import useStateRef from '../hooks/use-state-ref';
 
@@ -104,6 +104,7 @@ export default function WorldWorkers() {
 
   React.useEffect(() => {// restart workers
     if (w.threeReady && w.hash.full) {
+      w.nav.offMeshDefs = computeOffMeshConnectionsParams(w.gms, w.gmGraph);
       w.nav.worker = new Worker(new URL("./nav.worker", import.meta.url), { type: "module" });
       w.nav.worker.addEventListener("message", state.handleNavWorkerMessage);
 
@@ -129,7 +130,7 @@ export default function WorldWorkers() {
       
       w.events.next({ key: 'pre-request-nav', changedGmIds });
       w.menu.measure('request-nav');
-      w.nav.worker.postMessage({ type: "request-nav", mapKey: w.mapKey });
+      w.nav.worker.postMessage({ type: "request-nav", mapKey: w.mapKey, offMeshDefs: w.nav.offMeshDefs });
 
       w.events.next({ key: 'pre-setup-physics' });
       w.menu.measure('setup-physics');
