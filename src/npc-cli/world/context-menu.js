@@ -14,6 +14,7 @@ class BaseContextMenu {
   
   position = /** @type {[number, number, number]} */ ([0, 0, 0]);
   tracked = /** @type {undefined | THREE.Object3D} */ (undefined);
+  offset = /** @type {undefined | THREE.Vector3Like} */ (undefined);
   
   docked = false;
   open = false;
@@ -235,8 +236,28 @@ export class DefaultContextMenu extends BaseContextMenu {
 }
 
 export class NpcSpeechBubble extends BaseContextMenu {
+
+  offset = { x: 0, y: 0, z: 0 };
   /** @type {string | undefined} */
   speech = undefined;
+
+  updateOffset() {
+    const npc = this.w.n[this.key];
+
+    switch (npc.s.act) {
+      case 'Idle':
+      case 'Run':
+      case 'Walk':
+        this.offset.y = 2;
+        break;
+      case 'Lie':
+        this.offset.y = 0.9;
+        break;
+      case 'Sit':
+        this.offset.y = 1.7;
+        break;
+    }
+  }
 }
 
 /**

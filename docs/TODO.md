@@ -11,7 +11,7 @@
 - 🚧 ContextMenu rethink
   - ✅ move object-pick-circle into Debug
   - ✅ lastDown.{normal,quaternion} always defined
-  - 🚧 `ContextMenus`
+  - ✅ `ContextMenus`
     - ✅ fix HMR by avoiding function-as-property
     - ✅ default i.e. via rmb/long-press
       - ℹ️ no popup
@@ -79,10 +79,12 @@
       - choose none or npcKey
       - can refresh via button "refresh"
       - profile-1 `handleContextMenu` takes npcKey into account
-    - 🚧 clean
+    - ✅ clean
   - ✅ remove icon generation code from asset.js
-  - Fix npc speech height: sit, lie
-  - Logger also records speech and provides link options
+  - ✅ Fix npc speech height
+    - ✅ change height offset onchange animation
+    - ✅ walk/run/idle , ✅ sit, ✅ lie
+  - 🚧 Logger also records speech and provides link options
 
 - 🚧 pre next.js migration
   - ✅ finish/close wip todos
@@ -226,6 +228,8 @@
 
 ### On hold
 
+- change npc label height onchange animation
+- smaller npc label
 - ✅ allow multiple npcs through hull doors via different offMeshConnections
 - ❌ npc stops on try nav to inaccessible-via-off-mesh-connection room
   - eventually?

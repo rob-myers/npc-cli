@@ -30,7 +30,8 @@ export default function ContextMenus() {
           npcKey,
         });
         cm.setTracked(w.n[npcKey].m.group);
-        cm.baseScale = 4; // 🚧
+        cm.updateOffset();
+        cm.baseScale = speechBubbleBaseScale; // speech bubble always scaled
         cm.open = true;
         update();
         return cm;
@@ -125,6 +126,7 @@ function ContextMenu({ cm }) {
       baseScale={cm.baseScale}
       docked={cm.docked}
       position={cm.position}
+      offset={cm.offset}
       open={cm.open}
       tracked={cm.tracked}
       zIndex={cm.key === 'default' ? 1 : undefined}
@@ -144,3 +146,5 @@ function ContextMenu({ cm }) {
 
 /** @type {React.MemoExoticComponent<(props: ContextMenuProps & { epochMs: number }) => JSX.Element>} */
 const MemoizedContextMenu = React.memo(ContextMenu);
+
+const speechBubbleBaseScale = 4;

@@ -15,6 +15,7 @@ export const Html3d = React.forwardRef(({
   className,
   docked,
   open,
+  offset,
   tracked,
   zIndex,
   ...props
@@ -39,7 +40,7 @@ export const Html3d = React.forwardRef(({
   
         camera.updateMatrixWorld()
         state.group.updateWorldMatrix(true, false)
-        const vec = calculatePosition(state.objTarget, camera, size)
+        const vec = state.computePosition();
   
         if (
           Math.abs(state.zoom - camera.zoom) > eps ||
@@ -63,7 +64,16 @@ export const Html3d = React.forwardRef(({
           state.zoom = camera.zoom;
         }
       },
-    }), { deps: [baseScale, camera, size, docked] });
+
+      computePosition() {
+        v1.setFromMatrixPosition(state.objTarget.matrixWorld);
+        if (offset !== undefined) {
+          v1.add(offset);
+        }
+        return calculatePosition(v1, camera, size)
+      }
+
+    }), { deps: [baseScale, camera, size, docked, offset] });
 
     React.useImperativeHandle(ref, () => state, []);
 
@@ -75,7 +85,9 @@ export const Html3d = React.forwardRef(({
       if (state.objTarget !== null) {
         const currentRoot = (state.reactRoot = ReactDOM.createRoot(state.rootDiv))
         scene.updateMatrixWorld()
-        const vec = calculatePosition(state.objTarget, camera, size)
+
+        const vec = state.computePosition();
+
         state.rootDiv.style.transform = `translate3d(${vec[0]}px,${vec[1]}px,0)`;
         if (state.domTarget) {
           state.domTarget.appendChild(state.rootDiv)
@@ -134,6 +146,7 @@ export const Html3d = React.forwardRef(({
  * @typedef BaseProps
  * @property {boolean} [docked]
  * @property {number} [baseScale]
+ * @property {THREE.Vector3Like} [offset]
  * @property {boolean} open
  * @property {THREE.Object3D} [tracked]
  * @property {number} [zIndex]
@@ -151,6 +164,7 @@ export const Html3d = React.forwardRef(({
 * @property {ReactDOM.Root} reactRoot
 * @property {number} zoom
 * @property {(rootState?: import('@react-three/fiber').RootState) => void} onFrame
+* @property {() => [number, number]} computePosition
 */
 
 const eps = 0.001;
@@ -158,14 +172,14 @@ const v1 = new THREE.Vector3()
 const v2 = new THREE.Vector3()
 
 /**
- * @param {THREE.Object3D} el 
+ * @param {THREE.Vector3} objectPos
  * @param {THREE.Camera} camera 
  * @param {{ width: number; height: number }} size 
  * @returns {[number, number]}
  */
-function calculatePosition(el, camera, size) {
+function calculatePosition(objectPos, camera, size) {
   // 🤔 support tracked offset vector?
-  const objectPos = v1.setFromMatrixPosition(el.matrixWorld);
+  // const objectPos = v1.setFromMatrixPosition(el.matrixWorld);
   objectPos.project(camera);
   const widthHalf = size.width / 2;
   const heightHalf = size.height / 2;

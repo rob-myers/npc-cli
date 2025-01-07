@@ -39,8 +39,8 @@ export const npcContextMenuCss = css`
     justify-content: center;
     
     font-size: 1rem;
-    color: white;
-    /* background-color: #99999966; */
+    color: #ff9;
+    background-color: #99999933;
     
     transition: width 300ms;
   }
