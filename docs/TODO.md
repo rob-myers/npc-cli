@@ -14,7 +14,12 @@
     - ℹ️ https://github.com/xtermjs/xterm.js/issues/5222
     - ℹ️ https://github.com/xtermjs/xterm.js/tree/master/addons/addon-web-links
     - ℹ️ https://github.com/xtermjs/xterm.js/discussions/5223#discussioncomment-11762329
-  - 🚧 infer: linkText, lineText, linkStartIndex, lineNumber
+  - 🚧 infer link meta
+    - ✅ linkText is "uri" e.g. `[ test link ]` (with brackets, sans escape-codes)
+    - ✅ lineText follows from "hover location"
+    - ✅ linkStartIndex follows from "hover location"
+    - ✅ lineNumber follows from "hover location"
+    - ...
 
 - 🚧 pre next.js migration
   - ✅ finish/close wip todos

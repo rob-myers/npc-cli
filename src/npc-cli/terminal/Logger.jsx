@@ -7,7 +7,6 @@ import { WebglAddon } from "@xterm/addon-webgl";
 import { SerializeAddon } from "@xterm/addon-serialize";
 import { WebLinksAddon } from "@xterm/addon-web-links";
 
-import { LinkProvider } from "./xterm-link-provider";
 import useStateRef from "../hooks/use-state-ref";
 import useUpdate from "../hooks/use-update";
 
@@ -22,6 +21,7 @@ export const Logger = React.forwardRef(function WorldLogger(props, ref) {
     contents: '',
     fitAddon: new FitAddon(),
     linksAddon: new WebLinksAddon(),
+    linkLocation: null,
     webglAddon: new WebglAddon(),
     serializeAddon: new SerializeAddon(),
     xterm: /** @type {*} */ (null),
@@ -81,9 +81,17 @@ export const Logger = React.forwardRef(function WorldLogger(props, ref) {
     //   })
     // );
     xterm.loadAddon(state.linksAddon = new WebLinksAddon((e, uri) => {
-      console.log('🔔 Logger link', e, uri);
+      console.log('🔔 click', uri);
       // 🚧
     }, {
+      hover(event, text, location) {
+        console.log('🔔 hover', text, location);
+        state.linkLocation = location;
+      },
+      leave(event, text) {
+        console.log('🔔 leave', text);
+        state.linkLocation = null;
+      },
       urlRegex: /(\[ [^\]]+ \])/,
     }));
   
@@ -100,6 +108,7 @@ export const Logger = React.forwardRef(function WorldLogger(props, ref) {
     
     return () => {
       state.contents = state.serializeAddon.serialize();
+      state.linksAddon.dispose();
       state.xterm.dispose();
     };
   }, [state.container]);
@@ -119,12 +128,13 @@ export const Logger = React.forwardRef(function WorldLogger(props, ref) {
 
 /**
  * @typedef State
- * @property {string} contents
  * @property {HTMLDivElement} container
- * @property {Terminal} xterm
+ * @property {string} contents
  * @property {FitAddon} fitAddon
  * @property {WebLinksAddon} linksAddon
- * @property {WebglAddon} webglAddon
+ * @property {null | import('@xterm/xterm').IViewportRange} linkLocation
  * @property {SerializeAddon} serializeAddon
+ * @property {Terminal} xterm
+ * @property {WebglAddon} webglAddon
  * @property {(el: null | HTMLDivElement) => void} containerRef
  */
