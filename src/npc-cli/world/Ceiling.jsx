@@ -1,7 +1,7 @@
 import React from "react";
 import * as THREE from "three";
 
-import { Mat } from "../geom";
+import { Mat, Poly } from "../geom";
 import { wallHeight, gmFloorExtraScale, worldToSguScale, sguToWorldScale } from "../service/const";
 import { pause } from "../service/generic";
 import { drawPolygons } from "../service/dom";
@@ -57,11 +57,20 @@ export default function Ceiling(props) {
       // drawPolygons(ct, tops.nonHull, [black, wallsColor, thickLineWidth]);
       drawPolygons(ct, tops.window, [black, wallsColor, thinLineWidth]);
       drawPolygons(ct, tops.door.filter(x => !x.meta.hull), [grey100, null]);
-      drawPolygons(ct, tops.door.filter(x => x.meta.hull), [hullDoorsColor, null, thinLineWidth]);
+      drawPolygons(ct, tops.door.filter(x => x.meta.hull), [black, wallsColor, thinLineWidth]);
       drawPolygons(ct, tops.broad, [black, grey90, thinLineWidth]);
       const hullWalls = layout.walls.filter(x => x.meta.hull);
-      drawPolygons(ct, hullWalls, [wallsColor, wallsColor]);
+      drawPolygons(ct, hullWalls, [black, wallsColor]);
       
+      // Stroke a square at each corner to avoid z-fighting
+      const hullRect = layout.hullPoly[0].rect;
+      const cornerDim = 8 * sguToWorldScale;
+      ct.lineWidth = 0.02;
+      ct.strokeRect(hullRect.x, hullRect.y, cornerDim, cornerDim);
+      ct.strokeRect(hullRect.right - cornerDim, hullRect.y, cornerDim, cornerDim);
+      ct.strokeRect(hullRect.x, hullRect.bottom - cornerDim, cornerDim, cornerDim);
+      ct.strokeRect(hullRect.right - cornerDim, hullRect.bottom - cornerDim, cornerDim, cornerDim);
+
       // decals
       polyDecals.filter(x => x.meta.ceil === true).forEach(x => {
         const strokeWidth = typeof x.meta.strokeWidth === 'number'
