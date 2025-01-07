@@ -65,6 +65,10 @@ export default function WorldMenu(props) {
 
   w.menu = state;
 
+  React.useEffect(() => {// 🚧 WIP
+    state.logger?.xterm?.writeln(`foo bar [ ${ansi.Blue}test link${ansi.Reset} ]`);
+  }, [state.logger?.xterm]);
+
   return <>
 
     <div
@@ -97,7 +101,7 @@ export default function WorldMenu(props) {
 
     <div className={loggerCss}>
       <Logger
-        ref={api => state.logger = state.logger ?? api}
+        ref={state.ref('logger')}
         className={cx("world-logger", { hidden: state.shown === false })}
       />
       <div className="controls">

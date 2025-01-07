@@ -5,6 +5,7 @@ import { Terminal } from "@xterm/xterm";
 import { FitAddon } from "@xterm/addon-fit";
 import { WebglAddon } from "@xterm/addon-webgl";
 import { SerializeAddon } from "@xterm/addon-serialize";
+import { WebLinksAddon } from "@xterm/addon-web-links";
 
 import { LinkProvider } from "./xterm-link-provider";
 import useStateRef from "../hooks/use-state-ref";
@@ -17,9 +18,10 @@ import useUpdate from "../hooks/use-update";
 export const Logger = React.forwardRef(function WorldLogger(props, ref) {
 
   const state = useStateRef(/** @returns {State} */ () => ({
+    container: /** @type {*} */ (null),
     contents: '',
     fitAddon: new FitAddon(),
-    container: /** @type {*} */ (null),
+    linksAddon: new WebLinksAddon(),
     webglAddon: new WebglAddon(),
     serializeAddon: new SerializeAddon(),
     xterm: /** @type {*} */ (null),
@@ -56,28 +58,34 @@ export const Logger = React.forwardRef(function WorldLogger(props, ref) {
       rows: 50,
     });
   
-    xterm.registerLinkProvider(
-      new LinkProvider(xterm, /(\[ [^\]]+ \])/gi, async function callback(
-        _event,
-        linkText,
-        { lineText, linkStartIndex, lineNumber }
-      ) {
-        console.log('Logger: clicked link', {
-          linkText,
-          lineText,
-          linkStartIndex,
-          lineNumber,
-        });
-        // useSession.api.onTtyLink({
-        //   sessionKey: props.sessionKey,
-        //   lineText: stripAnsi(lineText),
-        //   // Omit square brackets and spacing:
-        //   linkText: stripAnsi(linkText).slice(2, -2),
-        //   linkStartIndex,
-        //   lineNumber,
-        // });
-      })
-    );
+    // xterm.registerLinkProvider(
+    //   new LinkProvider(xterm, /(\[ [^\]]+ \])/gi, async function callback(
+    //     _event,
+    //     linkText,
+    //     { lineText, linkStartIndex, lineNumber }
+    //   ) {
+    //     console.log('Logger: clicked link', {
+    //       linkText,
+    //       lineText,
+    //       linkStartIndex,
+    //       lineNumber,
+    //     });
+    //     // useSession.api.onTtyLink({
+    //     //   sessionKey: props.sessionKey,
+    //     //   lineText: stripAnsi(lineText),
+    //     //   // Omit square brackets and spacing:
+    //     //   linkText: stripAnsi(linkText).slice(2, -2),
+    //     //   linkStartIndex,
+    //     //   lineNumber,
+    //     // });
+    //   })
+    // );
+    xterm.loadAddon(state.linksAddon = new WebLinksAddon((e, uri) => {
+      console.log('🔔 Logger link', e, uri);
+      // 🚧
+    }, {
+      urlRegex: /(\[ [^\]]+ \])/,
+    }));
   
     xterm.loadAddon(state.fitAddon = new FitAddon());
     xterm.loadAddon(state.webglAddon = new WebglAddon());
@@ -115,6 +123,7 @@ export const Logger = React.forwardRef(function WorldLogger(props, ref) {
  * @property {HTMLDivElement} container
  * @property {Terminal} xterm
  * @property {FitAddon} fitAddon
+ * @property {WebLinksAddon} linksAddon
  * @property {WebglAddon} webglAddon
  * @property {SerializeAddon} serializeAddon
  * @property {(el: null | HTMLDivElement) => void} containerRef

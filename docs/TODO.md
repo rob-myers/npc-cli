@@ -10,7 +10,11 @@
 
 - 🚧 Logger also records speech and provides link options
   - ✅ Logger is always pinned
-  - https://github.com/xtermjs/xterm.js/issues/5222
+  - ✅ Implement demo link
+    - ℹ️ https://github.com/xtermjs/xterm.js/issues/5222
+    - ℹ️ https://github.com/xtermjs/xterm.js/tree/master/addons/addon-web-links
+    - ℹ️ https://github.com/xtermjs/xterm.js/discussions/5223#discussioncomment-11762329
+  - 🚧 infer: linkText, lineText, linkStartIndex, lineNumber
 
 - 🚧 pre next.js migration
   - ✅ finish/close wip todos
