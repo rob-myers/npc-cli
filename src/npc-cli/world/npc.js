@@ -373,7 +373,7 @@ export class Npc {
       throw new Error(`${this.key}: npc lacks agent`);
     }
 
-    const closest = this.w.npc.getClosestNavigable(toV3(dst), 0.05);
+    const closest = this.w.npc.getClosestNavigable(toV3(dst), 0.5);
     if (closest === null) {
       throw new Error(`${this.key}: not navigable: ${JSON.stringify(dst)}`);
     }
