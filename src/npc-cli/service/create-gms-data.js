@@ -63,7 +63,7 @@ export default function createGmsData() {
         //   .flatMap(x => geom.createInset(x, 0.01)),
         nonHull: Poly.union(nonHullWallsTouchCeil
           .concat(gm.doors.map(door => door.computeThinPoly()))
-        ).flatMap(x => geom.createInset(x, 0.01)),
+        ).flatMap(x => geom.createInset(x, 0.025)),
       };
 
       // canvas for quick "point -> roomId", "point -> doorId" computation
