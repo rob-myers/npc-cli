@@ -8,83 +8,9 @@
 
 ## WIP
 
-- 🚧 ContextMenu rethink
-  - ✅ move object-pick-circle into Debug
-  - ✅ lastDown.{normal,quaternion} always defined
-  - ✅ `ContextMenus`
-    - ✅ fix HMR by avoiding function-as-property
-    - ✅ default i.e. via rmb/long-press
-      - ℹ️ no popup
-      - ✅ shows object-pick meta
-      - ✅ positioned at click
-      - ✅ object-pick meta collapsible (remembered)
-      - ✅ scaled
-    - ✅ can customise from CLI
-      - ✅ links not icons
-      - ✅ links trigger world events
-    - ✅ can add static menu from default context menu
-    - ✅ "save" creates static menu with left label `cm.key`
-      - "save" and "pin" disappear
-      - "exit" deletes
-    - ✅ no need to refresh all i.e. use cm.epochMs
-    - ✅ show-context-menu event
-    - ❌ show-context-menu event
-    - ✅ example of static panel
-    - ✅ remove `ContextMenu`
-    - ✅ default context menu can be "docked"
-    - ✅ remove static panels
-      - decided only default and speech bubbles
-    - ✅ default context menu dock moves to lower left
-    - ❌ default context menu can drag
-    - ✅ extend default via script
-      - ✅ can add/remove named "matchers"
-        - ℹ️ w.cm.match.foo = bar
-      - ✅ extra links on click switch
-      - ✅ extra links on click door
-        - do not support unauth npc inside room i.e. this action corresponds to having a remote key
-      - ✅ links take effect e.g. open door
-      - ✅ speech bubbles
-        - ✅ can add for npc `w c.trackNpc rob`
-          - cm.tracked as `w.n[npcKey]?.m.group`
-        - ✅ can remove for npc `w c.delete @rob`
-        - ✅ always scaled
-          - seems hard-coded cm.baseScale better than "agent-to-camera-distance" when `w c.trackNpc rob`
-        - ✅ improve styling
-        - ❌ offset upwards
-        - ✅ `w c.create rob`
-        - ✅ can set speech
-          - `w c.lookup.@rob.setSpeech 'foo bar baz'`
-        - ✅ `w c.lookup.rob.say 'foo bar baz'`
-        - ✅ `w c.say rob 'foo bar baz'`
-        - ✅ can show links too
-          ```sh
-          w c.lookup.rob.setLinks "{ key: 'foo', label: 'foo' }" "{ key: 'bar', label: 'bar' }"
-          ```
-        - ✅ object pick npc shows bubble, not default context menu
-        - ✅ can close bubble
-    - ✅ default context menu on npc tracks npc
-    - ✅ simplify speech bubbles
-      - ✅ no links
-      - ✅ `w.c.say {npcKey} {words}` ensures
-      - ✅ `w.c.say {npcKey}` deletes
-    - ❌ links can be npc-sensitive
-      - ✅ `cm.setNpc()` `cm.setNpc('rob')` and show
-      - ✅ can remove by clicking it
-      - ✅ temp: profile-1: triggered on select npc
-      - ✅ triggered via long click npc
-      - ✅ handleContextMenu accounts for `cm.npcKey`
-      - will use custom select instead
-    - ✅ separate classes for DefaultContextMenu and SpeechBubble
-    - ✅ use custom select instead
-      - choose none or npcKey
-      - can refresh via button "refresh"
-      - profile-1 `handleContextMenu` takes npcKey into account
-    - ✅ clean
-  - ✅ remove icon generation code from asset.js
-  - ✅ Fix npc speech height
-    - ✅ change height offset onchange animation
-    - ✅ walk/run/idle , ✅ sit, ✅ lie
-  - 🚧 Logger also records speech and provides link options
+- 🚧 Logger also records speech and provides link options
+  - ✅ Logger is always pinned
+  - https://github.com/xtermjs/xterm.js/issues/5222
 
 - 🚧 pre next.js migration
   - ✅ finish/close wip todos
@@ -3421,3 +3347,80 @@ done
   - ❌ to avoid offMeshConnection backtracking could set `anim->startPoint` to be
     closest point on edge `startPoint -> endPoint`
 
+
+- ✅ ContextMenu rethink
+  - ✅ move object-pick-circle into Debug
+  - ✅ lastDown.{normal,quaternion} always defined
+  - ✅ `ContextMenus`
+    - ✅ fix HMR by avoiding function-as-property
+    - ✅ default i.e. via rmb/long-press
+      - ℹ️ no popup
+      - ✅ shows object-pick meta
+      - ✅ positioned at click
+      - ✅ object-pick meta collapsible (remembered)
+      - ✅ scaled
+    - ✅ can customise from CLI
+      - ✅ links not icons
+      - ✅ links trigger world events
+    - ✅ can add static menu from default context menu
+    - ✅ "save" creates static menu with left label `cm.key`
+      - "save" and "pin" disappear
+      - "exit" deletes
+    - ✅ no need to refresh all i.e. use cm.epochMs
+    - ✅ show-context-menu event
+    - ❌ show-context-menu event
+    - ✅ example of static panel
+    - ✅ remove `ContextMenu`
+    - ✅ default context menu can be "docked"
+    - ✅ remove static panels
+      - decided only default and speech bubbles
+    - ✅ default context menu dock moves to lower left
+    - ❌ default context menu can drag
+    - ✅ extend default via script
+      - ✅ can add/remove named "matchers"
+        - ℹ️ w.cm.match.foo = bar
+      - ✅ extra links on click switch
+      - ✅ extra links on click door
+        - do not support unauth npc inside room i.e. this action corresponds to having a remote key
+      - ✅ links take effect e.g. open door
+      - ✅ speech bubbles
+        - ✅ can add for npc `w c.trackNpc rob`
+          - cm.tracked as `w.n[npcKey]?.m.group`
+        - ✅ can remove for npc `w c.delete @rob`
+        - ✅ always scaled
+          - seems hard-coded cm.baseScale better than "agent-to-camera-distance" when `w c.trackNpc rob`
+        - ✅ improve styling
+        - ❌ offset upwards
+        - ✅ `w c.create rob`
+        - ✅ can set speech
+          - `w c.lookup.@rob.setSpeech 'foo bar baz'`
+        - ✅ `w c.lookup.rob.say 'foo bar baz'`
+        - ✅ `w c.say rob 'foo bar baz'`
+        - ✅ can show links too
+          ```sh
+          w c.lookup.rob.setLinks "{ key: 'foo', label: 'foo' }" "{ key: 'bar', label: 'bar' }"
+          ```
+        - ✅ object pick npc shows bubble, not default context menu
+        - ✅ can close bubble
+    - ✅ default context menu on npc tracks npc
+    - ✅ simplify speech bubbles
+      - ✅ no links
+      - ✅ `w.c.say {npcKey} {words}` ensures
+      - ✅ `w.c.say {npcKey}` deletes
+    - ❌ links can be npc-sensitive
+      - ✅ `cm.setNpc()` `cm.setNpc('rob')` and show
+      - ✅ can remove by clicking it
+      - ✅ temp: profile-1: triggered on select npc
+      - ✅ triggered via long click npc
+      - ✅ handleContextMenu accounts for `cm.npcKey`
+      - will use custom select instead
+    - ✅ separate classes for DefaultContextMenu and SpeechBubble
+    - ✅ use custom select instead
+      - choose none or npcKey
+      - can refresh via button "refresh"
+      - profile-1 `handleContextMenu` takes npcKey into account
+    - ✅ clean
+  - ✅ remove icon generation code from asset.js
+  - ✅ Fix npc speech height
+    - ✅ change height offset onchange animation
+    - ✅ walk/run/idle , ✅ sit, ✅ lie

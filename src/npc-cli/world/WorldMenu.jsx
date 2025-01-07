@@ -26,13 +26,7 @@ export default function WorldMenu(props) {
     initHeight: tryLocalStorageGetParsed(`log-height-px@${w.key}`) ?? 200,
     logger: /** @type {*} */ (null),
     shown: true,
-    pinned: tryLocalStorageGetParsed(`pin-log@${w.key}`) ?? false,
 
-    changeLoggerPin(e) {
-      state.pinned = e.currentTarget.checked;
-      tryLocalStorageSet(`pin-log@${w.key}`, `${state.pinned}`);
-      update();
-    },
     changeShown(e) {
       state.shown = e.currentTarget.checked;
       update();
@@ -101,9 +95,7 @@ export default function WorldMenu(props) {
       </button>
     </div>}
 
-    <div className={cx(loggerCss, {
-      hidden: !state.pinned && !(w.disabled && state.debugWhilePaused)
-    })}>
+    <div className={loggerCss}>
       <Logger
         ref={api => state.logger = state.logger ?? api}
         className={cx("world-logger", { hidden: state.shown === false })}
@@ -116,14 +108,6 @@ export default function WorldMenu(props) {
             onChange={state.changeShown}
           />
           logger
-        </label>
-        <label>
-          <input
-            type="checkbox"
-            defaultChecked={state.pinned}
-            onChange={state.changeLoggerPin}
-          />
-          pin
         </label>
       </div>
     </div>
@@ -214,14 +198,12 @@ const cssTtyDisconnectedMessage = css`
  * @property {{ [durKey: string]: number }} durationKeys
  * @property {import('../terminal/Logger').State} logger
  * @property {number} initHeight
- * @property {boolean} pinned
  * @property {boolean} shown
  *
  * @property {(e: React.ChangeEvent<HTMLInputElement>) => void} changeShown
  * @property {() => void} enableAll
  * @property {(msg: string) => void} measure
  * Measure durations by sending same `msg` twice.
- * @property {React.ChangeEventHandler<HTMLInputElement>} changeLoggerPin
  * @property {() => void} onOverlayPointerUp
  * @property {() => void} storeTextareaHeight
  * @property {() => void} toggleDebug
