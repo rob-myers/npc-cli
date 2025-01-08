@@ -29,7 +29,6 @@ export function DefaultContextMenu({ cm }) {
 
         <select
           className="select-npc"
-          defaultValue=""
           onChange={cm.onSelectNpc.bind(cm)}
           value={cm.npcKey ?? ""}
         >
