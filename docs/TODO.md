@@ -14,12 +14,16 @@
     - ℹ️ https://github.com/xtermjs/xterm.js/issues/5222
     - ℹ️ https://github.com/xtermjs/xterm.js/tree/master/addons/addon-web-links
     - ℹ️ https://github.com/xtermjs/xterm.js/discussions/5223#discussioncomment-11762329
-  - 🚧 infer link meta
+  - ✅ infer link meta on click link
     - ✅ linkText is "uri" e.g. `[ test link ]` (with brackets, sans escape-codes)
     - ✅ lineText follows from "hover location"
     - ✅ linkStartIndex follows from "hover location"
     - ✅ lineNumber follows from "hover location"
-    - ...
+    - ✅ construct lineText, startRow, endRow from IViewportRange
+      - ℹ️ this means finding the whole "wrapped line" that the link is part of
+  - 🚧 setup matching (lineText, linkText)
+  - api to write line to Logger
+  - link NpcSpeechBubble "say" to Logger
 
 - 🚧 pre next.js migration
   - ✅ finish/close wip todos

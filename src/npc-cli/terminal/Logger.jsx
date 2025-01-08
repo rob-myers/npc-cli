@@ -21,7 +21,7 @@ export const Logger = React.forwardRef(function WorldLogger(props, ref) {
     contents: '',
     fitAddon: new FitAddon(),
     linksAddon: new WebLinksAddon(),
-    linkLocation: null,
+    linkViewportRange: null,
     webglAddon: new WebglAddon(),
     serializeAddon: new SerializeAddon(),
     xterm: /** @type {*} */ (null),
@@ -29,6 +29,29 @@ export const Logger = React.forwardRef(function WorldLogger(props, ref) {
     containerRef: (el) => el && !state.container &&
       setTimeout(() => (state.container = el, update())
     ),
+    // given row potentially in middle of a wrapped line, return the whole line
+    getFullLine(rowNumber) {
+      const buffer = state.xterm.buffer.active;
+      
+      let line = buffer.getLine(rowNumber);
+      if (line === undefined) {
+        return { fullLine: '', startRow: rowNumber, endRow: rowNumber + 1 };
+      }
+      
+      const lines = [line.translateToString(true)];
+      let startRow = rowNumber, endRow = rowNumber;
+
+      while (line?.isWrapped && (line = buffer.getLine(--startRow)))
+        lines.unshift(line.translateToString(true));
+      while ((line = buffer.getLine(++endRow))?.isWrapped)
+        lines.push(line.translateToString(true));
+
+      return {
+        fullLine: lines.join('\n'),
+        startRow,
+        endRow, // 1 row after final row
+      };
+    },
   }));
 
   const update = useUpdate();
@@ -47,50 +70,34 @@ export const Logger = React.forwardRef(function WorldLogger(props, ref) {
       cursorBlink: false,
       disableStdin: true,
       cursorInactiveStyle: 'none',
-      // rendererType: "canvas",
-      // mobile: can select single word via long press
-      rightClickSelectsWord: true,
+      rightClickSelectsWord: true, // mobile: can select single word via long press
       theme: {
         background: 'rgba(0, 0, 0, 0.5)'
       },
       convertEol: false,
-      // scrollback: scrollback,
       rows: 50,
     });
   
-    // xterm.registerLinkProvider(
-    //   new LinkProvider(xterm, /(\[ [^\]]+ \])/gi, async function callback(
-    //     _event,
-    //     linkText,
-    //     { lineText, linkStartIndex, lineNumber }
-    //   ) {
-    //     console.log('Logger: clicked link', {
-    //       linkText,
-    //       lineText,
-    //       linkStartIndex,
-    //       lineNumber,
-    //     });
-    //     // useSession.api.onTtyLink({
-    //     //   sessionKey: props.sessionKey,
-    //     //   lineText: stripAnsi(lineText),
-    //     //   // Omit square brackets and spacing:
-    //     //   linkText: stripAnsi(linkText).slice(2, -2),
-    //     //   linkStartIndex,
-    //     //   lineNumber,
-    //     // });
-    //   })
-    // );
     xterm.loadAddon(state.linksAddon = new WebLinksAddon((e, uri) => {
-      console.log('🔔 click', uri);
+      const viewportRange = state.linkViewportRange;
+      if (viewportRange === null) {
+        return; // should be unreachable
+      }
+
+      const linkText = uri;
+      const { fullLine, startRow, endRow } = state.getFullLine(viewportRange.start.y - 1);
+
+      console.log('🔔 click', { linkText, fullLine, startRow, endRow });
       // 🚧
+
     }, {
       hover(event, text, location) {
         console.log('🔔 hover', text, location);
-        state.linkLocation = location;
+        state.linkViewportRange = location;
       },
       leave(event, text) {
         console.log('🔔 leave', text);
-        state.linkLocation = null;
+        state.linkViewportRange = null;
       },
       urlRegex: /(\[ [^\]]+ \])/,
     }));
@@ -132,9 +139,11 @@ export const Logger = React.forwardRef(function WorldLogger(props, ref) {
  * @property {string} contents
  * @property {FitAddon} fitAddon
  * @property {WebLinksAddon} linksAddon
- * @property {null | import('@xterm/xterm').IViewportRange} linkLocation
+ * @property {null | import('@xterm/xterm').IViewportRange} linkViewportRange
  * @property {SerializeAddon} serializeAddon
  * @property {Terminal} xterm
  * @property {WebglAddon} webglAddon
  * @property {(el: null | HTMLDivElement) => void} containerRef
+ * @property {(rowNumber: number) => { fullLine: string; startRow: number; endRow: number; }} getFullLine
+ * Given 0-based rowNumber in active buffer, compute the whole (possibly-wrapped) line.
  */

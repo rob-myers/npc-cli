@@ -66,7 +66,7 @@ export default function WorldMenu(props) {
   w.menu = state;
 
   React.useEffect(() => {// 🚧 WIP
-    state.logger?.xterm?.writeln(`foo bar [ ${ansi.Blue}test link${ansi.Reset} ]`);
+    state.logger?.xterm?.writeln(`${Date.now()} [ ${ansi.Blue}test link${ansi.Reset} ]`);
   }, [state.logger?.xterm]);
 
   return <>
