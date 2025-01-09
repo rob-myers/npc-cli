@@ -22,8 +22,8 @@ export const Logger = React.forwardRef(function WorldLogger(props, ref) {
     fitAddon: new FitAddon(),
     linksAddon: new WebLinksAddon(),
     linkViewportRange: null,
-    webglAddon: new WebglAddon(),
     serializeAddon: new SerializeAddon(),
+    webglAddon: new WebglAddon(),
     xterm: /** @type {*} */ (null),
 
     containerRef: (el) => el && !state.container &&

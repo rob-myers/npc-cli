@@ -26,16 +26,24 @@ export default function WorldMenu(props) {
     initHeight: tryLocalStorageGetParsed(`log-height-px@${w.key}`) ?? 200,
     logger: /** @type {*} */ (null),
     shown: true,
+    showMeasures: tryLocalStorageGetParsed(`log-show-measures@${w.key}`) ?? false,
 
     changeShown(e) {
       state.shown = e.currentTarget.checked;
+      update();
+    },
+    changeShowMeasures(e) {
+      state.showMeasures = e.currentTarget.checked;
+      tryLocalStorageSet(`log-show-measures@${w.key}`, `${state.showMeasures}`);
       update();
     },
     enableAll() {
       props.setTabsEnabled(true);
     },
     measure(msg) {
-      if (msg in state.durationKeys) {
+      if (!state.showMeasures) {
+        return;
+      } else if (msg in state.durationKeys) {
         const durationMs = (performance.now() - state.durationKeys[msg]).toFixed(1);
         state.logger.xterm.writeln(`${msg} ${ansi.BrightYellow}${durationMs}${ansi.Reset}`);
         delete state.durationKeys[msg];
@@ -65,7 +73,7 @@ export default function WorldMenu(props) {
 
   w.menu = state;
 
-  React.useEffect(() => {// 🚧 WIP
+  React.useEffect(() => {// 🚧 remove
     state.logger?.xterm?.writeln(`${Date.now()} [ ${ansi.Blue}test link${ansi.Reset} ]`);
   }, [state.logger?.xterm]);
 
@@ -112,6 +120,14 @@ export default function WorldMenu(props) {
             onChange={state.changeShown}
           />
           logger
+        </label>
+        <label>
+          <input
+            type="checkbox"
+            defaultChecked={state.showMeasures}
+            onChange={state.changeShowMeasures}
+          />
+          debug
         </label>
       </div>
     </div>
@@ -203,8 +219,10 @@ const cssTtyDisconnectedMessage = css`
  * @property {import('../terminal/Logger').State} logger
  * @property {number} initHeight
  * @property {boolean} shown
+ * @property {boolean} showMeasures
  *
  * @property {(e: React.ChangeEvent<HTMLInputElement>) => void} changeShown
+ * @property {(e: React.ChangeEvent<HTMLInputElement>) => void} changeShowMeasures
  * @property {() => void} enableAll
  * @property {(msg: string) => void} measure
  * Measure durations by sending same `msg` twice.
