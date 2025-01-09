@@ -18,7 +18,7 @@ export default function Floor(props) {
   const w = React.useContext(WorldContext);
 
   const state = useStateRef(/** @returns {State} */ () => ({
-    grid: getGridPattern(1/5 * geomorphGridMeters * worldToCanvas, 'rgba(100, 100, 150, 0.05)'),
+    grid: getGridPattern(1/5 * geomorphGridMeters * worldToCanvas, 'rgba(0, 0, 100, 0)'),
     largeGrid: getGridPattern(geomorphGridMeters * worldToCanvas, 'rgba(100, 100, 100, 0.25)'),
     inst: /** @type {*} */ (null),
     quad: getQuadGeometryXZ(`${w.key}-multi-tex-floor-xz`),
@@ -66,26 +66,22 @@ export default function Floor(props) {
       const gm = w.geomorphs.layout[gmKey];
 
       ct.clearRect(0, 0, ct.canvas.width, ct.canvas.height);
-      ct.fillStyle = 'red';
-      ct.strokeStyle = 'green';
-
       ct.setTransform(worldToCanvas, 0, 0, worldToCanvas, -gm.pngRect.x * worldToCanvas, -gm.pngRect.y * worldToCanvas);
 
-      // Floor
+      // Floor (mostly hidden by NavMesh)
       drawPolygons(ct, gm.hullPoly.map(x => x.clone().removeHoles()), ['#222', null]);
-
-      // Nav-mesh
-      const triangles = gm.navDecomp.tris.map(tri => new Poly(tri.map(i => gm.navDecomp.vs[i])));
-      // const navPoly = Poly.union(triangles);
-      const navPoly = Poly.union(triangles.concat(gm.doors.map(x => x.computeDoorway()))); // 🚧 move to create-gms-data
-      drawPolygons(ct, navPoly, ['#000', '#99999977', 0.03]);
       
+      // NavMesh 🚧 compute navPoly in create-gms-data
+      const triangles = gm.navDecomp.tris.map(tri => new Poly(tri.map(i => gm.navDecomp.vs[i])));
+      const navPoly = Poly.union(triangles.concat(gm.doors.map(x => x.computeDoorway())));
+      drawPolygons(ct, navPoly, ['#000', '#99999977', 0.03]);
       // drawPolygons(ct, triangles, [null, 'rgba(200, 200, 200, 0.3)', 0.01]); // outlines
 
-      // draw grid
       ct.setTransform(1, 0, 0, 1, -gm.pngRect.x * worldToCanvas, -gm.pngRect.y * worldToCanvas);
-      ct.fillStyle = state.grid;
-      ct.fillRect(0, 0, ct.canvas.width, ct.canvas.height);
+      // Small grid
+      // ct.fillStyle = state.grid;
+      // ct.fillRect(0, 0, ct.canvas.width, ct.canvas.height);
+      // Large grid
       ct.fillStyle = state.largeGrid;
       ct.fillRect(0, 0, ct.canvas.width, ct.canvas.height);
       ct.setTransform(worldToCanvas, 0, 0, worldToCanvas, -gm.pngRect.x * worldToCanvas, -gm.pngRect.y * worldToCanvas);
