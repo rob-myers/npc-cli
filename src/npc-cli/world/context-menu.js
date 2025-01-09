@@ -1,7 +1,7 @@
 import * as THREE from "three";
 import { stringify as javascriptStringify } from 'javascript-stringify';
+import { tryLocalStorageGetParsed, tryLocalStorageSet, warn } from "../service/generic";
 import { objectScale } from "../components/Html3d";
-import { warn } from "../service/generic";
 
 /**
  * 🔔 Avoid `foo = (...bar) => baz` because incompatible with our approach to HMR.
@@ -34,10 +34,9 @@ class BaseContextMenu {
     /** @type {string} */ this.key = key;
     /** @type {import('./World').State} */ this.w = w;
 
-    const savedOpts = w.c.savedOpts[key] ?? {};
-    this.pinned = opts.pinned ?? savedOpts.pinned ?? w.smallViewport;
+    this.pinned = opts.pinned ?? w.smallViewport;
     this.scaled = false;
-    this.showKvs = opts.showKvs ?? savedOpts.showKvs ?? false;
+    this.showKvs = opts.showKvs ?? false;
   }
 
   /** @param {Geom.Meta} meta */
@@ -102,7 +101,7 @@ class BaseContextMenu {
       case 'toggle-scaled': this.toggleScaled(); break;
     }
 
-    this.w.c.saveOpts();
+    this.w.cm.persist();
     this.update();
   }
 
@@ -173,6 +172,12 @@ export class DefaultContextMenu extends BaseContextMenu {
   constructor(key, w, opts) {
     super(key, w, opts);
 
+    /** @type {null | Pick<BaseContextMenu, 'docked' | 'pinned' | 'showKvs'>} */
+    const savedOpts = tryLocalStorageGetParsed(`default-context-menu@${w.key}`);
+    this.pinned = opts.pinned ?? savedOpts?.pinned ?? w.smallViewport;
+    this.scaled = false;
+    this.showKvs = opts.showKvs ?? savedOpts?.showKvs ?? false;
+
     this.npcKey = opts.npcKey;
   }
 
@@ -206,6 +211,13 @@ export class DefaultContextMenu extends BaseContextMenu {
     if (willOpen) {
       this.refreshPopup();
     }
+  }
+
+  persist() {
+    const { pinned, showKvs, docked } = this;
+    tryLocalStorageSet(`default-context-menu@${this.w.key}`, JSON.stringify({
+      pinned, showKvs, docked,
+    }));
   }
   
   refreshPopup() {

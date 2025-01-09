@@ -20,7 +20,6 @@ export default function ContextMenus() {
 
   const state = useStateRef(/** @returns {State} */ () => ({
     lookup: {},
-    savedOpts: tryLocalStorageGetParsed(`context-menus@${w.key}`) ?? {},
 
     create(npcKey) {// assumes non-existent
       if (npcKey in w.n) {
@@ -63,11 +62,6 @@ export default function ContextMenus() {
         cm.update();
       }
     },
-    saveOpts() {// only need to save default?
-      tryLocalStorageSet(`context-menus@${w.key}`, JSON.stringify(
-        mapValues(state.lookup, ({ pinned, showKvs, docked }) => ({ pinned, showKvs, docked }))
-      ));
-    },
 
   }));
 
@@ -96,13 +90,11 @@ export default function ContextMenus() {
 /**
  * @typedef State
  * @property {{ [cmKey: string]: NPC.ContextMenuType }} lookup
- * @property {{ [cmKey: string]: Pick<NPC.ContextMenuType, 'docked' | 'pinned' | 'showKvs'> }} savedOpts
  *
  * @property {(npcKey: string) => NpcSpeechBubble} create Add speech bubble for specific npc
  * @property {(...npcKeys: string[]) => void} delete
  * @property {(npcKey: string) => NpcSpeechBubble} get
  * @property {(npcKey: string, ...parts: string[]) => void} say
- * @property {() => void} saveOpts
  */
 
 /**
