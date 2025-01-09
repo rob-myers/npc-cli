@@ -27,7 +27,8 @@
     - ✅ speech always has initial link `[ {npcKey} ]`
     - ✅ send event `click-npc-link` with `{ npcKey, line, link }`
   - ✅ can clear Logger
-  - 🚧 link NpcSpeechBubble "say" to Logger
+  - ✅ link NpcSpeechBubble "say" to Logger
+  - 🚧 move `w.c.say` -> `w.e.say`
   - setup demo link listener
   - can resize Logger
 

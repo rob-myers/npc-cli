@@ -303,33 +303,6 @@ export default function useHandleEvents(w) {
           state.roomToNpcs[e.gmId][e.roomId].delete(e.npcKey);
           break;
         }
-        case "spawned": {
-          if (npc.s.spawns === 1) {
-            // 1st spawn
-            const { x, y, z } = npc.getPosition();
-            w.physics.worker.postMessage({
-              type: 'add-npcs',
-              npcs: [{ npcKey: e.npcKey, position: { x, y, z } }],
-            });
-            npc.setLabel(e.npcKey);
-          } else {
-            // Respawn
-            const prevGrId = state.npcToRoom.get(npc.key);
-            if (prevGrId !== undefined) {
-              state.roomToNpcs[prevGrId.gmId][prevGrId.roomId]?.delete(npc.key);
-            }
-          }
-
-          state.npcToRoom.set(npc.key, {...e.gmRoomId});
-          (state.roomToNpcs[e.gmRoomId.gmId][e.gmRoomId.roomId] ??= new Set()).add(e.npcKey);
-
-          w.c.get(e.npcKey)?.updateOffset(); // update speechBubble height
-
-          if (w.disabled === true) {
-            w.debugTick();
-          }
-          break;
-        }
         case "removed-npc": {
           w.physics.worker.postMessage({
             type: 'remove-bodies',
@@ -357,6 +330,36 @@ export default function useHandleEvents(w) {
           w.c.delete(e.npcKey);
           break;
         }
+        case "spawned": {
+          if (npc.s.spawns === 1) {
+            // 1st spawn
+            const { x, y, z } = npc.getPosition();
+            w.physics.worker.postMessage({
+              type: 'add-npcs',
+              npcs: [{ npcKey: e.npcKey, position: { x, y, z } }],
+            });
+            npc.setLabel(e.npcKey);
+          } else {
+            // Respawn
+            const prevGrId = state.npcToRoom.get(npc.key);
+            if (prevGrId !== undefined) {
+              state.roomToNpcs[prevGrId.gmId][prevGrId.roomId]?.delete(npc.key);
+            }
+          }
+
+          state.npcToRoom.set(npc.key, {...e.gmRoomId});
+          (state.roomToNpcs[e.gmRoomId.gmId][e.gmRoomId.roomId] ??= new Set()).add(e.npcKey);
+
+          w.c.get(e.npcKey)?.updateOffset(); // update speechBubble height
+
+          if (w.disabled === true) {
+            w.debugTick();
+          }
+          break;
+        }
+        case "speech":
+          w.menu.say(e.npcKey, e.speech);
+          break;
         case "way-point": {
           if (e.index !== 0 && npc.position.distanceTo(npc.lastTarget) < 1.5) {
             npc.s.lookSecs = 0.3; // 🔔 slower final turn

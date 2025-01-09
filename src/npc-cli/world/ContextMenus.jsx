@@ -61,6 +61,8 @@ export default function ContextMenus() {
         cm.speech = speech;
         cm.update();
       }
+
+      w.events.next({ key: 'speech', npcKey, speech });
     },
 
   }));

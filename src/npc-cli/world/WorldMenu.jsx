@@ -57,7 +57,7 @@ export default function WorldMenu(props) {
     say(npcKey, ...parts) {
       const line = parts.join(' ');
       state.logger.xterm.writeln(
-        `[ ${ansi.BrightYellow}${npcKey}${ansi.Reset} ] ${ansi.Blue}${line}${ansi.Reset}`
+        `${ansi.BrightGreen}[ ${ansi.BrightYellow}${ansi.Bold}${npcKey}${ansi.BrightGreen}${ansi.BoldReset} ]${ansi.Reset} ${line}${ansi.Reset}`
       );
     },
     toggleDebug() {
