@@ -167,7 +167,11 @@
 
 ### On hold
 
-- avoid line rendering issues of Ceiling at large distances
+- tty should restore variables on full-page-refresh
+  - currently only working on refresh Tabs
+- npc label (e.g. `kate`) sometimes not updated in prod after reload
+  - fixed by manually changing `npc.epochMs` then `w.npc.update()`
+- ❌ avoid line rendering issues of Ceiling at large distances
 - ✅ avoid creating gmGraph in nav.worker
   - create offMeshDefs in main thread and send
 - change npc label height onchange animation
