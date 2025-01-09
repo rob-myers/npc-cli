@@ -18,8 +18,8 @@ export default function Floor(props) {
   const w = React.useContext(WorldContext);
 
   const state = useStateRef(/** @returns {State} */ () => ({
-    grid: getGridPattern(1/5 * geomorphGridMeters * worldToCanvas, 'rgba(100, 110, 110, 0.05)'),
-    largeGrid: getGridPattern(geomorphGridMeters * worldToCanvas, 'rgba(100, 100, 100, 0.2)'),
+    grid: getGridPattern(1/5 * geomorphGridMeters * worldToCanvas, 'rgba(100, 100, 150, 0.05)'),
+    largeGrid: getGridPattern(geomorphGridMeters * worldToCanvas, 'rgba(100, 100, 100, 0.25)'),
     inst: /** @type {*} */ (null),
     quad: getQuadGeometryXZ(`${w.key}-multi-tex-floor-xz`),
 
@@ -78,7 +78,7 @@ export default function Floor(props) {
       const triangles = gm.navDecomp.tris.map(tri => new Poly(tri.map(i => gm.navDecomp.vs[i])));
       // const navPoly = Poly.union(triangles);
       const navPoly = Poly.union(triangles.concat(gm.doors.map(x => x.computeDoorway()))); // 🚧 move to create-gms-data
-      drawPolygons(ct, navPoly, ['#191921', '#99999977', 0.03]);
+      drawPolygons(ct, navPoly, ['#000', '#99999977', 0.03]);
       
       // drawPolygons(ct, triangles, [null, 'rgba(200, 200, 200, 0.3)', 0.01]); // outlines
 
