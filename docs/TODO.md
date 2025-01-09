@@ -22,8 +22,14 @@
     - ✅ construct lineText, startRow, endRow from IViewportRange
       - ℹ️ this means finding the whole "wrapped line" that the link is part of
   - 🚧 setup matching system (lineText, linkText)
-  - api to write line to Logger
-  - link NpcSpeechBubble "say" to Logger
+    - ✅ can `w.menu.say(npcKey, line)`
+      - `w menu.say rob foo bar baz`
+    - ✅ speech always has initial link `[ {npcKey} ]`
+    - ✅ send event `click-npc-link` with `{ npcKey, line, link }`
+  - ✅ can clear Logger
+  - 🚧 link NpcSpeechBubble "say" to Logger
+  - setup demo link listener
+  - can resize Logger
 
 - 🚧 pre next.js migration
   - ✅ finish/close wip todos

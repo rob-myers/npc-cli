@@ -131,6 +131,7 @@ declare namespace NPC {
     | { key: 'click-link'; cmKey: string; linkKey: string }
     | { key: 'enter-off-mesh'; npcKey: string; offMesh: NPC.OffMeshLookupValue }
     | { key: 'exit-off-mesh'; npcKey: string; offMesh: NPC.OffMeshLookupValue }
+    | { key: 'click-npc-link'; npcKey: string; } & NPC.ClickLinkEvent
     // ...
   );
 
@@ -314,5 +315,18 @@ declare namespace NPC {
     showLinks?: ContextMenuLink[];
     hideKeys?: string[];
   };
+
+  interface ClickLinkEvent {
+    /** e.g. `[ rob ]` */  
+    linkText: string;
+    /** Full possibly-wrapped line */  
+    fullLine: string;
+    /** 0-based */  
+    startRow: number;
+    /** 0-based */  
+    endRow: number;
+    /** 1-based (x,y) positions, originally from hover event */
+    viewportRange: import("@xterm/xterm").IViewportRange;
+  }
 
 }

@@ -54,10 +54,11 @@ export default function WorldMenu(props) {
     onOverlayPointerUp() {
       props.setTabsEnabled(true);
     },
-    storeTextareaHeight() {
-      tryLocalStorageSet(`log-height-px@${w.key}`, `${
-        Math.max(100, state.logger.container.getBoundingClientRect().height)
-      }`);
+    say(npcKey, ...parts) {
+      const line = parts.join(' ');
+      state.logger.xterm.writeln(
+        `[ ${ansi.BrightYellow}${npcKey}${ansi.Reset} ] ${ansi.Blue}${line}${ansi.Reset}`
+      );
     },
     toggleDebug() {
       // by hiding overlay we permit user to use camera while World paused
@@ -72,10 +73,6 @@ export default function WorldMenu(props) {
   }));
 
   w.menu = state;
-
-  React.useEffect(() => {// 🚧 remove
-    state.logger?.xterm?.writeln(`${Date.now()} [ ${ansi.Blue}test link${ansi.Reset} ]`);
-  }, [state.logger?.xterm]);
 
   return <>
 
@@ -111,6 +108,12 @@ export default function WorldMenu(props) {
       <Logger
         ref={state.ref('logger')}
         className={cx("world-logger", { hidden: state.shown === false })}
+        onClickLink={(e) => {
+          const [npcKey] = e.fullLine.slice('[ '.length).split(' ] ', 1);
+          if (npcKey in w.n) {// prefix `[ {npcKey} ] `
+            w.events.next({ key: 'click-npc-link', npcKey, ...e });
+          }
+        }}
       />
       <div className="controls">
         <label>
@@ -127,7 +130,7 @@ export default function WorldMenu(props) {
             defaultChecked={state.showMeasures}
             onChange={state.changeShowMeasures}
           />
-          debug
+          measure
         </label>
       </div>
     </div>
@@ -227,7 +230,7 @@ const cssTtyDisconnectedMessage = css`
  * @property {(msg: string) => void} measure
  * Measure durations by sending same `msg` twice.
  * @property {() => void} onOverlayPointerUp
- * @property {() => void} storeTextareaHeight
+ * @property {(npcKey: string, line: string) => void} say
  * @property {() => void} toggleDebug
  * @property {() => void} toggleXRay
  * @property {() => void} update

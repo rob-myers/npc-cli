@@ -26,10 +26,12 @@ export const Logger = React.forwardRef(function WorldLogger(props, ref) {
     webglAddon: new WebglAddon(),
     xterm: /** @type {*} */ (null),
 
+    clear() {
+      state.xterm.clear();
+    },
     containerRef: (el) => el && !state.container &&
       setTimeout(() => (state.container = el, update())
     ),
-    // given row potentially in middle of a wrapped line, return the whole line
     getFullLine(rowNumber) {
       const buffer = state.xterm.buffer.active;
       
@@ -47,7 +49,7 @@ export const Logger = React.forwardRef(function WorldLogger(props, ref) {
         lines.push(line.translateToString(true));
 
       return {
-        fullLine: lines.join('\n'),
+        fullLine: lines.join(''),
         startRow,
         endRow, // 1 row after final row
       };
@@ -87,16 +89,21 @@ export const Logger = React.forwardRef(function WorldLogger(props, ref) {
       const linkText = uri;
       const { fullLine, startRow, endRow } = state.getFullLine(viewportRange.start.y - 1);
 
-      console.log('🔔 click', { linkText, fullLine, startRow, endRow });
-      // 🚧
-
+      // console.log('🔔 click', { linkText, fullLine, startRow, endRow });
+      props.onClickLink({
+        linkText,
+        fullLine,
+        startRow,
+        endRow,
+        viewportRange,
+      });
     }, {
       hover(event, text, location) {
-        console.log('🔔 hover', text, location);
+        // console.log('🔔 hover', text, location);
         state.linkViewportRange = location;
       },
       leave(event, text) {
-        console.log('🔔 leave', text);
+        // console.log('🔔 leave', text);
         state.linkViewportRange = null;
       },
       urlRegex: /(\[ [^\]]+ \])/,
@@ -131,6 +138,7 @@ export const Logger = React.forwardRef(function WorldLogger(props, ref) {
 /**
  * @typedef Props
  * @property {string} [className]
+ * @property {(e: NPC.ClickLinkEvent) => void} onClickLink
  */
 
 /**
@@ -143,6 +151,8 @@ export const Logger = React.forwardRef(function WorldLogger(props, ref) {
  * @property {SerializeAddon} serializeAddon
  * @property {Terminal} xterm
  * @property {WebglAddon} webglAddon
+ *
+ * @property {() => void} clear
  * @property {(el: null | HTMLDivElement) => void} containerRef
  * @property {(rowNumber: number) => { fullLine: string; startRow: number; endRow: number; }} getFullLine
  * Given 0-based rowNumber in active buffer, compute the whole (possibly-wrapped) line.
