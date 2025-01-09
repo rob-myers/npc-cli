@@ -23566,7 +23566,7 @@
         {
           "symbolKey": "bridge--042--8x9",
           "obstacleId": 4,
-          "height": 1.05,
+          "height": 1.08,
           "origPoly": {
             "type": "Polygon",
             "coordinates": [
@@ -23613,7 +23613,7 @@
             ],
             "meta": {
               "obstacle": true,
-              "y": 1.05,
+              "y": 1.08,
               "window-base": true,
               "symKey": "bridge--042--8x9",
               "obsId": 4
@@ -23623,7 +23623,7 @@
           "center": {"x": 15.01, "y": 2.01},
           "meta": {
             "obstacle": true,
-            "y": 1.05,
+            "y": 1.08,
             "window-base": true,
             "symKey": "bridge--042--8x9",
             "obsId": 4
@@ -25744,7 +25744,7 @@
             "meta": {
               "window": true,
               "hull": true,
-              "y": 1.075,
+              "y": 1.1,
               "h": 0.6,
               "auto": true
             }

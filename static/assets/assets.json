@@ -3,7 +3,7 @@
     "101--hull": {"outputHash": -1018006266, "pngHash": 568633107},
     "102--hull": {"outputHash": -234772630, "pngHash": 184103855},
     "103--hull": {"outputHash": -1566389117, "pngHash": -1937509879},
-    "301--hull": {"outputHash": -1558732590, "pngHash": 787602800},
+    "301--hull": {"outputHash": -1570062987, "pngHash": 787602800},
     "302--hull": {"outputHash": 551679440, "pngHash": -1557128953},
     "303--hull": {"outputHash": 1156010591, "pngHash": -299838577},
     "bed--003--1x1.6": {
@@ -18,14 +18,14 @@
       "obsHashes": [895128349]
     },
     "bridge--042--8x9": {
-      "outputHash": 41245136,
+      "outputHash": -924635117,
       "pngHash": 628461375,
       "obsHashes": [
         -1257084114,
         2018744846,
         1296475642,
         -1175340879,
-        -1238391632
+        1111745293
       ]
     },
     "cargo--002--2x2": {"outputHash": 29938404, "pngHash": 1491321256},
@@ -4054,7 +4054,7 @@
               [10.5, 3.0858]
             ]
           ],
-          "meta": {"window": true, "hull": true, "y": 1.075, "h": 0.6}
+          "meta": {"window": true, "hull": true, "y": 1.1, "h": 0.6}
         }
       ],
       "decor": [
@@ -6919,7 +6919,7 @@
           ],
           "meta": {
             "obstacle": true,
-            "y": 1.05,
+            "y": 1.08,
             "window-base": true,
             "symKey": "bridge--042--8x9",
             "obsId": 4
