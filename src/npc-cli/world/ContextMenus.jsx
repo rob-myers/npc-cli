@@ -42,7 +42,7 @@ export default function ContextMenus() {
     delete(...npcKeys) {
       for (const npcKey of npcKeys) {
         if (npcKey === 'default') {
-          continue; // cannot delete default context mennu
+          continue; // cannot delete default context menu
         }
         state.lookup[npcKey]?.setTracked();
         delete state.lookup[npcKey];
