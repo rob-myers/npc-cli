@@ -1,5 +1,6 @@
 import React from "react";
 import { css, cx } from "@emotion/css";
+import useMeasure from 'react-use-measure';
 
 import { tryLocalStorageGetParsed, tryLocalStorageSet } from "../service/generic";
 import { ansi } from "../sh/const";
@@ -74,6 +75,12 @@ export default function WorldMenu(props) {
 
   w.menu = state;
 
+  const [measureLoggerRef, bounds] = useMeasure(({ debounce: 30 }));
+
+  React.useEffect(() => {
+    state.logger?.fitAddon.fit();
+  }, [bounds]);
+
   return <>
 
     <div
@@ -104,7 +111,7 @@ export default function WorldMenu(props) {
       </button>
     </div>}
 
-    <div className={loggerCss}>
+    <div className={loggerCss} ref={measureLoggerRef}>
       <Logger
         ref={state.ref('logger')}
         className={cx("world-logger", { hidden: state.shown === false })}

@@ -29,9 +29,11 @@ export const Logger = React.forwardRef(function WorldLogger(props, ref) {
     clear() {
       state.xterm.clear();
     },
-    containerRef: (el) => el && !state.container &&
-      setTimeout(() => (state.container = el, update())
-    ),
+    containerRef(el) {
+      el !== null && !state.container && setTimeout(
+        () => (state.container = el, update())
+      );
+    },
     getFullLine(rowNumber) {
       const buffer = state.xterm.buffer.active;
       
@@ -74,7 +76,7 @@ export const Logger = React.forwardRef(function WorldLogger(props, ref) {
       cursorInactiveStyle: 'none',
       rightClickSelectsWord: true, // mobile: can select single word via long press
       theme: {
-        background: 'rgba(0, 0, 0, 0.5)'
+        background: 'rgba(0, 0, 0, 0.25)'
       },
       convertEol: false,
       rows: 50,
