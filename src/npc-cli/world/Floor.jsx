@@ -19,7 +19,7 @@ export default function Floor(props) {
 
   const state = useStateRef(/** @returns {State} */ () => ({
     grid: getGridPattern(1/5 * geomorphGridMeters * worldToCanvas, 'rgba(0, 0, 100, 0)'),
-    largeGrid: getGridPattern(geomorphGridMeters * worldToCanvas, 'rgba(100, 100, 100, 0.25)'),
+    largeGrid: getGridPattern(geomorphGridMeters * worldToCanvas, 'rgba(120, 120, 120, 0.25)'),
     inst: /** @type {*} */ (null),
     quad: getQuadGeometryXZ(`${w.key}-multi-tex-floor-xz`),
 
@@ -136,7 +136,7 @@ export default function Floor(props) {
       state.inst.instanceMatrix.needsUpdate = true;
       state.inst.computeBoundingSphere();
     },
-  }), { reset: { grid: false, largeGrid: false } });
+  }), { reset: { grid: false, largeGrid: true } });
 
   w.floor = state;
   const { tex } = w.texFloor;
