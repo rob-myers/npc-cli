@@ -27,17 +27,13 @@ click | map '({meta}, {w}) => {
 }' &
 
 w | map 'w => w.e.pressMenuFilters.push(
-  (meta) => meta.do === true || meta.floor === true || meta.npc === true
+  (meta) => meta.do === true || meta.floor === true
 )'
 
 click --long | map --forever 'async (input, {home, w}) => {
-  if (input.meta.npc === true) {
-    w.cm.setNpc(input.meta.npcKey);
-  } else {
-    const npc = w.n[home.selectedNpcKey];
-    if (input.meta.floor === true && !npc.s.doMeta) npc.look(input);
-    else await npc.do(input);
-  }
+  const npc = w.n[home.selectedNpcKey];
+  if (input.meta.floor === true && !npc.s.doMeta) npc.look(input);
+  else await npc.do(input);
 }' &
 
 # click navmesh to move selectedNpcKey

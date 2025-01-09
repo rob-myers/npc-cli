@@ -21,7 +21,7 @@
     - ✅ lineNumber follows from "hover location"
     - ✅ construct lineText, startRow, endRow from IViewportRange
       - ℹ️ this means finding the whole "wrapped line" that the link is part of
-  - 🚧 setup matching (lineText, linkText)
+  - 🚧 setup matching system (lineText, linkText)
   - api to write line to Logger
   - link NpcSpeechBubble "say" to Logger
 

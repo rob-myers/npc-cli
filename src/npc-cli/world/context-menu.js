@@ -28,7 +28,7 @@ class BaseContextMenu {
   /**
    * @param {string} key
    * @param {import('./World').State} w
-   * @param {Partial<Pick<BaseContextMenu, 'showKvs' | 'npcKey' | 'pinned'>>} opts
+   * @param {Partial<Pick<BaseContextMenu, 'showKvs' | 'pinned'>>} opts
    */
   constructor(key, w, opts) {
     /** @type {string} */ this.key = key;

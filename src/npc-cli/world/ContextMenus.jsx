@@ -27,7 +27,6 @@ export default function ContextMenus() {
         const cm = state.lookup[npcKey] = new NpcSpeechBubble(npcKey, w, {
           showKvs: false,
           pinned: true,
-          npcKey,
         });
         cm.setTracked(w.n[npcKey].m.group);
         cm.updateOffset();
