@@ -67,7 +67,7 @@ export default function WorldMenu(props) {
       update();
     },
     toggleXRay() {
-      w.wall.setOpacity(w.wall.opacity === 0.5 ? 1 : 0.5);
+      w.wall.setOpacity(w.wall.opacity === 0.4 ? 1 : 0.4);
       update();
     },
     update,

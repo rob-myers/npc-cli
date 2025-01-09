@@ -45,7 +45,11 @@ class GeomorphService {
     const hullPoly = Poly.union(hullWalls).map(x => x.precision(precision));
     const hullOutline = hullPoly.map((x) => new Poly(x.outline).clone()); // sans holes
 
-    const uncutWalls = symbol.walls;
+    // const uncutWalls = symbol.walls;
+    // Avoid non-hull walls inside hull walls (for x-ray)
+    const uncutWalls = symbol.walls.flatMap(x =>
+      Poly.cutOut(hullWalls, [x]).map(y => (y.meta = x.meta, y))
+    ).concat(hullWalls);
     const plainWallMeta = { wall: true };
     const hullWallMeta = { wall: true, hull: true };
 
