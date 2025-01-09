@@ -62,7 +62,7 @@ export function computeOffMeshConnectionsParams(gms, gmGraph) {
 
       const halfLength = wallOutset + (meta.hull === true ? 0.25 : 0.125);
       // const offsets = meta.hull === true ? [-0.7, 0, 0.7] : [-0.25, 0, 0.25];
-      const offsets = meta.hull === true ? [-0.7, 0, 0.7] : [0];
+      const offsets = meta.hull === true ? [-0.7, 0.01, 0.7] : [0];
       const src = gm.matrix.transformPoint(center.clone().addScaled(normal, halfLength));
       const dst = gm.matrix.transformPoint(center.clone().addScaled(normal, -halfLength));
       const tangent = { x: -normal.y, y: normal.x };
