@@ -81,6 +81,14 @@ w decor.byKey | map Object.values | map length
 
 w decor.rmInstantiatedDecor 1
 w decor.updateInstanceLists
+
+d=0
+test $( call 'x => x.home.d === 0' )
+# exit code 0
+
+# example of bounded loop
+seq 29 | map '(x, {w}) => w.c.say(`rob_${x}`, "yoyoyoy")'
+
 ```
 
 ```sh

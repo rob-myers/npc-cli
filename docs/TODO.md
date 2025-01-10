@@ -31,6 +31,8 @@
   - 🚧 move `w.c.say` -> `w.e.say`
   - setup demo link listener
   - can resize Logger
+  - reconsider npc speech bubble style
+    - ℹ️ keep npc label, even though speech bubble performance good for 100 npcs
 
 - 🚧 pre next.js migration
   - ✅ finish/close wip todos
@@ -175,6 +177,7 @@
 ### On hold
 
 - support different themes (floor colors, ceiling colors, obstacles diffuse, ...)
+  - mobile vs desktop
   - default theme
   - dark theme
 - ✅ tty should restore variables on full-page-refresh
