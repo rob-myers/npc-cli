@@ -123,11 +123,12 @@ export const defaultContextMenuCss = css`
   }
 
   &.docked {
+    z-index: 7;
     transform: unset !important;
     top: unset;
     left: unset;
     right: 0;
-    bottom: calc(64px + 12px);
+    bottom: 0;
     > div {
       padding-bottom: 12px;
     }
@@ -167,11 +168,11 @@ export const defaultContextMenuCss = css`
   .kvs {
     display: flex;
     flex-wrap: wrap;
+    padding: 4px;
   }
 
   .kv {
     display: flex;
-    /* justify-content: space-around; */
     align-items: center;
 
     flex: 1;

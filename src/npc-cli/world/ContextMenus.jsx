@@ -1,6 +1,5 @@
 import React from "react";
 
-import { mapValues, tryLocalStorageGetParsed, tryLocalStorageSet } from "../service/generic";
 import { DefaultContextMenu, NpcSpeechBubble } from "./context-menu";
 import { WorldContext } from "./world-context";
 import useStateRef from "../hooks/use-state-ref";
@@ -123,7 +122,7 @@ function ContextMenu({ cm }) {
       offset={cm.offset}
       open={cm.open}
       tracked={cm.tracked}
-      zIndex={cm.key === 'default' ? 1 : undefined}
+      // zIndex={cm.key === 'default' ? 1 : undefined}
     >
       {cm instanceof DefaultContextMenu
         ? <DefaultContextMenuUi cm={cm} />
