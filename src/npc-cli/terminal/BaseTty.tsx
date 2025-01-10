@@ -5,6 +5,7 @@ import { FitAddon } from "@xterm/addon-fit";
 // 🔔 debugging "Cannot read properties of undefined" onRequestRedraw
 // import { WebglAddon } from "xterm-addon-webgl";
 import { WebglAddon } from "@xterm/addon-webgl";
+import { useBeforeunload } from "react-beforeunload";
 
 import { detectTabPrevNextShortcut } from '../service/generic';
 import { xtermJsTheme } from '../service/const';
@@ -108,6 +109,11 @@ export const BaseTty = React.forwardRef<State, Props>(function BaseTty(props: Pr
   }, [state.container]);
 
   const update = useUpdate();
+
+  useBeforeunload(() => {
+    useSession.api.persistHistory(props.sessionKey);
+    useSession.api.persistHome(props.sessionKey);
+  });
 
   return (
     <div

@@ -174,7 +174,10 @@
 
 ### On hold
 
-- tty should restore variables on full-page-refresh
+- support different themes (floor colors, ceiling colors, obstacles diffuse, ...)
+  - default theme
+  - dark theme
+- ✅ tty should restore variables on full-page-refresh
   - currently only working on refresh Tabs
 - npc label (e.g. `kate`) sometimes not updated in prod after reload
   - fixed by manually changing `npc.epochMs` then `w.npc.update()`
