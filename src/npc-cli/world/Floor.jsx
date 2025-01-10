@@ -69,7 +69,8 @@ export default function Floor(props) {
       ct.setTransform(worldToCanvas, 0, 0, worldToCanvas, -gm.pngRect.x * worldToCanvas, -gm.pngRect.y * worldToCanvas);
 
       // Floor
-      drawPolygons(ct, gm.hullPoly.map(x => x.clone().removeHoles()), ['#000', null]);
+      const floorFill = w.smallViewport ? '#000' : '#222';
+      drawPolygons(ct, gm.hullPoly.map(x => x.clone().removeHoles()), [floorFill, null]);
       
       // NavMesh 🚧 compute navPoly in create-gms-data
       const navMeshFill = w.smallViewport ? '#000' : '#111';
