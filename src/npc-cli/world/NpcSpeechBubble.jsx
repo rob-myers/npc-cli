@@ -40,7 +40,6 @@ export const npcContextMenuCss = css`
     
     font-size: 1rem;
     color: #ff9;
-    background-color: #99999933;
     
     transition: width 300ms;
   }

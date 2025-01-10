@@ -77,7 +77,9 @@ export const Logger = React.forwardRef(function WorldLogger(props, ref) {
       disableStdin: true,
       rightClickSelectsWord: true, // mobile: can select single word via long press
       theme: {
-        background: 'rgba(0, 0, 0, 0.25)',
+        background: 'rgba(0, 0, 0, 0.5)',
+        selectionBackground: 'rgb(30, 30, 30)',
+        // selectionForeground: 'rgb(0, 255, 255)',
       },
       convertEol: false,
       rows: 50,

@@ -28,11 +28,12 @@
     - ✅ send event `click-npc-link` with `{ npcKey, line, link }`
   - ✅ can clear Logger
   - ✅ link NpcSpeechBubble "say" to Logger
-  - 🚧 move `w.c.say` -> `w.e.say`
+  - 🚧 WorldMenu change layout
+    - Logger fixed at bottom
+    - DefaultContextMenu bottom right
+  - can resize Logger vertically
+  - move `w.c.say` -> `w.e.say`
   - setup demo link listener
-  - can resize Logger
-  - reconsider npc speech bubble style
-    - ℹ️ keep npc label, even though speech bubble performance good for 100 npcs
 
 - 🚧 pre next.js migration
   - ✅ finish/close wip todos
@@ -176,6 +177,8 @@
 
 ### On hold
 
+- reconsider npc speech bubble style
+  - ℹ️ keep npc label, even though speech bubble performance good for 100 npcs
 - support different themes (floor colors, ceiling colors, obstacles diffuse, ...)
   - mobile vs desktop
   - default theme

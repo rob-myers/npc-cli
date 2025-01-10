@@ -101,7 +101,7 @@ export const defaultContextMenuCss = css`
     transform-origin: 0 0;
     width: 200px;
     background-color: #000;
-    border: 1px solid #dddddd77;
+    /* border: 1px solid #dddddd55; */
   }
 
   .npc-key {
@@ -125,7 +125,13 @@ export const defaultContextMenuCss = css`
   &.docked {
     transform: unset !important;
     top: unset;
-    bottom: 0;
+    left: unset;
+    right: 0;
+    bottom: calc(64px + 12px);
+
+    > div {
+      padding-bottom: 12px;
+    }
   }
 
   .select-npc {
@@ -170,7 +176,7 @@ export const defaultContextMenuCss = css`
     align-items: center;
 
     flex: 1;
-    border: 1px solid #555;
+    border: 1px solid #222;
     /* font-family: 'Courier New', Courier, monospace; */
 
     .key {

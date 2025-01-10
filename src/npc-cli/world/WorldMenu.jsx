@@ -26,13 +26,8 @@ export default function WorldMenu(props) {
     durationKeys: {},
     initHeight: tryLocalStorageGetParsed(`log-height-px@${w.key}`) ?? 200,
     logger: /** @type {*} */ (null),
-    shown: true,
     showMeasures: tryLocalStorageGetParsed(`log-show-measures@${w.key}`) ?? false,
 
-    changeShown(e) {
-      state.shown = e.currentTarget.checked;
-      update();
-    },
     changeShowMeasures(e) {
       state.showMeasures = e.currentTarget.checked;
       tryLocalStorageSet(`log-show-measures@${w.key}`, `${state.showMeasures}`);
@@ -60,6 +55,7 @@ export default function WorldMenu(props) {
       state.logger.xterm.writeln(
         `${ansi.BrightGreen}[ ${ansi.BrightYellow}${ansi.Bold}${npcKey}${ansi.BrightGreen}${ansi.BoldReset} ]${ansi.Reset} ${line}${ansi.Reset}`
       );
+      state.logger.xterm.scrollToBottom();
     },
     toggleDebug() {
       // by hiding overlay we permit user to use camera while World paused
@@ -112,25 +108,8 @@ export default function WorldMenu(props) {
     </div>}
 
     <div className={loggerCss} ref={measureLoggerRef}>
-      <Logger
-        ref={state.ref('logger')}
-        className={cx("world-logger", { hidden: state.shown === false })}
-        onClickLink={(e) => {
-          const [npcKey] = e.fullLine.slice('[ '.length).split(' ] ', 1);
-          if (npcKey in w.n) {// prefix `[ {npcKey} ] `
-            w.events.next({ key: 'click-npc-link', npcKey, ...e });
-          }
-        }}
-      />
-      <div className="controls">
-        <label>
-          <input
-            type="checkbox"
-            defaultChecked={state.shown}
-            onChange={state.changeShown}
-          />
-          logger
-        </label>
+      {/* 🚧 move into pop-up in paused menu */}
+      {/* <div className="controls">
         <label>
           <input
             type="checkbox"
@@ -139,7 +118,17 @@ export default function WorldMenu(props) {
           />
           measure
         </label>
-      </div>
+      </div> */}
+      <Logger
+        ref={state.ref('logger')}
+        className="world-logger"
+        onClickLink={(e) => {
+          const [npcKey] = e.fullLine.slice('[ '.length).split(' ] ', 1);
+          if (npcKey in w.n) {// prefix `[ {npcKey} ] `
+            w.events.next({ key: 'click-npc-link', npcKey, ...e });
+          }
+        }}
+      />
     </div>
 
     <TouchIndicator/>
@@ -157,16 +146,18 @@ export default function WorldMenu(props) {
 const loggerCss = css`
   position: absolute;
   z-index: 6;
-  right: 0;
+  left: 0;
   bottom: 0;
   display: flex;
   flex-direction: column;
-  width: 50%;
+
+  width: 100%;
+  height: 80px;
 
   color: white;
   font-size: 12px;
   font-family: 'Courier New', Courier, monospace;
-  padding: 8px;
+  padding: 0px;
 
   &.hidden, .hidden {
     display: none;
@@ -174,9 +165,12 @@ const loggerCss = css`
   
   .world-logger {
     width: 100%;
-    height: 50px;
+    height: 100%;
     textarea {
       visibility: hidden; // Hide cursor
+    }
+    .terminal.xterm {
+      height: 100%;
     }
   }
 
@@ -194,8 +188,8 @@ const loggerCss = css`
 
 const cssTtyDisconnectedMessage = css`
   position: absolute;
-  bottom: 0;
-  right: 0;
+  top: 0;
+  left: 0;
   z-index: 5;
   
   pointer-events: none;
@@ -230,10 +224,8 @@ const cssTtyDisconnectedMessage = css`
  * @property {{ [durKey: string]: number }} durationKeys
  * @property {import('../terminal/Logger').State} logger
  * @property {number} initHeight
- * @property {boolean} shown
  * @property {boolean} showMeasures
  *
- * @property {(e: React.ChangeEvent<HTMLInputElement>) => void} changeShown
  * @property {(e: React.ChangeEvent<HTMLInputElement>) => void} changeShowMeasures
  * @property {() => void} enableAll
  * @property {(msg: string) => void} measure
