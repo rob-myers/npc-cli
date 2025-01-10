@@ -46,7 +46,7 @@ export default function TouchIndicator() {
       }
     }
 
-    const el = w.view.rootEl;
+    const el = w.view.canvas;
 
     el.addEventListener('pointerdown', onPointerDown);
     el.addEventListener('pointerup', onPointerUp);

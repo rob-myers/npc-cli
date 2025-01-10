@@ -1,4 +1,5 @@
 import React from "react";
+import { createPortal } from "react-dom";
 import { css, cx } from "@emotion/css";
 import useMeasure from 'react-use-measure';
 
@@ -107,29 +108,34 @@ export default function WorldMenu(props) {
       </button>
     </div>}
 
-    <div className={loggerCss} ref={measureLoggerRef}>
-      {/* 🚧 move into pop-up in paused menu */}
-      {/* <div className="controls">
-        <label>
-          <input
-            type="checkbox"
-            defaultChecked={state.showMeasures}
-            onChange={state.changeShowMeasures}
-          />
-          measure
-        </label>
-      </div> */}
-      <Logger
-        ref={state.ref('logger')}
-        className="world-logger"
-        onClickLink={(e) => {
-          const [npcKey] = e.fullLine.slice('[ '.length).split(' ] ', 1);
-          if (npcKey in w.n) {// prefix `[ {npcKey} ] `
-            w.events.next({ key: 'click-npc-link', npcKey, ...e });
-          }
-        }}
-      />
-    </div>
+    {/* 🚧 move measures option into paused menu */}
+    {/* <div className="controls">
+      <label>
+        <input
+          type="checkbox"
+          defaultChecked={state.showMeasures}
+          onChange={state.changeShowMeasures}
+        />
+        measure
+      </label>
+    </div> */}
+
+    {w.view.rootEl && createPortal(
+      <div className={loggerCss} ref={measureLoggerRef}>
+        <Logger
+          ref={state.ref('logger')}
+          className="world-logger"
+          onClickLink={(e) => {
+            const [npcKey] = e.fullLine.slice('[ '.length).split(' ] ', 1);
+            if (npcKey in w.n) {// prefix `[ {npcKey} ] `
+              w.events.next({ key: 'click-npc-link', npcKey, ...e });
+            }
+          }}
+        />
+      </div>
+      ,
+      w.view.rootEl,
+    )}
 
     <TouchIndicator/>
 

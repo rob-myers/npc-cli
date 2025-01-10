@@ -482,21 +482,20 @@ export default function WorldView(props) {
 const rootCss = css`
   user-select: none;
 
-  > div {
-    background-color: black;
+  > div:first-child {
     display: flex;
     align-items: center;
     justify-content: center;
+
+    canvas {
+      background-color: rgba(20, 20, 20, 1);
+      width: 100%;
+      height: 100%;
+      /* background-color: rgba(60, 60, 60, 1); */
+      /* background-color: rgba(255, 255, 255, 1); */
+    }
   }
 
-  canvas {
-    background-color: rgba(20, 20, 20, 1);
-    /* background-color: rgba(60, 60, 60, 1); */
-    /* background-color: rgba(255, 255, 255, 1); */
-    width: 100%;
-    height: 100%;
-    /* filter: sepia(1) invert(1); */
-  }
 `;
 
 const statsCss = css`
