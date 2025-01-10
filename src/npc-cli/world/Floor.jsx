@@ -72,10 +72,11 @@ export default function Floor(props) {
       drawPolygons(ct, gm.hullPoly.map(x => x.clone().removeHoles()), ['#000', null]);
       
       // NavMesh 🚧 compute navPoly in create-gms-data
-      const navMeshColor = w.smallViewport ? '#000' : '#111';
+      const navMeshFill = w.smallViewport ? '#000' : '#111';
+      const navMeshStroke = w.smallViewport ? '#9999cc77' : '#9999cc55';
       const triangles = gm.navDecomp.tris.map(tri => new Poly(tri.map(i => gm.navDecomp.vs[i])));
       const navPoly = Poly.union(triangles.concat(gm.doors.map(x => x.computeDoorway())));
-      drawPolygons(ct, navPoly, [navMeshColor, '#9999ff77', 0.05]);
+      drawPolygons(ct, navPoly, [navMeshFill, navMeshStroke, 0.05]);
       // drawPolygons(ct, triangles, [null, 'rgba(200, 200, 200, 0.3)', 0.01]); // outlines
 
       ct.setTransform(1, 0, 0, 1, -gm.pngRect.x * worldToCanvas, -gm.pngRect.y * worldToCanvas);
@@ -103,7 +104,7 @@ export default function Floor(props) {
       const shadowPolys = Poly.union(gm.obstacles.flatMap(x =>
         x.origPoly.meta['no-shadow'] ? [] : x.origPoly.clone().applyMatrix(tmpMat1.setMatrixValue(x.transform))
       ));
-      drawPolygons(ct, shadowPolys, [navMeshColor, '#99999977']);
+      drawPolygons(ct, shadowPolys, [navMeshFill, '#99999977']);
 
       // debug decor: moved to <Debug/>
       // // ct.setTransform(worldToSgu, 0, 0, worldToSgu, -pngRect.x * worldToSgu, -pngRect.y * worldToSgu);
