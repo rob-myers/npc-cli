@@ -69,12 +69,12 @@ export default function Floor(props) {
       ct.setTransform(worldToCanvas, 0, 0, worldToCanvas, -gm.pngRect.x * worldToCanvas, -gm.pngRect.y * worldToCanvas);
 
       // Floor (mostly hidden by NavMesh)
-      drawPolygons(ct, gm.hullPoly.map(x => x.clone().removeHoles()), ['#222', null]);
+      drawPolygons(ct, gm.hullPoly.map(x => x.clone().removeHoles()), ['#000', null]);
       
       // NavMesh 🚧 compute navPoly in create-gms-data
       const triangles = gm.navDecomp.tris.map(tri => new Poly(tri.map(i => gm.navDecomp.vs[i])));
       const navPoly = Poly.union(triangles.concat(gm.doors.map(x => x.computeDoorway())));
-      drawPolygons(ct, navPoly, ['#000', '#99999977', 0.03]);
+      drawPolygons(ct, navPoly, ['#111', '#99999977', 0.03]);
       // drawPolygons(ct, triangles, [null, 'rgba(200, 200, 200, 0.3)', 0.01]); // outlines
 
       ct.setTransform(1, 0, 0, 1, -gm.pngRect.x * worldToCanvas, -gm.pngRect.y * worldToCanvas);
@@ -99,11 +99,10 @@ export default function Floor(props) {
       drawPolygons(ct, gm.walls, ['black', null]);
 
       // drop shadows (avoid doubling e.g. bunk bed, overlapping tables)
-      const shadowColor = 'rgba(0, 0, 0, 0.25)'
       const shadowPolys = Poly.union(gm.obstacles.flatMap(x =>
         x.origPoly.meta['no-shadow'] ? [] : x.origPoly.clone().applyMatrix(tmpMat1.setMatrixValue(x.transform))
       ));
-      drawPolygons(ct, shadowPolys, [shadowColor, null]);
+      drawPolygons(ct, shadowPolys, ['#111', '#99999977']);
 
       // debug decor: moved to <Debug/>
       // // ct.setTransform(worldToSgu, 0, 0, worldToSgu, -pngRect.x * worldToSgu, -pngRect.y * worldToSgu);
