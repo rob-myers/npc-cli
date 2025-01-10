@@ -75,7 +75,7 @@ export default function WorldMenu(props) {
 
   w.menu = state;
 
-  const [measureLoggerRef, bounds] = useMeasure(({ debounce: 30 }));
+  const [measureLoggerRef, bounds] = useMeasure(({ debounce: 0 }));
 
   React.useEffect(() => {
     state.logger?.fitAddon.fit();
@@ -157,9 +157,11 @@ export default function WorldMenu(props) {
 const loggerCss = css`
   position: absolute;
   z-index: 6;
-  top: 0;
+  right: 0;
+  bottom: 0;
   display: flex;
   flex-direction: column;
+  width: 50%;
 
   color: white;
   font-size: 12px;
@@ -171,8 +173,8 @@ const loggerCss = css`
   }
   
   .world-logger {
-    width: 230px;
-    height: 160px;
+    width: 100%;
+    height: 50px;
     textarea {
       visibility: hidden; // Hide cursor
     }
