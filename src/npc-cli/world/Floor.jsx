@@ -18,8 +18,8 @@ export default function Floor(props) {
   const w = React.useContext(WorldContext);
 
   const state = useStateRef(/** @returns {State} */ () => ({
-    grid: getGridPattern(1/5 * geomorphGridMeters * worldToCanvas, 'rgba(0, 0, 100, 0)'),
-    largeGrid: getGridPattern(geomorphGridMeters * worldToCanvas, 'rgba(120, 120, 120, 0.3)'),
+    grid: getGridPattern(1/5 * geomorphGridMeters * worldToCanvas, 'rgba(200, 200, 200, 0)'),
+    largeGrid: getGridPattern(geomorphGridMeters * worldToCanvas, 'rgba(120, 120, 120, 0.2)'),
     inst: /** @type {*} */ (null),
     quad: getQuadGeometryXZ(`${w.key}-multi-tex-floor-xz`),
 
@@ -82,8 +82,8 @@ export default function Floor(props) {
 
       ct.setTransform(1, 0, 0, 1, -gm.pngRect.x * worldToCanvas, -gm.pngRect.y * worldToCanvas);
       // Small grid
-      // ct.fillStyle = state.grid;
-      // ct.fillRect(0, 0, ct.canvas.width, ct.canvas.height);
+      ct.fillStyle = state.grid;
+      ct.fillRect(0, 0, ct.canvas.width, ct.canvas.height);
       // Large grid
       ct.fillStyle = state.largeGrid;
       ct.fillRect(0, 0, ct.canvas.width, ct.canvas.height);
@@ -138,7 +138,7 @@ export default function Floor(props) {
       state.inst.instanceMatrix.needsUpdate = true;
       state.inst.computeBoundingSphere();
     },
-  }), { reset: { grid: false, largeGrid: true } });
+  }), { reset: { grid: true, largeGrid: true } });
 
   w.floor = state;
   const { tex } = w.texFloor;
