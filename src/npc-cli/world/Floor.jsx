@@ -69,11 +69,11 @@ export default function Floor(props) {
       ct.setTransform(worldToCanvas, 0, 0, worldToCanvas, -gm.pngRect.x * worldToCanvas, -gm.pngRect.y * worldToCanvas);
 
       // Floor
-      const floorFill = w.smallViewport ? '#000' : '#222';
+      const floorFill = '#222';
       drawPolygons(ct, gm.hullPoly.map(x => x.clone().removeHoles()), [floorFill, null]);
       
       // NavMesh 🚧 compute navPoly in create-gms-data
-      const navMeshFill = w.smallViewport ? '#000' : '#111';
+      const navMeshFill = '#111';
       const navMeshStroke = w.smallViewport ? '#9999cc77' : '#9999cc55';
       const triangles = gm.navDecomp.tris.map(tri => new Poly(tri.map(i => gm.navDecomp.vs[i])));
       const navPoly = Poly.union(triangles.concat(gm.doors.map(x => x.computeDoorway())));
