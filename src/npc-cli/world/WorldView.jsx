@@ -415,6 +415,7 @@ export default function WorldView(props) {
         makeDefault
         zoomToCursor
         onChange={state.onChangeControls}
+        domElement={state.canvas}
         panSpeed={2}
         {...state.controlsViewportOpts}
         //@ts-ignore see three-stdlib patch
