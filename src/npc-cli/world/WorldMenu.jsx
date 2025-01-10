@@ -42,11 +42,11 @@ export default function WorldMenu(props) {
       props.setTabsEnabled(true);
     },
     measure(msg) {
-      if (!state.showMeasures) {
+      if (state.showMeasures === false) {
         return;
       } else if (msg in state.durationKeys) {
         const durationMs = (performance.now() - state.durationKeys[msg]).toFixed(1);
-        state.logger.xterm.writeln(`${msg} ${ansi.BrightYellow}${durationMs}${ansi.Reset}`);
+        state.logger?.xterm.writeln(`${msg} ${ansi.BrightYellow}${durationMs}${ansi.Reset}`);
         delete state.durationKeys[msg];
       } else {
         state.durationKeys[msg] = performance.now();
