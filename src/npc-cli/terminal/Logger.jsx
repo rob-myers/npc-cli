@@ -70,13 +70,14 @@ export const Logger = React.forwardRef(function WorldLogger(props, ref) {
     const xterm = state.xterm = new Terminal({
       allowProposedApi: true, // Needed for WebLinksAddon
       allowTransparency: true,
-      fontSize: 16,
+      fontSize: 15,
+      fontFamily: 'Courier new, monospace',
       cursorBlink: false,
-      disableStdin: true,
       cursorInactiveStyle: 'none',
+      disableStdin: true,
       rightClickSelectsWord: true, // mobile: can select single word via long press
       theme: {
-        background: 'rgba(0, 0, 0, 0.25)'
+        background: 'rgba(0, 0, 0, 0.25)',
       },
       convertEol: false,
       rows: 50,
