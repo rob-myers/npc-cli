@@ -128,7 +128,6 @@ export const defaultContextMenuCss = css`
     left: unset;
     right: 0;
     bottom: calc(64px + 12px);
-
     > div {
       padding-bottom: 12px;
     }
@@ -172,11 +171,11 @@ export const defaultContextMenuCss = css`
 
   .kv {
     display: flex;
-    justify-content: space-around;
+    /* justify-content: space-around; */
     align-items: center;
 
     flex: 1;
-    border: 1px solid #222;
+    /* border: 1px solid #222; */
     /* font-family: 'Courier New', Courier, monospace; */
 
     .key {
