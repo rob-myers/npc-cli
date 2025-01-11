@@ -42,7 +42,7 @@
     - ✅ can drag around while docked
     - 🚧 remember position
     - 🚧 responsive i.e. keeps in view
-    - test Draggable on mobile
+    - 🚧 test Draggable on mobile
   - can move Logger
   - can resize Logger
   - Logger logs disconnected/connected message

@@ -59,7 +59,6 @@ export default function Draggable(props) {
 
     /** @param {React.TouchEvent} e */
     onTouchStart(e) {
-      // 🚧
       state.touchId = state.getTouchIdentifier(e);
       const touchObj = typeof state.touchId  === 'number' ? state.getTouch(e, state.touchId) : null;
       if (!touchObj) return null; // not the right touch
@@ -70,15 +69,13 @@ export default function Draggable(props) {
     },
     /** @param {React.TouchEvent} e */
     onTouchEnd(e) {
-      // 🚧
-      e.stopPropagation();
-      e.preventDefault();
+      // e.stopPropagation();
+      // e.preventDefault();
       state.dragging = false;
       state.touchId = undefined;
     },
     /** @param {React.TouchEvent} e */
     onTouchMove(e) {
-      // 🚧
       if (state.dragging === false) {
         return;
       }
