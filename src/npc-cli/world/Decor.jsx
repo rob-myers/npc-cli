@@ -574,7 +574,7 @@ export default function Decor(props) {
       {ready && <instancedMultiTextureMaterial
         key={glsl.InstancedMultiTextureMaterial.key}
         alphaTest={0.5}
-        diffuse={[0.5, 0.5, 0.5]}
+        diffuse={[0.7, 0.7, 0.7]}
         atlas={w.texDecor.tex}
         objectPickRed={5}
         opacity={query.status === 'success' ? 1 : 0}
