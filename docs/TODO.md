@@ -28,12 +28,18 @@
     - ✅ send event `click-npc-link` with `{ npcKey, line, link }`
   - ✅ can clear Logger
   - ✅ link NpcSpeechBubble "say" to Logger
+  - ✅ Draggable component
+  - 🚧 Split ContextMenus into DefaultContextMenu, NpcSpeechBubbles
   - 🚧 WorldMenu change layout
     - ✅ Logger fixed at bottom
     - ✅ DefaultContextMenu bottom right
-    - can move DefaultContextMenu whilst docked
+    - ℹ️ https://stackoverflow.com/questions/20926551/recommended-way-of-making-react-component-div-draggable
+    - 🚧 can move DefaultContextMenu whilst docked via Draggable
   - can move Logger
   - can resize Logger
+  - Logger logs disconnected/connected message
+  - Paused "Opts" with PopUp and Logger measure option
+  - X-ray slider always visible
   - move `w.c.say` -> `w.e.say`
   - profile-1 has link listener
 

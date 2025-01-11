@@ -1,6 +1,17 @@
 
 ## Bits and pieces
 
+### Get closest position relative ancestor 
+
+> https://css-irl.info/finding-an-elements-nearest-relative-positioned-ancestor/
+
+```js
+// el in Chrome devtool
+$0.offsetParent
+// position
+getComputedStyle($0.offsetParent).position
+```
+
 ### Developing WASM / C++ locally with `recast-navigation-js` and `recastnavigation`
 
 Download parallel repos:
