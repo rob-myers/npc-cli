@@ -132,12 +132,13 @@ export async function* reduce({ api, args, datum }) {
 
 /**
  * Split arrays from stdin into items.
- * Split strings by optional separator (default `''`).
- * Otherwise ignore.
+ * Split strings by optional separator (default `''`), e.g.
+ * - `split ,` splits by comma
+ * - `split '/\n/'` splits by newlines
  * @param {RunArg} ctxt 
  */
 export async function* split({ api, args, datum }) {
-  const arg = args[0] || "";
+  let arg = api.parseJsArg( args[0] || "");
   while ((datum = await api.read()) !== api.eof)
     if (datum instanceof Array) {
       // yield* datum
