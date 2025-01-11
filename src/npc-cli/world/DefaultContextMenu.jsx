@@ -1,78 +1,112 @@
 import React from "react";
 import { css, cx } from "@emotion/css";
+
+import { WorldContext } from "./world-context";
+import { DefaultContextMenuApi as DefaultContextMenuApi } from "./context-menu";
+import useUpdate from "../hooks/use-update";
 import { PopUp } from "../components/PopUp";
+import { Html3d } from "../components/Html3d";
 
-/**
- * @param {{ cm: NPC.DefaultContextMenuType }} props 
- */
-export function DefaultContextMenu({ cm }) {
+// 🚧 React.memo ?
+export function DefaultContextMenu() {
 
-  return <div onClick={cm.onClickLink.bind(cm)}>
+  const w = React.useContext(WorldContext);
 
-    <div className={cx({ hidden: cm.npcKey === undefined }, "npc-key")} data-key="clear-npc">
-      @<span>{cm.npcKey}</span>
-    </div>
+  const cm = (w.cm ??= new DefaultContextMenuApi('default', w, { showKvs: true }));
   
-    <div className="links">
+  cm.update = useUpdate();
 
-      <button data-key="toggle-docked">
-        {cm.docked ? 'embed' : 'dock'}
-      </button>
+  React.useMemo(() => {// HMR
+    if (process.env.NODE_ENV === 'development') {
+      w.cm = Object.assign(new DefaultContextMenuApi(cm.key, w, cm), {...cm})
+      cm.dispose();
+    }
+  }, []);
 
-      <PopUp
-        ref={cm.popUpRef.bind(cm)}
-        infoClassName={popUpInfoCss}
-        label="opts"
-        onChange={cm.onTogglePopup.bind(cm)}
-        width={200}
-      >
+  // Extra initial render e.g. init paused, trigger CSS transition on scaled:=false
+  React.useEffect(() => void cm.update(), [cm.scaled]);
 
-        <select
-          className="select-npc"
-          onChange={cm.onSelectNpc.bind(cm)}
-          value={cm.npcKey ?? ""}
-        >
-          <option value="">no npc</option>
-          {cm.selectNpcKeys.map(npcKey => 
-            <option value={npcKey}>{npcKey}</option>
-          )}
-        </select>
+  return (
+    <Html3d
+      ref={cm.html3dRef.bind(cm)}
+      className={defaultContextMenuCss}
+      baseScale={cm.baseScale}
+      docked={cm.docked}
+      position={cm.position}
+      offset={cm.offset}
+      open={cm.open}
+      tracked={cm.tracked}
+      // zIndex={cm.key === 'default' ? 1 : undefined}
+    >
+      <div onClick={cm.onClickLink.bind(cm)}>
 
-        <button onClick={cm.refreshPopup.bind(cm)}>
-          refresh
-        </button>
-      </PopUp>
-
-      {(cm.docked ? topLinks.docked : topLinks.embedded).map(({ key, label, test }) =>
-        <button
-          key={key}
-          data-key={key}
-          className={test !== undefined && !(/** @type {*} */ (cm)[test]) ? 'off' : undefined}
-        >
-          {label}
-        </button>
-      )}
-      {cm.links.map(({ key, label, test }) =>
-        <button
-          key={key}
-          data-key={key}
-          className={test !== undefined && !(/** @type {*} */ (cm)[test]) ? 'off' : undefined}
-        >
-          {label}
-        </button>
-      )}
-    </div>
-
-    {cm.showKvs === true && <div className="kvs">
-      {cm.kvs.map(({ k, v }) => (
-        <div key={k} className="kv">
-          <span className="key">{k}</span>
-          {v !== '' && <span className="value">{v}</span>}
+        <div className={cx({ hidden: cm.npcKey === undefined }, "npc-key")} data-key="clear-npc">
+          @<span>{cm.npcKey}</span>
         </div>
-      ))}
-    </div>}
+      
+        <div className="links">
 
-  </div>;
+          <button data-key="toggle-docked">
+            {cm.docked ? 'embed' : 'dock'}
+          </button>
+
+          <PopUp
+            ref={cm.popUpRef.bind(cm)}
+            infoClassName={popUpInfoCss}
+            label="opts"
+            onChange={cm.onTogglePopup.bind(cm)}
+            width={200}
+          >
+
+            <select
+              className="select-npc"
+              onChange={cm.onSelectNpc.bind(cm)}
+              value={cm.npcKey ?? ""}
+            >
+              <option value="">no npc</option>
+              {cm.selectNpcKeys.map(npcKey => 
+                <option value={npcKey}>{npcKey}</option>
+              )}
+            </select>
+
+            <button onClick={cm.refreshPopup.bind(cm)}>
+              refresh
+            </button>
+          </PopUp>
+
+          {(cm.docked ? topLinks.docked : topLinks.embedded).map(({ key, label, test }) =>
+            <button
+              key={key}
+              data-key={key}
+              className={test !== undefined && !(/** @type {*} */ (cm)[test]) ? 'off' : undefined}
+            >
+              {label}
+            </button>
+          )}
+          {cm.links.map(({ key, label, test }) =>
+            <button
+              key={key}
+              data-key={key}
+              className={test !== undefined && !(/** @type {*} */ (cm)[test]) ? 'off' : undefined}
+            >
+              {label}
+            </button>
+          )}
+        </div>
+
+        {cm.showKvs === true && <div className="kvs">
+          {cm.kvs.map(({ k, v }) => (
+            <div key={k} className="kv">
+              <span className="key">{k}</span>
+              {v !== '' && <span className="value">{v}</span>}
+            </div>
+          ))}
+        </div>}
+
+      </div>
+    </Html3d>
+  );
+
 }
 
 /** @type {Record<'embedded' | 'docked', NPC.ContextMenuLink[]>} */

@@ -1,11 +1,11 @@
 import React from "react";
 
-import { DefaultContextMenu, NpcSpeechBubble } from "./context-menu";
+import { DefaultContextMenuApi, NpcSpeechBubbleApi } from "./context-menu";
 import { WorldContext } from "./world-context";
 import useStateRef from "../hooks/use-state-ref";
 import useUpdate from "../hooks/use-update";
 import { Html3d } from "../components/Html3d";
-import { DefaultContextMenu as DefaultContextMenuUi, defaultContextMenuCss } from "./DefaultContextMenu";
+// import { DefaultContextMenu as DefaultContextMenuUi, defaultContextMenuCss } from "./DefaultContextMenu";
 import { NpcSpeechBubble as NpcSpeechBubbleUi, npcContextMenuCss } from "./NpcSpeechBubble";
 
 /**
@@ -22,7 +22,7 @@ export default function ContextMenus() {
 
     create(npcKey) {// assumes non-existent
       if (npcKey in w.n) {
-        const cm = state.lookup[npcKey] = new NpcSpeechBubble(npcKey, w, {
+        const cm = state.lookup[npcKey] = new NpcSpeechBubbleApi(npcKey, w, {
           showKvs: false,
           pinned: true,
         });
@@ -47,7 +47,7 @@ export default function ContextMenus() {
       update();
     },
     get(npcKey) {
-      return /** @type {NpcSpeechBubble} */ (state.lookup[npcKey]);
+      return /** @type {NpcSpeechBubbleApi} */ (state.lookup[npcKey]);
     },
     say(npcKey, ...parts) {// ensure/change/delete
       const cm = state.get(npcKey) || state.create(npcKey);
@@ -68,15 +68,15 @@ export default function ContextMenus() {
   }));
 
   w.c = state;
-  w.cm = /** @type {DefaultContextMenu} */ (
-    state.lookup.default ??= new DefaultContextMenu('default', w, { showKvs: true })
-  );
+  // w.cm = /** @type {DefaultContextMenuApi} */ (
+  //   state.lookup.default ??= new DefaultContextMenuApi('default', w, { showKvs: true })
+  // );
 
   React.useMemo(() => {// HMR
     process.env.NODE_ENV === 'development' && Object.values(state.lookup).forEach(cm => {
       state.lookup[cm.key] = cm.key === 'default'
-        ? Object.assign(new DefaultContextMenu(cm.key, cm.w, cm), {...cm})
-        : Object.assign(new NpcSpeechBubble(cm.key, cm.w, cm), {...cm})
+        ? Object.assign(new DefaultContextMenuApi(cm.key, cm.w, cm), {...cm})
+        : Object.assign(new NpcSpeechBubbleApi(cm.key, cm.w, cm), {...cm})
       ;
       cm.dispose();
     });
@@ -93,9 +93,9 @@ export default function ContextMenus() {
  * @typedef State
  * @property {{ [cmKey: string]: NPC.ContextMenuType }} lookup
  *
- * @property {(npcKey: string) => NpcSpeechBubble} create Add speech bubble for specific npc
+ * @property {(npcKey: string) => NpcSpeechBubbleApi} create Add speech bubble for specific npc
  * @property {(...npcKeys: string[]) => void} delete
- * @property {(npcKey: string) => NpcSpeechBubble} get
+ * @property {(npcKey: string) => NpcSpeechBubbleApi} get
  * @property {(npcKey: string, ...parts: string[]) => void} say
  */
 
@@ -115,7 +115,7 @@ function ContextMenu({ cm }) {
   return (
     <Html3d
       ref={cm.html3dRef.bind(cm)}
-      className={cm.key === 'default' ? defaultContextMenuCss: npcContextMenuCss}
+      className={cm.key === 'default' ? undefined: npcContextMenuCss}
       baseScale={cm.baseScale}
       docked={cm.docked}
       position={cm.position}
@@ -124,8 +124,9 @@ function ContextMenu({ cm }) {
       tracked={cm.tracked}
       // zIndex={cm.key === 'default' ? 1 : undefined}
     >
-      {cm instanceof DefaultContextMenu
-        ? <DefaultContextMenuUi cm={cm} />
+      {cm instanceof DefaultContextMenuApi
+        // ? <DefaultContextMenuUi cm={cm} />
+        ? null
         : <NpcSpeechBubbleUi cm={cm} />
       }
     </Html3d>

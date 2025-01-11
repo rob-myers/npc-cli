@@ -21,7 +21,7 @@
     - ✅ lineNumber follows from "hover location"
     - ✅ construct lineText, startRow, endRow from IViewportRange
       - ℹ️ this means finding the whole "wrapped line" that the link is part of
-  - 🚧 setup matching system (lineText, linkText)
+  - ✅ setup matching system (lineText, linkText)
     - ✅ can `w.menu.say(npcKey, line)`
       - `w menu.say rob foo bar baz`
     - ✅ speech always has initial link `[ {npcKey} ]`
@@ -30,6 +30,8 @@
   - ✅ link NpcSpeechBubble "say" to Logger
   - ✅ Draggable component
   - 🚧 Split ContextMenus into DefaultContextMenu, NpcSpeechBubbles
+    - ✅ DefaultContextMenu.jsx
+    - 🚧 NpcSpeechBubbles.jsx
   - 🚧 WorldMenu change layout
     - ✅ Logger fixed at bottom
     - ✅ DefaultContextMenu bottom right

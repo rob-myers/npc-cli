@@ -14,6 +14,7 @@ import { popUpRootDataAttribute } from "../components/PopUp.jsx";
 import { WorldContext } from "./world-context.js";
 import useStateRef from "../hooks/use-state-ref.js";
 import ContextMenus from "./ContextMenus.jsx";
+import { DefaultContextMenu } from "./DefaultContextMenu.jsx";
 
 /**
  * @param {Props} props
@@ -422,6 +423,7 @@ export default function WorldView(props) {
         minPanDistance={w.smallViewport ? 0.05 : 0}
       />
 
+      <DefaultContextMenu/>
       <ContextMenus/>
     </Canvas>
   );

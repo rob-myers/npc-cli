@@ -2,7 +2,7 @@ import React from "react";
 import { css } from "@emotion/css";
 
 /**
- * @param {{ cm: NPC.NpcSpeechBubbleType }} props 
+ * @param {{ cm: NPC.NpcSpeechBubbleApi }} props 
  */
 export function NpcSpeechBubble({ cm }) {
   return (

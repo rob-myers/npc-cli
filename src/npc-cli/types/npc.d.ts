@@ -284,13 +284,13 @@ declare namespace NPC {
     quaternion: import('three').Quaternion;
   }
 
-  type DefaultContextMenuType = import('../world/context-menu').DefaultContextMenu;
-  type NpcSpeechBubbleType = import('../world/context-menu').NpcSpeechBubble;
+  type DefaultContextMenuApi = import('../world/context-menu').DefaultContextMenuApi;
+  type NpcSpeechBubbleApi = import('../world/context-menu').NpcSpeechBubbleApi;
 
   // type CMInstance = import('../world/ContextMenus').CMInstance;
   type ContextMenuType = (
-    | DefaultContextMenuType
-    | NpcSpeechBubbleType
+    | DefaultContextMenuApi
+    | NpcSpeechBubbleApi
   );
   
 
@@ -312,7 +312,7 @@ declare namespace NPC {
   /**
    * Assume `parent.meta` has already been updated.
    */
-  type ContextMenuMatcher = (parent: DefaultContextMenuType) => {
+  type ContextMenuMatcher = (parent: DefaultContextMenuApi) => {
     showLinks?: ContextMenuLink[];
     hideKeys?: string[];
   };

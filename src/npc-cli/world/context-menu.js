@@ -150,7 +150,7 @@ class BaseContextMenu {
   update = noop
 }
 
-export class DefaultContextMenu extends BaseContextMenu {
+export class DefaultContextMenuApi extends BaseContextMenu {
   /** @type {import('../components/PopUp').State} */
   popUp = /** @type {*} */ (null);
 
@@ -246,8 +246,7 @@ export class DefaultContextMenu extends BaseContextMenu {
     this.update();
   }
 }
-
-export class NpcSpeechBubble extends BaseContextMenu {
+export class NpcSpeechBubbleApi extends BaseContextMenu {
 
   offset = { x: 0, y: 0, z: 0 };
   /** @type {string | undefined} */
@@ -274,8 +273,8 @@ export class NpcSpeechBubble extends BaseContextMenu {
 
 /**
  * @typedef {(
- *   | DefaultContextMenu
- *   | NpcSpeechBubble
+ *   | DefaultContextMenuApi
+ *   | NpcSpeechBubbleApi
  * )} ContextMenuType
  */
 
