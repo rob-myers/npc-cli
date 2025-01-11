@@ -1,19 +1,13 @@
 import React from "react";
+import { css } from "@emotion/css";
 
-import { DefaultContextMenuApi, NpcSpeechBubbleApi } from "./context-menu";
 import { WorldContext } from "./world-context";
+import { NpcSpeechBubbleApi } from "./context-menu";
 import useStateRef from "../hooks/use-state-ref";
 import useUpdate from "../hooks/use-update";
 import { Html3d } from "../components/Html3d";
-// import { DefaultContextMenu as DefaultContextMenuUi, defaultContextMenuCss } from "./DefaultContextMenu";
-import { NpcSpeechBubble as NpcSpeechBubbleUi, npcContextMenuCss } from "./NpcSpeechBubble";
 
-/**
- * We support two kinds of context menu:
- * - default context menu, key=default, path=`w.cm`
- * - npc speech bubble, key={npcKey}, path=`w.c.lookup.{npcKey}`
- */
-export default function ContextMenus() {
+export default function NpcSpeechBubbles() {
 
   const w = React.useContext(WorldContext);
 
@@ -67,17 +61,11 @@ export default function ContextMenus() {
 
   }));
 
-  w.c = state;
-  // w.cm = /** @type {DefaultContextMenuApi} */ (
-  //   state.lookup.default ??= new DefaultContextMenuApi('default', w, { showKvs: true })
-  // );
+  w.bubble = state;
 
   React.useMemo(() => {// HMR
     process.env.NODE_ENV === 'development' && Object.values(state.lookup).forEach(cm => {
-      state.lookup[cm.key] = cm.key === 'default'
-        ? Object.assign(new DefaultContextMenuApi(cm.key, cm.w, cm), {...cm})
-        : Object.assign(new NpcSpeechBubbleApi(cm.key, cm.w, cm), {...cm})
-      ;
+      state.lookup[cm.key] = Object.assign(new NpcSpeechBubbleApi(cm.key, w, cm), {...cm});
       cm.dispose();
     });
   }, []);
@@ -91,7 +79,7 @@ export default function ContextMenus() {
 
 /**
  * @typedef State
- * @property {{ [cmKey: string]: NPC.ContextMenuType }} lookup
+ * @property {{ [cmKey: string]: NpcSpeechBubbleApi }} lookup
  *
  * @property {(npcKey: string) => NpcSpeechBubbleApi} create Add speech bubble for specific npc
  * @property {(...npcKeys: string[]) => void} delete
@@ -124,21 +112,66 @@ function ContextMenu({ cm }) {
       tracked={cm.tracked}
       // zIndex={cm.key === 'default' ? 1 : undefined}
     >
-      {cm instanceof DefaultContextMenuApi
-        // ? <DefaultContextMenuUi cm={cm} />
-        ? null
-        : <NpcSpeechBubbleUi cm={cm} />
-      }
+      <div className="bubble">
+        <div className="speech">
+          {cm.speech}
+        </div>
+      </div>
     </Html3d>
   );
 }
 
 /**
  * @typedef ContextMenuProps
- * @property {NPC.ContextMenuType} cm
+ * @property {NpcSpeechBubbleApi} cm
  */
 
 /** @type {React.MemoExoticComponent<(props: ContextMenuProps & { epochMs: number }) => JSX.Element>} */
 const MemoizedContextMenu = React.memo(ContextMenu);
 
 const speechBubbleBaseScale = 4;
+
+export const npcContextMenuCss = css`
+  --menu-width: 200px;
+
+  position: absolute;
+  top: 0;
+  left: calc(-1/2 * var(--menu-width));
+  transform-origin: 0 0;
+  
+  pointer-events: none;
+  background: transparent !important;
+
+  > div {
+    transform-origin: calc(+1/2 * var(--menu-width)) 0;
+    width: var(--menu-width);
+    display: flex;
+    justify-content: center;
+  }
+  
+  .bubble {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    
+    font-size: 1rem;
+    color: #ff9;
+    
+    transition: width 300ms;
+  }
+
+  .speech {
+    font-weight: lighter;
+    font-style: italic;
+    font-size: 1rem;
+
+    display: -webkit-box;
+    justify-content: center;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical; 
+    overflow: hidden;
+
+    text-align: center;
+  }
+`;

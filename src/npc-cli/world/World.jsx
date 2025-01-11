@@ -88,7 +88,7 @@ export default function World(props) {
     npc: /** @type {*} */ (null), // Npcs
     menu: /** @type {State['menu']} */ ({ measure(_) {} }), // ContextMenu
     debug: /** @type {*} */ (null), // Debug
-    c: /** @type {*} */ (null), // ContextMenus
+    bubble: /** @type {*} */ (null), // ContextMenus
     cm: /** @type {*} */ (null), // c.lookup.default
 
     // 🚧 support hmr e.g. via state.hmr
@@ -117,7 +117,7 @@ export default function World(props) {
     debugTick() {
       state.npc.onTick(1000 / 60);
       state.advance(// update npc speech balloons
-        () => Object.values(state.c.lookup).forEach(cm => cm.html3d.onFrame())
+        () => Object.values(state.bubble.lookup).forEach(cm => cm.html3d.onFrame())
       );
     },
     isReady() {
@@ -423,6 +423,8 @@ export default function World(props) {
  * @property {import('./Npcs').State} npc
  * Npcs (dynamic)
  * @property {import('./WorldMenu').State} menu
+ * @property {import("./NpcSpeechBubbles").State} bubble
+ * Npc speech bubbles
  * @property {import('./Debug').State} debug
  * @property {StateUtil & import("../service/helper").Helper} lib
  *
@@ -432,8 +434,7 @@ export default function World(props) {
  * Shortcut for `w.npc.npc`
  * @property {import("./Doors").State['byKey']} d
  * Shortcut for `w.door.byKey`
- * @property {import("./ContextMenus").State} c
- * @property {NPC.DefaultContextMenuApi} cm
+ * @property {import('./context-menu').DefaultContextMenuApi} cm
  *
  * @property {TexArray} texFloor
  * @property {TexArray} texCeil

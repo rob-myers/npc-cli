@@ -327,7 +327,7 @@ export default function useHandleEvents(w) {
             );
           }
 
-          w.c.delete(e.npcKey);
+          w.bubble.delete(e.npcKey);
           break;
         }
         case "spawned": {
@@ -350,7 +350,7 @@ export default function useHandleEvents(w) {
           state.npcToRoom.set(npc.key, {...e.gmRoomId});
           (state.roomToNpcs[e.gmRoomId.gmId][e.gmRoomId.roomId] ??= new Set()).add(e.npcKey);
 
-          w.c.get(e.npcKey)?.updateOffset(); // update speechBubble height
+          w.bubble.get(e.npcKey)?.updateOffset(); // update speechBubble height
 
           if (w.disabled === true) {
             w.debugTick();

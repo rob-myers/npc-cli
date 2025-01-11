@@ -284,16 +284,6 @@ declare namespace NPC {
     quaternion: import('three').Quaternion;
   }
 
-  type DefaultContextMenuApi = import('../world/context-menu').DefaultContextMenuApi;
-  type NpcSpeechBubbleApi = import('../world/context-menu').NpcSpeechBubbleApi;
-
-  // type CMInstance = import('../world/ContextMenus').CMInstance;
-  type ContextMenuType = (
-    | DefaultContextMenuApi
-    | NpcSpeechBubbleApi
-  );
-  
-
   interface ContextMenuLink {
     key: string;
     label: string;
@@ -312,7 +302,7 @@ declare namespace NPC {
   /**
    * Assume `parent.meta` has already been updated.
    */
-  type ContextMenuMatcher = (parent: DefaultContextMenuApi) => {
+  type ContextMenuMatcher = (parent: import('../world/context-menu').DefaultContextMenuApi) => {
     showLinks?: ContextMenuLink[];
     hideKeys?: string[];
   };

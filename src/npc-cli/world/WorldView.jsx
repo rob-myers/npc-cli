@@ -13,7 +13,7 @@ import { emptySceneForPicking, getTempInstanceMesh, hasObjectPickShaderMaterial,
 import { popUpRootDataAttribute } from "../components/PopUp.jsx";
 import { WorldContext } from "./world-context.js";
 import useStateRef from "../hooks/use-state-ref.js";
-import ContextMenus from "./ContextMenus.jsx";
+import NpcSpeechBubbles from "./NpcSpeechBubbles.jsx";
 import { DefaultContextMenu } from "./DefaultContextMenu.jsx";
 
 /**
@@ -424,7 +424,7 @@ export default function WorldView(props) {
       />
 
       <DefaultContextMenu/>
-      <ContextMenus/>
+      <NpcSpeechBubbles/>
     </Canvas>
   );
 }

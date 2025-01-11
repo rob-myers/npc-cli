@@ -31,7 +31,8 @@
   - ✅ Draggable component
   - 🚧 Split ContextMenus into DefaultContextMenu, NpcSpeechBubbles
     - ✅ DefaultContextMenu.jsx
-    - 🚧 NpcSpeechBubbles.jsx
+    - ✅ NpcSpeechBubbles.jsx
+    - 🚧 Only send DefaultContextMenu thru portal
   - 🚧 WorldMenu change layout
     - ✅ Logger fixed at bottom
     - ✅ DefaultContextMenu bottom right
