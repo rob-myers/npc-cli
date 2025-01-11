@@ -2,7 +2,6 @@ import React from "react";
 import useStateRef from "../hooks/use-state-ref";
 
 /**
- * https://stackoverflow.com/a/20927899/2917822
  * @param {React.PropsWithChildren<BaseProps>} props 
  */
 export default function Draggable(props) {
@@ -50,7 +49,7 @@ export default function Draggable(props) {
       onPointerDown={state.onPointerDown}
       onPointerUp={state.onPointerUp}
       onPointerMove={state.onPointerMove}
-      onPointerOut={state.onPointerUp}
+      onPointerLeave={state.onPointerUp}
       style={{
         position: 'absolute',
         // zIndex: 100,

@@ -29,15 +29,19 @@
   - ✅ can clear Logger
   - ✅ link NpcSpeechBubble "say" to Logger
   - ✅ Draggable component
-  - 🚧 Split ContextMenus into DefaultContextMenu, NpcSpeechBubbles
+  - ✅ Split ContextMenus into DefaultContextMenu, NpcSpeechBubbles
     - ✅ DefaultContextMenu.jsx
     - ✅ NpcSpeechBubbles.jsx
-    - 🚧 Only send DefaultContextMenu thru portal
-  - 🚧 WorldMenu change layout
-    - ✅ Logger fixed at bottom
-    - ✅ DefaultContextMenu bottom right
-    - ℹ️ https://stackoverflow.com/questions/20926551/recommended-way-of-making-react-component-div-draggable
-    - 🚧 can move DefaultContextMenu whilst docked via Draggable
+    - ℹ️ `w bubble.say rob Hello everyone!{1..5}`
+    - ❌ Only send DefaultContextMenu thru portal
+      - we are sending Logger thru portal
+  - ✅ Logger fixed at bottom
+  - ✅ DefaultContextMenu bottom right
+  - ℹ️ https://stackoverflow.com/questions/20926551/recommended-way-of-making-react-component-div-draggable
+  - 🚧 can move DefaultContextMenu whilst docked via Draggable
+    - ✅ can drag around while docked
+    - 🚧 remember position
+    - 🚧 responsive i.e. keeps in view
   - can move Logger
   - can resize Logger
   - Logger logs disconnected/connected message

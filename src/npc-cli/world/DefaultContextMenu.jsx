@@ -6,8 +6,8 @@ import { DefaultContextMenuApi as DefaultContextMenuApi } from "./context-menu";
 import useUpdate from "../hooks/use-update";
 import { PopUp } from "../components/PopUp";
 import { Html3d } from "../components/Html3d";
+import Draggable from "../components/Draggable";
 
-// 🚧 React.memo ?
 export function DefaultContextMenu() {
 
   const w = React.useContext(WorldContext);
@@ -33,12 +33,11 @@ export function DefaultContextMenu() {
       baseScale={cm.baseScale}
       docked={cm.docked}
       position={cm.position}
-      offset={cm.offset}
       open={cm.open}
       tracked={cm.tracked}
-      // zIndex={cm.key === 'default' ? 1 : undefined}
     >
-      <div onClick={cm.onClickLink.bind(cm)}>
+      {React.createElement(cm.docked ? Draggable : 'div', {},
+      <div className="inner-root" onClick={cm.onClickLink.bind(cm)}>
 
         <div className={cx({ hidden: cm.npcKey === undefined }, "npc-key")} data-key="clear-npc">
           @<span>{cm.npcKey}</span>
@@ -104,6 +103,7 @@ export function DefaultContextMenu() {
         </div>}
 
       </div>
+      )}
     </Html3d>
   );
 
@@ -133,9 +133,10 @@ export const defaultContextMenuCss = css`
 
   > div {
     transform-origin: 0 0;
+  }
+  .inner-root {
     width: 200px;
     background-color: #000;
-    /* border: 1px solid #dddddd55; */
   }
 
   .npc-key {
@@ -159,13 +160,6 @@ export const defaultContextMenuCss = css`
   &.docked {
     z-index: 7;
     transform: unset !important;
-    top: unset;
-    left: unset;
-    right: 0;
-    bottom: 0;
-    > div {
-      padding-bottom: 12px;
-    }
   }
 
   .select-npc {
