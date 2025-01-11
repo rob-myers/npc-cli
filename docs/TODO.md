@@ -40,7 +40,7 @@
 - x-ray should be default view (?)
   - could have manual slider
 
-- 🚧 pre next.js migration
+- ✅ pre next.js migration
   - ✅ finish/close wip todos
   - ✅ avoid stationary npc push through door
     - ✅ create a queryFilter with a doorway excluded and prevent a single agent from moving through it
@@ -154,16 +154,6 @@
     - ℹ️ use desiredVelocity to move ±5deg base direction
   - ✅ auto-open accessible door earlier
     - e.g. check up to two corners in this case
-  - can only spawn onto navigable floor or do point
-  - spawn onto do point uses orient
-  - redo cuboid-man: lower-spine-bone (for sit), independent face quad, clean skin
-  - redo cuboid-pet
-  - represent skins as single TexArray
-  - improve alternate character faces
-  - improve alternate character icons
-  - clean overwritten attributes using patched three.js:
-    > `w.r3f.gl.getAttributes().remove(attribute)`
-  - clean away off-mesh-connection if we don't use them
 
 - 🚧 integrate Viewer into blog
   - 🚧 screenshots in 1st blog
@@ -182,6 +172,16 @@
 
 ### On hold
 
+- can only spawn onto navigable floor or do point
+- spawn onto do point uses orient
+- redo cuboid-man: lower-spine-bone (for sit), independent face quad, clean skin
+- redo cuboid-pet
+- represent skins as single TexArray
+- improve alternate character faces
+- improve alternate character icons
+- clean overwritten attributes using patched three.js:
+  > `w.r3f.gl.getAttributes().remove(attribute)`
+- ❌ clean away off-mesh-connection if we don't use them
 - reconsider npc speech bubble style
   - ℹ️ keep npc label, even though speech bubble performance good for 100 npcs
 - support different themes (floor colors, ceiling colors, obstacles diffuse, ...)
