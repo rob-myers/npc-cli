@@ -49,7 +49,7 @@ export default function Draggable(props) {
       onPointerDown={state.onPointerDown}
       onPointerUp={state.onPointerUp}
       onPointerMove={state.onPointerMove}
-      onPointerLeave={state.onPointerUp}
+      // onPointerLeave={state.onPointerUp} // 🚧 mobile issue
       style={{
         position: 'absolute',
         // zIndex: 100,
