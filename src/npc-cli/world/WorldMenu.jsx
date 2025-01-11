@@ -64,7 +64,7 @@ export default function WorldMenu(props) {
       update();
     },
     toggleXRay() {
-      w.wall.setOpacity(w.wall.opacity === 0.4 ? 1 : 0.4);
+      w.wall.setOpacity(w.wall.opacity === 0.45 ? 1 : 0.45);
       update();
     },
     update,
@@ -158,6 +158,7 @@ const loggerCss = css`
   flex-direction: column;
 
   width: 100%;
+  max-width: 800px;
   height: 80px;
 
   color: white;
