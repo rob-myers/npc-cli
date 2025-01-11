@@ -6,7 +6,7 @@ import { objectScale } from "../components/Html3d";
 /**
  * 🔔 Avoid `foo = (...bar) => baz` because incompatible with our approach to HMR.
  */
-class BaseContextMenu {
+class BaseContextMenuApi {
 
   baseScale = /** @type {undefined | number} */ (undefined);
   /** For violating React.memo */
@@ -28,7 +28,7 @@ class BaseContextMenu {
   /**
    * @param {string} key
    * @param {import('./World').State} w
-   * @param {Partial<Pick<BaseContextMenu, 'showKvs' | 'pinned'>>} opts
+   * @param {Partial<Pick<BaseContextMenuApi, 'showKvs' | 'pinned'>>} opts
    */
   constructor(key, w, opts) {
     /** @type {string} */ this.key = key;
@@ -150,13 +150,13 @@ class BaseContextMenu {
   update = noop
 }
 
-export class DefaultContextMenuApi extends BaseContextMenu {
+export class DefaultContextMenuApi extends BaseContextMenuApi {
   /** @type {import('../components/PopUp').State} */
   popUp = /** @type {*} */ (null);
 
-  /** @type {ContextMenuUi['kvs']} */
+  /** @type {{ k: string; v: string; length: number; }[]} */
   kvs = [];
-  /** @type {ContextMenuUi['links']} */
+  /** @type {NPC.ContextMenuLink[]} */
   links = [];
   match = /** @type {{ [matcherKey: string]: NPC.ContextMenuMatcher}} */ ({});
   meta = /** @type {Geom.Meta} */ ({});
@@ -167,12 +167,12 @@ export class DefaultContextMenuApi extends BaseContextMenu {
   /**
    * @param {string} key
    * @param {import('./World').State} w
-   * @param {Partial<Pick<BaseContextMenu, 'showKvs' | 'npcKey' | 'pinned'>>} opts
+   * @param {Partial<Pick<BaseContextMenuApi, 'showKvs' | 'npcKey' | 'pinned'>>} opts
    */
   constructor(key, w, opts) {
     super(key, w, opts);
 
-    /** @type {null | Pick<BaseContextMenu, 'docked' | 'pinned' | 'showKvs'>} */
+    /** @type {null | Pick<BaseContextMenuApi, 'docked' | 'pinned' | 'showKvs'>} */
     const savedOpts = tryLocalStorageGetParsed(`default-context-menu@${w.key}`);
     this.pinned = opts.pinned ?? savedOpts?.pinned ?? w.smallViewport;
     this.scaled = false;
@@ -246,7 +246,8 @@ export class DefaultContextMenuApi extends BaseContextMenu {
     this.update();
   }
 }
-export class NpcSpeechBubbleApi extends BaseContextMenu {
+
+export class NpcSpeechBubbleApi extends BaseContextMenuApi {
 
   offset = { x: 0, y: 0, z: 0 };
   /** @type {string | undefined} */
@@ -270,21 +271,5 @@ export class NpcSpeechBubbleApi extends BaseContextMenu {
     }
   }
 }
-
-/**
- * @typedef {(
- *   | DefaultContextMenuApi
- *   | NpcSpeechBubbleApi
- * )} ContextMenuType
- */
-
-/**
- * Used by "default" and "@{npcKey}"
- * @typedef ContextMenuUi
- * @property {{ k: string; v: string; length: number; }[]} kvs
- * Key values e.g. of last clicked meta
- * @property {NPC.ContextMenuLink[]} links
- * @property {string} [speech]
- */
 
 function noop() {};
