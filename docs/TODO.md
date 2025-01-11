@@ -29,11 +29,16 @@
   - ✅ can clear Logger
   - ✅ link NpcSpeechBubble "say" to Logger
   - 🚧 WorldMenu change layout
-    - Logger fixed at bottom
-    - DefaultContextMenu bottom right
-  - can resize Logger vertically
+    - ✅ Logger fixed at bottom
+    - ✅ DefaultContextMenu bottom right
+    - can move DefaultContextMenu whilst docked
+  - can move Logger
+  - can resize Logger
   - move `w.c.say` -> `w.e.say`
-  - setup demo link listener
+  - profile-1 has link listener
+
+- x-ray should be default view (?)
+  - could have manual slider
 
 - 🚧 pre next.js migration
   - ✅ finish/close wip todos
