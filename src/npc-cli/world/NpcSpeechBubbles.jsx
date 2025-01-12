@@ -105,7 +105,6 @@ function ContextMenu({ cm }) {
       ref={cm.html3dRef.bind(cm)}
       className={cm.key === 'default' ? undefined: npcContextMenuCss}
       baseScale={cm.baseScale}
-      docked={cm.docked}
       position={cm.position}
       offset={cm.offset}
       open={cm.open}

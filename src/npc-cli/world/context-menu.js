@@ -16,7 +16,6 @@ class BaseContextMenuApi {
   tracked = /** @type {undefined | THREE.Object3D} */ (undefined);
   offset = /** @type {undefined | THREE.Vector3Like} */ (undefined);
   
-  docked = false;
   open = false;
   pinned = false;
   scaled = false;
@@ -79,6 +78,84 @@ class BaseContextMenuApi {
       : delete this.html3d;
   }
 
+  /** @param {string} [npcKey] */
+  setNpc(npcKey) {
+    this.npcKey = npcKey;
+    this.update();
+  }
+
+  /**
+   * @param {THREE.Object3D} [input] 
+   */
+  setTracked(input) {
+    this.tracked = input;
+  }
+
+  toggleKvs() {
+    this.showKvs = !this.showKvs;
+  }
+
+  togglePinned() {
+    this.pinned = !this.pinned;
+  }
+
+  /** Ensure smooth transition when start scaling */
+  toggleScaled() {
+    this.scaled = !this.scaled;
+    this.baseScale = this.scaled === true ? 1 / objectScale(this.html3d.objTarget, this.w.r3f.camera) : undefined;
+  }
+
+  update = noop
+}
+
+export class DefaultContextMenuApi extends BaseContextMenuApi {
+  docked = false;
+  /** @type {import('../components/PopUp').State} */
+  popUp = /** @type {*} */ (null);
+
+  /** @type {{ k: string; v: string; length: number; }[]} */
+  kvs = [];
+  /** @type {NPC.ContextMenuLink[]} */
+  links = [];
+  match = /** @type {{ [matcherKey: string]: NPC.ContextMenuMatcher}} */ ({});
+  meta = /** @type {Geom.Meta} */ ({});
+  npcKey = /** @type {undefined | string} */ (undefined);
+
+  selectNpcKeys = /** @type {string[]} */ ([]);
+
+  /**
+   * @param {string} key
+   * @param {import('./World').State} w
+   * @param {Partial<Pick<BaseContextMenuApi, 'showKvs' | 'npcKey' | 'pinned'>>} opts
+   */
+  constructor(key, w, opts) {
+    super(key, w, opts);
+
+    /** @type {null | Record<'docked' | 'pinned' | 'showKvs', boolean>} */
+    const savedOpts = tryLocalStorageGetParsed(`default-context-menu@${w.key}`);
+    this.pinned = opts.pinned ?? savedOpts?.pinned ?? w.smallViewport;
+    this.scaled = false;
+    this.showKvs = opts.showKvs ?? savedOpts?.showKvs ?? false;
+
+    this.npcKey = opts.npcKey;
+  }
+
+  /**
+   * Apply matchers, assuming `this.meta` is up-to-date.
+   */
+  computeLinks() {
+    let suppressKeys = /** @type {string[]} */ ([]);
+    const keyToLink = Object.values(this.match).reduce((agg, matcher) => {
+      const { showLinks, hideKeys } = matcher(this);
+      showLinks?.forEach(link => agg[link.key] = link);
+      suppressKeys.push(...hideKeys ?? []);
+      return agg;
+    }, /** @type {{ [linkKey: string]: NPC.ContextMenuLink }} */ ({}));
+    
+    suppressKeys.forEach(key => delete keyToLink[key]);
+    this.links = Object.values(keyToLink);
+  }
+
   /** @param {React.MouseEvent} e */
   onClickLink(e) {
     const el = /** @type {HTMLElement} */ (e.target);
@@ -105,98 +182,6 @@ class BaseContextMenuApi {
     this.update();
   }
 
-  /** @param {null | import('../components/PopUp').State} popUp */
-  popUpRef(popUp) {
-    return popUp !== null
-      ? this.popUp = popUp // @ts-ignore
-      : delete this.popUp;
-  }
-
-  /** @param {string} [npcKey] */
-  setNpc(npcKey) {
-    this.npcKey = npcKey;
-    this.update();
-  }
-
-  /**
-   * @param {THREE.Object3D} [input] 
-   */
-  setTracked(input) {
-    this.tracked = input;
-  }
-
-  toggleDocked() {
-    this.docked = !this.docked;
-    if (this.docked === true) {
-      this.scaled === true && this.toggleScaled();
-      this.popUp?.close();
-    }
-  }
-
-  toggleKvs() {
-    this.showKvs = !this.showKvs;
-  }
-
-  togglePinned() {
-    this.pinned = !this.pinned;
-  }
-
-  /** Ensure smooth transition when start scaling */
-  toggleScaled() {
-    this.scaled = !this.scaled;
-    this.baseScale = this.scaled === true ? 1 / objectScale(this.html3d.objTarget, this.w.r3f.camera) : undefined;
-  }
-
-  update = noop
-}
-
-export class DefaultContextMenuApi extends BaseContextMenuApi {
-  /** @type {import('../components/PopUp').State} */
-  popUp = /** @type {*} */ (null);
-
-  /** @type {{ k: string; v: string; length: number; }[]} */
-  kvs = [];
-  /** @type {NPC.ContextMenuLink[]} */
-  links = [];
-  match = /** @type {{ [matcherKey: string]: NPC.ContextMenuMatcher}} */ ({});
-  meta = /** @type {Geom.Meta} */ ({});
-  npcKey = /** @type {undefined | string} */ (undefined);
-
-  selectNpcKeys = /** @type {string[]} */ ([]);
-
-  /**
-   * @param {string} key
-   * @param {import('./World').State} w
-   * @param {Partial<Pick<BaseContextMenuApi, 'showKvs' | 'npcKey' | 'pinned'>>} opts
-   */
-  constructor(key, w, opts) {
-    super(key, w, opts);
-
-    /** @type {null | Pick<BaseContextMenuApi, 'docked' | 'pinned' | 'showKvs'>} */
-    const savedOpts = tryLocalStorageGetParsed(`default-context-menu@${w.key}`);
-    this.pinned = opts.pinned ?? savedOpts?.pinned ?? w.smallViewport;
-    this.scaled = false;
-    this.showKvs = opts.showKvs ?? savedOpts?.showKvs ?? false;
-
-    this.npcKey = opts.npcKey;
-  }
-
-  /**
-   * Apply matchers, assuming `this.meta` is up-to-date.
-   */
-  computeLinks() {
-    let suppressKeys = /** @type {string[]} */ ([]);
-    const keyToLink = Object.values(this.match).reduce((agg, matcher) => {
-      const { showLinks, hideKeys } = matcher(this);
-      showLinks?.forEach(link => agg[link.key] = link);
-      suppressKeys.push(...hideKeys ?? []);
-      return agg;
-    }, /** @type {{ [linkKey: string]: NPC.ContextMenuLink }} */ ({}));
-    
-    suppressKeys.forEach(key => delete keyToLink[key]);
-    this.links = Object.values(keyToLink);
-  }
-
   /**
    * @param {React.ChangeEvent<HTMLSelectElement> } e 
    */
@@ -218,6 +203,13 @@ export class DefaultContextMenuApi extends BaseContextMenuApi {
     tryLocalStorageSet(`default-context-menu@${this.w.key}`, JSON.stringify({
       pinned, showKvs, docked,
     }));
+  }
+
+  /** @param {null | import('../components/PopUp').State} popUp */
+  popUpRef(popUp) {
+    return popUp !== null
+      ? this.popUp = popUp // @ts-ignore
+      : delete this.popUp;
   }
   
   refreshPopup() {
@@ -244,6 +236,14 @@ export class DefaultContextMenuApi extends BaseContextMenuApi {
   show() {
     this.open = true;
     this.update();
+  }
+
+  toggleDocked() {
+    this.docked = !this.docked;
+    if (this.docked === true) {
+      this.scaled === true && this.toggleScaled();
+      this.popUp?.close();
+    }
   }
 }
 

@@ -43,6 +43,8 @@
     - ✅ test Draggable on mobile
     - ✅ drag continues when off element
     - 🚧 set initial position at bottom
+      - cm.dockedPos
+    - always ensure whole menu visible
     - remember position
     - responsive: ratio positions
     - responsive: keeps in view
