@@ -302,7 +302,7 @@ declare namespace NPC {
   /**
    * Assume `parent.meta` has already been updated.
    */
-  type ContextMenuMatcher = (parent: import('../world/context-menu').DefaultContextMenuApi) => {
+  type ContextMenuMatcher = (parent: import('../world/menu-api').ContextMenuApi) => {
     showLinks?: ContextMenuLink[];
     hideKeys?: string[];
   };

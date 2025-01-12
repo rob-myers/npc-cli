@@ -48,7 +48,7 @@
     - remember position
     - responsive: ratio positions
     - responsive: keeps in view
-  - rename DefaultContextMenu -> ContextMenu
+  - ✅ rename DefaultContextMenu -> ContextMenu
   - can move Logger
   - can resize Logger
   - Logger logs disconnected/connected message

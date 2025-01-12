@@ -14,7 +14,7 @@ import { popUpRootDataAttribute } from "../components/PopUp.jsx";
 import { WorldContext } from "./world-context.js";
 import useStateRef from "../hooks/use-state-ref.js";
 import NpcSpeechBubbles from "./NpcSpeechBubbles.jsx";
-import { DefaultContextMenu } from "./DefaultContextMenu.jsx";
+import { ContextMenu } from "./ContextMenu.jsx";
 
 /**
  * @param {Props} props
@@ -423,7 +423,7 @@ export default function WorldView(props) {
         minPanDistance={w.smallViewport ? 0.05 : 0}
       />
 
-      <DefaultContextMenu/>
+      <ContextMenu/>
       <NpcSpeechBubbles/>
     </Canvas>
   );

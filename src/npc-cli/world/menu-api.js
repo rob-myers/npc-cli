@@ -6,7 +6,7 @@ import { objectScale } from "../components/Html3d";
 /**
  * 🔔 Avoid `foo = (...bar) => baz` because incompatible with our approach to HMR.
  */
-class BaseContextMenuApi {
+class BaseMenuApi {
 
   baseScale = /** @type {undefined | number} */ (undefined);
   /** For violating React.memo */
@@ -27,7 +27,7 @@ class BaseContextMenuApi {
   /**
    * @param {string} key
    * @param {import('./World').State} w
-   * @param {Partial<Pick<BaseContextMenuApi, 'showKvs' | 'pinned'>>} opts
+   * @param {Partial<Pick<BaseMenuApi, 'showKvs' | 'pinned'>>} opts
    */
   constructor(key, w, opts) {
     /** @type {string} */ this.key = key;
@@ -108,7 +108,7 @@ class BaseContextMenuApi {
   update = noop
 }
 
-export class DefaultContextMenuApi extends BaseContextMenuApi {
+export class ContextMenuApi extends BaseMenuApi {
   docked = false;
   /** @type {import('../components/PopUp').State} */
   popUp = /** @type {*} */ (null);
@@ -126,7 +126,7 @@ export class DefaultContextMenuApi extends BaseContextMenuApi {
   /**
    * @param {string} key
    * @param {import('./World').State} w
-   * @param {Partial<Pick<BaseContextMenuApi, 'showKvs' | 'npcKey' | 'pinned'>>} opts
+   * @param {Partial<Pick<BaseMenuApi, 'showKvs' | 'npcKey' | 'pinned'>>} opts
    */
   constructor(key, w, opts) {
     super(key, w, opts);
@@ -247,7 +247,7 @@ export class DefaultContextMenuApi extends BaseContextMenuApi {
   }
 }
 
-export class NpcSpeechBubbleApi extends BaseContextMenuApi {
+export class NpcSpeechBubbleApi extends BaseMenuApi {
 
   offset = { x: 0, y: 0, z: 0 };
   /** @type {string | undefined} */

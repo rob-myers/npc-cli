@@ -2,23 +2,23 @@ import React from "react";
 import { css, cx } from "@emotion/css";
 
 import { WorldContext } from "./world-context";
-import { DefaultContextMenuApi as DefaultContextMenuApi } from "./context-menu";
+import { ContextMenuApi as ContextMenuApi } from "./menu-api";
 import useUpdate from "../hooks/use-update";
 import { PopUp } from "../components/PopUp";
 import { Html3d } from "../components/Html3d";
 import Draggable from "../components/Draggable";
 
-export function DefaultContextMenu() {
+export function ContextMenu() {
 
   const w = React.useContext(WorldContext);
 
-  const cm = (w.cm ??= new DefaultContextMenuApi('default', w, { showKvs: true }));
+  const cm = (w.cm ??= new ContextMenuApi('default', w, { showKvs: true }));
   
   cm.update = useUpdate();
 
   React.useMemo(() => {// HMR
     if (process.env.NODE_ENV === 'development') {
-      w.cm = Object.assign(new DefaultContextMenuApi(cm.key, w, cm), {...cm})
+      w.cm = Object.assign(new ContextMenuApi(cm.key, w, cm), {...cm})
       cm.dispose();
     }
   }, []);

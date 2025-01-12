@@ -2,7 +2,7 @@ import React from "react";
 import { css } from "@emotion/css";
 
 import { WorldContext } from "./world-context";
-import { NpcSpeechBubbleApi } from "./context-menu";
+import { NpcSpeechBubbleApi } from "./menu-api";
 import useStateRef from "../hooks/use-state-ref";
 import useUpdate from "../hooks/use-update";
 import { Html3d } from "../components/Html3d";
