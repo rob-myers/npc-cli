@@ -153,7 +153,7 @@ const loggerCss = css`
   position: absolute;
   z-index: 6;
   left: 0;
-  bottom: 0;
+  top: 0;
   display: flex;
   flex-direction: column;
 
