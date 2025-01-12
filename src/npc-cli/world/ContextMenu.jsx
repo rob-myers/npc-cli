@@ -35,7 +35,7 @@ export function ContextMenu() {
       tracked={cm.tracked}
     >
       {cm.docked
-        ? <Draggable><ContextMenuUi cm={cm} /></Draggable>
+        ? <Draggable initPos={cm.dock.point}><ContextMenuUi cm={cm} /></Draggable>
         : <div><ContextMenuUi cm={cm} /></div>
       }
     </Html3d>
@@ -46,10 +46,15 @@ export function ContextMenu() {
 /** @param {{ cm: ContextMenuApi }} _ */
 function ContextMenuUi({ cm }) {
 
-  return (
-    <div className="inner-root" onClick={cm.onClickLink.bind(cm)}>
+  return <div
+    className="inner-root"
+    onClick={cm.onClickLink.bind(cm)}
+  >
 
-    <div className={cx({ hidden: cm.npcKey === undefined }, "npc-key")} data-key="clear-npc">
+    <div
+      className={cx({ hidden: cm.npcKey === undefined }, "npc-key")}
+      data-key="clear-npc"
+    >
       @<span>{cm.npcKey}</span>
     </div>
   
@@ -66,7 +71,6 @@ function ContextMenuUi({ cm }) {
         onChange={cm.onTogglePopup.bind(cm)}
         width={200}
       >
-
         <select
           className="select-npc"
           onChange={cm.onSelectNpc.bind(cm)}
@@ -78,12 +82,21 @@ function ContextMenuUi({ cm }) {
           )}
         </select>
 
-        <button onClick={cm.refreshPopup.bind(cm)}>
-          refresh
+        <button
+          key="toggle-scaled"
+          data-key="toggle-scaled"
+          className={!cm.scaled ? 'off' : undefined}
+        >
+          scale
         </button>
+
+        {/* 🚧 avoid refresh i.e. auto-update npc list  */}
+        {/* <button onClick={cm.refreshPopup.bind(cm)}>
+          refresh
+        </button> */}
       </PopUp>
 
-      {(cm.docked ? topLinks.docked : topLinks.embedded).map(({ key, label, test }) =>
+      {topLinks.map(({ key, label, test }) =>
         <button
           key={key}
           data-key={key}
@@ -92,6 +105,7 @@ function ContextMenuUi({ cm }) {
           {label}
         </button>
       )}
+
       {cm.links.map(({ key, label, test }) =>
         <button
           key={key}
@@ -112,23 +126,18 @@ function ContextMenuUi({ cm }) {
       ))}
     </div>}
 
-  </div>
-  );
+  </div>;
 }
 
 
-/** @type {Record<'embedded' | 'docked', NPC.ContextMenuLink[]>} */
-const topLinks = {
-  embedded: [
-    { key: 'toggle-kvs', label: 'meta', test: 'showKvs' },
-    { key: 'toggle-pinned', label: 'pin', test: 'pinned' },
-    { key: 'toggle-scaled', label: 'scale', test: 'scaled' },
-  ],
-  docked: [
-    { key: 'toggle-kvs', label: 'meta', test: 'showKvs' },
-    { key: 'toggle-pinned', label: 'pin', test: 'pinned' },
-  ],
-};
+/**
+ * @type {NPC.ContextMenuLink[]}
+ * 🔔 same for embedded/docked avoids measure height
+ */
+const topLinks = [
+  { key: 'toggle-kvs', label: 'meta', test: 'showKvs' },
+  { key: 'toggle-pinned', label: 'pin', test: 'pinned' },
+];
 
 export const defaultContextMenuCss = css`
   position: absolute;

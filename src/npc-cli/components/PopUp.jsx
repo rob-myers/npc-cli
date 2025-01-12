@@ -32,8 +32,9 @@ export const PopUp = React.forwardRef(function PopUp(props, ref) {
       const pixelsOnRight = rootRect.right - rect.right;
       const pixelsOnLeft = rect.x - rootRect.x;
       state.left = pixelsOnRight < pixelsOnLeft;
-      
-      state.bubble.style.setProperty('--info-arrow-delta-x', `${state.left ? 18 : 12}px`);
+
+      // 🚧 infer or parameterize `24`
+      state.bubble.style.setProperty('--info-arrow-delta-x', `${state.left ? 24 : 12}px`);
 
       const maxWidthAvailable = Math.max(pixelsOnLeft, pixelsOnRight);
       width = maxWidthAvailable < (width ?? defaultInfoWidthPx) ? maxWidthAvailable : width;

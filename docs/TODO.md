@@ -42,13 +42,14 @@
     - ✅ can drag around while docked
     - ✅ test Draggable on mobile
     - ✅ drag continues when off element
-    - 🚧 set initial position at bottom
-      - cm.dockedPos
+    - ✅ set initial position at bottom
+      - cm.dock.point
     - always ensure whole menu visible
     - remember position
     - responsive: ratio positions
     - responsive: keeps in view
   - ✅ rename DefaultContextMenu -> ContextMenu
+  - 🚧 remove `refresh` link from opts
   - can move Logger
   - can resize Logger
   - Logger logs disconnected/connected message

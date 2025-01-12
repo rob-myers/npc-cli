@@ -110,19 +110,23 @@ class BaseMenuApi {
 
 export class ContextMenuApi extends BaseMenuApi {
   docked = false;
-  dockedMeta = { ratio: { x: 0, y: 0 }, point: { x: 0, y: 0 } };
-
-  /** @type {import('../components/PopUp').State} */
-  popUp = /** @type {*} */ (null);
-
+  dock = {
+    /** Normalized to [0, 1] x [0, 1] relative to `offsetParent` */
+    ratio: { x: 0, y: 0 },
+    /** Relative to `offsetParent` */
+    point: /** @type {undefined | Geom.VectJson} */ (undefined),
+  };
   /** @type {{ k: string; v: string; length: number; }[]} */
   kvs = [];
+  /** @type {HTMLElement} */
+  innerRoot = /** @type {*} */ (null);
   /** @type {NPC.ContextMenuLink[]} */
   links = [];
   match = /** @type {{ [matcherKey: string]: NPC.ContextMenuMatcher}} */ ({});
   meta = /** @type {Geom.Meta} */ ({});
   npcKey = /** @type {undefined | string} */ (undefined);
-
+  /** @type {import('../components/PopUp').State} */
+  popUp = /** @type {*} */ (null);
   selectNpcKeys = /** @type {string[]} */ ([]);
 
   /**
@@ -156,6 +160,10 @@ export class ContextMenuApi extends BaseMenuApi {
     
     suppressKeys.forEach(key => delete keyToLink[key]);
     this.links = Object.values(keyToLink);
+  }
+
+  getInnerRoot() {
+    return /** @type {HTMLElement} */ (this.html3d.domTarget?.querySelector('.inner-root'));
   }
 
   /** @param {React.MouseEvent} e */
@@ -242,13 +250,18 @@ export class ContextMenuApi extends BaseMenuApi {
 
   toggleDocked() {
     this.docked = !this.docked;
+
     if (this.docked === true) {
       this.scaled === true && this.toggleScaled();
       this.popUp.close();
       
-      // 🚧
-      const { point } = this.dockedMeta;
-      point.x = point.y = 50;
+      const elRect = this.getInnerRoot().getBoundingClientRect();
+      const rootRect = this.w.view.rootEl.getBoundingClientRect();
+      
+      this.dock.point ??= {
+        x: 0,
+        y: rootRect.height - elRect.height,
+      };
     }
   }
 }
