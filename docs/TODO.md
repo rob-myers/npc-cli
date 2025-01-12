@@ -40,9 +40,13 @@
   - ℹ️ https://stackoverflow.com/questions/20926551/recommended-way-of-making-react-component-div-draggable
   - 🚧 can move DefaultContextMenu whilst docked via Draggable
     - ✅ can drag around while docked
-    - 🚧 remember position
-    - 🚧 responsive i.e. keeps in view
-    - 🚧 test Draggable on mobile
+    - ✅ test Draggable on mobile
+    - ✅ drag continues when off element
+    - 🚧 set initial position at bottom
+    - remember position
+    - responsive: ratio positions
+    - responsive: keeps in view
+  - rename DefaultContextMenu -> ContextMenu
   - can move Logger
   - can resize Logger
   - Logger logs disconnected/connected message

@@ -36,13 +36,13 @@ export default function Draggable(props) {
       state.rel.x = e.clientX - state.el.offsetLeft;
       state.rel.y = e.clientY - state.el.offsetTop;
     },
-    /** @param {React.MouseEvent} e */
+    /** @param {React.MouseEvent | MouseEvent} e */
     onMouseUp(e) {
       e.stopPropagation();
       e.preventDefault();
       state.dragging = false;
     },
-    /** @param {React.MouseEvent} e */
+    /** @param {React.MouseEvent | MouseEvent} e */
     onMouseMove(e) {
       if (state.dragging === false) {
         return;
@@ -91,14 +91,23 @@ export default function Draggable(props) {
     },
   }));
 
+  React.useEffect(() => {
+    document.body.addEventListener('mousemove', state.onMouseMove);
+    document.body.addEventListener('mouseleave', state.onMouseUp);
+    return () => {
+      document.body.removeEventListener('mousemove', state.onMouseMove);
+      document.body.removeEventListener('mouseleave', state.onMouseUp);
+    };
+  }, []);
+
   return (
     <div
       ref={state.ref('el')}
       className={props.className}
       onMouseDown={state.onMouseDown}
       onMouseUp={state.onMouseUp}
-      onMouseMove={state.onMouseMove}
-      onMouseLeave={state.onMouseUp}
+      // onMouseMove={state.onMouseMove}
+      // onMouseLeave={state.onMouseUp}
       onTouchStart={state.onTouchStart}
       onTouchEnd={state.onTouchEnd}
       onTouchMove={state.onTouchMove}
