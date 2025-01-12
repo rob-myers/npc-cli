@@ -1,5 +1,6 @@
 import React from "react";
 import { cx } from "@emotion/css";
+import useMeasure from 'react-use-measure';
 
 import { Terminal } from "@xterm/xterm";
 import { FitAddon } from "@xterm/addon-fit";
@@ -30,6 +31,7 @@ export const Logger = React.forwardRef(function WorldLogger(props, ref) {
       state.xterm.clear();
     },
     containerRef(el) {
+      measureLoggerRef(el);
       el !== null && !state.container && setTimeout(
         () => (state.container = el, update())
       );
@@ -130,6 +132,9 @@ export const Logger = React.forwardRef(function WorldLogger(props, ref) {
       state.xterm.dispose();
     };
   }, [state.container]);
+
+  const [measureLoggerRef, bounds] = useMeasure(({ debounce: 0 }));
+  React.useEffect(() => void state.fitAddon.fit(), [bounds]);
 
   return (
     <div

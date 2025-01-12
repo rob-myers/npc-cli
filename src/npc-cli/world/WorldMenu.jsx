@@ -1,7 +1,6 @@
 import React from "react";
 import { createPortal } from "react-dom";
 import { css, cx } from "@emotion/css";
-import useMeasure from 'react-use-measure';
 
 import { tryLocalStorageGetParsed, tryLocalStorageSet } from "../service/generic";
 import { ansi } from "../sh/const";
@@ -72,14 +71,7 @@ export default function WorldMenu(props) {
 
   w.menu = state;
 
-  const [measureLoggerRef, bounds] = useMeasure(({ debounce: 0 }));
-
-  React.useEffect(() => {
-    state.logger?.fitAddon.fit();
-  }, [bounds]);
-
   return <>
-
     <div
       className={cx(faderOverlayCss, {
         faded: w.disabled && !state.debugWhilePaused,
@@ -121,7 +113,7 @@ export default function WorldMenu(props) {
     </div> */}
 
     {w.view.rootEl && createPortal(
-      <div className={loggerCss} ref={measureLoggerRef}>
+      <div className={loggerCss}>
         <Logger
           ref={state.ref('logger')}
           className="world-logger"
@@ -173,6 +165,7 @@ const loggerCss = css`
   .world-logger {
     width: 100%;
     height: 100%;
+
     textarea {
       visibility: hidden; // Hide cursor
     }
