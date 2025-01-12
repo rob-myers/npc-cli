@@ -110,6 +110,8 @@ class BaseMenuApi {
 
 export class ContextMenuApi extends BaseMenuApi {
   docked = false;
+  dockedMeta = { ratio: { x: 0, y: 0 }, point: { x: 0, y: 0 } };
+
   /** @type {import('../components/PopUp').State} */
   popUp = /** @type {*} */ (null);
 
@@ -242,7 +244,11 @@ export class ContextMenuApi extends BaseMenuApi {
     this.docked = !this.docked;
     if (this.docked === true) {
       this.scaled === true && this.toggleScaled();
-      this.popUp?.close();
+      this.popUp.close();
+      
+      // 🚧
+      const { point } = this.dockedMeta;
+      point.x = point.y = 50;
     }
   }
 }

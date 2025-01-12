@@ -86,10 +86,10 @@ export default function World(props) {
       onTick(_) {},
     }),
     npc: /** @type {*} */ (null), // Npcs
-    menu: /** @type {State['menu']} */ ({ measure(_) {} }), // ContextMenu
+    menu: /** @type {State['menu']} */ ({ measure(_) {} }), // WorldMenu
     debug: /** @type {*} */ (null), // Debug
-    bubble: /** @type {*} */ (null), // ContextMenus
-    cm: /** @type {*} */ (null), // c.lookup.default
+    bubble: /** @type {*} */ (null), // NpcSpeechBubbles
+    cm: /** @type {*} */ (null),
 
     // 🚧 support hmr e.g. via state.hmr
     lib: {
