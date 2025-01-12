@@ -15,7 +15,7 @@ import useUpdate from "../hooks/use-update";
  * Like `BaseTty` but without a session.
  * @type {React.ForwardRefExoticComponent<Props & React.RefAttributes<State>>}
  */
-export const Logger = React.forwardRef(function WorldLogger(props, ref) {
+export const Logger = React.forwardRef(function Logger(props, ref) {
 
   const state = useStateRef(/** @returns {State} */ () => ({
     container: /** @type {*} */ (null),
