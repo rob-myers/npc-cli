@@ -36,6 +36,7 @@ export function ContextMenu() {
     >
       {cm.docked === true && (
         <Draggable
+          container={w.view.rootEl}
           initPos={cm.dock.point}
           draggableClassName="drag-bar"
         >
@@ -153,17 +154,20 @@ export const defaultContextMenuCss = css`
   top: 0;
   transform-origin: 0 0;
   background: transparent !important;
+  pointer-events: none;
   
   opacity: 0.8;
 
   > div {
     transform-origin: 0 0;
+    pointer-events: all;
+
+    .inner-root {
+      width: 200px;
+      background-color: #000;
+    }
   }
 
-  .inner-root {
-    width: 200px;
-    background-color: #000;
-  }
 
   .drag-bar {
     cursor: grab;

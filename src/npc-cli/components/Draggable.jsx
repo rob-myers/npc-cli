@@ -10,6 +10,10 @@ export default function Draggable(props) {
     dragging: false,
     el: /** @type {HTMLDivElement} */ ({}),
     pos: props.initPos ?? { x: 0, y: 0 },
+    ratio: {
+      x: (props.initPos?.x ?? 0) / (props.container?.clientWidth ?? 1),
+      y: (props.initPos?.y ?? 0) / (props.container?.clientHeight ?? 1),
+    },
     rel: { x: 0, y: 0 },
     touchId: /** @type {undefined | number} */ (undefined),
 
@@ -46,6 +50,7 @@ export default function Draggable(props) {
       state.dragging = true;
       state.rel.x = e.clientX - state.el.offsetLeft;
       state.rel.y = e.clientY - state.el.offsetTop;
+      state.updateRatio();
     },
     /** @param {React.MouseEvent | MouseEvent} e */
     onMouseUp(e) {
@@ -66,6 +71,7 @@ export default function Draggable(props) {
       state.pos.y = e.clientY - state.rel.y;
       state.el.style.left = `${state.pos.x}px`;
       state.el.style.top = `${state.pos.y}px`;
+      state.updateRatio();
     },
 
     /** @param {React.TouchEvent} e */
@@ -82,6 +88,7 @@ export default function Draggable(props) {
       state.dragging = true;
       state.rel.x = touchObj.clientX - state.el.offsetLeft;
       state.rel.y = touchObj.clientY - state.el.offsetTop;
+      state.updateRatio();
     },
     /** @param {React.TouchEvent} e */
     onTouchEnd(e) {
@@ -101,8 +108,19 @@ export default function Draggable(props) {
       state.pos.y = touchObj.clientY - state.rel.y;
       state.el.style.left = `${state.pos.x}px`;
       state.el.style.top = `${state.pos.y}px`;
+      state.updateRatio();
     },
-  }));
+    updateRatio() {
+      if (props.container === undefined) {
+        return
+      }
+      state.ratio.x = state.pos.x / props.container.clientWidth;
+      state.ratio.y = state.pos.y / props.container.clientHeight;
+      console.log(state.ratio);
+      
+      // 🚧 ensure visible
+    },
+  }), { deps: [props.container] });
 
   React.useEffect(() => {
     document.body.addEventListener('mousemove', state.onMouseMove);
@@ -126,7 +144,6 @@ export default function Draggable(props) {
       onTouchMove={state.onTouchMove}
       style={{
         position: 'absolute',
-        // zIndex: 100,
         left: state.pos.x,
         top: state.pos.y,
       }}
@@ -139,6 +156,7 @@ export default function Draggable(props) {
 /**
  * @typedef BaseProps
  * @property {string} [className]
+ * @property {HTMLElement} [container] So can keep draggable within container
  * @property {string} [draggableClassName]
  * @property {Geom.VectJson} [initPos]
  */

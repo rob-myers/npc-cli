@@ -252,7 +252,7 @@ export class ContextMenuApi extends BaseMenuApi {
     this.docked = !this.docked;
 
     if (this.docked === true) {
-      this.scaled === true && this.toggleScaled();
+      // this.scaled === true && this.toggleScaled();
       this.popUp.close();
       
       const elRect = this.getInnerRoot().getBoundingClientRect();
