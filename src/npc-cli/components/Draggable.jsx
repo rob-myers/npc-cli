@@ -13,6 +13,14 @@ export default function Draggable(props) {
     rel: { x: 0, y: 0 },
     touchId: /** @type {undefined | number} */ (undefined),
 
+    /** @param {React.MouseEvent | React.TouchEvent} e */
+    canDrag(e) {
+      if (props.draggableClassName === undefined) {
+        return true;
+      } else {
+        return e.target instanceof HTMLElement && e.target.classList.contains(props.draggableClassName);
+      }
+    },
     /** @param {React.TouchEvent} e */
     getTouchIdentifier(e) {
       if (e.targetTouches && e.targetTouches[0]) return e.targetTouches[0].identifier;
@@ -30,6 +38,9 @@ export default function Draggable(props) {
 
     /** @param {React.MouseEvent} e */
     onMouseDown(e) {
+      if (!state.canDrag(e)) {
+        return;
+      }
       e.stopPropagation();
       e.preventDefault();
       state.dragging = true;
@@ -59,9 +70,14 @@ export default function Draggable(props) {
 
     /** @param {React.TouchEvent} e */
     onTouchStart(e) {
+      if (!state.canDrag(e)) {
+        return;
+      }
       state.touchId = state.getTouchIdentifier(e);
       const touchObj = typeof state.touchId  === 'number' ? state.getTouch(e, state.touchId) : null;
-      if (!touchObj) return null; // not the right touch
+      if (!touchObj) {
+        return null; // not the right touch
+      }
 
       state.dragging = true;
       state.rel.x = touchObj.clientX - state.el.offsetLeft;
@@ -69,8 +85,6 @@ export default function Draggable(props) {
     },
     /** @param {React.TouchEvent} e */
     onTouchEnd(e) {
-      // e.stopPropagation();
-      // e.preventDefault();
       state.dragging = false;
       state.touchId = undefined;
     },
@@ -80,7 +94,6 @@ export default function Draggable(props) {
         return;
       }
       e.stopPropagation();
-      // e.preventDefault();
       
       // Subtract rel to keep the cursor "in same position"
       const touchObj = /** @type {{clientX: number, clientY: number}} */ (state.getTouch(e, /** @type {number} */ (state.touchId)));
@@ -126,5 +139,6 @@ export default function Draggable(props) {
 /**
  * @typedef BaseProps
  * @property {string} [className]
+ * @property {string} [draggableClassName]
  * @property {Geom.VectJson} [initPos]
  */

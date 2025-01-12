@@ -27,17 +27,23 @@ export function ContextMenu() {
   return (
     <Html3d
       ref={cm.html3dRef.bind(cm)}
-      className={defaultContextMenuCss}
       baseScale={cm.baseScale}
+      className={defaultContextMenuCss}
       docked={cm.docked}
-      position={cm.position}
       open={cm.open}
+      position={cm.position}
       tracked={cm.tracked}
     >
-      {cm.docked
-        ? <Draggable initPos={cm.dock.point}><ContextMenuUi cm={cm} /></Draggable>
-        : <div><ContextMenuUi cm={cm} /></div>
-      }
+      {cm.docked === true && (
+        <Draggable
+          initPos={cm.dock.point}
+          draggableClassName="drag-bar"
+        >
+            <ContextMenuUi cm={cm} />
+          </Draggable>
+      ) || (
+        <ContextMenuUi cm={cm} />
+      )}
     </Html3d>
   );
 
@@ -50,6 +56,8 @@ function ContextMenuUi({ cm }) {
     className="inner-root"
     onClick={cm.onClickLink.bind(cm)}
   >
+
+    {cm.docked && <div className="drag-bar" />}
 
     <div
       className={cx({ hidden: cm.npcKey === undefined }, "npc-key")}
@@ -151,10 +159,28 @@ export const defaultContextMenuCss = css`
   > div {
     transform-origin: 0 0;
   }
+
   .inner-root {
     width: 200px;
     background-color: #000;
   }
+
+  .drag-bar {
+    cursor: grab;
+    position: absolute;
+    top: -24px;
+    right: 0;
+    width: 100%;
+    height: 24px;
+    background-color: #224;
+    border: 1px solid #333;
+    opacity: 0.5;
+    transition: opacity 300ms;
+  }
+  .drag-bar:active, .drag-bar:hover {
+    opacity: 1;
+  }
+
 
   .npc-key {
     cursor: pointer;
@@ -163,12 +189,11 @@ export const defaultContextMenuCss = css`
     height: 24px;
 
     background-color: black;
-    border: 1px solid #dddddd77;
     span {
       color: #99ff99;
       pointer-events: none;
     }
-    padding: 0 5px;
+    padding: 2px 6px;
   }
   .npc-key.hidden {
     display: none;
@@ -236,7 +261,6 @@ export const defaultContextMenuCss = css`
 `;
 
 const popUpInfoCss = css`
-  
   display: flex;
   justify-content: space-around;
   align-items: center;
@@ -245,5 +269,4 @@ const popUpInfoCss = css`
   select {
     border: 1px solid #555;
   }
-
 ;`
