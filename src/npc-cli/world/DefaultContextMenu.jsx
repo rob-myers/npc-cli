@@ -36,73 +36,75 @@ export function DefaultContextMenu() {
       open={cm.open}
       tracked={cm.tracked}
     >
-      {React.createElement(cm.docked ? Draggable : 'div', {},
-      <div className="inner-root" onClick={cm.onClickLink.bind(cm)}>
+      {React.createElement(
+        cm.docked ? Draggable : 'div',
+        {},
+        <div className="inner-root" onClick={cm.onClickLink.bind(cm)}>
 
-        <div className={cx({ hidden: cm.npcKey === undefined }, "npc-key")} data-key="clear-npc">
-          @<span>{cm.npcKey}</span>
+          <div className={cx({ hidden: cm.npcKey === undefined }, "npc-key")} data-key="clear-npc">
+            @<span>{cm.npcKey}</span>
+          </div>
+        
+          <div className="links">
+
+            <button data-key="toggle-docked">
+              {cm.docked ? 'embed' : 'dock'}
+            </button>
+
+            <PopUp
+              ref={cm.popUpRef.bind(cm)}
+              infoClassName={popUpInfoCss}
+              label="opts"
+              onChange={cm.onTogglePopup.bind(cm)}
+              width={200}
+            >
+
+              <select
+                className="select-npc"
+                onChange={cm.onSelectNpc.bind(cm)}
+                value={cm.npcKey ?? ""}
+              >
+                <option value="">no npc</option>
+                {cm.selectNpcKeys.map(npcKey => 
+                  <option value={npcKey}>{npcKey}</option>
+                )}
+              </select>
+
+              <button onClick={cm.refreshPopup.bind(cm)}>
+                refresh
+              </button>
+            </PopUp>
+
+            {(cm.docked ? topLinks.docked : topLinks.embedded).map(({ key, label, test }) =>
+              <button
+                key={key}
+                data-key={key}
+                className={test !== undefined && !(/** @type {*} */ (cm)[test]) ? 'off' : undefined}
+              >
+                {label}
+              </button>
+            )}
+            {cm.links.map(({ key, label, test }) =>
+              <button
+                key={key}
+                data-key={key}
+                className={test !== undefined && !(/** @type {*} */ (cm)[test]) ? 'off' : undefined}
+              >
+                {label}
+              </button>
+            )}
+          </div>
+
+          {cm.showKvs === true && <div className="kvs">
+            {cm.kvs.map(({ k, v }) => (
+              <div key={k} className="kv">
+                <span className="key">{k}</span>
+                {v !== '' && <span className="value">{v}</span>}
+              </div>
+            ))}
+          </div>}
+
         </div>
-      
-        <div className="links">
-
-          <button data-key="toggle-docked">
-            {cm.docked ? 'embed' : 'dock'}
-          </button>
-
-          <PopUp
-            ref={cm.popUpRef.bind(cm)}
-            infoClassName={popUpInfoCss}
-            label="opts"
-            onChange={cm.onTogglePopup.bind(cm)}
-            width={200}
-          >
-
-            <select
-              className="select-npc"
-              onChange={cm.onSelectNpc.bind(cm)}
-              value={cm.npcKey ?? ""}
-            >
-              <option value="">no npc</option>
-              {cm.selectNpcKeys.map(npcKey => 
-                <option value={npcKey}>{npcKey}</option>
-              )}
-            </select>
-
-            <button onClick={cm.refreshPopup.bind(cm)}>
-              refresh
-            </button>
-          </PopUp>
-
-          {(cm.docked ? topLinks.docked : topLinks.embedded).map(({ key, label, test }) =>
-            <button
-              key={key}
-              data-key={key}
-              className={test !== undefined && !(/** @type {*} */ (cm)[test]) ? 'off' : undefined}
-            >
-              {label}
-            </button>
-          )}
-          {cm.links.map(({ key, label, test }) =>
-            <button
-              key={key}
-              data-key={key}
-              className={test !== undefined && !(/** @type {*} */ (cm)[test]) ? 'off' : undefined}
-            >
-              {label}
-            </button>
-          )}
-        </div>
-
-        {cm.showKvs === true && <div className="kvs">
-          {cm.kvs.map(({ k, v }) => (
-            <div key={k} className="kv">
-              <span className="key">{k}</span>
-              {v !== '' && <span className="value">{v}</span>}
-            </div>
-          ))}
-        </div>}
-
-      </div>
       )}
     </Html3d>
   );
