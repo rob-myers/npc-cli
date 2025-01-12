@@ -20,7 +20,7 @@ export const faderOverlayCss = css`
   }
   &.faded {
     cursor: pointer;
-    opacity: 0.3;
+    opacity: 0.5;
     transition: opacity 0.5s ease-in;
   }
 `;
