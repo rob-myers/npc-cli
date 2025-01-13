@@ -185,7 +185,7 @@ export const defaultContextMenuCss = css`
   }
 
   &.docked {
-    z-index: 7;
+    z-index: 1; // 🚧
     transform: unset !important;
   }
 
