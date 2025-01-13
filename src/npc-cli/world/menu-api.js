@@ -195,13 +195,13 @@ export class ContextMenuApi extends BaseMenuApi {
   onSelectNpc(e) {
     const { value } = e.currentTarget;
     this.npcKey = value in this.w.n ? value : undefined;
-    this.refreshPopup();
+    this.refreshPopUp();
   }
 
   /** @param {boolean} willOpen  */
   onTogglePopup(willOpen) {
     if (willOpen) {
-      this.refreshPopup();
+      this.refreshPopUp();
     }
   }
 
@@ -219,7 +219,7 @@ export class ContextMenuApi extends BaseMenuApi {
       : delete this.popUp;
   }
   
-  refreshPopup() {
+  refreshPopUp() {
     this.selectNpcKeys = Object.keys(this.w.n);
     this.update();
   }
@@ -247,19 +247,19 @@ export class ContextMenuApi extends BaseMenuApi {
 
   toggleDocked() {
     this.docked = !this.docked;
-    const innerRoot = this.getInnerRoot();
-  
-    if (this.docked === false || innerRoot === null) {
+    
+    if (this.docked === false) {
       return;
     }
-
+    
     // About to dock...
+    const innerRoot = /** @type {HTMLElement} */ (this.getInnerRoot());
     this.popUp.close();
     // this.scaled === true && this.toggleScaled();
-    const elRect = innerRoot.getBoundingClientRect();
-    const rootRect = this.w.view.rootEl.getBoundingClientRect();
-
+    
     if (this.everDocked === false) {// initially dock at bottom left
+      const elRect = innerRoot.getBoundingClientRect();
+      const rootRect = this.w.view.rootEl.getBoundingClientRect();
       this.dockPoint = { x: 0, y: rootRect.height - elRect.height };
       this.everDocked = true;
     }

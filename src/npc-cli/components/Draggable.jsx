@@ -50,7 +50,6 @@ export default function Draggable(props) {
       state.dragging = true;
       state.rel.x = e.clientX - state.el.offsetLeft;
       state.rel.y = e.clientY - state.el.offsetTop;
-      state.updateRatio();
     },
     /** @param {React.MouseEvent | MouseEvent} e */
     onMouseUp(e) {
@@ -67,11 +66,9 @@ export default function Draggable(props) {
       e.preventDefault();
 
       // Subtract rel to keep the cursor "in same position"
-      state.pos.x = e.clientX - state.rel.x;
-      state.pos.y = e.clientY - state.rel.y;
+      state.updatePos(e.clientX - state.rel.x, e.clientY - state.rel.y);
       state.el.style.left = `${state.pos.x}px`;
       state.el.style.top = `${state.pos.y}px`;
-      state.updateRatio();
     },
 
     /** @param {React.TouchEvent} e */
@@ -88,7 +85,6 @@ export default function Draggable(props) {
       state.dragging = true;
       state.rel.x = touchObj.clientX - state.el.offsetLeft;
       state.rel.y = touchObj.clientY - state.el.offsetTop;
-      state.updateRatio();
     },
     /** @param {React.TouchEvent} e */
     onTouchEnd(e) {
@@ -104,21 +100,27 @@ export default function Draggable(props) {
       
       // Subtract rel to keep the cursor "in same position"
       const touchObj = /** @type {{clientX: number, clientY: number}} */ (state.getTouch(e, /** @type {number} */ (state.touchId)));
-      state.pos.x = touchObj.clientX - state.rel.x;
-      state.pos.y = touchObj.clientY - state.rel.y;
+      state.updatePos(touchObj.clientX - state.rel.x, touchObj.clientY - state.rel.y);
       state.el.style.left = `${state.pos.x}px`;
       state.el.style.top = `${state.pos.y}px`;
-      state.updateRatio();
     },
-    updateRatio() {
+    /**
+     * @param {number} x
+     * @param {number} y
+     */
+    updatePos(x, y) {
       if (props.container === undefined) {
-        return
+        state.pos.x = x;
+        state.pos.y = y;
+        return;
       }
+      
       state.ratio.x = state.pos.x / props.container.clientWidth;
       state.ratio.y = state.pos.y / props.container.clientHeight;
-      // console.log(state.ratio);
-      
-      // 🚧 ensure visible
+      console.log(state.ratio);
+      // 🚧 ensure within bounds
+      state.pos.x = x;
+      state.pos.y = y;
     },
   }), { deps: [props.container] });
 
