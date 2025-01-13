@@ -10,10 +10,6 @@ export default function Draggable(props) {
     dragging: false,
     el: /** @type {HTMLDivElement} */ ({}),
     pos: props.initPos ?? { x: 0, y: 0 },
-    ratio: {
-      x: (props.initPos?.x ?? 0) / (props.container?.clientWidth ?? 1),
-      y: (props.initPos?.y ?? 0) / (props.container?.clientHeight ?? 1),
-    },
     rel: { x: 0, y: 0 },
     touchId: /** @type {undefined | number} */ (undefined),
 
@@ -114,13 +110,9 @@ export default function Draggable(props) {
         state.pos.y = y;
         return;
       }
-      
-      state.ratio.x = state.pos.x / props.container.clientWidth;
-      state.ratio.y = state.pos.y / props.container.clientHeight;
-      console.log(state.ratio);
       // 🚧 ensure within bounds
-      state.pos.x = x;
-      state.pos.y = y;
+      state.pos.x = Math.max(0, Math.min(props.container.clientWidth - state.el.clientWidth, x));
+      state.pos.y = Math.max(0, Math.min(props.container.clientHeight - state.el.clientHeight, y));
     },
   }), { deps: [props.container] });
 

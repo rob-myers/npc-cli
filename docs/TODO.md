@@ -50,8 +50,8 @@
     - ✅ prevent popup toggle while drag
     - ✅ can toggle top links via tab-space
     - 🚧 while docked ensure whole menu visible
-      - 🚧 responsive: ratio positions
-      - 🚧 responsive: keeps in view
+      - ✅ while dragging
+      - 🚧 on viewport resize
       - also when open meta
     - ✅ remember position
   - ✅ rename DefaultContextMenu -> ContextMenu
