@@ -46,7 +46,7 @@ export default function Draggable(props) {
         return;
       }
       e.stopPropagation();
-      e.preventDefault();
+      // e.preventDefault();
       state.dragging = true;
       state.rel.x = e.clientX - state.el.offsetLeft;
       state.rel.y = e.clientY - state.el.offsetTop;
