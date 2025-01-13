@@ -38,7 +38,7 @@ export function ContextMenu() {
         <Draggable
           container={w.view.rootEl}
           initPos={cm.dock.point}
-          draggableClassName="drag-bar"
+          // draggableClassName="drag-bar"
         >
             <ContextMenuUi cm={cm} />
           </Draggable>
@@ -55,10 +55,9 @@ function ContextMenuUi({ cm }) {
 
   return <div
     className="inner-root"
-    onClick={cm.onClickLink.bind(cm)}
+    // 🚧 prevent on drag
+    onPointerUp={cm.onClickLink.bind(cm)}
   >
-
-    {cm.docked && <div className="drag-bar" />}
 
     <div
       className={cx({ hidden: cm.npcKey === undefined }, "npc-key")}
@@ -167,24 +166,6 @@ export const defaultContextMenuCss = css`
       background-color: #000;
     }
   }
-
-
-  .drag-bar {
-    cursor: grab;
-    position: absolute;
-    top: -24px;
-    right: 0;
-    width: 100%;
-    height: 24px;
-    background-color: #224;
-    border: 1px solid #333;
-    opacity: 0.5;
-    transition: opacity 300ms;
-  }
-  .drag-bar:active, .drag-bar:hover {
-    opacity: 1;
-  }
-
 
   .npc-key {
     cursor: pointer;
