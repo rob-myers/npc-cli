@@ -42,8 +42,8 @@ export function ContextMenu() {
           initPos={cm.dockPoint}
           resizeSubject={w.view.resizeEvents}
         >
-            <ContextMenuUi cm={cm} />
-          </Draggable>
+          <ContextMenuUi cm={cm} />
+        </Draggable>
       )}
       
       {cm.docked === false && <ContextMenuUi cm={cm} />}

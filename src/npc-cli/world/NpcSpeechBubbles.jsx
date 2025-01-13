@@ -16,10 +16,7 @@ export default function NpcSpeechBubbles() {
 
     create(npcKey) {// assumes non-existent
       if (npcKey in w.n) {
-        const cm = state.lookup[npcKey] = new NpcSpeechBubbleApi(npcKey, w, {
-          showKvs: false,
-          pinned: true,
-        });
+        const cm = state.lookup[npcKey] = new NpcSpeechBubbleApi(npcKey, w);
         cm.setTracked(w.n[npcKey].m.group);
         cm.updateOffset();
         cm.baseScale = speechBubbleBaseScale; // speech bubble always scaled
@@ -65,7 +62,7 @@ export default function NpcSpeechBubbles() {
 
   React.useMemo(() => {// HMR
     process.env.NODE_ENV === 'development' && Object.values(state.lookup).forEach(cm => {
-      state.lookup[cm.key] = Object.assign(new NpcSpeechBubbleApi(cm.key, w, cm), {...cm});
+      state.lookup[cm.key] = Object.assign(new NpcSpeechBubbleApi(cm.key, w), {...cm});
       cm.dispose();
     });
   }, []);
@@ -90,15 +87,14 @@ export default function NpcSpeechBubbles() {
 /**
  * @param {ContextMenuProps} props
  */
-function ContextMenu({ cm }) {
+function NpcSpeechBubble({ cm }) {
 
   cm.update = useUpdate();
 
   React.useEffect(() => {
     // Need extra initial render e.g. when paused
-    // Also trigger CSS transition on scaled:=false
     cm.update();
-  }, [cm.scaled]);
+  }, []);
 
   return (
     <Html3d
@@ -126,7 +122,7 @@ function ContextMenu({ cm }) {
  */
 
 /** @type {React.MemoExoticComponent<(props: ContextMenuProps & { epochMs: number }) => JSX.Element>} */
-const MemoizedContextMenu = React.memo(ContextMenu);
+const MemoizedContextMenu = React.memo(NpcSpeechBubble);
 
 const speechBubbleBaseScale = 4;
 

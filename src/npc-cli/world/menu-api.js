@@ -17,9 +17,6 @@ class BaseMenuApi {
   offset = /** @type {undefined | THREE.Vector3Like} */ (undefined);
   
   open = false;
-  pinned = false;
-  scaled = false;
-  showKvs = false;
 
   /** @type {import('../components/Html3d').State} */
   html3d = /** @type {*} */ (null);
@@ -27,15 +24,74 @@ class BaseMenuApi {
   /**
    * @param {string} key
    * @param {import('./World').State} w
-   * @param {Partial<Pick<BaseMenuApi, 'showKvs' | 'pinned'>>} opts
    */
-  constructor(key, w, opts) {
+  constructor(key, w) {
     /** @type {string} */ this.key = key;
     /** @type {import('./World').State} */ this.w = w;
+  }
 
-    this.pinned = opts.pinned ?? w.smallViewport;
+  dispose() {
+    this.tracked = undefined;
+    this.update = noop;
+    // @ts-ignore
+    this.w = null;
+    this.html3dRef(null);
+  }
+
+  /** @param {null | import('../components/Html3d').State} html3d */
+  html3dRef(html3d) {
+    return html3d !== null
+      ? this.html3d = html3d // @ts-ignore
+      : delete this.html3d;
+  }
+
+  /**
+   * @param {THREE.Object3D} [input] 
+   */
+  setTracked(input) {
+    this.tracked = input;
+  }
+
+  update = noop
+}
+
+export class ContextMenuApi extends BaseMenuApi {
+  docked = false;
+  everDocked = false;
+  pinned = false;
+  scaled = false;
+  showKvs = false;
+
+  dockPoint = { x: 0, y: 0 };
+  /** @type {{ k: string; v: string; length: number; }[]} */
+  kvs = [];
+  /** @type {HTMLElement} */
+  innerRoot = /** @type {*} */ (null);
+  /** @type {NPC.ContextMenuLink[]} */
+  links = [];
+  match = /** @type {{ [matcherKey: string]: NPC.ContextMenuMatcher}} */ ({});
+  meta = /** @type {Geom.Meta} */ ({});
+  npcKey = /** @type {undefined | string} */ (undefined);
+  /** @type {import('../components/PopUp').State} */
+  popUp = /** @type {*} */ (null);
+  selectNpcKeys = /** @type {string[]} */ ([]);
+
+
+  /**
+   * @param {string} key
+   * @param {import('./World').State} w
+   * @param {{ showKvs?: boolean; npcKey?: string; pinned?: boolean }} opts
+   */
+  constructor(key, w, opts) {
+    super(key, w);
+
+    /** @type {null | Record<'docked' | 'pinned' | 'showKvs', boolean>} */
+    const savedOpts = tryLocalStorageGetParsed(`default-context-menu@${w.key}`);
+    this.pinned = opts.pinned ?? savedOpts?.pinned ?? w.smallViewport;
     this.scaled = false;
-    this.showKvs = opts.showKvs ?? false;
+    this.showKvs = opts.showKvs ?? savedOpts?.showKvs ?? false;
+
+    this.npcKey = opts.npcKey;
   }
 
   /** @param {Geom.Meta} meta */
@@ -52,94 +108,6 @@ class BaseMenuApi {
       const vStr = v === true ? '' : typeof v === 'string' ? v : javascriptStringify(v) ?? '';
       return { k, v: vStr, length: k.length + (vStr === '' ? 0 : 1) + vStr.length };
     }).sort((a, b) => a.length < b.length ? -1 : 1);
-  }
-
-  dispose() {
-    this.tracked = undefined;
-    this.update = noop;
-    // @ts-ignore
-    this.w = null;
-    this.html3dRef(null);
-  }
-
-  /** @param {boolean} [force] */
-  hide(force) {
-    if (this.pinned === true && force !== true) {
-      return;
-    }
-    this.open = false;
-    this.update();
-  }
-
-  /** @param {null | import('../components/Html3d').State} html3d */
-  html3dRef(html3d) {
-    return html3d !== null
-      ? this.html3d = html3d // @ts-ignore
-      : delete this.html3d;
-  }
-
-  /** @param {string} [npcKey] */
-  setNpc(npcKey) {
-    this.npcKey = npcKey;
-    this.update();
-  }
-
-  /**
-   * @param {THREE.Object3D} [input] 
-   */
-  setTracked(input) {
-    this.tracked = input;
-  }
-
-  toggleKvs() {
-    this.showKvs = !this.showKvs;
-  }
-
-  togglePinned() {
-    this.pinned = !this.pinned;
-  }
-
-  /** Ensure smooth transition when start scaling */
-  toggleScaled() {
-    this.scaled = !this.scaled;
-    this.baseScale = this.scaled === true ? 1 / objectScale(this.html3d.objTarget, this.w.r3f.camera) : undefined;
-  }
-
-  update = noop
-}
-
-export class ContextMenuApi extends BaseMenuApi {
-  docked = false;
-  dockPoint = { x: 0, y: 0 };
-  everDocked = false;
-  /** @type {{ k: string; v: string; length: number; }[]} */
-  kvs = [];
-  /** @type {HTMLElement} */
-  innerRoot = /** @type {*} */ (null);
-  /** @type {NPC.ContextMenuLink[]} */
-  links = [];
-  match = /** @type {{ [matcherKey: string]: NPC.ContextMenuMatcher}} */ ({});
-  meta = /** @type {Geom.Meta} */ ({});
-  npcKey = /** @type {undefined | string} */ (undefined);
-  /** @type {import('../components/PopUp').State} */
-  popUp = /** @type {*} */ (null);
-  selectNpcKeys = /** @type {string[]} */ ([]);
-
-  /**
-   * @param {string} key
-   * @param {import('./World').State} w
-   * @param {Partial<Pick<BaseMenuApi, 'showKvs' | 'npcKey' | 'pinned'>>} opts
-   */
-  constructor(key, w, opts) {
-    super(key, w, opts);
-
-    /** @type {null | Record<'docked' | 'pinned' | 'showKvs', boolean>} */
-    const savedOpts = tryLocalStorageGetParsed(`default-context-menu@${w.key}`);
-    this.pinned = opts.pinned ?? savedOpts?.pinned ?? w.smallViewport;
-    this.scaled = false;
-    this.showKvs = opts.showKvs ?? savedOpts?.showKvs ?? false;
-
-    this.npcKey = opts.npcKey;
   }
 
   /**
@@ -161,6 +129,15 @@ export class ContextMenuApi extends BaseMenuApi {
   /** Non-null iff `this.docked` true */
   getInnerRoot() {
     return this.html3d.domTarget?.querySelector('.inner-root') ?? null;
+  }
+
+  /** @param {boolean} [force] */
+  hide(force) {
+    if (this.pinned === true && force !== true) {
+      return;
+    }
+    this.open = false;
+    this.update();
   }
 
   /** @param {React.MouseEvent | React.KeyboardEvent} e */
@@ -235,6 +212,12 @@ export class ContextMenuApi extends BaseMenuApi {
     this.computeLinks();
   }
 
+  /** @param {string} [npcKey] */
+  setNpc(npcKey) {
+    this.npcKey = npcKey;
+    this.update();
+  }
+
   /** @param {number} opacity  */
   setOpacity(opacity) {
     this.html3d.rootDiv.style.opacity = `${opacity}`;
@@ -264,6 +247,20 @@ export class ContextMenuApi extends BaseMenuApi {
       this.everDocked = true;
     }
 
+  }
+
+  togglePinned() {
+    this.pinned = !this.pinned;
+  }
+
+  /** Ensure smooth transition when start scaling */
+  toggleScaled() {
+    this.scaled = !this.scaled;
+    this.baseScale = this.scaled === true ? 1 / objectScale(this.html3d.objTarget, this.w.r3f.camera) : undefined;
+  }
+
+  toggleKvs() {
+    this.showKvs = !this.showKvs;
   }
 }
 
