@@ -110,12 +110,8 @@ class BaseMenuApi {
 
 export class ContextMenuApi extends BaseMenuApi {
   docked = false;
-  dock = {
-    /** Normalized to [0, 1] x [0, 1] relative to `offsetParent` */
-    ratio: { x: 0, y: 0 },
-    /** Relative to `offsetParent` */
-    point: /** @type {undefined | Geom.VectJson} */ (undefined),
-  };
+  dockPoint = { x: 0, y: 0 };
+  everDocked = false;
   /** @type {{ k: string; v: string; length: number; }[]} */
   kvs = [];
   /** @type {HTMLElement} */
@@ -162,8 +158,9 @@ export class ContextMenuApi extends BaseMenuApi {
     this.links = Object.values(keyToLink);
   }
 
+  /** Non-null iff `this.docked` true */
   getInnerRoot() {
-    return /** @type {HTMLElement} */ (this.html3d.domTarget?.querySelector('.inner-root'));
+    return this.html3d.domTarget?.querySelector('.inner-root') ?? null;
   }
 
   /** @param {React.MouseEvent} e */
@@ -250,19 +247,23 @@ export class ContextMenuApi extends BaseMenuApi {
 
   toggleDocked() {
     this.docked = !this.docked;
-
-    if (this.docked === true) {
-      // this.scaled === true && this.toggleScaled();
-      this.popUp.close();
-      
-      const elRect = this.getInnerRoot().getBoundingClientRect();
-      const rootRect = this.w.view.rootEl.getBoundingClientRect();
-      
-      this.dock.point ??= {
-        x: 0,
-        y: rootRect.height - elRect.height,
-      };
+    const innerRoot = this.getInnerRoot();
+  
+    if (this.docked === false || innerRoot === null) {
+      return;
     }
+
+    // About to dock...
+    this.popUp.close();
+    // this.scaled === true && this.toggleScaled();
+    const elRect = innerRoot.getBoundingClientRect();
+    const rootRect = this.w.view.rootEl.getBoundingClientRect();
+
+    if (this.everDocked === false) {// initially dock at bottom left
+      this.dockPoint = { x: 0, y: rootRect.height - elRect.height };
+      this.everDocked = true;
+    }
+
   }
 }
 

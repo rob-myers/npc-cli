@@ -1,9 +1,11 @@
 import React from "react";
 import { css, cx } from "@emotion/css";
 
+import { Vect } from "../geom";
 import { WorldContext } from "./world-context";
 import { ContextMenuApi as ContextMenuApi } from "./menu-api";
 import useUpdate from "../hooks/use-update";
+import useStateRef from "../hooks/use-state-ref";
 import { PopUp } from "../components/PopUp";
 import { Html3d } from "../components/Html3d";
 import Draggable from "../components/Draggable";
@@ -37,7 +39,7 @@ export function ContextMenu() {
       {cm.docked === true && (
         <Draggable
           container={w.view.rootEl}
-          initPos={cm.dock.point}
+          initPos={cm.dockPoint}
           // draggableClassName="drag-bar"
         >
             <ContextMenuUi cm={cm} />
@@ -53,10 +55,40 @@ export function ContextMenu() {
 /** @param {{ cm: ContextMenuApi }} _ */
 function ContextMenuUi({ cm }) {
 
+  const state = useStateRef(() => ({
+    /** `cm.dockPoint` when on pointer down */
+    downDockPoint: /** @type {undefined | Geom.VectJson} */ (undefined),
+    /** Was pointerdown over contextmenu and not yet up? */
+    isDown: false,
+
+    /** @param {React.PointerEvent} e */
+    onPointerUp(e) {
+      const { downDockPoint, isDown } = state;
+      state.downDockPoint = undefined;
+      state.isDown = false;
+
+      if (isDown === false) {
+        return;
+      } else if (cm.docked === false) {
+        cm.onClickLink(e);
+      } else if (// docked click should not be dragged
+        downDockPoint !== undefined &&
+        tmpVect.copy(downDockPoint).distanceTo(cm.dockPoint) < 4
+      ) {
+        cm.onClickLink(e);
+      }
+    },
+    /** @param {React.PointerEvent} e */
+    onPointerDown(e) {
+      state.isDown = true;
+      state.downDockPoint = cm.docked ? {...cm.dockPoint} : undefined;
+    },
+  }), { deps: [cm] });
+
   return <div
     className="inner-root"
-    // 🚧 prevent on drag
-    onPointerUp={cm.onClickLink.bind(cm)}
+    onPointerUp={state.onPointerUp}
+    onPointerDown={state.onPointerDown}
   >
 
     <div
@@ -146,6 +178,8 @@ const topLinks = [
   { key: 'toggle-kvs', label: 'meta', test: 'showKvs' },
   { key: 'toggle-pinned', label: 'pin', test: 'pinned' },
 ];
+
+const tmpVect = new Vect();
 
 export const defaultContextMenuCss = css`
   position: absolute;

@@ -116,7 +116,7 @@ export default function Draggable(props) {
       }
       state.ratio.x = state.pos.x / props.container.clientWidth;
       state.ratio.y = state.pos.y / props.container.clientHeight;
-      console.log(state.ratio);
+      // console.log(state.ratio);
       
       // 🚧 ensure visible
     },

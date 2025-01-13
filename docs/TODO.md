@@ -46,7 +46,8 @@
       - cm.dock.point
     - ✅ prevent link click whilst dragging
       - must drag "draggable bar"
-    - 🚧 try remove draggable bar, whilst preventing links
+    - ✅ try remove draggable bar, whilst preventing links
+    - 🚧 prevent popup toggle while drag
     - 🚧 while docked ensure whole menu visible
       - 🚧 responsive: ratio positions
       - 🚧 responsive: keeps in view
