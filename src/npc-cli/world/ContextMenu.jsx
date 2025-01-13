@@ -40,7 +40,6 @@ export function ContextMenu() {
         <Draggable
           container={w.view.rootEl}
           initPos={cm.dockPoint}
-          // draggableClassName="drag-bar"
         >
             <ContextMenuUi cm={cm} />
           </Draggable>
@@ -61,6 +60,13 @@ function ContextMenuUi({ cm }) {
     /** Was pointerdown over contextmenu and not yet up? */
     isDown: false,
 
+    /** @param {React.KeyboardEvent<HTMLButtonElement>} e */
+    onKeyDownButton(e) {
+      if (e.code === 'Space') {
+        cm.onToggleLink(e);
+        e.currentTarget.focus();
+      }
+    },
     /** @param {React.PointerEvent} e */
     onPointerUp(e) {
       const { downDockPoint, isDown } = state;
@@ -70,12 +76,15 @@ function ContextMenuUi({ cm }) {
       if (isDown === false) {
         return;
       } else if (cm.docked === false) {
-        cm.onClickLink(e);
-      } else if (// docked click should not be dragged
+        cm.onToggleLink(e);
+      } else if (
         downDockPoint !== undefined &&
         tmpVect.copy(downDockPoint).distanceTo(cm.dockPoint) < 4
-      ) {
-        cm.onClickLink(e);
+      ) {// docked click without drag
+        cm.onToggleLink(e);
+      } else {// dragged docked click
+        cm.popUp.preventToggle = true;
+        setTimeout(() => cm.popUp.preventToggle = false);
       }
     },
     /** @param {React.PointerEvent} e */
@@ -100,7 +109,10 @@ function ContextMenuUi({ cm }) {
   
     <div className="links">
 
-      <button data-key="toggle-docked">
+      <button
+        data-key="toggle-docked"
+        onKeyDown={state.onKeyDownButton}
+      >
         {cm.docked ? 'embed' : 'dock'}
       </button>
 
@@ -136,15 +148,23 @@ function ContextMenuUi({ cm }) {
         </button> */}
       </PopUp>
 
-      {topLinks.map(({ key, label, test }) =>
-        <button
-          key={key}
-          data-key={key}
-          className={test !== undefined && !(/** @type {*} */ (cm)[test]) ? 'off' : undefined}
-        >
-          {label}
-        </button>
-      )}
+      <button
+        key="toggle-kvs"
+        data-key="toggle-kvs"
+        className={!cm.showKvs ? 'off' : undefined}
+        onKeyDown={state.onKeyDownButton}
+      >
+        meta
+      </button>
+
+      <button
+        key="toggle-pinned"
+        data-key="toggle-pinned"
+        className={!cm.pinned ? 'off' : undefined}
+        onKeyDown={state.onKeyDownButton}
+      >
+        pin
+      </button>
 
       {cm.links.map(({ key, label, test }) =>
         <button
@@ -169,16 +189,6 @@ function ContextMenuUi({ cm }) {
   </div>;
 }
 
-
-/**
- * @type {NPC.ContextMenuLink[]}
- * 🔔 same for embedded/docked avoids measure height
- */
-const topLinks = [
-  { key: 'toggle-kvs', label: 'meta', test: 'showKvs' },
-  { key: 'toggle-pinned', label: 'pin', test: 'pinned' },
-];
-
 const tmpVect = new Vect();
 
 export const defaultContextMenuCss = css`
@@ -194,6 +204,7 @@ export const defaultContextMenuCss = css`
   > div {
     transform-origin: 0 0;
     pointer-events: all;
+    /* user-select: auto; */
 
     .inner-root {
       width: 200px;

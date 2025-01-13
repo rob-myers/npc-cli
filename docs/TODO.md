@@ -47,7 +47,8 @@
     - ✅ prevent link click whilst dragging
       - must drag "draggable bar"
     - ✅ try remove draggable bar, whilst preventing links
-    - 🚧 prevent popup toggle while drag
+    - ✅ prevent popup toggle while drag
+    - ✅ can toggle top links via tab-space
     - 🚧 while docked ensure whole menu visible
       - 🚧 responsive: ratio positions
       - 🚧 responsive: keeps in view

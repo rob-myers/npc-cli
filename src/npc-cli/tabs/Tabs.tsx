@@ -198,7 +198,7 @@ export const Tabs = React.forwardRef<State, Props>(function Tabs(props, ref) {
       <figure
         key={state.resetCount}
         className={cx("tabs", tabsCss)}
-        ref={(x) => x && (state.rootEl = x)}
+        ref={state.ref('rootEl')}
         tabIndex={0}
         onKeyDown={state.onKeyDown}
       >

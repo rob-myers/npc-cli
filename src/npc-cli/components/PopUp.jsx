@@ -15,6 +15,7 @@ export const PopUp = React.forwardRef(function PopUp(props, ref) {
     left: false,
     bubble: /** @type {*} */ (null),
     icon: /** @type {*} */ (null),
+    preventToggle: false,
 
     close() {
       state.opened = false;
@@ -54,7 +55,9 @@ export const PopUp = React.forwardRef(function PopUp(props, ref) {
         ref={state.ref('icon')}
         className="pop-up-button"
         onClick={e => {
-          if (state.opened) {
+          if (state.preventToggle) {
+            return;
+          } else if (state.opened) {
             state.close();
           } else {
             state.open(props.width);
@@ -96,6 +99,7 @@ export const PopUp = React.forwardRef(function PopUp(props, ref) {
  * @property {HTMLSpanElement} bubble
  * @property {HTMLSpanElement} icon
  * @property {(width?: number | undefined) => void} open
+ * @property {boolean} preventToggle
  * @property {() => void} close
  */
 

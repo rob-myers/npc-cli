@@ -163,8 +163,8 @@ export class ContextMenuApi extends BaseMenuApi {
     return this.html3d.domTarget?.querySelector('.inner-root') ?? null;
   }
 
-  /** @param {React.MouseEvent} e */
-  onClickLink(e) {
+  /** @param {React.MouseEvent | React.KeyboardEvent} e */
+  onToggleLink(e) {
     const el = /** @type {HTMLElement} */ (e.target);
     const linkKey = el.dataset.key;
 
