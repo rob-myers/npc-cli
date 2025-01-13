@@ -116,15 +116,16 @@ export default function Draggable(props) {
   }), { deps: [props.container] });
 
   React.useEffect(() => {
+    const container = props.container ?? document.body;
     document.body.addEventListener('mousemove', state.onMouseMove);
-    document.body.addEventListener('mouseleave', state.onMouseUp);
+    container.addEventListener('mouseleave', state.onMouseUp);
     const sub = props.resizeSubject?.subscribe(() => {
       // console.log('resized');
       state.updatePos(state.pos.x, state.pos.y);
     });
     return () => {
       document.body.removeEventListener('mousemove', state.onMouseMove);
-      document.body.removeEventListener('mouseleave', state.onMouseUp);
+      container.removeEventListener('mouseleave', state.onMouseUp);
       sub?.unsubscribe();
     };
   }, [props.resizeSubject]);
