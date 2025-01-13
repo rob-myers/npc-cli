@@ -12,6 +12,8 @@ import Draggable from "../components/Draggable";
 
 export function ContextMenu() {
 
+  // 🚧 move state here (remove ContextMenuApi, remove state from ContextMenuUi)
+
   const w = React.useContext(WorldContext);
   const cm = w.cm ??= new ContextMenuApi('default', w, { showKvs: true });
   cm.update = useUpdate();

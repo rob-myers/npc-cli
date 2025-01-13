@@ -38,7 +38,7 @@
   - ✅ Logger fixed at bottom
   - ✅ DefaultContextMenu bottom right
   - ℹ️ https://stackoverflow.com/questions/20926551/recommended-way-of-making-react-component-div-draggable
-  - 🚧 can move DefaultContextMenu whilst docked via Draggable
+  - ✅ can move DefaultContextMenu whilst docked via Draggable
     - ✅ can drag around while docked
     - ✅ test Draggable on mobile
     - ✅ drag continues when off element
@@ -49,14 +49,19 @@
     - ✅ try remove draggable bar, whilst preventing links
     - ✅ prevent popup toggle while drag
     - ✅ can toggle top links via tab-space
-    - 🚧 while docked ensure whole menu visible
+    - ✅ while docked ensure whole menu visible
       - ✅ while dragging
       - ✅ on viewport resize
-      - 🚧 also when open meta - might need refactor
     - ✅ remember position
     - reposition PopUp when too high
   - ✅ rename DefaultContextMenu -> ContextMenu
-  - 🚧 remove `refresh` link from opts
+  - 🚧 another BaseContextMenu refactor
+    - ContextMenu does not have corresponding class
+    - NpcSpeechBubbleApi is self contained class (remove BaseContextMenu)
+  - ContextMenu on open meta, ensure whole menu visible
+    - remove resizeSubject prop from Draggable
+    - expose Draggable api, and updatePos when appropriate
+  - remove `refresh` link from opts
   - can move Logger
   - can resize Logger
   - Logger logs disconnected/connected message
