@@ -63,8 +63,6 @@ export default function Draggable(props) {
 
       // Subtract rel to keep the cursor "in same position"
       state.updatePos(e.clientX - state.rel.x, e.clientY - state.rel.y);
-      state.el.style.left = `${state.pos.x}px`;
-      state.el.style.top = `${state.pos.y}px`;
     },
 
     /** @param {React.TouchEvent} e */
@@ -97,8 +95,6 @@ export default function Draggable(props) {
       // Subtract rel to keep the cursor "in same position"
       const touchObj = /** @type {{clientX: number, clientY: number}} */ (state.getTouch(e, /** @type {number} */ (state.touchId)));
       state.updatePos(touchObj.clientX - state.rel.x, touchObj.clientY - state.rel.y);
-      state.el.style.left = `${state.pos.x}px`;
-      state.el.style.top = `${state.pos.y}px`;
     },
     /**
      * @param {number} x
@@ -110,20 +106,28 @@ export default function Draggable(props) {
         state.pos.y = y;
         return;
       }
-      // 🚧 ensure within bounds
+      // ensure within bounds
       state.pos.x = Math.max(0, Math.min(props.container.clientWidth - state.el.clientWidth, x));
       state.pos.y = Math.max(0, Math.min(props.container.clientHeight - state.el.clientHeight, y));
+
+      state.el.style.left = `${state.pos.x}px`;
+      state.el.style.top = `${state.pos.y}px`;
     },
   }), { deps: [props.container] });
 
   React.useEffect(() => {
     document.body.addEventListener('mousemove', state.onMouseMove);
     document.body.addEventListener('mouseleave', state.onMouseUp);
+    const sub = props.resizeSubject?.subscribe(() => {
+      // console.log('resized');
+      state.updatePos(state.pos.x, state.pos.y);
+    });
     return () => {
       document.body.removeEventListener('mousemove', state.onMouseMove);
       document.body.removeEventListener('mouseleave', state.onMouseUp);
+      sub?.unsubscribe();
     };
-  }, []);
+  }, [props.resizeSubject]);
 
   return (
     <div
@@ -153,4 +157,5 @@ export default function Draggable(props) {
  * @property {HTMLElement} [container] So can keep draggable within container
  * @property {string} [draggableClassName]
  * @property {Geom.VectJson} [initPos]
+ * @property {import('rxjs').Subject<any>} [resizeSubject] Emits on resize
  */

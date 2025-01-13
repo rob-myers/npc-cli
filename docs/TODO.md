@@ -51,9 +51,10 @@
     - ✅ can toggle top links via tab-space
     - 🚧 while docked ensure whole menu visible
       - ✅ while dragging
-      - 🚧 on viewport resize
-      - also when open meta
+      - ✅ on viewport resize
+      - 🚧 also when open meta - might need refactor
     - ✅ remember position
+    - reposition PopUp when too high
   - ✅ rename DefaultContextMenu -> ContextMenu
   - 🚧 remove `refresh` link from opts
   - can move Logger

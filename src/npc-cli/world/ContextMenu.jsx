@@ -40,12 +40,13 @@ export function ContextMenu() {
         <Draggable
           container={w.view.rootEl}
           initPos={cm.dockPoint}
+          resizeSubject={w.view.resizeEvents}
         >
             <ContextMenuUi cm={cm} />
           </Draggable>
-      ) || (
-        <ContextMenuUi cm={cm} />
       )}
+      
+      {cm.docked === false && <ContextMenuUi cm={cm} />}
     </Html3d>
   );
 
@@ -230,7 +231,7 @@ export const defaultContextMenuCss = css`
   }
 
   &.docked {
-    z-index: 1; // 🚧
+    z-index: 7; // 🚧
     transform: unset !important;
   }
 
