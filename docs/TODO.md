@@ -46,10 +46,11 @@
       - cm.dock.point
     - ✅ prevent link click whilst dragging
       - must drag "draggable bar"
+    - 🚧 try remove draggable bar, whilst preventing links
     - 🚧 while docked ensure whole menu visible
       - 🚧 responsive: ratio positions
       - 🚧 responsive: keeps in view
-      - including when open meta
+      - also when open meta
     - ✅ remember position
   - ✅ rename DefaultContextMenu -> ContextMenu
   - 🚧 remove `refresh` link from opts
