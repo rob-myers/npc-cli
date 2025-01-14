@@ -52,7 +52,6 @@ export function ContextMenu() {
     /** Was pointerdown over contextmenu and not yet up? */
     isDown: false,
 
-    /** @param {Geom.Meta} meta */
     computeKvsFromMeta(meta) {
       const skip = /** @type {Record<string, boolean>} */ ({
         doorId: 'gdKey' in meta,
@@ -86,7 +85,6 @@ export function ContextMenu() {
     getInnerRoot() {
       return state.html3d.domTarget?.querySelector('.inner-root') ?? null;
     },
-    /** @param {boolean} [force] */
     hide(force) {
       if (state.pinned === true && force !== true) {
         return;
@@ -94,19 +92,16 @@ export function ContextMenu() {
       state.open = false;
       state.update();
     },
-    /** @param {React.KeyboardEvent<HTMLButtonElement>} e */
     onKeyDownButton(e) {
       if (e.code === 'Space') {
         state.onToggleLink(e);
         e.currentTarget.focus();
       }
     },
-    /** @param {React.PointerEvent} e */
     onPointerDown(e) {
       state.isDown = true;
       state.downDockPoint = state.docked ? {...state.dockPoint} : undefined;
     },
-    /** @param {React.PointerEvent} e */
     onPointerUp(e) {
       const { downDockPoint, isDown } = state;
       state.downDockPoint = undefined;
@@ -126,15 +121,11 @@ export function ContextMenu() {
         setTimeout(() => state.popUp.preventToggle = false);
       }
     },
-    /**
-     * @param {React.ChangeEvent<HTMLSelectElement> } e 
-     */
     onSelectNpc(e) {
       const { value } = e.currentTarget;
       state.npcKey = value in w.n ? value : undefined;
       state.refreshPopUp();
     },
-    /** @param {React.MouseEvent | React.KeyboardEvent} e */
     onToggleLink(e) {
       const el = /** @type {HTMLElement} */ (e.target);
       const linkKey = el.dataset.key;
@@ -159,7 +150,6 @@ export function ContextMenu() {
       w.cm.persist();
       state.update();
     },
-    /** @param {boolean} willOpen  */
     onTogglePopup(willOpen) {
       if (willOpen) {
         state.refreshPopUp();
@@ -171,7 +161,6 @@ export function ContextMenu() {
         pinned, showKvs, docked,
       }));
     },
-    /** @param {null | import('../components/PopUp').State} popUp */
     popUpRef(popUp) {
       return popUp !== null
         ? state.popUp = popUp // @ts-ignore
@@ -183,7 +172,6 @@ export function ContextMenu() {
     },
     /**
      * Context is world position and meta concerning said position
-     * @param {NPC.ContextMenuContextDef} ct 
      */
     setContext({ position, meta }) {
       this.meta = meta;
@@ -191,18 +179,13 @@ export function ContextMenu() {
       this.computeKvsFromMeta(meta);
       this.computeLinks();
     },
-    /** @param {string} [npcKey] */
     setNpc(npcKey) {
       this.npcKey = npcKey;
       this.update();
     },
-    /** @param {number} opacity  */
     setOpacity(opacity) {
       this.html3d.rootDiv.style.opacity = `${opacity}`;
     },
-    /**
-     * @param {import('three').Object3D} [input] 
-     */
     setTracked(input) {
       this.tracked = input;
     },

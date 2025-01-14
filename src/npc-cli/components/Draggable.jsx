@@ -14,7 +14,6 @@ export const Draggable = React.forwardRef(function Draggable(props, ref) {
     rel: { x: 0, y: 0 },
     touchId: /** @type {undefined | number} */ (undefined),
 
-    /** @param {React.MouseEvent | React.TouchEvent} e */
     canDrag(e) {
       if (props.draggableClassName === undefined) {
         return true;
@@ -22,7 +21,6 @@ export const Draggable = React.forwardRef(function Draggable(props, ref) {
         return e.target instanceof HTMLElement && e.target.classList.contains(props.draggableClassName);
       }
     },
-    /** @param {React.TouchEvent} e */
     getTouchIdentifier(e) {
       if (e.targetTouches && e.targetTouches[0]) return e.targetTouches[0].identifier;
       if (e.changedTouches && e.changedTouches[0]) return e.changedTouches[0].identifier;
@@ -37,7 +35,6 @@ export const Draggable = React.forwardRef(function Draggable(props, ref) {
         (e.changedTouches && Array.from(e.changedTouches).find(t => identifier === t.identifier));
     },
 
-    /** @param {React.MouseEvent} e */
     onMouseDown(e) {
       if (!state.canDrag(e)) {
         return;
@@ -48,13 +45,11 @@ export const Draggable = React.forwardRef(function Draggable(props, ref) {
       state.rel.x = e.clientX - state.el.offsetLeft;
       state.rel.y = e.clientY - state.el.offsetTop;
     },
-    /** @param {React.MouseEvent | MouseEvent} e */
     onMouseUp(e) {
       e.stopPropagation();
       e.preventDefault();
       state.dragging = false;
     },
-    /** @param {React.MouseEvent | MouseEvent} e */
     onMouseMove(e) {
       if (state.dragging === false) {
         return;
@@ -66,7 +61,6 @@ export const Draggable = React.forwardRef(function Draggable(props, ref) {
       state.updatePos(e.clientX - state.rel.x, e.clientY - state.rel.y);
     },
 
-    /** @param {React.TouchEvent} e */
     onTouchStart(e) {
       if (!state.canDrag(e)) {
         return;
@@ -81,12 +75,10 @@ export const Draggable = React.forwardRef(function Draggable(props, ref) {
       state.rel.x = touchObj.clientX - state.el.offsetLeft;
       state.rel.y = touchObj.clientY - state.el.offsetTop;
     },
-    /** @param {React.TouchEvent} e */
     onTouchEnd(e) {
       state.dragging = false;
       state.touchId = undefined;
     },
-    /** @param {React.TouchEvent} e */
     onTouchMove(e) {
       if (state.dragging === false) {
         return;
