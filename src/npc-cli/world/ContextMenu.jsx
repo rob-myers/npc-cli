@@ -1,36 +1,221 @@
 import React from "react";
 import { css, cx } from "@emotion/css";
+import { stringify as javascriptStringify } from 'javascript-stringify';
 
+import { tryLocalStorageGetParsed, tryLocalStorageSet, warn } from "../service/generic";
 import { Vect } from "../geom";
 import { WorldContext } from "./world-context";
-import { ContextMenuApi as ContextMenuApi } from "./menu-api";
 import useUpdate from "../hooks/use-update";
 import useStateRef from "../hooks/use-state-ref";
 import { PopUp } from "../components/PopUp";
-import { Html3d } from "../components/Html3d";
+import { Html3d, objectScale } from "../components/Html3d";
 import Draggable from "../components/Draggable";
 
 export function ContextMenu() {
 
-  // 🚧 move state here (remove ContextMenuApi, remove state from ContextMenuUi)
-
   const w = React.useContext(WorldContext);
-  const cm = w.cm ??= new ContextMenuApi('default', w, { showKvs: true });
-  cm.update = useUpdate();
+  const update = useUpdate();
+
+  // 🚧 remove state from ContextMenuUi
+  const state = useStateRef(/** @returns {State} */ () => ({
+    baseScale: /** @type {undefined | number} */ (undefined),
+    /** For violating React.memo */
+    epochMs: 0,
+    position: /** @type {[number, number, number]} */ ([0, 0, 0]),
+    tracked: /** @type {undefined | import('three').Object3D} */ (undefined),
+    offset: /** @type {undefined | import('three').Vector3Like} */ (undefined),
+    open: false,
+    /** @type {import('../components/Html3d').State} */
+    html3d: /** @type {*} */ (null),
+
+    docked: false,
+    everDocked: false,
+    pinned: tryLocalStorageGetParsed(`default-context-menu@${w.key}`)?.pinned ?? w.smallViewport,
+    scaled: false,
+    showKvs: true,
+  
+    dockPoint: { x: 0, y: 0 },
+    /** @type {{ k: string; v: string; length: number; }[]} */
+    kvs: [],
+    /** @type {HTMLElement} */
+    innerRoot: /** @type {*} */ (null),
+    /** @type {NPC.ContextMenuLink[]} */
+    links: [],
+    match: /** @type {{ [matcherKey: string]: NPC.ContextMenuMatcher}} */ ({}),
+    meta: /** @type {Geom.Meta} */ ({}),
+    npcKey: /** @type {undefined | string} */ (undefined),
+    /** @type {import('../components/PopUp').State} */
+    popUp: /** @type {*} */ (null),
+    selectNpcKeys: /** @type {string[]} */ ([]),
+
+    /** @param {Geom.Meta} meta */
+    computeKvsFromMeta(meta) {
+      const skip = /** @type {Record<string, boolean>} */ ({
+        doorId: 'gdKey' in meta,
+        gmId: 'gdKey' in meta || 'grKey' in meta,
+        obsId: true,
+        picked: true,
+        roomId: 'grKey' in meta,
+      });
+      state.kvs = Object.entries(meta ?? {}).flatMap(([k, v]) => {
+        if (skip[k] === true) return [];
+        const vStr = v === true ? '' : typeof v === 'string' ? v : javascriptStringify(v) ?? '';
+        return { k, v: vStr, length: k.length + (vStr === '' ? 0 : 1) + vStr.length };
+      }).sort((a, b) => a.length < b.length ? -1 : 1);
+    },
+    /**
+     * Apply matchers, assuming `state.meta` is up-to-date.
+     */
+    computeLinks() {
+      let suppressKeys = /** @type {string[]} */ ([]);
+      const keyToLink = Object.values(state.match).reduce((agg, matcher) => {
+        const { showLinks, hideKeys } = matcher(state);
+        showLinks?.forEach(link => agg[link.key] = link);
+        suppressKeys.push(...hideKeys ?? []);
+        return agg;
+      }, /** @type {{ [linkKey: string]: NPC.ContextMenuLink }} */ ({}));
+      
+      suppressKeys.forEach(key => delete keyToLink[key]);
+      state.links = Object.values(keyToLink);
+    },
+    /** Non-null iff `state.docked` true */
+    getInnerRoot() {
+      return state.html3d.domTarget?.querySelector('.inner-root') ?? null;
+    },
+    /** @param {boolean} [force] */
+    hide(force) {
+      if (state.pinned === true && force !== true) {
+        return;
+      }
+      state.open = false;
+      state.update();
+    },
+    /** @param {React.MouseEvent | React.KeyboardEvent} e */
+    onToggleLink(e) {
+      const el = /** @type {HTMLElement} */ (e.target);
+      const linkKey = el.dataset.key;
+
+      if (linkKey === undefined) {
+        return warn(`${'onClick'}: ignored el ${el.tagName} with class ${el.className}`);
+      }
+
+      w.view.rootEl.focus();
+      w.events.next({ key: 'click-link', cmKey: 'default', linkKey });
+
+      switch (linkKey) {
+        // case 'delete': w.c.delete(e.cmKey); break;
+        case 'clear-npc': state.setNpc(); break;
+        case 'hide': state.hide(true); break;
+        case 'toggle-docked': state.toggleDocked(); break;
+        case 'toggle-kvs': state.toggleKvs(); break;
+        case 'toggle-pinned': state.togglePinned(); break;
+        case 'toggle-scaled': state.toggleScaled(); break;
+      }
+
+      w.cm.persist();
+      state.update();
+    },
+    /**
+     * @param {React.ChangeEvent<HTMLSelectElement> } e 
+     */
+    onSelectNpc(e) {
+      const { value } = e.currentTarget;
+      state.npcKey = value in w.n ? value : undefined;
+      state.refreshPopUp();
+    },
+    /** @param {boolean} willOpen  */
+    onTogglePopup(willOpen) {
+      if (willOpen) {
+        state.refreshPopUp();
+      }
+    },
+    persist() {
+      const { pinned, showKvs, docked } = this;
+      tryLocalStorageSet(`default-context-menu@${w.key}`, JSON.stringify({
+        pinned, showKvs, docked,
+      }));
+    },
+    /** @param {null | import('../components/PopUp').State} popUp */
+    popUpRef(popUp) {
+      return popUp !== null
+        ? state.popUp = popUp // @ts-ignore
+        : delete state.popUp;
+    },
+    refreshPopUp() {
+      state.selectNpcKeys = Object.keys(w.n);
+      this.update();
+    },
+    /**
+     * Context is world position and meta concerning said position
+     * @param {NPC.ContextMenuContextDef} ct 
+     */
+    setContext({ position, meta }) {
+      this.meta = meta;
+      this.position = position.toArray();
+      this.computeKvsFromMeta(meta);
+      this.computeLinks();
+    },
+    /** @param {string} [npcKey] */
+    setNpc(npcKey) {
+      this.npcKey = npcKey;
+      this.update();
+    },
+    /** @param {number} opacity  */
+    setOpacity(opacity) {
+      this.html3d.rootDiv.style.opacity = `${opacity}`;
+    },
+    /**
+     * @param {import('three').Object3D} [input] 
+     */
+    setTracked(input) {
+      this.tracked = input;
+    },
+    show() {
+      this.open = true;
+      this.update();
+    },
+    toggleDocked() {
+      this.docked = !this.docked;
+      
+      if (this.docked === false) {
+        return;
+      }
+      
+      // About to dock...
+      const innerRoot = /** @type {HTMLElement} */ (this.getInnerRoot());
+      this.popUp.close();
+      // this.scaled === true && this.toggleScaled();
+      
+      if (this.everDocked === false) {// initially dock at bottom left
+        const elRect = innerRoot.getBoundingClientRect();
+        const rootRect = w.view.rootEl.getBoundingClientRect();
+        this.dockPoint = { x: 0, y: rootRect.height - elRect.height };
+        this.everDocked = true;
+      }
+
+    },
+    togglePinned() {
+      this.pinned = !this.pinned;
+    },
+    /** Ensure smooth transition when start scaling */
+    toggleScaled() {
+      this.scaled = !this.scaled;
+      this.baseScale = this.scaled === true ? 1 / objectScale(this.html3d.objTarget, w.r3f.camera) : undefined;
+    },
+    toggleKvs() {
+      this.showKvs = !this.showKvs;
+    },
+    update,
+  }));
+
+  const cm = w.cm = state;
   
   // Extra initial render: (a) init paused, (b) trigger CSS transition
   React.useEffect(() => void cm.update(), [cm.scaled]);
 
-  React.useMemo(() => {// HMR
-    if (process.env.NODE_ENV === 'development') {
-      w.cm = Object.assign(new ContextMenuApi(cm.key, w, cm), {...cm})
-      cm.dispose();
-    }
-  }, []);
-
   return (
     <Html3d
-      ref={cm.html3dRef.bind(cm)}
+      ref={state.ref('html3d')}
       baseScale={cm.baseScale}
       className={defaultContextMenuCss}
       docked={cm.docked}
@@ -54,7 +239,7 @@ export function ContextMenu() {
 
 }
 
-/** @param {{ cm: ContextMenuApi }} _ */
+/** @param {{ cm: State }} _ */
 function ContextMenuUi({ cm }) {
 
   const state = useStateRef(() => ({
@@ -303,3 +488,58 @@ const popUpInfoCss = css`
     border: 1px solid #555;
   }
 ;`
+
+/**
+ * @typedef {{
+ *   baseScale: undefined | number;
+ *   epochMs: number;
+ *   position: [number, number, number];
+ *   tracked: undefined | import("three").Object3D;
+ *   offset: undefined | import("three").Vector3Like;
+ *   open: boolean;
+ *   html3d: import("../components/Html3d").State;
+ *   docked: boolean;
+ *   everDocked: boolean;
+ *   pinned: any;
+ *   scaled: boolean;
+ *   showKvs: boolean;
+ *   dockPoint: {
+ *       x: number;
+ *       y: number;
+ *   };
+ *   kvs: {
+ *       k: string;
+ *       v: string;
+ *       length: number;
+ *   }[];
+ *   innerRoot: HTMLElement;
+ *   links: NPC.ContextMenuLink[];
+ *   match: {
+ *       [matcherKey: string]: NPC.ContextMenuMatcher;
+ *   };
+ *   meta: Geom.Meta;
+ *   npcKey: undefined | string;
+ *   popUp: import("../components/PopUp").State;
+ *   selectNpcKeys: string[];
+ *   computeKvsFromMeta(meta: Geom.Meta): void;
+ *   computeLinks(): void;
+ *   getInnerRoot(): Element | null;
+ *   hide(force?: boolean | undefined): void;
+ *   onToggleLink(e: React.MouseEvent | React.KeyboardEvent): void;
+ *   onSelectNpc(e: React.ChangeEvent<HTMLSelectElement>): void;
+ *   onTogglePopup(willOpen: boolean): void;
+ *   persist(): void;
+ *   popUpRef(popUp: null | import("../components/PopUp").State): void;
+ *   refreshPopUp(): void;
+ *   setContext({ position, meta }: NPC.ContextMenuContextDef): void;
+ *   setNpc(npcKey?: string | undefined): void;
+ *   setOpacity(opacity: number): void;
+ *   setTracked(input?: import('three').Object3D): void;
+ *   show(): void;
+ *   toggleDocked(): void;
+ *   togglePinned(): void;
+ *   toggleScaled(): void;
+ *   toggleKvs(): void;
+ *   update: () => void;
+ * }} State
+ **/
