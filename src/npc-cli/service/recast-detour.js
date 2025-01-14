@@ -60,9 +60,9 @@ export function computeOffMeshConnectionsParams(w) {
       }
 
       const halfLength = wallOutset + (meta.hull === true ? 0.25 : 0.125);
+      // 🔔 saw nav fail in 102 when many offMeshConnections
       // const offsets = meta.hull === true ? [-0.7, 0.01, 0.7] : [0.01];
-      // 🔔 saw nav fail in 102 when many offMeshConnections, so introduced door.meta.locker
-      const offsets = meta.hull === true || meta.locker === true ? [0.01] : [-0.25, 0.01, 0.25];
+      const offsets = meta.hull === true || meta.iris !== true ? [0.01] : [-0.25, 0.01, 0.25];
       const src = gm.matrix.transformPoint(center.clone().addScaled(normal, halfLength));
       const dst = gm.matrix.transformPoint(center.clone().addScaled(normal, -halfLength));
       const tangent = { x: -normal.y, y: normal.x };
