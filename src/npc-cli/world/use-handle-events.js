@@ -300,7 +300,7 @@ export default function useHandleEvents(w) {
         }
         case "exit-room": {
           state.npcToRoom.delete(e.npcKey);
-          state.roomToNpcs[e.gmId][e.roomId].delete(e.npcKey);
+          state.roomToNpcs[e.gmId][e.roomId]?.delete(e.npcKey);
           break;
         }
         case "removed-npc": {
