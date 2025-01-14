@@ -55,11 +55,12 @@
     - ✅ remember position
     - reposition PopUp when too high
   - ✅ rename DefaultContextMenu -> ContextMenu
-  - 🚧 another BaseContextMenu refactor
+  - ✅ another BaseContextMenu refactor
     - ✅ ContextMenu does not have corresponding class
     - ✅ ContextMenuUi state merged into parent
-    - 🚧 NpcSpeechBubbleApi is self-contained class (remove BaseContextMenu)
-  - ContextMenu on open meta, ensure whole menu visible
+    - ✅ NpcSpeechBubbleApi is self-contained class (remove BaseContextMenu)
+    - ℹ️ `w bubble.say rob 'the quick brown [ fox ] jumped over the lazy [ dog ]'`
+  - on open meta in ContextMenu, ensure whole menu visible
     - remove resizeSubject prop from Draggable
     - expose Draggable api, and updatePos when appropriate
   - remove `refresh` link from opts

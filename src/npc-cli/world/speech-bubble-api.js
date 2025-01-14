@@ -1,17 +1,15 @@
-import * as THREE from "three";
-
 /**
- * 🔔 Avoid `foo = (...bar) => baz` because incompatible with our approach to HMR.
+ * 🔔 Avoid `foo = (...bar) => baz` because incompatible with our approach to class HMR.
  */
-class BaseMenuApi {
+export class SpeechBubbleApi {
 
   baseScale = /** @type {undefined | number} */ (undefined);
   /** For violating React.memo */
   epochMs = 0;
   
   position = /** @type {[number, number, number]} */ ([0, 0, 0]);
-  tracked = /** @type {undefined | THREE.Object3D} */ (undefined);
-  offset = /** @type {undefined | THREE.Vector3Like} */ (undefined);
+  tracked = /** @type {undefined | import('three').Object3D} */ (undefined);
+  offset = { x: 0, y: 0, z: 0 };
   
   open = false;
 
@@ -26,6 +24,9 @@ class BaseMenuApi {
     /** @type {string} */ this.key = key;
     /** @type {import('./World').State} */ this.w = w;
   }
+
+  /** @type {string | undefined} */
+  speech = undefined;
 
   dispose() {
     this.tracked = undefined;
@@ -43,20 +44,13 @@ class BaseMenuApi {
   }
 
   /**
-   * @param {THREE.Object3D} [input] 
+   * @param {import('three').Object3D} [input] 
    */
   setTracked(input) {
     this.tracked = input;
   }
 
   update = noop
-}
-
-export class NpcSpeechBubbleApi extends BaseMenuApi {
-
-  offset = { x: 0, y: 0, z: 0 };
-  /** @type {string | undefined} */
-  speech = undefined;
 
   updateOffset() {
     const npc = this.w.n[this.key];

@@ -2,7 +2,7 @@ import React from "react";
 import { css } from "@emotion/css";
 
 import { WorldContext } from "./world-context";
-import { NpcSpeechBubbleApi } from "./menu-api";
+import { SpeechBubbleApi } from "./speech-bubble-api";
 import useStateRef from "../hooks/use-state-ref";
 import useUpdate from "../hooks/use-update";
 import { Html3d } from "../components/Html3d";
@@ -16,7 +16,7 @@ export default function NpcSpeechBubbles() {
 
     create(npcKey) {// assumes non-existent
       if (npcKey in w.n) {
-        const cm = state.lookup[npcKey] = new NpcSpeechBubbleApi(npcKey, w);
+        const cm = state.lookup[npcKey] = new SpeechBubbleApi(npcKey, w);
         cm.setTracked(w.n[npcKey].m.group);
         cm.updateOffset();
         cm.baseScale = speechBubbleBaseScale; // speech bubble always scaled
@@ -38,7 +38,7 @@ export default function NpcSpeechBubbles() {
       update();
     },
     get(npcKey) {
-      return /** @type {NpcSpeechBubbleApi} */ (state.lookup[npcKey]);
+      return /** @type {SpeechBubbleApi} */ (state.lookup[npcKey]);
     },
     say(npcKey, ...parts) {// ensure/change/delete
       const cm = state.get(npcKey) || state.create(npcKey);
@@ -62,7 +62,7 @@ export default function NpcSpeechBubbles() {
 
   React.useMemo(() => {// HMR
     process.env.NODE_ENV === 'development' && Object.values(state.lookup).forEach(cm => {
-      state.lookup[cm.key] = Object.assign(new NpcSpeechBubbleApi(cm.key, w), {...cm});
+      state.lookup[cm.key] = Object.assign(new SpeechBubbleApi(cm.key, w), {...cm});
       cm.dispose();
     });
   }, []);
@@ -76,11 +76,11 @@ export default function NpcSpeechBubbles() {
 
 /**
  * @typedef State
- * @property {{ [cmKey: string]: NpcSpeechBubbleApi }} lookup
+ * @property {{ [cmKey: string]: SpeechBubbleApi }} lookup
  *
- * @property {(npcKey: string) => NpcSpeechBubbleApi} create Add speech bubble for specific npc
+ * @property {(npcKey: string) => SpeechBubbleApi} create Add speech bubble for specific npc
  * @property {(...npcKeys: string[]) => void} delete
- * @property {(npcKey: string) => NpcSpeechBubbleApi} get
+ * @property {(npcKey: string) => SpeechBubbleApi} get
  * @property {(npcKey: string, ...parts: string[]) => void} say
  */
 
@@ -118,7 +118,7 @@ function NpcSpeechBubble({ cm }) {
 
 /**
  * @typedef ContextMenuProps
- * @property {NpcSpeechBubbleApi} cm
+ * @property {SpeechBubbleApi} cm
  */
 
 /** @type {React.MemoExoticComponent<(props: ContextMenuProps & { epochMs: number }) => JSX.Element>} */

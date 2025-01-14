@@ -276,14 +276,11 @@ export function ContextMenu() {
 }
 
 /** @param {{ state: State }} _ */
-function ContextMenuUi({ state }) {
-
-  const cm = state;
-
+function ContextMenuUi({ state: cm }) {
   return <div
     className="inner-root"
-    onPointerUp={state.onPointerUp}
-    onPointerDown={state.onPointerDown}
+    onPointerUp={cm.onPointerUp}
+    onPointerDown={cm.onPointerDown}
   >
 
     <div
@@ -297,7 +294,7 @@ function ContextMenuUi({ state }) {
 
       <button
         data-key="toggle-docked"
-        onKeyDown={state.onKeyDownButton}
+        onKeyDown={cm.onKeyDownButton}
       >
         {cm.docked ? 'embed' : 'dock'}
       </button>
@@ -338,7 +335,7 @@ function ContextMenuUi({ state }) {
         key="toggle-kvs"
         data-key="toggle-kvs"
         className={!cm.showKvs ? 'off' : undefined}
-        onKeyDown={state.onKeyDownButton}
+        onKeyDown={cm.onKeyDownButton}
       >
         meta
       </button>
@@ -347,7 +344,7 @@ function ContextMenuUi({ state }) {
         key="toggle-pinned"
         data-key="toggle-pinned"
         className={!cm.pinned ? 'off' : undefined}
-        onKeyDown={state.onKeyDownButton}
+        onKeyDown={cm.onKeyDownButton}
       >
         pin
       </button>
