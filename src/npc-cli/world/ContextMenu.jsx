@@ -18,8 +18,11 @@ export function ContextMenu() {
 
   const state = useStateRef(/** @returns {State} */ () => ({
     baseScale: /** @type {undefined | number} */ (undefined),
+    docked: false,
+    draggable: null,
     /** For violating React.memo */
     epochMs: 0,
+    everDocked: false,
     position: /** @type {[number, number, number]} */ ([0, 0, 0]),
     tracked: /** @type {undefined | import('three').Object3D} */ (undefined),
     offset: /** @type {undefined | import('three').Vector3Like} */ (undefined),
@@ -27,8 +30,6 @@ export function ContextMenu() {
     /** @type {import('../components/Html3d').State} */
     html3d: /** @type {*} */ (null),
 
-    docked: false,
-    everDocked: false,
     pinned: tryLocalStorageGetParsed(`default-context-menu@${w.key}`)?.pinned ?? w.smallViewport,
     scaled: false,
     showKvs: true,
@@ -194,24 +195,16 @@ export function ContextMenu() {
       this.update();
     },
     toggleDocked() {
-      this.docked = !this.docked;
-      
-      if (this.docked === false) {
-        return;
+      if ((this.docked = !this.docked) === true) {// About to dock
+        this.popUp.close();
+        if (this.everDocked === false) {// initially dock at bottom left
+          const innerRoot = /** @type {HTMLElement} */ (this.getInnerRoot());
+          const elRect = innerRoot.getBoundingClientRect();
+          const rootRect = w.view.rootEl.getBoundingClientRect();
+          this.dockPoint = { x: 0, y: rootRect.height - elRect.height };
+          this.everDocked = true;
+        }
       }
-      
-      // About to dock...
-      const innerRoot = /** @type {HTMLElement} */ (this.getInnerRoot());
-      this.popUp.close();
-      // this.scaled === true && this.toggleScaled();
-      
-      if (this.everDocked === false) {// initially dock at bottom left
-        const elRect = innerRoot.getBoundingClientRect();
-        const rootRect = w.view.rootEl.getBoundingClientRect();
-        this.dockPoint = { x: 0, y: rootRect.height - elRect.height };
-        this.everDocked = true;
-      }
-
     },
     togglePinned() {
       this.pinned = !this.pinned;
@@ -223,6 +216,8 @@ export function ContextMenu() {
     },
     toggleKvs() {
       this.showKvs = !this.showKvs;
+      // 🚧 better way
+      setTimeout(() => (state.draggable?.updatePos(), update()), 30);
     },
     update,
   }));
@@ -231,6 +226,13 @@ export function ContextMenu() {
   
   // Extra initial render: (a) init paused, (b) trigger CSS transition
   React.useEffect(() => void update(), [state.scaled]);
+  
+  React.useEffect(() => {
+    const sub = w.view.resizeEvents.subscribe(() => {
+      state.draggable?.updatePos();
+    });
+    return () => sub.unsubscribe();
+  }, [state.draggable]);
 
   return (
     <Html3d
@@ -244,9 +246,9 @@ export function ContextMenu() {
     >
       {state.docked === true && (
         <Draggable
+          ref={state.ref('draggable')}
           container={w.view.rootEl}
           initPos={state.dockPoint}
-          resizeSubject={w.view.resizeEvents}
         >
           <ContextMenuUi state={state} />
         </Draggable>
@@ -470,28 +472,29 @@ const popUpInfoCss = css`
 /**
  * @typedef {{
  *   baseScale: undefined | number;
- *   epochMs: number;
- *   position: [number, number, number];
- *   tracked: undefined | import("three").Object3D;
- *   offset: undefined | import("three").Vector3Like;
- *   open: boolean;
- *   html3d: import("../components/Html3d").State;
  *   docked: boolean;
- *   everDocked: boolean;
- *   pinned: any;
- *   scaled: boolean;
- *   showKvs: boolean;
  *   dockPoint: Geom.VectJson;
  *   downDockPoint: undefined | Geom.VectJson;
- *   kvs: { k: string; v: string; length: number }[];
+ *   draggable: null | import('../components/Draggable').State;
+ *   epochMs: number;
+ *   everDocked: boolean;
+ *   html3d: import("../components/Html3d").State;
  *   innerRoot: HTMLElement;
  *   isDown: boolean;
+ *   kvs: { k: string; v: string; length: number }[];
  *   links: NPC.ContextMenuLink[];
  *   match: { [matcherKey: string]: NPC.ContextMenuMatcher };
  *   meta: Geom.Meta;
  *   npcKey: undefined | string;
+ *   offset: undefined | import("three").Vector3Like;
+ *   open: boolean;
  *   popUp: import("../components/PopUp").State;
+ *   position: [number, number, number];
+ *   tracked: undefined | import("three").Object3D;
+ *   pinned: any;
+ *   scaled: boolean;
  *   selectNpcKeys: string[];
+ *   showKvs: boolean;
  *   computeKvsFromMeta(meta: Geom.Meta): void;
  *   computeLinks(): void;
  *   getInnerRoot(): Element | null;

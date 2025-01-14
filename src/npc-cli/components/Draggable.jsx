@@ -89,11 +89,7 @@ export const Draggable = React.forwardRef(function Draggable(props, ref) {
       const touchObj = /** @type {{clientX: number, clientY: number}} */ (state.getTouch(e, /** @type {number} */ (state.touchId)));
       state.updatePos(touchObj.clientX - state.rel.x, touchObj.clientY - state.rel.y);
     },
-    /**
-     * @param {number} x
-     * @param {number} y
-     */
-    updatePos(x, y) {
+    updatePos(x = state.pos.x, y = state.pos.y) {
       if (props.container === undefined) {
         state.pos.x = x;
         state.pos.y = y;
@@ -112,16 +108,11 @@ export const Draggable = React.forwardRef(function Draggable(props, ref) {
     const container = props.container ?? document.body;
     document.body.addEventListener('mousemove', state.onMouseMove);
     container.addEventListener('mouseleave', state.onMouseUp);
-    const sub = props.resizeSubject?.subscribe(() => {
-      // console.log('resized');
-      state.updatePos(state.pos.x, state.pos.y);
-    });
     return () => {
       document.body.removeEventListener('mousemove', state.onMouseMove);
       container.removeEventListener('mouseleave', state.onMouseUp);
-      sub?.unsubscribe();
     };
-  }, [props.resizeSubject]);
+  }, []);
 
   React.useImperativeHandle(ref, () => state, []);
 
@@ -153,7 +144,6 @@ export const Draggable = React.forwardRef(function Draggable(props, ref) {
  * @property {HTMLElement} [container] So can keep draggable within container
  * @property {string} [draggableClassName]
  * @property {Geom.VectJson} [initPos]
- * @property {import('rxjs').Subject<any>} [resizeSubject] Emits on resize
  */
 
 /**
@@ -172,6 +162,6 @@ export const Draggable = React.forwardRef(function Draggable(props, ref) {
  *   onTouchStart(e: React.TouchEvent): null | undefined;
  *   onTouchEnd(e: React.TouchEvent): void;
  *   onTouchMove(e: React.TouchEvent): void;
- *   updatePos(x: number, y: number): void;
+ *   updatePos(x?: number, y?: number): void;
  * }} State
  */
