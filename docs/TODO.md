@@ -60,9 +60,9 @@
     - ✅ ContextMenuUi state merged into parent
     - ✅ NpcSpeechBubbleApi is self-contained class (remove BaseContextMenu)
     - ℹ️ `w bubble.say rob 'the quick brown [ fox ] jumped over the lazy [ dog ]'`
-  - on open meta in ContextMenu, ensure whole menu visible
-    - remove resizeSubject prop from Draggable
-    - expose Draggable api, and updatePos when appropriate
+  - 🚧 on open meta in ContextMenu, ensure whole menu visible
+    - 🚧 remove resizeSubject prop from Draggable
+    - 🚧 expose Draggable api, and updatePos when appropriate
   - remove `refresh` link from opts
   - can move Logger
   - can resize Logger

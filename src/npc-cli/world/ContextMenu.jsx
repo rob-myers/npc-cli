@@ -9,7 +9,7 @@ import useUpdate from "../hooks/use-update";
 import useStateRef from "../hooks/use-state-ref";
 import { PopUp } from "../components/PopUp";
 import { Html3d, objectScale } from "../components/Html3d";
-import Draggable from "../components/Draggable";
+import { Draggable } from "../components/Draggable";
 
 export function ContextMenu() {
 

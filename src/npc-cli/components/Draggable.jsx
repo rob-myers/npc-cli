@@ -2,11 +2,12 @@ import React from "react";
 import useStateRef from "../hooks/use-state-ref";
 
 /**
- * @param {React.PropsWithChildren<BaseProps>} props 
+ * Based on https://github.com/pmndrs/drei/blob/master/src/web/Html.tsx
+ * @type {React.ForwardRefExoticComponent<React.PropsWithChildren<BaseProps> & React.RefAttributes<State>>}
  */
-export default function Draggable(props) {
+export const Draggable = React.forwardRef(function Draggable(props, ref) {
 
-  const state = useStateRef(() => ({
+  const state = useStateRef(/** @returns {State} */ () => ({
     dragging: false,
     el: /** @type {HTMLDivElement} */ ({}),
     pos: props.initPos ?? { x: 0, y: 0 },
@@ -130,6 +131,8 @@ export default function Draggable(props) {
     };
   }, [props.resizeSubject]);
 
+  React.useImperativeHandle(ref, () => state, []);
+
   return (
     <div
       ref={state.ref('el')}
@@ -150,7 +153,7 @@ export default function Draggable(props) {
       {props.children}
     </div>
   )
-}
+})
 
 /**
  * @typedef BaseProps
@@ -159,4 +162,24 @@ export default function Draggable(props) {
  * @property {string} [draggableClassName]
  * @property {Geom.VectJson} [initPos]
  * @property {import('rxjs').Subject<any>} [resizeSubject] Emits on resize
+ */
+
+/**
+ * @typedef {{
+ *   dragging: boolean;
+ *   el: HTMLDivElement;
+ *   pos: Geom.VectJson;
+ *   rel: { x: number; y: number };
+ *   touchId: undefined | number;
+ *   canDrag(e: React.MouseEvent | React.TouchEvent): boolean;
+ *   getTouchIdentifier(e: React.TouchEvent): number | undefined;
+ *   getTouch(e: React.TouchEvent, identifier: number): undefined | { clientX: number; clientY: number };
+ *   onMouseDown(e: React.MouseEvent): void;
+ *   onMouseUp(e: React.MouseEvent | MouseEvent): void;
+ *   onMouseMove(e: React.MouseEvent | MouseEvent): void;
+ *   onTouchStart(e: React.TouchEvent): null | undefined;
+ *   onTouchEnd(e: React.TouchEvent): void;
+ *   onTouchMove(e: React.TouchEvent): void;
+ *   updatePos(x: number, y: number): void;
+ * }} State
  */
