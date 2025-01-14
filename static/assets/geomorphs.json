@@ -12256,7 +12256,7 @@
             "coordinates": [
               [[25.575, 4.25], [25.425, 4.25], [25.425, 3.25], [25.575, 3.25]]
             ],
-            "meta": {"door": true, "locked": true, "auto": true}
+            "meta": {"door": true, "locked": true, "locker": true, "auto": true}
           },
           "navRectId": 1,
           "roomIds": [null, null]
@@ -12305,7 +12305,7 @@
             "coordinates": [
               [[25.575, 5.75], [25.425, 5.75], [25.425, 4.75], [25.575, 4.75]]
             ],
-            "meta": {"door": true, "locked": true, "auto": true}
+            "meta": {"door": true, "locked": true, "locker": true, "auto": true}
           },
           "navRectId": 1,
           "roomIds": [null, null]

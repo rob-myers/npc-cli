@@ -39,20 +39,19 @@ export function computeGmInstanceMesh(gm) {
 }
 
 /**
- * @param {Geomorph.LayoutInstance[]} gms
- * @param {Graph.GmGraph} gmGraph
+ * @param {import('../world/World').State} w
  */
-export function computeOffMeshConnectionsParams(gms, gmGraph) {
+export function computeOffMeshConnectionsParams(w) {
   
   // ignore isolated hull doors
   // ignore 2nd identified hull door
   const ignoreGdKeys = /** @type {Set<Geomorph.GmDoorKey>} */ (new Set());
 
-  return gms.flatMap((gm, gmId) => gm.doors.flatMap(/** @returns {import("recast-navigation").OffMeshConnectionParams[]} */
+  return w.gms.flatMap((gm, gmId) => gm.doors.flatMap(/** @returns {import("recast-navigation").OffMeshConnectionParams[]} */
     ({ center, normal, meta }, doorId) => {
 
       if (meta.hull === true) {
-        const adj = gmGraph.getAdjacentRoomCtxt(gmId, doorId);
+        const adj = w.gmGraph.getAdjacentRoomCtxt(gmId, doorId);
         if (ignoreGdKeys.has(`g${gmId}d${doorId}`) === true || adj === null) {
           return [];
         } else {
@@ -61,8 +60,9 @@ export function computeOffMeshConnectionsParams(gms, gmGraph) {
       }
 
       const halfLength = wallOutset + (meta.hull === true ? 0.25 : 0.125);
-      // const offsets = meta.hull === true ? [-0.7, 0.01, 0.7] : [0];
-      const offsets = meta.hull === true ? [-0.7, 0, 0.7] : [-0.25, 0, 0.25];
+      // const offsets = meta.hull === true ? [-0.7, 0.01, 0.7] : [0.01];
+      // 🔔 saw nav fail in 102 when many offMeshConnections, so introduced door.meta.locker
+      const offsets = meta.hull === true || meta.locker === true ? [0.01] : [-0.25, 0.01, 0.25];
       const src = gm.matrix.transformPoint(center.clone().addScaled(normal, halfLength));
       const dst = gm.matrix.transformPoint(center.clone().addScaled(normal, -halfLength));
       const tangent = { x: -normal.y, y: normal.x };

@@ -320,7 +320,7 @@
       "pngHash": -1241808431,
       "obsHashes": [1490685047]
     },
-    "ships-locker--003--1x1": {"outputHash": 42648450, "pngHash": 780413933},
+    "ships-locker--003--1x1": {"outputHash": -1285910702, "pngHash": 780413933},
     "ships-locker--007--2x1": {"outputHash": -449224818, "pngHash": 1054035955},
     "ships-locker--011--2x1": {"outputHash": 765062415, "pngHash": -1452399662},
     "ships-locker--020--2x2": {
@@ -15606,7 +15606,7 @@
           "coordinates": [
             [[1.25, -0.075], [1.25, 0.075], [0.25, 0.075], [0.25, -0.075]]
           ],
-          "meta": {"door": true, "locked": true}
+          "meta": {"door": true, "locked": true, "locker": true}
         }
       ],
       "windows": [],

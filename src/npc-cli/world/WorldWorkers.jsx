@@ -127,7 +127,7 @@ export default function WorldWorkers() {
         || next.mapGmHashes[gmId] !== prev.mapGmHashes[gmId] // geomorph instance changed
       );
       
-      w.nav.offMeshDefs = computeOffMeshConnectionsParams(w.gms, w.gmGraph);
+      w.nav.offMeshDefs = computeOffMeshConnectionsParams(w);
       w.events.next({ key: 'pre-request-nav', changedGmIds });
       w.menu.measure('request-nav');
       w.nav.worker.postMessage({ type: "request-nav", mapKey: w.mapKey, offMeshDefs: w.nav.offMeshDefs });
