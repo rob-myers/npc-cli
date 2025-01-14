@@ -16,7 +16,6 @@ export function ContextMenu() {
   const w = React.useContext(WorldContext);
   const update = useUpdate();
 
-  // 🚧 remove state from ContextMenuUi
   const state = useStateRef(/** @returns {State} */ () => ({
     baseScale: /** @type {undefined | number} */ (undefined),
     /** For violating React.memo */
@@ -47,6 +46,11 @@ export function ContextMenu() {
     /** @type {import('../components/PopUp').State} */
     popUp: /** @type {*} */ (null),
     selectNpcKeys: /** @type {string[]} */ ([]),
+
+    /** `cm.dockPoint` when on pointer down */
+    downDockPoint: /** @type {undefined | Geom.VectJson} */ (undefined),
+    /** Was pointerdown over contextmenu and not yet up? */
+    isDown: false,
 
     /** @param {Geom.Meta} meta */
     computeKvsFromMeta(meta) {
@@ -90,6 +94,46 @@ export function ContextMenu() {
       state.open = false;
       state.update();
     },
+    /** @param {React.KeyboardEvent<HTMLButtonElement>} e */
+    onKeyDownButton(e) {
+      if (e.code === 'Space') {
+        state.onToggleLink(e);
+        e.currentTarget.focus();
+      }
+    },
+    /** @param {React.PointerEvent} e */
+    onPointerDown(e) {
+      state.isDown = true;
+      state.downDockPoint = state.docked ? {...state.dockPoint} : undefined;
+    },
+    /** @param {React.PointerEvent} e */
+    onPointerUp(e) {
+      const { downDockPoint, isDown } = state;
+      state.downDockPoint = undefined;
+      state.isDown = false;
+
+      if (isDown === false) {
+        return;
+      } else if (state.docked === false) {
+        state.onToggleLink(e);
+      } else if (
+        downDockPoint !== undefined &&
+        tmpVect.copy(downDockPoint).distanceTo(state.dockPoint) < 4
+      ) {// docked click without drag
+        state.onToggleLink(e);
+      } else {// dragged docked click
+        state.popUp.preventToggle = true;
+        setTimeout(() => state.popUp.preventToggle = false);
+      }
+    },
+    /**
+     * @param {React.ChangeEvent<HTMLSelectElement> } e 
+     */
+    onSelectNpc(e) {
+      const { value } = e.currentTarget;
+      state.npcKey = value in w.n ? value : undefined;
+      state.refreshPopUp();
+    },
     /** @param {React.MouseEvent | React.KeyboardEvent} e */
     onToggleLink(e) {
       const el = /** @type {HTMLElement} */ (e.target);
@@ -114,14 +158,6 @@ export function ContextMenu() {
 
       w.cm.persist();
       state.update();
-    },
-    /**
-     * @param {React.ChangeEvent<HTMLSelectElement> } e 
-     */
-    onSelectNpc(e) {
-      const { value } = e.currentTarget;
-      state.npcKey = value in w.n ? value : undefined;
-      state.refreshPopUp();
     },
     /** @param {boolean} willOpen  */
     onTogglePopup(willOpen) {
@@ -208,79 +244,41 @@ export function ContextMenu() {
     update,
   }));
 
-  const cm = w.cm = state;
+  w.cm = state;
   
   // Extra initial render: (a) init paused, (b) trigger CSS transition
-  React.useEffect(() => void cm.update(), [cm.scaled]);
+  React.useEffect(() => void update(), [state.scaled]);
 
   return (
     <Html3d
       ref={state.ref('html3d')}
-      baseScale={cm.baseScale}
+      baseScale={state.baseScale}
       className={defaultContextMenuCss}
-      docked={cm.docked}
-      open={cm.open}
-      position={cm.position}
-      tracked={cm.tracked}
+      docked={state.docked}
+      open={state.open}
+      position={state.position}
+      tracked={state.tracked}
     >
-      {cm.docked === true && (
+      {state.docked === true && (
         <Draggable
           container={w.view.rootEl}
-          initPos={cm.dockPoint}
+          initPos={state.dockPoint}
           resizeSubject={w.view.resizeEvents}
         >
-          <ContextMenuUi cm={cm} />
+          <ContextMenuUi state={state} />
         </Draggable>
       )}
       
-      {cm.docked === false && <ContextMenuUi cm={cm} />}
+      {state.docked === false && <ContextMenuUi state={state} />}
     </Html3d>
   );
 
 }
 
-/** @param {{ cm: State }} _ */
-function ContextMenuUi({ cm }) {
+/** @param {{ state: State }} _ */
+function ContextMenuUi({ state }) {
 
-  const state = useStateRef(() => ({
-    /** `cm.dockPoint` when on pointer down */
-    downDockPoint: /** @type {undefined | Geom.VectJson} */ (undefined),
-    /** Was pointerdown over contextmenu and not yet up? */
-    isDown: false,
-
-    /** @param {React.KeyboardEvent<HTMLButtonElement>} e */
-    onKeyDownButton(e) {
-      if (e.code === 'Space') {
-        cm.onToggleLink(e);
-        e.currentTarget.focus();
-      }
-    },
-    /** @param {React.PointerEvent} e */
-    onPointerUp(e) {
-      const { downDockPoint, isDown } = state;
-      state.downDockPoint = undefined;
-      state.isDown = false;
-
-      if (isDown === false) {
-        return;
-      } else if (cm.docked === false) {
-        cm.onToggleLink(e);
-      } else if (
-        downDockPoint !== undefined &&
-        tmpVect.copy(downDockPoint).distanceTo(cm.dockPoint) < 4
-      ) {// docked click without drag
-        cm.onToggleLink(e);
-      } else {// dragged docked click
-        cm.popUp.preventToggle = true;
-        setTimeout(() => cm.popUp.preventToggle = false);
-      }
-    },
-    /** @param {React.PointerEvent} e */
-    onPointerDown(e) {
-      state.isDown = true;
-      state.downDockPoint = cm.docked ? {...cm.dockPoint} : undefined;
-    },
-  }), { deps: [cm] });
+  const cm = state;
 
   return <div
     className="inner-root"
@@ -503,20 +501,13 @@ const popUpInfoCss = css`
  *   pinned: any;
  *   scaled: boolean;
  *   showKvs: boolean;
- *   dockPoint: {
- *       x: number;
- *       y: number;
- *   };
- *   kvs: {
- *       k: string;
- *       v: string;
- *       length: number;
- *   }[];
+ *   dockPoint: Geom.VectJson;
+ *   downDockPoint: undefined | Geom.VectJson;
+ *   kvs: { k: string; v: string; length: number }[];
  *   innerRoot: HTMLElement;
+ *   isDown: boolean;
  *   links: NPC.ContextMenuLink[];
- *   match: {
- *       [matcherKey: string]: NPC.ContextMenuMatcher;
- *   };
+ *   match: { [matcherKey: string]: NPC.ContextMenuMatcher };
  *   meta: Geom.Meta;
  *   npcKey: undefined | string;
  *   popUp: import("../components/PopUp").State;
@@ -525,6 +516,9 @@ const popUpInfoCss = css`
  *   computeLinks(): void;
  *   getInnerRoot(): Element | null;
  *   hide(force?: boolean | undefined): void;
+ *   onKeyDownButton(e: React.KeyboardEvent<HTMLButtonElement>): void;
+ *   onPointerDown(e: React.PointerEvent): void;
+ *   onPointerUp(e: React.PointerEvent): void;
  *   onToggleLink(e: React.MouseEvent | React.KeyboardEvent): void;
  *   onSelectNpc(e: React.ChangeEvent<HTMLSelectElement>): void;
  *   onTogglePopup(willOpen: boolean): void;
