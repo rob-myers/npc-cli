@@ -64,17 +64,16 @@
     - ✅ remove resizeSubject prop from Draggable
     - ✅ expose Draggable api, and updatePos when appropriate
   - ✅ could move ResizeObserver inside ContextMenu and track both container and cm
-  - remove `refresh` link from opts
-  - can move Logger
+  - ✅ remove `refresh` link from PopUp opts
+    - ✅ auto-refresh npc select e.g. with debounce
+  - 🚧 can move Logger
   - can resize Logger
   - Logger logs disconnected/connected message
   - Paused "Opts" with PopUp and Logger measure option
   - X-ray slider always visible
-  - move `w.c.say` -> `w.e.say`
+    - x-ray should be default view
+  - move `w.bubble.say` -> `w.e.say`
   - profile-1 has link listener
-
-- x-ray should be default view (?)
-  - could have manual slider
 
 - ✅ pre next.js migration
   - ✅ finish/close wip todos

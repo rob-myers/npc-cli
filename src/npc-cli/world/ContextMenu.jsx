@@ -1,6 +1,7 @@
 import React from "react";
 import { css, cx } from "@emotion/css";
 import { stringify as javascriptStringify } from 'javascript-stringify';
+import debounce from "debounce";
 
 import { tryLocalStorageGetParsed, tryLocalStorageSet, warn } from "../service/generic";
 import { Vect } from "../geom";
@@ -163,10 +164,10 @@ export function ContextMenu() {
         ? state.popUp = popUp // @ts-ignore
         : delete state.popUp;
     },
-    refreshPopUp() {
+    refreshPopUp: debounce(() => {
       state.selectNpcKeys = Object.keys(w.n);
       update();
-    },
+    }, 30, { immediate: true }),
     /**
      * Context is world position and meta concerning said position
      */
@@ -233,7 +234,7 @@ export function ContextMenu() {
     <Html3d
       ref={state.ref('html3d')}
       baseScale={state.baseScale}
-      className={defaultContextMenuCss}
+      className={contextMenuCss}
       docked={state.docked}
       open={state.open}
       position={state.position}
@@ -263,7 +264,6 @@ function ContextMenuUi({ state: cm }) {
     onPointerUp={cm.onPointerUp}
     onPointerDown={cm.onPointerDown}
   >
-
     <div
       className={cx({ hidden: cm.npcKey === undefined }, "npc-key")}
       data-key="clear-npc"
@@ -305,11 +305,6 @@ function ContextMenuUi({ state: cm }) {
         >
           scale
         </button>
-
-        {/* 🚧 avoid refresh i.e. auto-update npc list  */}
-        {/* <button onClick={cm.refreshPopup.bind(cm)}>
-          refresh
-        </button> */}
       </PopUp>
 
       <button
@@ -349,13 +344,12 @@ function ContextMenuUi({ state: cm }) {
         </div>
       ))}
     </div>}
-
   </div>;
 }
 
 const tmpVect = new Vect();
 
-export const defaultContextMenuCss = css`
+export const contextMenuCss = css`
   position: absolute;
   left: 0;
   top: 0;
