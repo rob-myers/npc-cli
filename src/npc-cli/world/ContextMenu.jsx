@@ -191,7 +191,8 @@ export function ContextMenu() {
       update();
     },
     toggleDocked() {
-      if ((state.docked = !state.docked) === true) {// About to dock
+      state.docked = !state.docked
+      if (state.docked === true) {// About to dock
         state.popUp.close();
         if (state.everDocked === false) {// initially dock at bottom left
           const elRect = state.innerRoot.getBoundingClientRect();
@@ -211,8 +212,6 @@ export function ContextMenu() {
     },
     toggleKvs() {
       state.showKvs = !state.showKvs;
-      // 🚧 better way
-      setTimeout(() => (state.draggable?.updatePos(), update()), 30);
     },
   }));
 
@@ -221,13 +220,14 @@ export function ContextMenu() {
   // Extra initial render: (a) init paused, (b) trigger CSS transition
   React.useEffect(() => void update(), [state.scaled]);
   
-  React.useEffect(() => {
-    const sub = w.view.resizeEvents.subscribe(() => {
+  React.useEffect(() => {// adjust draggable onresize
+    const obs = new ResizeObserver(([entry]) => {
       state.draggable?.updatePos();
     });
-
-    return () => sub.unsubscribe();
-  }, [state.draggable]);
+    obs.observe(w.view.rootEl);
+    state.innerRoot && obs.observe(state.innerRoot);
+    return () => obs.disconnect();
+  }, [state.innerRoot]);
 
   return (
     <Html3d

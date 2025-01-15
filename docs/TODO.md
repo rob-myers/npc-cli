@@ -63,8 +63,8 @@
   - ✅ on open meta in ContextMenu, ensure whole menu visible
     - ✅ remove resizeSubject prop from Draggable
     - ✅ expose Draggable api, and updatePos when appropriate
+  - ✅ could move ResizeObserver inside ContextMenu and track both container and cm
   - remove `refresh` link from opts
-  - could move ResizeObserver inside ContextMenu and track both container and cm
   - can move Logger
   - can resize Logger
   - Logger logs disconnected/connected message

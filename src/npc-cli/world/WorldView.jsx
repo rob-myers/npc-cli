@@ -50,7 +50,6 @@ export default function WorldView(props) {
       mat3: new THREE.Matrix3(),
     },
     raycaster: new THREE.Raycaster(),
-    resizeEvents: new Subject(),
     rootEl: /** @type {*} */ (null),
     targetFov: /** @type {null | number} */ (null),
     zoomState: 'near',
@@ -382,17 +381,7 @@ export default function WorldView(props) {
       state.controls.setPolarAngle(w.smallViewport ? Math.PI / 2 : Math.PI / 4);
       state.controls.setAzimuthalAngle(w.smallViewport ? Math.PI / 6 : Math.PI / 4);
     }
-
     emptySceneForPicking.onAfterRender = state.renderObjectPickScene;
-
-    const obs = new ResizeObserver(([entry]) => {
-      state.resizeEvents.next({ key: 'resized' });
-    });
-    obs.observe(state.rootEl);
-
-    return () => {
-      obs.disconnect();
-    };
   }, [state.controls]);
 
   return (
@@ -471,7 +460,6 @@ export default function WorldView(props) {
  * @property {Geom.Vect} lastScreenPoint Updated `onPointerMove` and `onPointerDown`.
  * @property {{ tri: THREE.Triangle; indices: THREE.Vector3; mat3: THREE.Matrix3 }} normal
  * @property {THREE.Raycaster} raycaster
- * @property {Subject<{ key: 'resized' }>} resizeEvents
  * @property {HTMLDivElement} rootEl
  * @property {null | number} targetFov
  * @property {'near' | 'far'} zoomState
