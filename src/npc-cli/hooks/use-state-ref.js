@@ -14,7 +14,7 @@ import React from "react";
  * @param {Options<State>} [opts]
  */
 export default function useStateRef(initializer, opts = {}) {
-  const [state] = /** @type {[State & ExtraState<State>, any]} */ (
+  const [state] = /** @type {[UseStateRef<State>, any]} */ (
     React.useState(initializer)
   );
 
@@ -72,7 +72,7 @@ export default function useStateRef(initializer, opts = {}) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, opts.deps ?? []);
 
-  return /** @type {State & Pick<ExtraState<State>, 'ref'>} */ (state);
+  return state;
 }
 
 module.hot?.decline();
@@ -87,8 +87,9 @@ module.hot?.decline();
 
 /**
  * @template {Record<string, any>} State
- * @typedef {{
+ * @typedef {State & {
  *   _prevFn?: string;
  *   ref<Key extends keyof State, T extends State[Key]>(key: Key): ((value: T | null) => void);
- * }} ExtraState
+ * }} UseStateRef
+ * The state returned by `useStateRef`, which includes a special function `ref`.
  */
