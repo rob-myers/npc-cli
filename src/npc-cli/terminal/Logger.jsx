@@ -80,12 +80,11 @@ export const Logger = React.forwardRef(function Logger(props, ref) {
       rightClickSelectsWord: true, // mobile: can select single word via long press
       theme: {
         background: 'rgba(0, 0, 0, 0.5)',
-        selectionBackground: 'rgb(30, 30, 30)',
+        selectionBackground: 'rgb(0, 0, 0)', // 🚧 invisible to fix dragging?
       },
       convertEol: false,
       rows: 50,
     });
-  
     xterm.loadAddon(state.linksAddon = new WebLinksAddon((e, uri) => {
       const viewportRange = state.linkViewportRange;
       if (viewportRange === null) {
@@ -138,8 +137,8 @@ export const Logger = React.forwardRef(function Logger(props, ref) {
 
   return (
     <div
-      className={cx(props.className, "scrollable")}
       ref={state.containerRef}
+      className={props.className}
     />
   );
 });

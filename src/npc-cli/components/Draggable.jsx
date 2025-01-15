@@ -46,8 +46,8 @@ export const Draggable = React.forwardRef(function Draggable(props, ref) {
       state.rel.y = e.clientY - state.el.offsetTop;
     },
     onMouseUp(e) {
-      e.stopPropagation();
-      e.preventDefault();
+      // e.stopPropagation();
+      // e.preventDefault();
       state.dragging = false;
     },
     onMouseMove(e) {
@@ -90,14 +90,10 @@ export const Draggable = React.forwardRef(function Draggable(props, ref) {
       state.updatePos(touchObj.clientX - state.rel.x, touchObj.clientY - state.rel.y);
     },
     updatePos(x = state.pos.x, y = state.pos.y) {
-      if (props.container === undefined) {
-        state.pos.x = x;
-        state.pos.y = y;
-        return;
-      }
       // ensure within bounds
-      state.pos.x = Math.max(0, Math.min(props.container.clientWidth - state.el.clientWidth, x));
-      state.pos.y = Math.max(0, Math.min(props.container.clientHeight - state.el.clientHeight, y));
+      const container = props.container ?? document.body;
+      state.pos.x = Math.max(0, Math.min(container.clientWidth - state.el.clientWidth, x));
+      state.pos.y = Math.max(0, Math.min(container.clientHeight - state.el.clientHeight, y));
 
       state.el.style.left = `${state.pos.x}px`;
       state.el.style.top = `${state.pos.y}px`;
@@ -120,6 +116,7 @@ export const Draggable = React.forwardRef(function Draggable(props, ref) {
     <div
       ref={state.ref('el')}
       className={props.className}
+      
       onMouseDown={state.onMouseDown}
       onMouseUp={state.onMouseUp}
       // onMouseMove={state.onMouseMove}
@@ -127,10 +124,13 @@ export const Draggable = React.forwardRef(function Draggable(props, ref) {
       onTouchStart={state.onTouchStart}
       onTouchEnd={state.onTouchEnd}
       onTouchMove={state.onTouchMove}
+
       style={{
         position: 'absolute',
         left: state.pos.x,
         top: state.pos.y,
+        // 🚧 support resize?
+        border: '8px solid rgba(0, 0, 0, 1)',
       }}
     >
       {props.children}

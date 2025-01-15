@@ -8,6 +8,7 @@ import { WorldContext } from "./world-context";
 import useStateRef from "../hooks/use-state-ref";
 import useUpdate from "../hooks/use-update";
 import { faderOverlayCss, pausedControlsCss } from "./overlay-menu-css";
+import { Draggable } from "../components/Draggable";
 import { Logger } from "../terminal/Logger";
 import TouchIndicator from "./TouchIndicator";
 
@@ -112,46 +113,57 @@ export default function WorldMenu(props) {
       </label>
     </div> */}
 
-    {w.view.rootEl && createPortal(
-      <div className={loggerCss}>
+    {w.view.rootEl !== null && createPortal(
+      <Draggable
+        className={loggerCss}
+        initPos={{ x: 0, y: 0 }}
+        container={w.view.rootEl}
+      >
         <Logger
           ref={state.ref('logger')}
           className="world-logger"
           onClickLink={(e) => {
             const [npcKey] = e.fullLine.slice('[ '.length).split(' ] ', 1);
-            if (npcKey in w.n) {// prefix `[ {npcKey} ] `
+            if (npcKey in w.n) {// prefix `[ {npcKey} ] ` 
               w.events.next({ key: 'click-npc-link', npcKey, ...e });
             }
           }}
         />
-      </div>
+      </Draggable>
       ,
       w.view.rootEl,
     )}
 
     <TouchIndicator/>
 
-    <div className={cx(cssTtyDisconnectedMessage, {
+    {/* <div className={cx(cssTtyDisconnectedMessage, {
       hidden: w.disconnected === false
     })}>
       <h3>[disconnected]</h3>
       click or show a tty tab
-    </div>
+    </div> */}
 
   </>;
 }
 
 const loggerCss = css`
+
   position: absolute;
-  z-index: 6;
   left: 0;
   top: 0;
+
   display: flex;
   flex-direction: column;
-
   width: 100%;
   max-width: 800px;
   height: 80px;
+
+  // 🔔 cover bottom scroll spacing
+  background: rgba(0, 0, 0, 1);
+
+  canvas {
+    cursor: auto !important;
+  }
 
   color: white;
   font-size: 12px;
