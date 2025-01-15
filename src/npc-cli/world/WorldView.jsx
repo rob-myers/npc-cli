@@ -27,15 +27,15 @@ export default function WorldView(props) {
     clickIds: [],
     controls: /** @type {*} */ (null),
     controlsViewportOpts: {
-      minAzimuthAngle: Math.PI/4,
-      maxAzimuthAngle: Math.PI/4,
+      minAzimuthAngle: Math.PI * 0,
+      maxAzimuthAngle: Math.PI * 0,
       maxPolarAngle: Math.PI * 0.25,
       minDistance: 5,
-      maxDistance: 80,
+      maxDistance: 32,
     },
     down: undefined,
     epoch: { pickStart: 0, pickEnd: 0, pointerDown: 0, pointerUp: 0 },
-    fov: 10,
+    fov: 30,
     glOpts: {
       toneMapping: 3,
       toneMappingExposure: 1,
@@ -407,7 +407,7 @@ export default function WorldView(props) {
       }
 
       <PerspectiveCamera
-        position={[0, 80, 0]}
+        position={[0, 32, 0]}
         makeDefault
         fov={state.fov}
         zoom={1}
