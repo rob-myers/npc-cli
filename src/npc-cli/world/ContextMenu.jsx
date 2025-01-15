@@ -220,15 +220,6 @@ export function ContextMenu() {
   
   // Extra initial render: (a) init paused, (b) trigger CSS transition
   React.useEffect(() => void update(), [state.scaled]);
-  
-  React.useEffect(() => {// adjust draggable onresize
-    const obs = new ResizeObserver(([entry]) => {
-      state.draggable?.updatePos();
-    });
-    obs.observe(w.view.rootEl);
-    state.innerRoot && obs.observe(state.innerRoot);
-    return () => obs.disconnect();
-  }, [state.innerRoot]);
 
   return (
     <Html3d
@@ -245,6 +236,7 @@ export function ContextMenu() {
           ref={state.ref('draggable')}
           container={w.view.rootEl}
           initPos={state.dockPoint}
+          observeSizes={[w.view.rootEl, state.innerRoot]}
         >
           <ContextMenuUi state={state} />
         </Draggable>

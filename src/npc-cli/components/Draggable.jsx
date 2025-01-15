@@ -100,6 +100,8 @@ export const Draggable = React.forwardRef(function Draggable(props, ref) {
     },
   }), { deps: [props.container] });
 
+  React.useImperativeHandle(ref, () => state, []);
+  
   React.useEffect(() => {
     const container = props.container ?? document.body;
     document.body.addEventListener('mousemove', state.onMouseMove);
@@ -110,7 +112,11 @@ export const Draggable = React.forwardRef(function Draggable(props, ref) {
     };
   }, []);
 
-  React.useImperativeHandle(ref, () => state, []);
+  React.useEffect(() => {// adjust draggable onresize
+    const obs = new ResizeObserver(([entry]) => state.updatePos());
+    props.observeSizes?.forEach(el => el instanceof HTMLElement && obs.observe(el))
+    return () => obs.disconnect();
+  }, [...props.observeSizes ?? []]);
 
   return (
     <div
@@ -143,7 +149,10 @@ export const Draggable = React.forwardRef(function Draggable(props, ref) {
 /**
  * @typedef BaseProps
  * @property {string} [className]
- * @property {HTMLElement} [container] So can keep draggable within container
+ * @property {HTMLElement} [container]
+ * So can keep draggable within container
+ * @property {HTMLElement[]} [observeSizes]
+ * Elements whose size can effect the Draggable's position
  * @property {string} [draggableClassName]
  * @property {Geom.VectJson} [initPos]
  */

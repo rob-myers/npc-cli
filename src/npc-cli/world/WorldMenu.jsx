@@ -116,6 +116,7 @@ export default function WorldMenu(props) {
       className={loggerCss}
       container={w.view.rootEl}
       initPos={{ x: 0, y: 0 }}
+      observeSizes={[w.view.rootEl]}
     >
       <Logger
         ref={state.ref('logger')}
