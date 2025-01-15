@@ -31,7 +31,7 @@ export default function WorldView(props) {
       maxAzimuthAngle: Math.PI * 0.25,
       maxPolarAngle: Math.PI * 0.25,
       minDistance: 5,
-      maxDistance: 32,
+      maxDistance: 24,
     },
     down: undefined,
     epoch: { pickStart: 0, pickEnd: 0, pointerDown: 0, pointerUp: 0 },
@@ -407,7 +407,7 @@ export default function WorldView(props) {
       }
 
       <PerspectiveCamera
-        position={[0, 32, 0]}
+        position={[0, 24, 0]}
         makeDefault
         fov={state.fov}
         zoom={1}
