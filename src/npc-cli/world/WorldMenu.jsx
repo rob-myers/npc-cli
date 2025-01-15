@@ -1,5 +1,6 @@
 import React from "react";
 import { css, cx } from "@emotion/css";
+import { createPortal } from "react-dom";
 
 import { tryLocalStorageGetParsed, tryLocalStorageSet } from "../service/generic";
 import { ansi } from "../sh/const";
@@ -112,23 +113,26 @@ export default function WorldMenu(props) {
       </label>
     </div> */}
     
-    <Draggable
-      className={loggerCss}
-      container={w.view.rootEl}
-      initPos={{ x: 0, y: 0 }}
-      observeSizes={[w.view.rootEl]}
-    >
-      <Logger
-        ref={state.ref('logger')}
-        className="world-logger"
-        onClickLink={(e) => {
-          const [npcKey] = e.fullLine.slice('[ '.length).split(' ] ', 1);
-          if (npcKey in w.n) {// prefix `[ {npcKey} ] ` 
-            w.events.next({ key: 'click-npc-link', npcKey, ...e });
-          }
-        }}
-      />
-    </Draggable>
+    {w.view.rootEl && createPortal(
+      <Draggable
+        className={loggerCss}
+        container={w.view.rootEl}
+        initPos={{ x: 0, y: 0 }}
+        observeSizes={[w.view.rootEl]}
+      >
+        <Logger
+          ref={state.ref('logger')}
+          className="world-logger"
+          onClickLink={(e) => {
+            const [npcKey] = e.fullLine.slice('[ '.length).split(' ] ', 1);
+            if (npcKey in w.n) {// prefix `[ {npcKey} ] ` 
+              w.events.next({ key: 'click-npc-link', npcKey, ...e });
+            }
+          }}
+        />
+      </Draggable>,
+      w.view.rootEl,
+    )}
 
     <TouchIndicator/>
 
