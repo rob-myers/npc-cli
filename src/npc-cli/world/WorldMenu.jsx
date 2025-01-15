@@ -115,7 +115,7 @@ export default function WorldMenu(props) {
     
     {w.view.rootEl && createPortal(
       <Draggable
-        borderWidth={8}
+        borderWidth="8px 16px 4px 16px"
         className={loggerCss}
         container={w.view.rootEl}
         initPos={{ x: 0, y: 0 }}

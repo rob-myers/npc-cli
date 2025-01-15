@@ -138,7 +138,9 @@ export const Draggable = React.forwardRef(function Draggable(props, ref) {
         left: state.pos.x,
         top: state.pos.y,
         // 🚧 support resize?
-        border: `${props.borderWidth ?? 0}px solid rgba(0, 0, 0, 1)`,
+        borderWidth: props.borderWidth,
+        borderStyle: 'solid',
+        borderColor: 'black'
       }}
     >
       {props.children}
@@ -148,7 +150,7 @@ export const Draggable = React.forwardRef(function Draggable(props, ref) {
 
 /**
  * @typedef BaseProps
- * @property {number} [borderWidth]
+ * @property {number | string} [borderWidth]
  * @property {string} [className]
  * @property {HTMLElement} [container]
  * So can keep draggable within container
