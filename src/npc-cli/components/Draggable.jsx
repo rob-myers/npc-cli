@@ -92,8 +92,8 @@ export const Draggable = React.forwardRef(function Draggable(props, ref) {
     updatePos(x = state.pos.x, y = state.pos.y) {
       // ensure within bounds
       const container = props.container ?? document.body;
-      state.pos.x = Math.max(0, Math.min(container.clientWidth - state.el.clientWidth, x));
-      state.pos.y = Math.max(0, Math.min(container.clientHeight - state.el.clientHeight, y));
+      state.pos.x = Math.max(0, Math.min(container.clientWidth - state.el.offsetWidth, x));
+      state.pos.y = Math.max(0, Math.min(container.clientHeight - state.el.offsetHeight, y));
 
       state.el.style.left = `${state.pos.x}px`;
       state.el.style.top = `${state.pos.y}px`;
