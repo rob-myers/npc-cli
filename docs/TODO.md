@@ -66,9 +66,10 @@
   - ✅ could move ResizeObserver inside ContextMenu and track both container and cm
   - ✅ remove `refresh` link from PopUp opts
     - ✅ auto-refresh npc select e.g. with debounce
-  - 🚧 can move Logger
+  - ✅ can move Logger
+  - ❌ Logger/ContextMenu z-index changes onclick
+  - move Logger on mobile via toggle between move/scroll
   - can resize Logger
-  - Logger/ContextMenu z-index changes onclick
   - Logger logs disconnected/connected message
   - Paused "Opts" with PopUp and Logger measure option
   - X-ray slider always visible

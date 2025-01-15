@@ -1,5 +1,4 @@
 import React from "react";
-import { createPortal } from "react-dom";
 import { css, cx } from "@emotion/css";
 
 import { tryLocalStorageGetParsed, tryLocalStorageSet } from "../service/generic";
@@ -112,36 +111,32 @@ export default function WorldMenu(props) {
         measure
       </label>
     </div> */}
-
-    {w.view.rootEl !== null && createPortal(
-      <Draggable
-        className={loggerCss}
-        initPos={{ x: 0, y: 0 }}
-        container={w.view.rootEl}
-      >
-        <Logger
-          ref={state.ref('logger')}
-          className="world-logger"
-          onClickLink={(e) => {
-            const [npcKey] = e.fullLine.slice('[ '.length).split(' ] ', 1);
-            if (npcKey in w.n) {// prefix `[ {npcKey} ] ` 
-              w.events.next({ key: 'click-npc-link', npcKey, ...e });
-            }
-          }}
-        />
-      </Draggable>
-      ,
-      w.view.rootEl,
-    )}
+    
+    <Draggable
+      className={loggerCss}
+      container={w.view.rootEl}
+      initPos={{ x: 0, y: 0 }}
+    >
+      <Logger
+        ref={state.ref('logger')}
+        className="world-logger"
+        onClickLink={(e) => {
+          const [npcKey] = e.fullLine.slice('[ '.length).split(' ] ', 1);
+          if (npcKey in w.n) {// prefix `[ {npcKey} ] ` 
+            w.events.next({ key: 'click-npc-link', npcKey, ...e });
+          }
+        }}
+      />
+    </Draggable>
 
     <TouchIndicator/>
 
-    {/* <div className={cx(cssTtyDisconnectedMessage, {
+    <div className={cx(cssTtyDisconnectedMessage, {
       hidden: w.disconnected === false
     })}>
       <h3>[disconnected]</h3>
       click or show a tty tab
-    </div> */}
+    </div>
 
   </>;
 }
@@ -200,8 +195,8 @@ const loggerCss = css`
 
 const cssTtyDisconnectedMessage = css`
   position: absolute;
-  top: 0;
-  left: 0;
+  bottom: 0;
+  right: 0;
   z-index: 5;
   
   pointer-events: none;
