@@ -4,7 +4,6 @@ import { css } from "@emotion/css";
 import { Canvas } from "@react-three/fiber";
 import { MapControls, PerspectiveCamera, Stats } from "@react-three/drei";
 import { damp } from "maath/easing";
-import { Subject } from "rxjs";
 
 import { testNever, debug } from "../service/generic.js";
 import { Rect, Vect } from "../geom/index.js";
@@ -28,13 +27,15 @@ export default function WorldView(props) {
     clickIds: [],
     controls: /** @type {*} */ (null),
     controlsViewportOpts: {
-      maxPolarAngle: Math.PI / 4,
-      minDistance: w.smallViewport ? 5 : 5,
-      maxDistance: w.smallViewport ? 32 : 48,
+      minAzimuthAngle: Math.PI/4,
+      maxAzimuthAngle: Math.PI/4,
+      maxPolarAngle: Math.PI * 0.25,
+      minDistance: 5,
+      maxDistance: 80,
     },
     down: undefined,
     epoch: { pickStart: 0, pickEnd: 0, pointerDown: 0, pointerUp: 0 },
-    fov: 20,
+    fov: 10,
     glOpts: {
       toneMapping: 3,
       toneMappingExposure: 1,
@@ -406,7 +407,7 @@ export default function WorldView(props) {
       }
 
       <PerspectiveCamera
-        position={[0, 16, 0]}
+        position={[0, 80, 0]}
         makeDefault
         fov={state.fov}
         zoom={1}

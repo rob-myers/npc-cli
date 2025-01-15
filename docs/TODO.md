@@ -70,6 +70,7 @@
   - Logger/ContextMenu z-index changes onclick
   - move Logger on mobile via toggle between move/scroll
   - Draggables are sticky e.g. to bottom, to right
+  - Still seeing flicker on change "embed" -> "docked" on mobile
   - can resize Logger
   - Logger logs disconnected/connected message
   - Paused "Opts" with PopUp and Logger measure option
