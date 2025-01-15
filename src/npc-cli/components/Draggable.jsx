@@ -127,7 +127,7 @@ export const Draggable = React.forwardRef(function Draggable(props, ref) {
       onMouseUp={state.onMouseUp}
       
       // onMouseMove={state.onMouseMove}
-      onMouseLeave={state.onMouseUp}
+      // onMouseLeave={state.onMouseUp}
       
       onTouchStart={state.onTouchStart}
       onTouchEnd={state.onTouchEnd}
