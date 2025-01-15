@@ -264,10 +264,7 @@ function ContextMenuUi({ state: cm }) {
     onPointerUp={cm.onPointerUp}
     onPointerDown={cm.onPointerDown}
   >
-    <div
-      className={cx({ hidden: cm.npcKey === undefined }, "npc-key")}
-      data-key="clear-npc"
-    >
+    <div className={cx({ hidden: cm.npcKey === undefined }, "npc-key")}>
       @<span>{cm.npcKey}</span>
     </div>
   
@@ -371,7 +368,6 @@ export const contextMenuCss = css`
   }
 
   .npc-key {
-    cursor: pointer;
     position: absolute;
     top: -24px;
     height: 24px;
