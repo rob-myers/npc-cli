@@ -208,6 +208,7 @@
 
 ### On hold
 
+- npc diffuse does not apply to selector or label
 - can only spawn onto navigable floor or do point
 - spawn onto do point uses orient
 - redo cuboid-man: lower-spine-bone (for sit), independent face quad, clean skin
