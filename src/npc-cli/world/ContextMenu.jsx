@@ -82,16 +82,12 @@ export function ContextMenu() {
       suppressKeys.forEach(key => delete keyToLink[key]);
       state.links = Object.values(keyToLink);
     },
-    /** Non-null iff `state.docked` true */
-    getInnerRoot() {
-      return state.html3d.domTarget?.querySelector('.inner-root') ?? null;
-    },
     hide(force) {
       if (state.pinned === true && force !== true) {
         return;
       }
       state.open = false;
-      state.update();
+      update();
     },
     onKeyDownButton(e) {
       if (e.code === 'Space') {
@@ -135,7 +131,7 @@ export function ContextMenu() {
         return warn(`${'onClick'}: ignored el ${el.tagName} with class ${el.className}`);
       }
 
-      w.view.rootEl.focus();
+      // w.view.rootEl.focus();
       w.events.next({ key: 'click-link', cmKey: 'default', linkKey });
 
       switch (linkKey) {
@@ -149,7 +145,7 @@ export function ContextMenu() {
       }
 
       w.cm.persist();
-      state.update();
+      update();
     },
     onTogglePopup(willOpen) {
       if (willOpen) {
@@ -169,57 +165,55 @@ export function ContextMenu() {
     },
     refreshPopUp() {
       state.selectNpcKeys = Object.keys(w.n);
-      this.update();
+      update();
     },
     /**
      * Context is world position and meta concerning said position
      */
     setContext({ position, meta }) {
-      this.meta = meta;
-      this.position = position.toArray();
-      this.computeKvsFromMeta(meta);
-      this.computeLinks();
+      state.meta = meta;
+      state.position = position.toArray();
+      state.computeKvsFromMeta(meta);
+      state.computeLinks();
     },
     setNpc(npcKey) {
-      this.npcKey = npcKey;
-      this.update();
+      state.npcKey = npcKey;
+      update();
     },
     setOpacity(opacity) {
-      this.html3d.rootDiv.style.opacity = `${opacity}`;
+      state.html3d.rootDiv.style.opacity = `${opacity}`;
     },
     setTracked(input) {
-      this.tracked = input;
+      state.tracked = input;
     },
     show() {
-      this.open = true;
-      this.update();
+      state.open = true;
+      update();
     },
     toggleDocked() {
-      if ((this.docked = !this.docked) === true) {// About to dock
-        this.popUp.close();
-        if (this.everDocked === false) {// initially dock at bottom left
-          const innerRoot = /** @type {HTMLElement} */ (this.getInnerRoot());
-          const elRect = innerRoot.getBoundingClientRect();
+      if ((state.docked = !state.docked) === true) {// About to dock
+        state.popUp.close();
+        if (state.everDocked === false) {// initially dock at bottom left
+          const elRect = state.innerRoot.getBoundingClientRect();
           const rootRect = w.view.rootEl.getBoundingClientRect();
-          this.dockPoint = { x: 0, y: rootRect.height - elRect.height };
-          this.everDocked = true;
+          state.dockPoint = { x: 0, y: rootRect.height - elRect.height };
+          state.everDocked = true;
         }
       }
     },
     togglePinned() {
-      this.pinned = !this.pinned;
+      state.pinned = !state.pinned;
     },
     /** Ensure smooth transition when start scaling */
     toggleScaled() {
-      this.scaled = !this.scaled;
-      this.baseScale = this.scaled === true ? 1 / objectScale(this.html3d.objTarget, w.r3f.camera) : undefined;
+      state.scaled = !state.scaled;
+      state.baseScale = state.scaled === true ? 1 / objectScale(state.html3d.objTarget, w.r3f.camera) : undefined;
     },
     toggleKvs() {
-      this.showKvs = !this.showKvs;
+      state.showKvs = !state.showKvs;
       // 🚧 better way
       setTimeout(() => (state.draggable?.updatePos(), update()), 30);
     },
-    update,
   }));
 
   w.cm = state;
@@ -231,6 +225,7 @@ export function ContextMenu() {
     const sub = w.view.resizeEvents.subscribe(() => {
       state.draggable?.updatePos();
     });
+
     return () => sub.unsubscribe();
   }, [state.draggable]);
 
@@ -260,10 +255,11 @@ export function ContextMenu() {
 
 }
 
-/** @param {{ state: State }} _ */
+/** @param {{ state: import("../hooks/use-state-ref").UseStateRef<State> }} _ */
 function ContextMenuUi({ state: cm }) {
   return <div
     className="inner-root"
+    ref={cm.ref('innerRoot')}
     onPointerUp={cm.onPointerUp}
     onPointerDown={cm.onPointerDown}
   >
@@ -497,7 +493,6 @@ const popUpInfoCss = css`
  *   showKvs: boolean;
  *   computeKvsFromMeta(meta: Geom.Meta): void;
  *   computeLinks(): void;
- *   getInnerRoot(): Element | null;
  *   hide(force?: boolean | undefined): void;
  *   onKeyDownButton(e: React.KeyboardEvent<HTMLButtonElement>): void;
  *   onPointerDown(e: React.PointerEvent): void;
@@ -517,6 +512,5 @@ const popUpInfoCss = css`
  *   togglePinned(): void;
  *   toggleScaled(): void;
  *   toggleKvs(): void;
- *   update: () => void;
  * }} State
  **/
