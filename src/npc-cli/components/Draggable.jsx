@@ -15,11 +15,7 @@ export const Draggable = React.forwardRef(function Draggable(props, ref) {
     touchId: /** @type {undefined | number} */ (undefined),
 
     canDrag(e) {
-      if (props.draggableClassName === undefined) {
-        return true;
-      } else {
-        return e.target instanceof HTMLElement && e.target.classList.contains(props.draggableClassName);
-      }
+      return props.enabled !== false;
     },
     getTouchIdentifier(e) {
       if (e.targetTouches && e.targetTouches[0]) return e.targetTouches[0].identifier;
@@ -98,7 +94,7 @@ export const Draggable = React.forwardRef(function Draggable(props, ref) {
       state.el.style.left = `${state.pos.x}px`;
       state.el.style.top = `${state.pos.y}px`;
     },
-  }), { deps: [props.container] });
+  }), { deps: [props.container, props.enabled] });
 
   React.useImperativeHandle(ref, () => state, []);
   
@@ -115,9 +111,10 @@ export const Draggable = React.forwardRef(function Draggable(props, ref) {
 
   React.useEffect(() => {// adjust draggable onresize
     const obs = new ResizeObserver(([entry]) => state.updatePos());
-    props.observeSizes?.forEach(el => el instanceof HTMLElement && obs.observe(el))
+    const els = (props.observeSizes?.filter(x => x !== props.container) ?? []).concat(props.container ?? []);
+    els.forEach(el => el instanceof HTMLElement && obs.observe(el))
     return () => obs.disconnect();
-  }, [...props.observeSizes ?? []]);
+  }, [props.container, ...props.observeSizes ?? []]);
 
   return (
     <div
@@ -150,9 +147,9 @@ export const Draggable = React.forwardRef(function Draggable(props, ref) {
  * @property {string} [className]
  * @property {HTMLElement} [container]
  * So can keep draggable within container
+ * @property {boolean} [enabled]
  * @property {HTMLElement[]} [observeSizes]
  * Elements whose size can effect the Draggable's position
- * @property {string} [draggableClassName]
  * @property {Geom.VectJson} [initPos]
  */
 
