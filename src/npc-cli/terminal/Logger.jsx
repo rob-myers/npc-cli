@@ -1,5 +1,4 @@
 import React from "react";
-import { cx } from "@emotion/css";
 import useMeasure from 'react-use-measure';
 
 import { Terminal } from "@xterm/xterm";

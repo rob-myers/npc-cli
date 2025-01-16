@@ -115,12 +115,19 @@ export default function WorldMenu(props) {
     
     {w.view.rootEl && createPortal(
       <Draggable
-        borderWidth="8px 16px 4px 0"
         className={loggerCss}
         container={w.view.rootEl}
         initPos={{ x: 0, y: 0 }}
         observeSizes={[w.view.rootEl]}
       >
+        <div className="links">
+          <button>
+            move
+          </button>
+          <button>
+            resize
+          </button>
+        </div>
         <Logger
           ref={state.ref('logger')}
           className="world-logger"
@@ -152,50 +159,47 @@ const loggerCss = css`
   position: absolute;
   left: 0;
   top: 0;
-
-  display: flex;
-  flex-direction: column;
   width: 100%;
   max-width: 800px;
   height: 80px;
 
-  // 🔔 cover bottom scroll spacing
-  background: rgba(0, 0, 0, 1);
-
-  canvas {
-    cursor: auto !important;
-  }
-
+  display: flex;
+  flex-direction: column;
+  
   color: white;
   font-size: 12px;
-  font-family: 'Courier New', Courier, monospace;
   padding: 0px;
-
-  &.hidden, .hidden {
-    display: none;
-  }
   
+  .links {
+    display: flex;
+    justify-content: end;
+    gap: 4px;
+
+    button {
+      text-decoration: underline;
+      color: #aaf;
+    }
+  }
+
   .world-logger {
     width: 100%;
     height: 100%;
-
+    // 🔔 cover bottom scroll spacing
+    background: rgba(0, 0, 0, 1);
+    border: 0px solid black;
+    border-width: 8px 0 4px 16px;
+    
+    canvas {
+      // 🔔 override textual selection cursor
+      cursor: auto !important;
+    }
     textarea {
-      visibility: hidden; // Hide cursor
+      // 🔔 Hide xterm cursor
+      visibility: hidden;
     }
     .terminal.xterm {
-      height: 100%;
+      /* height: 100%; */
     }
-  }
-
-  label {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  }
-
-  .controls {
-    display: flex;
-    gap: 8px;
   }
 `;
 

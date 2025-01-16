@@ -9,7 +9,7 @@ export const Draggable = React.forwardRef(function Draggable(props, ref) {
 
   const state = useStateRef(/** @returns {State} */ () => ({
     dragging: false,
-    el: /** @type {HTMLDivElement} */ ({}),
+    el: /** @type {*} */ (null),
     pos: props.initPos ?? { x: 0, y: 0 },
     rel: { x: 0, y: 0 },
     touchId: /** @type {undefined | number} */ (undefined),
@@ -104,11 +104,12 @@ export const Draggable = React.forwardRef(function Draggable(props, ref) {
   
   React.useEffect(() => {
     const container = props.container ?? document.body;
-    document.body.addEventListener('mousemove', state.onMouseMove);
-    container.addEventListener('mouseleave', state.onMouseUp);
+    const { onMouseMove, onMouseUp } = state; // for HMR
+    document.body.addEventListener('mousemove', onMouseMove);
+    container.addEventListener('mouseleave', onMouseUp);
     return () => {
-      document.body.removeEventListener('mousemove', state.onMouseMove);
-      container.removeEventListener('mouseleave', state.onMouseUp);
+      document.body.removeEventListener('mousemove', onMouseMove);
+      container.removeEventListener('mouseleave', onMouseUp);
     };
   }, []);
 
@@ -137,10 +138,6 @@ export const Draggable = React.forwardRef(function Draggable(props, ref) {
         position: 'absolute',
         left: state.pos.x,
         top: state.pos.y,
-        // 🚧 support resize?
-        borderWidth: props.borderWidth,
-        borderStyle: 'solid',
-        borderColor: 'black'
       }}
     >
       {props.children}
@@ -150,7 +147,6 @@ export const Draggable = React.forwardRef(function Draggable(props, ref) {
 
 /**
  * @typedef BaseProps
- * @property {number | string} [borderWidth]
  * @property {string} [className]
  * @property {HTMLElement} [container]
  * So can keep draggable within container
