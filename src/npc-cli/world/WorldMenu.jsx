@@ -140,7 +140,7 @@ export default function WorldMenu(props) {
     
     {w.view.rootEl && createPortal(
       <Draggable
-        className={loggerCss}
+        className={loggerContainerCss}
         container={w.view.rootEl}
         enabled={state.loggerMeta.canDrag}
         initPos={{ x: 0, y: 0 }}
@@ -175,13 +175,13 @@ export default function WorldMenu(props) {
   </>;
 }
 
-const loggerCss = css`
+const loggerContainerCss = css`
   position: absolute;
   left: 0;
   top: 0;
   width: 100%;
   max-width: 800px;
-  height: 80px;
+  height: 120px;
 
   display: flex;
   flex-direction: column;
@@ -191,6 +191,7 @@ const loggerCss = css`
   padding: 0px;
   
   .links {
+    height: 20px;
     display: flex;
     gap: 8px;
     justify-content: start;
@@ -206,11 +207,12 @@ const loggerCss = css`
 
   .logger {
     width: 100%;
-    height: 100%;
+    height: calc(100% - 20px);
+    
     // 🔔 cover bottom scroll spacing
     background: rgba(0, 0, 0, 1);
     border: 0px solid black;
-    border-width: 8px 0 4px 16px;
+    border-width: 8px 0 0 16px;
     
     canvas {
       // 🔔 override textual selection cursor
