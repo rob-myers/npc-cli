@@ -70,7 +70,7 @@
   - ✅ move Logger on mobile via toggle between move/scroll
   - 🚧 can resize Logger
     - ❌ try extend Draggable
-    - PopUp with slider
+    - 🚧 PopUp with slider
   - Logger/ContextMenu z-index changes onclick
   - Draggables are sticky e.g. to bottom, to right
   - Still seeing flicker on change "embed" -> "docked" on mobile

@@ -9,6 +9,7 @@ import useStateRef from "../hooks/use-state-ref";
 import useUpdate from "../hooks/use-update";
 import { faderOverlayCss, pausedControlsCss } from "./overlay-menu-css";
 import { Draggable } from "../components/Draggable";
+import { PopUp } from "../components/PopUp";
 import { Logger } from "../terminal/Logger";
 import TouchIndicator from "./TouchIndicator";
 
@@ -58,7 +59,7 @@ export default function WorldMenu(props) {
     onOverlayPointerUp() {
       props.setTabsEnabled(true);
     },
-    onLinksPointerDown(e) {
+    onLinksPointerDown(e) { // 🚧 remove
       const el = /** @type {HTMLElement} */ (e.target);
       const linkKey = el.dataset.key;
       switch (linkKey) {
@@ -67,7 +68,7 @@ export default function WorldMenu(props) {
       }
       update();
     },
-    onLinksPointerUp(e) {
+    onLinksPointerUp(e) { // 🚧 remove
       const el = /** @type {HTMLElement} */ (e.target);
       const linkKey = el.dataset.key;
       switch (linkKey) {
@@ -156,8 +157,15 @@ export default function WorldMenu(props) {
           onPointerUp={state.onLinksPointerUp}
           // onPointerLeave={state.onLinksPointerUp} // 🚧
         >
+
           {w.smallViewport === true && <button data-key="move">move</button>}
-          <button data-key="resize">resize</button>
+          
+          <PopUp label="resize">
+            Foo bar baz
+          </PopUp>
+          
+          {/* <button data-key="resize">resize</button> */}
+
         </div>
       </Draggable>,
       w.view.rootEl,
