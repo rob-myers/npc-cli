@@ -90,7 +90,6 @@ export const Draggable = React.forwardRef(function Draggable(props, ref) {
       const container = props.container ?? document.body;
       state.pos.x = Math.max(0, Math.min(container.clientWidth - state.el.offsetWidth, x));
       state.pos.y = Math.max(0, Math.min(container.clientHeight - state.el.offsetHeight, y));
-
       state.el.style.left = `${state.pos.x}px`;
       state.el.style.top = `${state.pos.y}px`;
     },
@@ -148,9 +147,9 @@ export const Draggable = React.forwardRef(function Draggable(props, ref) {
  * @property {HTMLElement} [container]
  * So can keep draggable within container
  * @property {boolean} [enabled]
+ * @property {Geom.VectJson} [initPos]
  * @property {HTMLElement[]} [observeSizes]
  * Elements whose size can effect the Draggable's position
- * @property {Geom.VectJson} [initPos]
  */
 
 /**

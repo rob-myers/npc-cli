@@ -154,7 +154,7 @@ export default function WorldMenu(props) {
           className="links"
           onPointerDown={state.onLinksPointerDown}
           onPointerUp={state.onLinksPointerUp}
-          onPointerLeave={state.onLinksPointerUp}
+          // onPointerLeave={state.onLinksPointerUp} // 🚧
         >
           {w.smallViewport === true && <button data-key="move">move</button>}
           <button data-key="resize">resize</button>
@@ -180,6 +180,8 @@ const loggerCss = css`
   left: 0;
   top: 0;
   width: 100%;
+  
+  /* 🚧 */
   max-width: 800px;
   height: 80px;
 

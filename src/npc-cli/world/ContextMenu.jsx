@@ -239,7 +239,7 @@ export function ContextMenu() {
           ref={state.ref('draggable')}
           container={w.view.rootEl}
           initPos={state.dockPoint}
-          observeSizes={[w.view.rootEl, state.innerRoot]}
+          observeSizes={[state.innerRoot]}
         >
           <ContextMenuUi state={state} />
         </Draggable>
