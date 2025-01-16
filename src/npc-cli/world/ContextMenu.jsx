@@ -205,6 +205,9 @@ export function ContextMenu() {
     },
     togglePinned() {
       state.pinned = !state.pinned;
+      if (state.pinned === false) {
+        state.open = false; // auto-close on un-pin
+      }
     },
     /** Ensure smooth transition when start scaling */
     toggleScaled() {
