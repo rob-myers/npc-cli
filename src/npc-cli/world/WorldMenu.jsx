@@ -27,7 +27,7 @@ export default function WorldMenu(props) {
     durationKeys: {},
     initHeight: tryLocalStorageGetParsed(`log-height-px@${w.key}`) ?? 200,
     logger: /** @type {*} */ (null),
-    loggerMeta: { moving: false, resizing: false, },
+    loggerMeta: { canDrag: w.smallViewport === false, canResize: false, },
     showMeasures: tryLocalStorageGetParsed(`log-show-measures@${w.key}`) ?? false,
 
     changeShowMeasures(e) {
@@ -49,24 +49,31 @@ export default function WorldMenu(props) {
         state.durationKeys[msg] = performance.now();
       }
     },
+    onClickLoggerLink(e) {
+      const [npcKey] = e.fullLine.slice('[ '.length).split(' ] ', 1);
+      if (npcKey in w.n) {// prefix `[ {npcKey} ] ` 
+        w.events.next({ key: 'click-npc-link', npcKey, ...e });
+      }
+    },
     onOverlayPointerUp() {
       props.setTabsEnabled(true);
     },
-    onToggleLink(e) {
+    onLinksPointerDown(e) {
       const el = /** @type {HTMLElement} */ (e.target);
       const linkKey = el.dataset.key;
-
-      if (linkKey === undefined) {
-        return warn(`${'onToggleLink'}: ignored el ${el.tagName} with class ${el.className}`);
-      }
-
-      // w.events.next({ key: 'click-link', cmKey: 'default', linkKey });
-
       switch (linkKey) {
-        case 'move': state.loggerMeta.moving = !state.loggerMeta.moving; break;
-        case 'resize': state.loggerMeta.resizing = !state.loggerMeta.resizing; break;
+        case 'move': state.loggerMeta.canDrag = true; break;
+        case 'resize': state.loggerMeta.canResize = true; break;
       }
-
+      update();
+    },
+    onLinksPointerUp(e) {
+      const el = /** @type {HTMLElement} */ (e.target);
+      const linkKey = el.dataset.key;
+      switch (linkKey) {
+        case 'move': state.loggerMeta.canDrag = false; break;
+        case 'resize': state.loggerMeta.canResize = false; break;
+      }
       update();
     },
     say(npcKey, ...parts) {
@@ -135,33 +142,23 @@ export default function WorldMenu(props) {
       <Draggable
         className={loggerCss}
         container={w.view.rootEl}
+        enabled={state.loggerMeta.canDrag}
         initPos={{ x: 0, y: 0 }}
-        observeSizes={[w.view.rootEl]} // 🚧 auto observe container
       >
-        <div className="links" onClick={state.onToggleLink}>
-          <button
-            data-key="move"
-            className={!state.loggerMeta.moving ? 'off' : undefined}
-          >
-            move
-          </button>
-          <button
-            data-key="resize"
-            className={!state.loggerMeta.resizing ? 'off' : undefined}
-          >
-            resize
-          </button>
-        </div>
         <Logger
           ref={state.ref('logger')}
-          className="world-logger"
-          onClickLink={(e) => {
-            const [npcKey] = e.fullLine.slice('[ '.length).split(' ] ', 1);
-            if (npcKey in w.n) {// prefix `[ {npcKey} ] ` 
-              w.events.next({ key: 'click-npc-link', npcKey, ...e });
-            }
-          }}
+          className="logger"
+          onClickLink={state.onClickLoggerLink}
         />
+        <div
+          className="links"
+          onPointerDown={state.onLinksPointerDown}
+          onPointerUp={state.onLinksPointerUp}
+          onPointerLeave={state.onLinksPointerUp}
+        >
+          {w.smallViewport === true && <button data-key="move">move</button>}
+          <button data-key="resize">resize</button>
+        </div>
       </Draggable>,
       w.view.rootEl,
     )}
@@ -196,21 +193,18 @@ const loggerCss = css`
   .links {
     display: flex;
     gap: 8px;
-    justify-content: end;
-    @media (max-width: 700px) {
-      justify-content: start;
-    }
+    justify-content: start;
+    padding-left: 12px;
 
     button {
-      text-decoration: underline;
-      color: #aaf;
+      color: #aaaaff88;
     }
-    button.off {
-      filter: brightness(0.7);
+    button:hover, button:active {
+      color: #aaaaff;
     }
   }
 
-  .world-logger {
+  .logger {
     width: 100%;
     height: 100%;
     // 🔔 cover bottom scroll spacing
@@ -269,7 +263,7 @@ const cssTtyDisconnectedMessage = css`
  * @property {boolean} debugWhilePaused Is the camera usable whilst paused?
  * @property {{ [durKey: string]: number }} durationKeys
  * @property {import('../terminal/Logger').State} logger
- * @property {{ moving: boolean; resizing: boolean }} loggerMeta
+ * @property {{ canDrag: boolean; canResize: boolean }} loggerMeta
  * @property {number} initHeight
  * @property {boolean} showMeasures
  *
@@ -277,8 +271,10 @@ const cssTtyDisconnectedMessage = css`
  * @property {() => void} enableAll
  * @property {(msg: string) => void} measure
  * Measure durations by sending same `msg` twice.
+ * @property {(e: NPC.ClickLinkEvent) => void} onClickLoggerLink
  * @property {() => void} onOverlayPointerUp
- * @property {(e: React.MouseEvent) => void} onToggleLink
+ * @property {(e: React.PointerEvent) => void} onLinksPointerDown
+ * @property {(e: React.PointerEvent) => void} onLinksPointerUp
  * @property {(npcKey: string, line: string) => void} say
  * @property {() => void} toggleDebug
  * @property {() => void} toggleXRay

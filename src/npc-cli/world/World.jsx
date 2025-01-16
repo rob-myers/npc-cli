@@ -448,7 +448,7 @@ export default function World(props) {
  * @property {GmRoomGraphClass} gmRoomGraph
  * @property {Crowd} crowd
  * @property {boolean} disconnected
- * @property {boolean} smallViewport
+ * @property {boolean} smallViewport Was viewport small when we mounted World?
  *
  * @property {(postAct?: () => void) => void} advance
  * @property {() => boolean} isReady
