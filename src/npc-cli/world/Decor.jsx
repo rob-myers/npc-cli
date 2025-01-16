@@ -554,7 +554,7 @@ export default function Decor(props) {
       {ready && <cameraLightMaterial
         key={glsl.CameraLightMaterial.key}
         side={THREE.DoubleSide} // fix flipped gm
-        diffuse={[1, 1, 1]}
+        diffuse={[0.4, 0.4, 0.4]}
         transparent
         objectPickRed={7}
         opacity={query.status === 'success' ? 1 : 0}

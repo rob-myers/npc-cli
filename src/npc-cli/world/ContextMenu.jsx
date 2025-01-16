@@ -379,7 +379,7 @@ export const contextMenuCss = css`
   }
 
   &.docked {
-    z-index: 7; // 🚧
+    z-index: 3; // 🚧
     transform: unset !important;
   }
 
