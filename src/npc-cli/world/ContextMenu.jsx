@@ -129,7 +129,7 @@ export function ContextMenu() {
       const linkKey = el.dataset.key;
 
       if (linkKey === undefined) {
-        return warn(`${'onClick'}: ignored el ${el.tagName} with class ${el.className}`);
+        return warn(`${'onToggleLink'}: ignored el ${el.tagName} with class ${el.className}`);
       }
 
       // w.view.rootEl.focus();

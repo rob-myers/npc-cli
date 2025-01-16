@@ -2,7 +2,7 @@ import React from "react";
 import { css, cx } from "@emotion/css";
 import { createPortal } from "react-dom";
 
-import { tryLocalStorageGetParsed, tryLocalStorageSet } from "../service/generic";
+import { tryLocalStorageGetParsed, tryLocalStorageSet, warn } from "../service/generic";
 import { ansi } from "../sh/const";
 import { WorldContext } from "./world-context";
 import useStateRef from "../hooks/use-state-ref";
@@ -27,6 +27,7 @@ export default function WorldMenu(props) {
     durationKeys: {},
     initHeight: tryLocalStorageGetParsed(`log-height-px@${w.key}`) ?? 200,
     logger: /** @type {*} */ (null),
+    loggerMeta: { moving: false, resizing: false, },
     showMeasures: tryLocalStorageGetParsed(`log-show-measures@${w.key}`) ?? false,
 
     changeShowMeasures(e) {
@@ -50,6 +51,23 @@ export default function WorldMenu(props) {
     },
     onOverlayPointerUp() {
       props.setTabsEnabled(true);
+    },
+    onToggleLink(e) {
+      const el = /** @type {HTMLElement} */ (e.target);
+      const linkKey = el.dataset.key;
+
+      if (linkKey === undefined) {
+        return warn(`${'onToggleLink'}: ignored el ${el.tagName} with class ${el.className}`);
+      }
+
+      // w.events.next({ key: 'click-link', cmKey: 'default', linkKey });
+
+      switch (linkKey) {
+        case 'move': state.loggerMeta.moving = !state.loggerMeta.moving; break;
+        case 'resize': state.loggerMeta.resizing = !state.loggerMeta.resizing; break;
+      }
+
+      update();
     },
     say(npcKey, ...parts) {
       const line = parts.join(' ');
@@ -118,13 +136,19 @@ export default function WorldMenu(props) {
         className={loggerCss}
         container={w.view.rootEl}
         initPos={{ x: 0, y: 0 }}
-        observeSizes={[w.view.rootEl]}
+        observeSizes={[w.view.rootEl]} // 🚧 auto observe container
       >
-        <div className="links">
-          <button>
+        <div className="links" onClick={state.onToggleLink}>
+          <button
+            data-key="move"
+            className={!state.loggerMeta.moving ? 'off' : undefined}
+          >
             move
           </button>
-          <button>
+          <button
+            data-key="resize"
+            className={!state.loggerMeta.resizing ? 'off' : undefined}
+          >
             resize
           </button>
         </div>
@@ -155,7 +179,6 @@ export default function WorldMenu(props) {
 }
 
 const loggerCss = css`
-
   position: absolute;
   left: 0;
   top: 0;
@@ -172,12 +195,18 @@ const loggerCss = css`
   
   .links {
     display: flex;
+    gap: 8px;
     justify-content: end;
-    gap: 4px;
+    @media (max-width: 700px) {
+      justify-content: start;
+    }
 
     button {
       text-decoration: underline;
       color: #aaf;
+    }
+    button.off {
+      filter: brightness(0.7);
     }
   }
 
@@ -240,6 +269,7 @@ const cssTtyDisconnectedMessage = css`
  * @property {boolean} debugWhilePaused Is the camera usable whilst paused?
  * @property {{ [durKey: string]: number }} durationKeys
  * @property {import('../terminal/Logger').State} logger
+ * @property {{ moving: boolean; resizing: boolean }} loggerMeta
  * @property {number} initHeight
  * @property {boolean} showMeasures
  *
@@ -248,6 +278,7 @@ const cssTtyDisconnectedMessage = css`
  * @property {(msg: string) => void} measure
  * Measure durations by sending same `msg` twice.
  * @property {() => void} onOverlayPointerUp
+ * @property {(e: React.MouseEvent) => void} onToggleLink
  * @property {(npcKey: string, line: string) => void} say
  * @property {() => void} toggleDebug
  * @property {() => void} toggleXRay
