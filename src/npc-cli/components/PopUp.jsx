@@ -76,10 +76,12 @@ export const PopUp = React.forwardRef(function PopUp(props, ref) {
           open: state.opened,
           left: state.left,
           right: !state.left,
+          top: state.top,
+          bottom: !state.top,
         })}
       >
         <div className="arrow"/>
-        <div className={cx("info", props.infoClassName, { top: state.top })}>
+        <div className={cx("info", props.infoClassName)}>
           {props.children}
         </div>
       </div>
@@ -183,9 +185,6 @@ const rootPopupCss = css`
       .info {
         left: calc(-0.5 * var(--info-width) - 2 * var(--info-arrow-delta-x));
       }
-      .info.top {
-        bottom: calc(-1 * var(--info-arrow-height));
-      }
       .arrow {
         top: 0;
         left: calc(-2 * var(--info-arrow-delta-x));
@@ -194,12 +193,10 @@ const rootPopupCss = css`
         border-left: 10px solid var(--info-arrow-color);
       }
     }
+
     &.right {
       .info {
         left: calc(0.5 * var(--info-width) + var(--info-arrow-delta-x) - 2px);
-      }
-      .info.top {
-        bottom: calc(-1 * var(--info-arrow-height));
       }
       .arrow {
         top: 0;
@@ -209,7 +206,18 @@ const rootPopupCss = css`
         border-right: 10px solid var(--info-arrow-color);
       }
     }
+
+    &.top .info {
+      bottom: calc(-1 * var(--info-arrow-height));
+    }
+    &.bottom {
+      .info, .arrow {
+        top: 2px;
+      }
+    }
   }
 `;
 
 export const popUpRootDataAttribute = 'data-pop-up-root';
+
+0;
