@@ -146,28 +146,23 @@ export default function WorldMenu(props) {
         enabled={state.loggerMeta.canDrag}
         initPos={{ x: 0, y: 0 }}
       >
-        <Logger
-          ref={state.ref('logger')}
-          className="logger"
-          onClickLink={state.onClickLoggerLink}
-        />
         <div
           className="links"
           onPointerDown={state.onLinksPointerDown}
           onPointerUp={state.onLinksPointerUp}
           onPointerOut={state.onLinksPointerUp}
-          // onPointerLeave={state.onLinksPointerUp} // 🚧
         >
 
-          {w.smallViewport === true && <button data-key="move">move</button>}
-          
-          <PopUp label="resize">
+          <PopUp label="opts">
             Foo bar baz
           </PopUp>
-          
-          {/* <button data-key="resize">resize</button> */}
 
         </div>
+        <Logger
+          ref={state.ref('logger')}
+          className="logger"
+          onClickLink={state.onClickLoggerLink}
+        />
       </Draggable>,
       w.view.rootEl,
     )}
@@ -293,3 +288,5 @@ const cssTtyDisconnectedMessage = css`
  * @property {() => void} toggleXRay
  * @property {() => void} update
  */
+
+3;
