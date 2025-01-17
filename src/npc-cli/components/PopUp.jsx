@@ -54,10 +54,10 @@ export const PopUp = React.forwardRef(function PopUp(props, ref) {
   React.useImperativeHandle(ref, () => state, []);
 
   return (
-    <div className={cx("pop-up", rootPopupCss, props.className)}>
+    <div className={cx("pop-up", rootPopupCss, props.className, { open: state.opened })}>
       <button
         ref={state.ref('icon')}
-        className="pop-up-button"
+        className={popUpButtonClassName}
         onClick={e => {
           if (state.preventToggle) {
             return;
@@ -73,7 +73,6 @@ export const PopUp = React.forwardRef(function PopUp(props, ref) {
       <div
         ref={state.ref('bubble')}
         className={cx("pop-up-bubble", {
-          open: state.opened,
           left: state.left,
           right: !state.left,
           top: state.top,
@@ -111,7 +110,13 @@ export const PopUp = React.forwardRef(function PopUp(props, ref) {
  * @property {() => void} close
  */
 
+
 const defaultInfoWidthPx = 300;
+
+export const popUpRootDataAttribute = 'data-pop-up-root';
+
+export const popUpButtonClassName = 'pop-up-button';
+
 
 const rootPopupCss = css`
   --top-offset: 16px;
@@ -123,10 +128,11 @@ const rootPopupCss = css`
   --info-border-color: #ffffff55;;
   --info-width: ${defaultInfoWidthPx}px;
 
-  .pop-up-button {
+  .${popUpButtonClassName} {
     cursor: pointer;
     white-space: nowrap;
   }
+
 
   .pop-up-bubble {
     
@@ -140,16 +146,6 @@ const rootPopupCss = css`
     font-style: normal;
     text-align: center;
     white-space: nowrap;
-    
-    &.open .arrow,
-    &.open .info
-    {
-      visibility: visible;
-      opacity: 1;
-    }
-    &:not(.open) .info {
-      right: 0; // prevent overflow scroll
-    }
     
     .info {
       min-height: 60px;
@@ -216,6 +212,14 @@ const rootPopupCss = css`
       }
     }
   }
-`;
 
-export const popUpRootDataAttribute = 'data-pop-up-root';
+  &.open .arrow,
+  &.open .info
+  {
+    visibility: visible;
+    opacity: 1;
+  }
+  &:not(.open) .info {
+    right: 0; // prevent overflow scroll
+  }
+`;

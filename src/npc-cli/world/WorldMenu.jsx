@@ -9,7 +9,7 @@ import useStateRef from "../hooks/use-state-ref";
 import useUpdate from "../hooks/use-update";
 import { faderOverlayCss, pausedControlsCss } from "./overlay-menu-css";
 import { Draggable } from "../components/Draggable";
-import { PopUp } from "../components/PopUp";
+import { PopUp, popUpButtonClassName } from "../components/PopUp";
 import { Logger } from "../terminal/Logger";
 import TouchIndicator from "./TouchIndicator";
 
@@ -28,7 +28,6 @@ export default function WorldMenu(props) {
     durationKeys: {},
     initHeight: tryLocalStorageGetParsed(`log-height-px@${w.key}`) ?? 200,
     logger: /** @type {*} */ (null),
-    loggerMeta: { canDrag: w.smallViewport === false, canResize: false, },
     showMeasures: tryLocalStorageGetParsed(`log-show-measures@${w.key}`) ?? false,
 
     changeShowMeasures(e) {
@@ -58,24 +57,6 @@ export default function WorldMenu(props) {
     },
     onOverlayPointerUp() {
       props.setTabsEnabled(true);
-    },
-    onLinksPointerDown(e) { // 🚧 remove
-      const el = /** @type {HTMLElement} */ (e.target);
-      const linkKey = el.dataset.key;
-      switch (linkKey) {
-        case 'move': state.loggerMeta.canDrag = true; break;
-        case 'resize': state.loggerMeta.canResize = true; break;
-      }
-      update();
-    },
-    onLinksPointerUp(e) { // 🚧 remove
-      const el = /** @type {HTMLElement} */ (e.target);
-      const linkKey = el.dataset.key;
-      switch (linkKey) {
-        case 'move': state.loggerMeta.canDrag = false; break;
-        case 'resize': state.loggerMeta.canResize = false; break;
-      }
-      update();
     },
     say(npcKey, ...parts) {
       const line = parts.join(' ');
@@ -143,8 +124,8 @@ export default function WorldMenu(props) {
       <Draggable
         className={loggerContainerCss}
         container={w.view.rootEl}
-        enabled={state.loggerMeta.canDrag}
         initPos={{ x: 0, y: 0 }}
+        // 🚧 disable by default on mobile
       >
         <PopUp label="opts" className={loggerPopUpCss}>
           Foo bar baz
@@ -177,10 +158,12 @@ const loggerPopUpCss = css`
       color: #aaaaff;
     }
   }
-
-  // 🚧 avoid hard-coded name
-  .pop-up-button {
+  
+  .${popUpButtonClassName} {
     padding: 0 4px;
+  }
+  &.open .${popUpButtonClassName} {
+    color: #aaaaff;
   }
 `;
 
@@ -254,7 +237,6 @@ const cssTtyDisconnectedMessage = css`
  * @property {boolean} debugWhilePaused Is the camera usable whilst paused?
  * @property {{ [durKey: string]: number }} durationKeys
  * @property {import('../terminal/Logger').State} logger
- * @property {{ canDrag: boolean; canResize: boolean }} loggerMeta
  * @property {number} initHeight
  * @property {boolean} showMeasures
  *
@@ -264,12 +246,8 @@ const cssTtyDisconnectedMessage = css`
  * Measure durations by sending same `msg` twice.
  * @property {(e: NPC.ClickLinkEvent) => void} onClickLoggerLink
  * @property {() => void} onOverlayPointerUp
- * @property {(e: React.PointerEvent) => void} onLinksPointerDown
- * @property {(e: React.PointerEvent) => void} onLinksPointerUp
  * @property {(npcKey: string, line: string) => void} say
  * @property {() => void} toggleDebug
  * @property {() => void} toggleXRay
  * @property {() => void} update
  */
-
-3;
