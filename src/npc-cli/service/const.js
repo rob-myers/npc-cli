@@ -140,7 +140,7 @@ export const defaultNpcInteractRadius = geomorphGridMeters;
  */
 // export const defaultAgentUpdateFlags = 1 + 2 + 4;
 // export const defaultAgentUpdateFlags = 1 + 2 + 4 + 8 + 16;
-export const defaultAgentUpdateFlags = 1 + 4 + 8 + 16;
+export const defaultAgentUpdateFlags = 1 + 2 + 4 + 8 + 16;
 
 export const colliderHeight = 1.8;
 

@@ -868,7 +868,7 @@ export const crowdAgentParams = {
   radius: helper.defaults.radius, // 🔔 too large causes jerky collisions
   height: 1.5,
   maxAcceleration: maxAcceleration,
-  pathOptimizationRange: defaultNpcInteractRadius * 30, // 🚧 clarify
+  pathOptimizationRange: helper.defaults.radius * 30, // 🚧 clarify
   // collisionQueryRange: 0.7,
   collisionQueryRange: 1.5,
   separationWeight: staticSeparationWeight,
