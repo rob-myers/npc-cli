@@ -27,8 +27,8 @@ export default function WorldView(props) {
     clickIds: [],
     controls: /** @type {*} */ (null),
     controlsViewportOpts: {
-      minAzimuthAngle: Math.PI * 0,
-      maxAzimuthAngle: Math.PI * 0.25,
+      minAzimuthAngle: -Infinity,
+      maxAzimuthAngle: +Infinity,
       maxPolarAngle: Math.PI * 0.25,
       minDistance: 16,
       maxDistance: 96,
