@@ -155,6 +155,7 @@ export default function WorldMenu(props) {
           className="links"
           onPointerDown={state.onLinksPointerDown}
           onPointerUp={state.onLinksPointerUp}
+          onPointerCancel={state.onLinksPointerUp}
           // onPointerLeave={state.onLinksPointerUp} // 🚧
         >
 
