@@ -254,10 +254,6 @@ function ContextMenuUi({ state: cm }) {
     onPointerUp={cm.onPointerUp}
     onPointerDown={cm.onPointerDown}
   >
-    <div className={cx({ hidden: cm.npcKey === undefined }, "npc-key")}>
-      @<span>{cm.npcKey}</span>
-    </div>
-  
     <div className="links">
 
       <button
@@ -350,24 +346,13 @@ export const contextMenuCss = css`
     .inner-root {
       width: 200px;
       background-color: #000;
+      border-radius: 0 8px 8px 8px;
+      border: 1px solid #333;
+      padding: 4px;
+      font-size: small;
     }
   }
 
-  .npc-key {
-    position: absolute;
-    top: -24px;
-    height: 24px;
-
-    background-color: black;
-    span {
-      color: #99ff99;
-      pointer-events: none;
-    }
-    padding: 2px 6px;
-  }
-  .npc-key.hidden {
-    display: none;
-  }
 
   &.docked {
     z-index: 3; // 🚧
@@ -391,10 +376,6 @@ export const contextMenuCss = css`
     line-height: normal;
     gap: 0px;
   }
-  
-  .links > * {
-    flex: 1;
-  }
 
   .links button {
     text-decoration: underline;
@@ -413,6 +394,7 @@ export const contextMenuCss = css`
     padding: 4px;
     gap: 4px;
     color: #ccc;
+    filter: brightness(0.7);
 
     span.value {
       color: #ff7;
