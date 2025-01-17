@@ -351,7 +351,6 @@ export const contextMenuCss = css`
   > div {
     transform-origin: 0 0;
     pointer-events: all;
-    /* user-select: auto; */
 
     .inner-root {
       width: 200px;
@@ -414,6 +413,8 @@ export const contextMenuCss = css`
   .kvs {
     display: flex;
     flex-wrap: wrap;
+    user-select: text;
+
     padding: 4px;
     gap: 4px;
     color: #ccc;
