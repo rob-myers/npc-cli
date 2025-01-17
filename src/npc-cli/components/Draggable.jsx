@@ -109,7 +109,7 @@ export const Draggable = React.forwardRef(function Draggable(props, ref) {
   }, []);
 
   React.useEffect(() => {// adjust draggable onresize
-    const obs = new ResizeObserver(([entry]) => state.updatePos());
+    const obs = new ResizeObserver(([entry]) => state.el !== null && state.updatePos());
     const els = (props.observeSizes?.filter(x => x !== props.container) ?? []).concat(props.container ?? []);
     els.forEach(el => el instanceof HTMLElement && obs.observe(el))
     return () => obs.disconnect();
