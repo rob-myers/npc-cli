@@ -324,7 +324,7 @@ export const fromSymbolKey = {// 🔔 must extend when adding new symbols
 export const npcClassToMeta = {
   'cuboid-man': {
     url: '/assets/3d/cuboid-man.glb',
-    scale: 0.7,
+    scale: 0.65,
     materialName: 'cuboid-man-material',
     meshName: 'cuboid-man-mesh',
     groupName: 'Scene',
