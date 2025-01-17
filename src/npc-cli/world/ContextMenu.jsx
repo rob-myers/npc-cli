@@ -329,12 +329,10 @@ function ContextMenuUi({ state: cm }) {
     </div>
 
     {cm.showKvs === true && <div className="kvs">
-      {cm.kvs.map(({ k, v }) => (
-        <div key={k} className="kv">
-          <span className="key">{k}</span>
-          {v !== '' && <span className="value">{v}</span>}
-        </div>
-      ))}
+      {cm.kvs.map(x => <>
+        <span>{x.k}</span>
+        {x.v !== '' && <span>{'('}{x.v}{')'}</span>}
+      </>)}
     </div>}
   </div>;
 }
@@ -418,25 +416,10 @@ export const contextMenuCss = css`
     display: flex;
     flex-wrap: wrap;
     padding: 4px;
+    gap: 4px;
+    color: #ccc;
   }
 
-  .kv {
-    display: flex;
-    align-items: center;
-
-    flex: 1;
-    /* border: 1px solid #222; */
-    /* font-family: 'Courier New', Courier, monospace; */
-
-    .key {
-      padding: 2px;
-    }
-    .value {
-      padding: 0 4px;
-      color: #cca;
-      max-width: 128px;
-    }
-  }
 `;
 
 const popUpInfoCss = css`
