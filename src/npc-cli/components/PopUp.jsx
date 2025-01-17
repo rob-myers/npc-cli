@@ -11,11 +11,12 @@ export const PopUp = React.forwardRef(function PopUp(props, ref) {
   const update = useUpdate();
 
   const state = useStateRef(/** @returns {State} */ () => ({
-    opened: false,
-    left: false,
     bubble: /** @type {*} */ (null),
     icon: /** @type {*} */ (null),
+    left: false,
+    opened: false,
     preventToggle: false,
+    top: true,
 
     close() {
       state.opened = false;
@@ -26,13 +27,16 @@ export const PopUp = React.forwardRef(function PopUp(props, ref) {
     },
     open(width) {
       state.opened = true;
+
       const root = state.bubble.closest(`[${popUpRootDataAttribute}]`) ?? document.documentElement;
       const rootRect = root.getBoundingClientRect();
-    
       const rect = state.icon.getBoundingClientRect();
       const pixelsOnRight = rootRect.right - rect.right;
       const pixelsOnLeft = rect.x - rootRect.x;
       state.left = pixelsOnRight < pixelsOnLeft;
+      const pixelsAbove = rect.y - rootRect.y;
+      const pixelsBelow = rootRect.bottom - rect.bottom;
+      state.top = pixelsBelow < pixelsAbove;
 
       // 🚧 infer or parameterize `24`
       state.bubble.style.setProperty('--info-arrow-delta-x', `${state.left ? 24 : 12}px`);
@@ -75,7 +79,7 @@ export const PopUp = React.forwardRef(function PopUp(props, ref) {
         })}
       >
         <div className="arrow"/>
-        <div className={cx("info", props.infoClassName)}>
+        <div className={cx("info", props.infoClassName, { top: state.top })}>
           {props.children}
         </div>
       </div>
@@ -94,12 +98,14 @@ export const PopUp = React.forwardRef(function PopUp(props, ref) {
 
 /**
  * @typedef State
- * @property {boolean} opened
- * @property {boolean} left or right
+ * @property {boolean} top or bottom
  * @property {HTMLSpanElement} bubble
+ * @property {boolean} opened
  * @property {HTMLSpanElement} icon
+ * @property {boolean} left or right
  * @property {(width?: number | undefined) => void} open
  * @property {boolean} preventToggle
+ *
  * @property {() => void} close
  */
 
@@ -176,6 +182,8 @@ const rootPopupCss = css`
     &.left {
       .info {
         left: calc(-0.5 * var(--info-width) - 2 * var(--info-arrow-delta-x));
+      }
+      .info.top {
         bottom: calc(-1 * var(--info-arrow-height));
       }
       .arrow {
@@ -189,6 +197,8 @@ const rootPopupCss = css`
     &.right {
       .info {
         left: calc(0.5 * var(--info-width) + var(--info-arrow-delta-x) - 2px);
+      }
+      .info.top {
         bottom: calc(-1 * var(--info-arrow-height));
       }
       .arrow {
