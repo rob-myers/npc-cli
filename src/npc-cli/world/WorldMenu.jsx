@@ -152,11 +152,9 @@ export default function WorldMenu(props) {
           onPointerUp={state.onLinksPointerUp}
           onPointerOut={state.onLinksPointerUp}
         >
-
           <PopUp label="opts">
             Foo bar baz
           </PopUp>
-
         </div>
         <Logger
           ref={state.ref('logger')}
@@ -201,7 +199,7 @@ const loggerContainerCss = css`
     display: flex;
     gap: 8px;
     justify-content: start;
-    padding-left: 12px;
+    padding-left: 8px;
 
     button {
       color: #aaaaff88;
@@ -211,26 +209,24 @@ const loggerContainerCss = css`
     }
   }
 
+  // 🚧 avoid hard-coded name
+  .pop-up-button {
+    padding: 0 4px;
+  }
+
   .logger {
     width: 100%;
     height: calc(100% - 20px);
     
-    // 🔔 cover bottom scroll spacing
-    background: rgba(0, 0, 0, 1);
     border: 0px solid black;
     border-width: 8px 0 0 16px;
+    // 🔔 cover bottom scroll spacing
+    background: rgba(0, 0, 0, 1);
     
-    canvas {
-      // 🔔 override textual selection cursor
-      cursor: auto !important;
-    }
-    textarea {
-      // 🔔 Hide xterm cursor
-      visibility: hidden;
-    }
-    .terminal.xterm {
-      /* height: 100%; */
-    }
+    // 🔔 override textual selection cursor
+    canvas { cursor: auto !important; }
+    // 🔔 Hide xterm cursor
+    textarea { visibility: hidden; }
   }
 `;
 
