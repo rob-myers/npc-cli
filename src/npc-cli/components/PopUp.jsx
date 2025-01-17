@@ -152,14 +152,13 @@ const rootPopupCss = css`
     
     .info {
       min-height: 60px;
+      position: absolute;
+      width: var(--info-width);
 
       visibility: hidden;
       opacity: 0;
       transition: opacity 300ms;
       white-space: normal;
-      position: absolute;
-      width: var(--info-width);
-      margin-left: calc(-0.5 * var(--info-width));
     
       background-color: black;
       color: white;
@@ -180,10 +179,10 @@ const rootPopupCss = css`
       width: 0; 
       height: 0;
     }
-    
+
     &.left {
       .info {
-        left: calc(-0.5 * var(--info-width) - 2 * var(--info-arrow-delta-x));
+        left: calc(-1 * var(--info-width) - 2 * var(--info-arrow-delta-x));
       }
       .arrow {
         top: 0;
@@ -196,7 +195,7 @@ const rootPopupCss = css`
 
     &.right {
       .info {
-        left: calc(0.5 * var(--info-width) + var(--info-arrow-delta-x) - 2px);
+        left: calc(var(--info-arrow-delta-x) - 2px);
       }
       .arrow {
         top: 0;
@@ -219,5 +218,3 @@ const rootPopupCss = css`
 `;
 
 export const popUpRootDataAttribute = 'data-pop-up-root';
-
-0;
