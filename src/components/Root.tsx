@@ -10,6 +10,10 @@ import { afterBreakpoint, allArticlesMeta, breakpoint, view } from "../const";
 import type { FrontMatter } from "./site.store";
 import { queryClient } from "../npc-cli/service/query-client";
 
+import "./globals.css";
+import "flexlayout-react/style/light.css";
+import "@xterm/xterm/css/xterm.css";
+
 import Nav from "./Nav";
 import Viewer from "./Viewer";
 import Main from "./Main";
