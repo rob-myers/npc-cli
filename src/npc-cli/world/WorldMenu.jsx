@@ -127,7 +127,10 @@ export default function WorldMenu(props) {
         initPos={{ x: 0, y: 0 }}
         // 🚧 disable by default on mobile
       >
-        <PopUp label="opts" className={loggerPopUpCss}>
+        <PopUp
+          label="⋯"
+          className={loggerPopUpCss}
+        >
           Foo bar baz
         </PopUp>
         <Logger
@@ -152,19 +155,14 @@ export default function WorldMenu(props) {
 }
 
 const loggerPopUpCss = css`
-  button {
-    color: #aaaaff88;
-    &:hover, &:active {
-      color: #aaaaff;
-    }
-  }
-  
   .${popUpButtonClassName} {
-    padding: 0 4px;
+    color: #8888ff;
+    padding: 2px 12px;
+    text-decoration: underline;
   }
-  &.open .${popUpButtonClassName} {
-    color: #aaaaff;
-  }
+  /* &.open .${popUpButtonClassName} {
+    font-weight: bold;
+  } */
 `;
 
 const loggerContainerCss = css`
