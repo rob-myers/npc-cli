@@ -330,8 +330,8 @@ function ContextMenuUi({ state: cm }) {
 
     {cm.showKvs === true && <div className="kvs">
       {cm.kvs.map(x => <>
-        <span>{x.k}</span>
-        {x.v !== '' && <span>{'('}{x.v}{')'}</span>}
+        <span className="key">{x.k}</span>
+        {x.v !== '' && <span className="value">{x.v}</span>}
       </>)}
     </div>}
   </div>;
@@ -346,7 +346,6 @@ export const contextMenuCss = css`
   transform-origin: 0 0;
   background: transparent !important;
   pointer-events: none;
-  
   opacity: 0.8;
 
   > div {
@@ -418,6 +417,10 @@ export const contextMenuCss = css`
     padding: 4px;
     gap: 4px;
     color: #ccc;
+
+    span.value {
+      color: #ff7;
+    }
   }
 
 `;
