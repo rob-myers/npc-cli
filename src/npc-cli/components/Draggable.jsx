@@ -10,7 +10,7 @@ export const Draggable = React.forwardRef(function Draggable(props, ref) {
   const state = useStateRef(/** @returns {State} */ () => ({
     dragging: false,
     el: /** @type {*} */ (null),
-    pos: props.initPos ?? { x: 0, y: 0 },
+    pos: {...props.initPos ?? { x: 0, y: 0 }},
     rel: { x: 0, y: 0 },
     touchId: /** @type {undefined | number} */ (undefined),
 
@@ -30,7 +30,6 @@ export const Draggable = React.forwardRef(function Draggable(props, ref) {
       return (e.targetTouches && Array.from(e.targetTouches).find(t => identifier === t.identifier)) ||
         (e.changedTouches && Array.from(e.changedTouches).find(t => identifier === t.identifier));
     },
-
     onMouseDown(e) {
       if (!state.canDrag(e)) {
         return;
@@ -56,7 +55,6 @@ export const Draggable = React.forwardRef(function Draggable(props, ref) {
       // Subtract rel to keep the cursor "in same position"
       state.updatePos(e.clientX - state.rel.x, e.clientY - state.rel.y);
     },
-
     onTouchStart(e) {
       if (!state.canDrag(e)) {
         return;

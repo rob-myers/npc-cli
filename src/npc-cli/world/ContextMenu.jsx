@@ -159,11 +159,6 @@ export function ContextMenu() {
         pinned, showKvs, docked,
       }));
     },
-    popUpRef(popUp) {
-      return popUp !== null
-        ? state.popUp = popUp // @ts-ignore
-        : delete state.popUp;
-    },
     refreshPopUp: debounce(() => {
       state.selectNpcKeys = Object.keys(w.n);
       update();
@@ -273,7 +268,7 @@ function ContextMenuUi({ state: cm }) {
       </button>
 
       <PopUp
-        ref={cm.popUpRef.bind(cm)}
+        ref={cm.ref('popUp')}
         infoClassName={popUpInfoCss}
         label="opts"
         onChange={cm.onTogglePopup.bind(cm)}
@@ -473,7 +468,6 @@ const popUpInfoCss = css`
  *   onSelectNpc(e: React.ChangeEvent<HTMLSelectElement>): void;
  *   onTogglePopup(willOpen: boolean): void;
  *   persist(): void;
- *   popUpRef(popUp: null | import("../components/PopUp").State): void;
  *   refreshPopUp(): void;
  *   setContext({ position, meta }: NPC.ContextMenuContextDef): void;
  *   setNpc(npcKey?: string | undefined): void;
