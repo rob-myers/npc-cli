@@ -146,16 +146,9 @@ export default function WorldMenu(props) {
         enabled={state.loggerMeta.canDrag}
         initPos={{ x: 0, y: 0 }}
       >
-        <div
-          className="links"
-          onPointerDown={state.onLinksPointerDown}
-          onPointerUp={state.onLinksPointerUp}
-          onPointerOut={state.onLinksPointerUp}
-        >
-          <PopUp label="opts">
-            Foo bar baz
-          </PopUp>
-        </div>
+        <PopUp label="opts" className={loggerPopUpCss}>
+          Foo bar baz
+        </PopUp>
         <Logger
           ref={state.ref('logger')}
           className="logger"
@@ -177,6 +170,20 @@ export default function WorldMenu(props) {
   </>;
 }
 
+const loggerPopUpCss = css`
+  button {
+    color: #aaaaff88;
+    &:hover, &:active {
+      color: #aaaaff;
+    }
+  }
+
+  // 🚧 avoid hard-coded name
+  .pop-up-button {
+    padding: 0 4px;
+  }
+`;
+
 const loggerContainerCss = css`
   position: absolute;
   left: 0;
@@ -194,26 +201,6 @@ const loggerContainerCss = css`
   font-size: 12px;
   padding: 0px;
   
-  .links {
-    height: 20px;
-    display: flex;
-    gap: 8px;
-    justify-content: start;
-    padding-left: 8px;
-
-    button {
-      color: #aaaaff88;
-    }
-    button:hover, button:active {
-      color: #aaaaff;
-    }
-  }
-
-  // 🚧 avoid hard-coded name
-  .pop-up-button {
-    padding: 0 4px;
-  }
-
   .logger {
     width: 100%;
     height: calc(100% - 20px);

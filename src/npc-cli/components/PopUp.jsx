@@ -54,7 +54,7 @@ export const PopUp = React.forwardRef(function PopUp(props, ref) {
   React.useImperativeHandle(ref, () => state, []);
 
   return (
-    <div className={cx("pop-up", rootPopupCss)}>
+    <div className={cx("pop-up", rootPopupCss, props.className)}>
       <button
         ref={state.ref('icon')}
         className="pop-up-button"
@@ -81,7 +81,7 @@ export const PopUp = React.forwardRef(function PopUp(props, ref) {
         })}
       >
         <div className="arrow"/>
-        <div className={cx("info", props.infoClassName)}>
+        <div className="info">
           {props.children}
         </div>
       </div>
@@ -92,7 +92,7 @@ export const PopUp = React.forwardRef(function PopUp(props, ref) {
 /**
  * @typedef Props
  * @property {number} [arrowDeltaX]
- * @property {string} [infoClassName]
+ * @property {string} [className]
  * @property {string} [label]
  * @property {number} [width]
  * @property {(willOpen: boolean) => void} [onChange]
@@ -117,9 +117,10 @@ const rootPopupCss = css`
   --top-offset: 16px;
   --side-offset: 16px;
 
-  --info-arrow-color: #ffffffaa;
+  --info-arrow-color: #ffffff77;
   --info-arrow-delta-x: 0px;
   --info-arrow-height: 20px;
+  --info-border-color: #ffffff55;;
   --info-width: ${defaultInfoWidthPx}px;
 
   .pop-up-button {
@@ -162,7 +163,7 @@ const rootPopupCss = css`
     
       background-color: black;
       color: white;
-      border: 1px solid var(--info-arrow-color);
+      border: 1px solid var(--info-border-color);
     
       a {
         color: #dd0;
