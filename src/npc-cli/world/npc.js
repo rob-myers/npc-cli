@@ -390,10 +390,8 @@ export class Npc {
       maxAcceleration,
       maxSpeed: this.getMaxSpeed(),
       radius: (this.s.run ? 3 : 2) * helper.defaults.radius, // reset
-      collisionQueryRange: 1.5,
-      separationWeight: 0.25,
-      // 🚧
-      // queryFilterType: this.w.lib.queryFilterType.default,
+      collisionQueryRange: movingCollisionQueryRange,
+      separationWeight: 0.4,
       queryFilterType: this.w.lib.queryFilterType.excludeDoors,
     });
     this.agent.requestMoveTarget(closest);
@@ -820,9 +818,8 @@ export class Npc {
       maxAcceleration: maxAcceleration,
       updateFlags: defaultAgentUpdateFlags,
       radius: helper.defaults.radius,
-      collisionQueryRange: 1.5,
+      collisionQueryRange: staticCollisionQueryRange,
       separationWeight: staticSeparationWeight,
-      // 🚧
       // queryFilterType: this.w.lib.queryFilterType.excludeDoors,
     });
     
@@ -862,18 +859,18 @@ export class Npc {
 
 const maxAcceleration = 8;
 const staticSeparationWeight = 2;
+const movingCollisionQueryRange = 1.5;
+const staticCollisionQueryRange = 1;
 
 /** @type {Partial<import("@recast-navigation/core").CrowdAgentParams>} */
 export const crowdAgentParams = {
   radius: helper.defaults.radius, // 🔔 too large causes jerky collisions
   height: 1.5,
   maxAcceleration: maxAcceleration,
-  pathOptimizationRange: helper.defaults.radius * 30, // 🚧 clarify
-  // collisionQueryRange: 0.7,
-  collisionQueryRange: 1.5,
+  pathOptimizationRange: helper.defaults.radius * 30,
+  collisionQueryRange: staticCollisionQueryRange,
   separationWeight: staticSeparationWeight,
   queryFilterType: 0,
-  // obstacleAvoidanceType
   updateFlags: defaultAgentUpdateFlags,
 };
 
