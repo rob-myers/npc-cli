@@ -420,49 +420,49 @@
   <rect x="-20" y="1240" width="40" height="240" style="fill: rgb(255, 255, 255); stroke: rgb(0, 0, 0);">
     <title>door hull edge=w</title>
   </rect>
-  <use width="1" height="1" transform="matrix(0, 30, -30, 0, 20, 1244.5)" style="transform-origin: 0.5px 0.5px;" href="#symbol-6">
+  <use width="1" height="1" transform="matrix(0, 30, -30, 0, 20, 1224.5)" style="transform-origin: 0.5px 0.5px;" href="#symbol-40">
     <title>decor quad switch inner</title>
   </use>
   <rect x="-20" y="1520" width="40" height="240" style="fill: rgb(255, 255, 255); stroke: rgb(0, 0, 0);">
     <title>door hull edge=w</title>
   </rect>
-  <use width="1" height="1" transform="matrix(0, 30, -30, 0, 20, 1754.5)" style="transform-origin: 0.5px 0.5px;" href="#symbol-6">
+  <use width="1" height="1" transform="matrix(0, 30, -30, 0, 20, 1774.5)" style="transform-origin: 0.5px 0.5px;" href="#symbol-40">
     <title>decor quad switch inner</title>
   </use>
   <rect x="5980" y="1240" width="40" height="240" style="fill: rgb(255, 255, 255); stroke: rgb(0, 0, 0);">
     <title>door hull edge=e</title>
   </rect>
-  <use width="1" height="1" transform="matrix(0, 30, -30, 0, 5979, 1244.5)" style="transform-origin: 0.5px 0.5px;" href="#symbol-6">
+  <use width="1" height="1" transform="matrix(0, 30, -30, 0, 5979, 1224.5)" style="transform-origin: 0.5px 0.5px;" href="#symbol-40">
     <title>decor quad switch inner</title>
   </use>
   <rect x="5980" y="1520" width="40" height="240" style="fill: rgb(255, 255, 255); stroke: rgb(0, 0, 0);">
     <title>door hull edge=e</title>
   </rect>
-  <use width="1" height="1" transform="matrix(0, 30, -30, 0, 5979, 1754.5)" style="transform-origin: 0.5px 0.5px;" href="#symbol-6">
+  <use width="1" height="1" transform="matrix(0, 30, -30, 0, 5979, 1774.5)" style="transform-origin: 0.5px 0.5px;" href="#symbol-40">
     <title>decor quad switch inner</title>
   </use>
   <rect x="1240" y="2980" width="240" height="40" style="fill: rgb(255, 255, 255); stroke: rgb(0, 0, 0);">
     <title>door hull edge=s</title>
   </rect>
-  <use width="1" height="1" transform="matrix(-30, 0, 0, -30, 2510.332275390625, -99.81781768798828)" style="transform-origin: -40.3333px 99.8167px;" href="#symbol-6">
+  <use width="1" height="1" transform="matrix(-30, 0, 0, -30, 2490.332275390625, -99.817817687988)" style="transform-origin: -40.3333px 99.8167px;" href="#symbol-40">
     <title>decor quad switch inner</title>
   </use>
   <rect x="1520" y="2980" width="240" height="40" style="fill: rgb(255, 255, 255); stroke: rgb(0, 0, 0);">
     <title>door hull edge=s</title>
   </rect>
-  <use width="1" height="1" transform="matrix(-30, 0, 0, -30, 3020.332275390625, -99.81787109375)" style="transform-origin: -40.3333px 99.8167px;" href="#symbol-6">
+  <use width="1" height="1" transform="matrix(-30, 0, 0, -30, 3040.332275390625, -99.81787109375)" style="transform-origin: -40.3333px 99.8167px;" href="#symbol-40">
     <title>decor quad switch inner</title>
   </use>
   <rect x="4240" y="2980" width="240" height="40" style="fill: rgb(255, 255, 255); stroke: rgb(0, 0, 0);">
     <title>door hull edge=s</title>
   </rect>
-  <use width="1" height="1" transform="matrix(-30, 0, 0, -30, 2410.335693359375, -99.81787109375)" style="transform-origin: 59.6667px 99.8167px;" href="#symbol-6">
+  <use width="1" height="1" transform="matrix(-30, 0, 0, -30, 2390.332275390625, -99.81787109375)" style="transform-origin: 59.6667px 99.8167px;" href="#symbol-40">
     <title>decor quad switch inner</title>
   </use>
   <rect x="4520" y="2980" width="240" height="40" style="fill: rgb(255, 255, 255); stroke: rgb(0, 0, 0);">
     <title>door hull edge=s</title>
   </rect>
-  <use width="1" height="1" transform="matrix(-30, 0, 0, -30, 2920.335693359375, -99.81781768798828)" style="transform-origin: 59.6667px 99.8167px;" href="#symbol-6">
+  <use width="1" height="1" transform="matrix(-30, 0, 0, -30, 2940.332275390625, -99.817817687988)" style="transform-origin: 59.6667px 99.8167px;" href="#symbol-40">
     <title>decor quad switch inner</title>
   </use>
   <rect x="637.5" y="1190" width="220" height="30" style="fill: rgb(255, 255, 255); stroke: rgb(0, 0, 0);">

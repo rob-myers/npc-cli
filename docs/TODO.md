@@ -87,7 +87,9 @@
 - 🚧 hull doors -> two doors
   - ℹ️ to solve navigation issues relating to offMeshConnections
   - ✅ 301, 302, 303
-  - 🚧 101, 102, 103
+  - ✅ 101, 102, 103
+  - ✅ try small separation between doors
+  - 🚧 adjust door switches
 
 - ✅ pre next.js migration
   - ✅ finish/close wip todos
@@ -221,6 +223,8 @@
 
 ### On hold
 
+- inconsistent symbol ids e.g. 301--hull.svg vs 302--hull.svg, decor-unit-quad
+- isolated hull doors should be locked
 - strategy for dealing with "stuck at 0 velocity"
   - ℹ️ arises from conflicting separationWeights
   - e.g. relax target distance when neighbour detected
