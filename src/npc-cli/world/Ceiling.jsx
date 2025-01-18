@@ -48,18 +48,13 @@ export default function Ceiling(props) {
       const black = 'black';
       const grey90 = 'rgb(90, 90, 90)';
       const wallsColor = '#333';
-      const grey100 = 'rgb(100, 100, 100)';
       const thinLineWidth = 0.04;
       const thickLineWidth = 0.06;
 
       drawPolygons(ct, tops.nonHull, ['#000', '#191919', thickLineWidth]);
-      // drawPolygons(ct, tops.nonHull, [black, wallsColor, thickLineWidth]);
       drawPolygons(ct, tops.window, [black, wallsColor, thinLineWidth]);
-      drawPolygons(ct, tops.door.filter(x => !x.meta.hull), [grey100, null]);
-      drawPolygons(ct, tops.door.filter(x => x.meta.hull), [black, wallsColor, thinLineWidth]);
       drawPolygons(ct, tops.broad, [black, grey90, thinLineWidth]);
-      const hullWalls = layout.walls.filter(x => x.meta.hull);
-      drawPolygons(ct, hullWalls, [black, wallsColor, thickLineWidth]);
+      drawPolygons(ct, tops.hull, [black, wallsColor, thickLineWidth]); // hull walls and doors
       
       // Stroke a square at each corner to avoid z-fighting
       const hullRect = layout.hullPoly[0].rect;

@@ -90,7 +90,7 @@
   - ✅ 101, 102, 103
   - ✅ try small separation between doors
   - ✅ adjust door switches
-  - 🚧 fix z-fighting above doors
+  - ✅ fix z-fighting above hull doors
 
 - ✅ pre next.js migration
   - ✅ finish/close wip todos

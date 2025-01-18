@@ -56,14 +56,13 @@ export default function createGmsData() {
       );
       gmData.tops = {
         broad: gm.walls.filter(x => x.meta.broad === true),
-        door: gm.hullDoors.map(door => door.computeThinPoly()),
-        window: gm.windows.map(window => geom.createInset(window.poly, 0.005)[0]),
-        // nonHull: Poly.union(nonHullWallsTouchCeil)
-        //   .concat(gm.doors.map(door => door.computeThinPoly()))
-        //   .flatMap(x => geom.createInset(x, 0.01)),
+        hull: Poly.union(gm.walls.filter(x => x.meta.hull).concat
+          (gm.hullDoors.map(x => x.computeThinPoly()))
+        ),
         nonHull: Poly.union(nonHullWallsTouchCeil
           .concat(gm.doors.map(door => door.computeThinPoly()))
         ).flatMap(x => geom.createInset(x, 0.02)),
+        window: gm.windows.map(window => geom.createInset(window.poly, 0.005)[0]),
       };
 
       // canvas for quick "point -> roomId", "point -> doorId" computation
@@ -238,7 +237,7 @@ const emptyGmData = {
   navPoly: undefined,
   polyDecals: [],
   roomGraph: new RoomGraphClass(),
-  tops: { broad: [], door: [], nonHull: [], window: [] },
+  tops: { broad: [], hull: [], nonHull: [], window: [] },
   unseen: true,
   wallPolyCount: 0,
   wallPolySegCounts: [],
@@ -259,7 +258,7 @@ const emptyGmData = {
  * @property {[Geom.Vect, Geom.Vect][]} doorSegs
  * @property {CanvasRenderingContext2D} hitCtxt
  * @property {import('three').BufferGeometry} [navPoly] Debug only
- * @property {{ broad: Geom.Poly[]; door: Geom.Poly[]; nonHull: Geom.Poly[]; window: Geom.Poly[]; }} tops
+ * @property {{ broad: Geom.Poly[]; hull: Geom.Poly[]; nonHull: Geom.Poly[]; window: Geom.Poly[]; }} tops
  * @property {Geom.Poly[]} polyDecals
  * @property {import('../graph/room-graph').RoomGraphClass} roomGraph
  * @property {boolean} unseen Has this geomorph never occurred in any map so far?

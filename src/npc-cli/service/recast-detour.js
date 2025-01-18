@@ -63,7 +63,7 @@ export function computeOffMeshConnectionsParams(w) {
       // 🔔 saw nav fail in 102 (top right) when many offMeshConnections
       // 🔔 saw collisionQueryRange cause jerk when parallel offMeshConnections too close (hull door)
       // const offsets = meta.hull === true ? [-0.7, 0.01, 0.7] : [0.01];
-      const offsets = meta.hull === true ? [-0.85, 0.01, 0.85] : meta.iris === true ? [-0.25, 0.01, 0.25] : [0.01];
+      const offsets = meta.hull === true ? [-0.3, 0.01, 0.3] : meta.iris === true ? [-0.25, 0.01, 0.25] : [0.01];
       const src = gm.matrix.transformPoint(center.clone().addScaled(normal, halfLength));
       const dst = gm.matrix.transformPoint(center.clone().addScaled(normal, -halfLength));
       const tangent = { x: -normal.y, y: normal.x };
