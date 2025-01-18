@@ -89,7 +89,8 @@
   - ✅ 301, 302, 303
   - ✅ 101, 102, 103
   - ✅ try small separation between doors
-  - 🚧 adjust door switches
+  - ✅ adjust door switches
+  - 🚧 fix z-fighting above doors
 
 - ✅ pre next.js migration
   - ✅ finish/close wip todos
