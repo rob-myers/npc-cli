@@ -3,9 +3,9 @@
     "101--hull": {"outputHash": -1018006266, "pngHash": 568633107},
     "102--hull": {"outputHash": -234772630, "pngHash": 184103855},
     "103--hull": {"outputHash": -1566389117, "pngHash": -1937509879},
-    "301--hull": {"outputHash": -1570062987, "pngHash": 787602800},
-    "302--hull": {"outputHash": 551679440, "pngHash": -1557128953},
-    "303--hull": {"outputHash": 1156010591, "pngHash": -299838577},
+    "301--hull": {"outputHash": 2104719227, "pngHash": 787602800},
+    "302--hull": {"outputHash": -305603942, "pngHash": -1557128953},
+    "303--hull": {"outputHash": -1183445679, "pngHash": -299838577},
     "bed--003--1x1.6": {
       "outputHash": -2001357850,
       "pngHash": -1845623984,
@@ -3971,23 +3971,45 @@
       "doors": [
         {
           "type": "Polygon",
-          "coordinates": [[[0.1, 6.3], [0.1, 8.7], [-0.1, 8.7], [-0.1, 6.3]]],
+          "coordinates": [[[0.1, 6.3], [0.1, 7.5], [-0.1, 7.5], [-0.1, 6.3]]],
           "meta": {"door": true, "hull": true, "edge": "w"}
         },
         {
           "type": "Polygon",
-          "coordinates": [[[30.1, 6.3], [30.1, 8.7], [29.9, 8.7], [29.9, 6.3]]],
+          "coordinates": [[[0.1, 7.5], [0.1, 8.7], [-0.1, 8.7], [-0.1, 7.5]]],
+          "meta": {"door": true, "hull": true, "edge": "w"}
+        },
+        {
+          "type": "Polygon",
+          "coordinates": [[[30.1, 6.3], [30.1, 7.5], [29.9, 7.5], [29.9, 6.3]]],
           "meta": {"door": true, "hull": true, "edge": "e"}
         },
         {
           "type": "Polygon",
-          "coordinates": [[[8.7, 14.9], [8.7, 15.1], [6.3, 15.1], [6.3, 14.9]]],
+          "coordinates": [[[30.1, 7.5], [30.1, 8.7], [29.9, 8.7], [29.9, 7.5]]],
+          "meta": {"door": true, "hull": true, "edge": "e"}
+        },
+        {
+          "type": "Polygon",
+          "coordinates": [[[7.5, 14.9], [7.5, 15.1], [6.3, 15.1], [6.3, 14.9]]],
+          "meta": {"door": true, "hull": true, "edge": "s"}
+        },
+        {
+          "type": "Polygon",
+          "coordinates": [[[8.7, 14.9], [8.7, 15.1], [7.5, 15.1], [7.5, 14.9]]],
           "meta": {"door": true, "hull": true, "edge": "s"}
         },
         {
           "type": "Polygon",
           "coordinates": [
-            [[23.7, 14.9], [23.7, 15.1], [21.3, 15.1], [21.3, 14.9]]
+            [[22.5, 14.9], [22.5, 15.1], [21.3, 15.1], [21.3, 14.9]]
+          ],
+          "meta": {"door": true, "hull": true, "edge": "s"}
+        },
+        {
+          "type": "Polygon",
+          "coordinates": [
+            [[23.7, 14.9], [23.7, 15.1], [22.5, 15.1], [22.5, 14.9]]
           ],
           "meta": {"door": true, "hull": true, "edge": "s"}
         },
@@ -4118,7 +4140,7 @@
           "meta": {
             "decor": true,
             "quad": true,
-            "switch": 0,
+            "switch": 1,
             "inner": true,
             "transform": [0, 0.15, -0.15, 0, 0.1775, 8.7],
             "y": 1,
@@ -4134,7 +4156,7 @@
           "meta": {
             "decor": true,
             "quad": true,
-            "switch": 1,
+            "switch": 2,
             "inner": true,
             "transform": [0, 0.15, -0.15, 0, 29.9725, 6.15],
             "y": 1,
@@ -4150,25 +4172,9 @@
           "meta": {
             "decor": true,
             "quad": true,
-            "switch": 1,
+            "switch": 3,
             "inner": true,
             "transform": [0, 0.15, -0.15, 0, 29.9725, 8.7],
-            "y": 1,
-            "tilt": true,
-            "img": "icon--square"
-          }
-        },
-        {
-          "type": "Polygon",
-          "coordinates": [
-            [[8.7, 14.9725], [8.7, 14.8225], [8.85, 14.8225], [8.85, 14.9725]]
-          ],
-          "meta": {
-            "decor": true,
-            "quad": true,
-            "switch": 2,
-            "inner": true,
-            "transform": [-0.15, 0, 0, -0.15, 8.85, 14.9725],
             "y": 1,
             "tilt": true,
             "img": "icon--square"
@@ -4182,9 +4188,25 @@
           "meta": {
             "decor": true,
             "quad": true,
-            "switch": 2,
+            "switch": 4,
             "inner": true,
             "transform": [-0.15, 0, 0, -0.15, 6.3, 14.9725],
+            "y": 1,
+            "tilt": true,
+            "img": "icon--square"
+          }
+        },
+        {
+          "type": "Polygon",
+          "coordinates": [
+            [[8.7, 14.9725], [8.7, 14.8225], [8.85, 14.8225], [8.85, 14.9725]]
+          ],
+          "meta": {
+            "decor": true,
+            "quad": true,
+            "switch": 5,
+            "inner": true,
+            "transform": [-0.15, 0, 0, -0.15, 8.85, 14.9725],
             "y": 1,
             "tilt": true,
             "img": "icon--square"
@@ -4203,7 +4225,7 @@
           "meta": {
             "decor": true,
             "quad": true,
-            "switch": 3,
+            "switch": 6,
             "inner": true,
             "transform": [-0.15, 0, 0, -0.15, 21.3, 14.9725],
             "y": 1,
@@ -4224,7 +4246,7 @@
           "meta": {
             "decor": true,
             "quad": true,
-            "switch": 3,
+            "switch": 7,
             "inner": true,
             "transform": [-0.15, 0, 0, -0.15, 23.85, 14.9725],
             "y": 1,
@@ -4238,7 +4260,7 @@
           "meta": {
             "decor": true,
             "quad": true,
-            "switch": 4,
+            "switch": 8,
             "inner": true,
             "transform": [0.15, 0, 0, 0.15, 6.05, 6],
             "y": 1,
@@ -4254,7 +4276,7 @@
           "meta": {
             "decor": true,
             "quad": true,
-            "switch": 4,
+            "switch": 8,
             "inner": true,
             "transform": [0.15, 0, 0, 0.15, 6.0548, 5.85],
             "y": 1,
@@ -4268,7 +4290,7 @@
           "meta": {
             "decor": true,
             "quad": true,
-            "switch": 5,
+            "switch": 9,
             "inner": true,
             "transform": [0.15, 0, 0, 0.15, 23.8, 6],
             "y": 1,
@@ -4284,7 +4306,7 @@
           "meta": {
             "decor": true,
             "quad": true,
-            "switch": 5,
+            "switch": 9,
             "inner": true,
             "transform": [0.15, 0, 0, 0.15, 23.8048, 5.85],
             "y": 1,
@@ -4825,23 +4847,45 @@
       "doors": [
         {
           "type": "Polygon",
-          "coordinates": [[[0.1, 6.3], [0.1, 8.7], [-0.1, 8.7], [-0.1, 6.3]]],
+          "coordinates": [[[0.1, 6.3], [0.1, 7.5], [-0.1, 7.5], [-0.1, 6.3]]],
           "meta": {"door": true, "hull": true, "edge": "w"}
         },
         {
           "type": "Polygon",
-          "coordinates": [[[30.1, 6.3], [30.1, 8.7], [29.9, 8.7], [29.9, 6.3]]],
+          "coordinates": [[[0.1, 7.5], [0.1, 8.7], [-0.1, 8.7], [-0.1, 7.5]]],
+          "meta": {"door": true, "hull": true, "edge": "w"}
+        },
+        {
+          "type": "Polygon",
+          "coordinates": [[[30.1, 6.3], [30.1, 7.5], [29.9, 7.5], [29.9, 6.3]]],
           "meta": {"door": true, "hull": true, "edge": "e"}
         },
         {
           "type": "Polygon",
-          "coordinates": [[[8.7, 14.9], [8.7, 15.1], [6.3, 15.1], [6.3, 14.9]]],
+          "coordinates": [[[30.1, 7.5], [30.1, 8.7], [29.9, 8.7], [29.9, 7.5]]],
+          "meta": {"door": true, "hull": true, "edge": "e"}
+        },
+        {
+          "type": "Polygon",
+          "coordinates": [[[7.5, 14.9], [7.5, 15.1], [6.3, 15.1], [6.3, 14.9]]],
+          "meta": {"door": true, "hull": true, "edge": "s"}
+        },
+        {
+          "type": "Polygon",
+          "coordinates": [[[8.7, 14.9], [8.7, 15.1], [7.5, 15.1], [7.5, 14.9]]],
           "meta": {"door": true, "hull": true, "edge": "s"}
         },
         {
           "type": "Polygon",
           "coordinates": [
-            [[23.7, 14.9], [23.7, 15.1], [21.3, 15.1], [21.3, 14.9]]
+            [[22.5, 14.9], [22.5, 15.1], [21.3, 15.1], [21.3, 14.9]]
+          ],
+          "meta": {"door": true, "hull": true, "edge": "s"}
+        },
+        {
+          "type": "Polygon",
+          "coordinates": [
+            [[23.7, 14.9], [23.7, 15.1], [22.5, 15.1], [22.5, 14.9]]
           ],
           "meta": {"door": true, "hull": true, "edge": "s"}
         },
@@ -5088,7 +5132,7 @@
           "meta": {
             "decor": true,
             "quad": true,
-            "switch": 0,
+            "switch": 1,
             "inner": true,
             "transform": [0, 0.15, -0.15, 0, 0.1775, 8.7],
             "y": 1,
@@ -5104,7 +5148,7 @@
           "meta": {
             "decor": true,
             "quad": true,
-            "switch": 1,
+            "switch": 2,
             "inner": true,
             "transform": [0, 0.15, -0.15, 0, 29.9725, 6.15],
             "y": 1,
@@ -5120,25 +5164,9 @@
           "meta": {
             "decor": true,
             "quad": true,
-            "switch": 1,
+            "switch": 3,
             "inner": true,
             "transform": [0, 0.15, -0.15, 0, 29.9725, 8.7],
-            "y": 1,
-            "tilt": true,
-            "img": "icon--square"
-          }
-        },
-        {
-          "type": "Polygon",
-          "coordinates": [
-            [[8.7, 14.9725], [8.7, 14.8225], [8.85, 14.8225], [8.85, 14.9725]]
-          ],
-          "meta": {
-            "decor": true,
-            "quad": true,
-            "switch": 2,
-            "inner": true,
-            "transform": [-0.15, 0, 0, -0.15, 8.85, 14.9725],
             "y": 1,
             "tilt": true,
             "img": "icon--square"
@@ -5152,9 +5180,25 @@
           "meta": {
             "decor": true,
             "quad": true,
-            "switch": 2,
+            "switch": 4,
             "inner": true,
             "transform": [-0.15, 0, 0, -0.15, 6.3, 14.9725],
+            "y": 1,
+            "tilt": true,
+            "img": "icon--square"
+          }
+        },
+        {
+          "type": "Polygon",
+          "coordinates": [
+            [[8.7, 14.9725], [8.7, 14.8225], [8.85, 14.8225], [8.85, 14.9725]]
+          ],
+          "meta": {
+            "decor": true,
+            "quad": true,
+            "switch": 5,
+            "inner": true,
+            "transform": [-0.15, 0, 0, -0.15, 8.85, 14.9725],
             "y": 1,
             "tilt": true,
             "img": "icon--square"
@@ -5173,7 +5217,7 @@
           "meta": {
             "decor": true,
             "quad": true,
-            "switch": 3,
+            "switch": 6,
             "inner": true,
             "transform": [-0.15, 0, 0, -0.15, 21.3, 14.9725],
             "y": 1,
@@ -5194,7 +5238,7 @@
           "meta": {
             "decor": true,
             "quad": true,
-            "switch": 3,
+            "switch": 7,
             "inner": true,
             "transform": [-0.15, 0, 0, -0.15, 23.85, 14.9725],
             "y": 1,
@@ -5210,7 +5254,7 @@
           "meta": {
             "decor": true,
             "quad": true,
-            "switch": 4,
+            "switch": 8,
             "inner": true,
             "transform": [0, 0.15, -0.15, 0, 12.15, 10.63],
             "y": 1,
@@ -5226,7 +5270,7 @@
           "meta": {
             "decor": true,
             "quad": true,
-            "switch": 5,
+            "switch": 9,
             "inner": true,
             "transform": [0, 0.15, -0.15, 0, 27.1775, 0.15],
             "y": 1,
@@ -5242,7 +5286,7 @@
           "meta": {
             "decor": true,
             "quad": true,
-            "switch": 5,
+            "switch": 9,
             "inner": true,
             "transform": [0, 0.15, -0.15, 0, 27.1775, 2.7],
             "y": 1,
@@ -5258,7 +5302,7 @@
           "meta": {
             "decor": true,
             "quad": true,
-            "switch": 6,
+            "switch": 10,
             "inner": true,
             "transform": [-0.15, 0, 0, -0.15, 18.15, 13.495],
             "y": 1,
@@ -5274,7 +5318,7 @@
           "meta": {
             "decor": true,
             "quad": true,
-            "switch": 6,
+            "switch": 10,
             "transform": [-0.15, 0, 0, -0.15, 18.15, 13.63],
             "y": 1,
             "tilt": true,
@@ -5289,7 +5333,7 @@
           "meta": {
             "decor": true,
             "quad": true,
-            "switch": 7,
+            "switch": 11,
             "inner": true,
             "transform": [0, -0.15, 0.15, 0, 22.36, 11.95],
             "y": 1,
@@ -5305,7 +5349,7 @@
           "meta": {
             "decor": true,
             "quad": true,
-            "switch": 7,
+            "switch": 11,
             "inner": true,
             "transform": [0, -0.15, 0.15, 0, 22.495, 11.95],
             "y": 1,
@@ -5326,7 +5370,7 @@
           "meta": {
             "decor": true,
             "quad": true,
-            "switch": 8,
+            "switch": 12,
             "inner": true,
             "transform": [0, -0.15, 0.15, 0, 26.8575, 10.5],
             "y": 1,
@@ -5347,7 +5391,7 @@
           "meta": {
             "decor": true,
             "quad": true,
-            "switch": 8,
+            "switch": 12,
             "transform": [0, -0.15, 0.15, 0, 26.9925, 10.5],
             "y": 1,
             "tilt": true,
@@ -5362,7 +5406,7 @@
           "meta": {
             "decor": true,
             "quad": true,
-            "switch": 9,
+            "switch": 13,
             "inner": true,
             "transform": [0, -0.15, 0.15, 0, 26.8575, 12],
             "y": 1,
@@ -5378,7 +5422,7 @@
           "meta": {
             "decor": true,
             "quad": true,
-            "switch": 9,
+            "switch": 13,
             "transform": [0, -0.15, 0.15, 0, 26.9925, 12],
             "y": 1,
             "tilt": true,
@@ -5398,7 +5442,7 @@
           "meta": {
             "decor": true,
             "quad": true,
-            "switch": 10,
+            "switch": 14,
             "transform": [0, -0.15, 0.15, 0, 26.8575, 13.7],
             "y": 1,
             "tilt": true,
@@ -5418,7 +5462,7 @@
           "meta": {
             "decor": true,
             "quad": true,
-            "switch": 10,
+            "switch": 14,
             "transform": [0, -0.15, 0.15, 0, 26.9925, 13.7],
             "y": 1,
             "tilt": true,
@@ -5433,7 +5477,7 @@
           "meta": {
             "decor": true,
             "quad": true,
-            "switch": 11,
+            "switch": 15,
             "transform": [0, -0.15, 0.15, 0, 29.11, 5.95],
             "y": 1,
             "tilt": true,
@@ -5448,7 +5492,7 @@
           "meta": {
             "decor": true,
             "quad": true,
-            "switch": 12,
+            "switch": 16,
             "transform": [0, -0.15, 0.15, 0, 29.11, 4.475],
             "y": 1,
             "tilt": true,
@@ -5463,7 +5507,7 @@
           "meta": {
             "decor": true,
             "quad": true,
-            "switch": 13,
+            "switch": 17,
             "transform": [0, -0.15, 0.15, 0, 29.11, 2.975],
             "y": 1,
             "tilt": true,
@@ -5478,7 +5522,7 @@
           "meta": {
             "decor": true,
             "quad": true,
-            "switch": 14,
+            "switch": 18,
             "transform": [0, -0.15, 0.15, 0, 29.11, 1.475],
             "y": 1,
             "tilt": true,
@@ -5845,23 +5889,45 @@
       "doors": [
         {
           "type": "Polygon",
-          "coordinates": [[[0.1, 6.3], [0.1, 8.7], [-0.1, 8.7], [-0.1, 6.3]]],
+          "coordinates": [[[0.1, 6.3], [0.1, 7.5], [-0.1, 7.5], [-0.1, 6.3]]],
           "meta": {"door": true, "hull": true, "edge": "w"}
         },
         {
           "type": "Polygon",
-          "coordinates": [[[30.1, 6.3], [30.1, 8.7], [29.9, 8.7], [29.9, 6.3]]],
+          "coordinates": [[[0.1, 7.5], [0.1, 8.7], [-0.1, 8.7], [-0.1, 7.5]]],
+          "meta": {"door": true, "hull": true, "edge": "w"}
+        },
+        {
+          "type": "Polygon",
+          "coordinates": [[[30.1, 6.3], [30.1, 7.5], [29.9, 7.5], [29.9, 6.3]]],
           "meta": {"door": true, "hull": true, "edge": "e"}
         },
         {
           "type": "Polygon",
-          "coordinates": [[[8.7, 14.9], [8.7, 15.1], [6.3, 15.1], [6.3, 14.9]]],
+          "coordinates": [[[30.1, 7.5], [30.1, 8.7], [29.9, 8.7], [29.9, 7.5]]],
+          "meta": {"door": true, "hull": true, "edge": "e"}
+        },
+        {
+          "type": "Polygon",
+          "coordinates": [[[7.5, 14.9], [7.5, 15.1], [6.3, 15.1], [6.3, 14.9]]],
+          "meta": {"door": true, "hull": true, "edge": "s"}
+        },
+        {
+          "type": "Polygon",
+          "coordinates": [[[8.7, 14.9], [8.7, 15.1], [7.5, 15.1], [7.5, 14.9]]],
           "meta": {"door": true, "hull": true, "edge": "s"}
         },
         {
           "type": "Polygon",
           "coordinates": [
-            [[23.7, 14.9], [23.7, 15.1], [21.3, 15.1], [21.3, 14.9]]
+            [[22.5, 14.9], [22.5, 15.1], [21.3, 15.1], [21.3, 14.9]]
+          ],
+          "meta": {"door": true, "hull": true, "edge": "s"}
+        },
+        {
+          "type": "Polygon",
+          "coordinates": [
+            [[23.7, 14.9], [23.7, 15.1], [22.5, 15.1], [22.5, 14.9]]
           ],
           "meta": {"door": true, "hull": true, "edge": "s"}
         },
@@ -5984,7 +6050,7 @@
           "meta": {
             "decor": true,
             "quad": true,
-            "switch": 0,
+            "switch": 1,
             "inner": true,
             "transform": [0, 0.15, -0.15, 0, 0.1775, 8.7],
             "y": 1,
@@ -6000,7 +6066,7 @@
           "meta": {
             "decor": true,
             "quad": true,
-            "switch": 1,
+            "switch": 2,
             "inner": true,
             "transform": [0, 0.15, -0.15, 0, 29.9725, 6.15],
             "y": 1,
@@ -6016,25 +6082,9 @@
           "meta": {
             "decor": true,
             "quad": true,
-            "switch": 1,
+            "switch": 3,
             "inner": true,
             "transform": [0, 0.15, -0.15, 0, 29.9725, 8.7],
-            "y": 1,
-            "tilt": true,
-            "img": "icon--square"
-          }
-        },
-        {
-          "type": "Polygon",
-          "coordinates": [
-            [[8.7, 14.9725], [8.7, 14.8225], [8.85, 14.8225], [8.85, 14.9725]]
-          ],
-          "meta": {
-            "decor": true,
-            "quad": true,
-            "switch": 2,
-            "inner": true,
-            "transform": [-0.15, 0, 0, -0.15, 8.85, 14.9725],
             "y": 1,
             "tilt": true,
             "img": "icon--square"
@@ -6048,9 +6098,25 @@
           "meta": {
             "decor": true,
             "quad": true,
-            "switch": 2,
+            "switch": 4,
             "inner": true,
             "transform": [-0.15, 0, 0, -0.15, 6.3, 14.9725],
+            "y": 1,
+            "tilt": true,
+            "img": "icon--square"
+          }
+        },
+        {
+          "type": "Polygon",
+          "coordinates": [
+            [[8.7, 14.9725], [8.7, 14.8225], [8.85, 14.8225], [8.85, 14.9725]]
+          ],
+          "meta": {
+            "decor": true,
+            "quad": true,
+            "switch": 5,
+            "inner": true,
+            "transform": [-0.15, 0, 0, -0.15, 8.85, 14.9725],
             "y": 1,
             "tilt": true,
             "img": "icon--square"
@@ -6069,7 +6135,7 @@
           "meta": {
             "decor": true,
             "quad": true,
-            "switch": 3,
+            "switch": 6,
             "inner": true,
             "transform": [-0.15, 0, 0, -0.15, 21.3, 14.9725],
             "y": 1,
@@ -6090,7 +6156,7 @@
           "meta": {
             "decor": true,
             "quad": true,
-            "switch": 3,
+            "switch": 7,
             "inner": true,
             "transform": [-0.15, 0, 0, -0.15, 23.85, 14.9725],
             "y": 1,
@@ -6106,7 +6172,7 @@
           "meta": {
             "decor": true,
             "quad": true,
-            "switch": 4,
+            "switch": 8,
             "transform": [-0.15, 0, 0, -0.15, 3.15, 6.045],
             "y": 1,
             "tilt": true,
@@ -6126,7 +6192,7 @@
           "meta": {
             "decor": true,
             "quad": true,
-            "switch": 5,
+            "switch": 9,
             "inner": true,
             "transform": [0.1494, 0.0131, -0.0131, 0.1494, 1.4199, 9.2198],
             "y": 1,
@@ -6147,7 +6213,7 @@
           "meta": {
             "decor": true,
             "quad": true,
-            "switch": 5,
+            "switch": 9,
             "transform": [0.1494, 0.0131, -0.0131, 0.1494, 1.4318, 9.0837],
             "y": 1,
             "tilt": true,
@@ -6167,7 +6233,7 @@
           "meta": {
             "decor": true,
             "quad": true,
-            "switch": 6,
+            "switch": 10,
             "inner": true,
             "transform": [0.0131, 0.1494, -0.1494, 0.0131, 5.7994, 13.4675],
             "y": 1,
@@ -6188,7 +6254,7 @@
           "meta": {
             "decor": true,
             "quad": true,
-            "switch": 6,
+            "switch": 10,
             "transform": [0.0131, 0.1494, -0.1494, 0.0131, 5.9407, 13.455],
             "y": 1,
             "tilt": true,
@@ -6203,7 +6269,7 @@
           "meta": {
             "decor": true,
             "quad": true,
-            "switch": 7,
+            "switch": 11,
             "inner": true,
             "transform": [-0.15, 0, 0, -0.15, 5.95, 6.145],
             "y": 1,
@@ -6219,7 +6285,7 @@
           "meta": {
             "decor": true,
             "quad": true,
-            "switch": 7,
+            "switch": 11,
             "transform": [-0.15, 0, 0, -0.15, 5.95, 6.045],
             "y": 1,
             "tilt": true,
@@ -6234,7 +6300,7 @@
           "meta": {
             "decor": true,
             "quad": true,
-            "switch": 8,
+            "switch": 12,
             "inner": true,
             "transform": [0, 0.15, -0.15, 0, 6.04, 4.5002],
             "y": 1,
@@ -6250,7 +6316,7 @@
           "meta": {
             "decor": true,
             "quad": true,
-            "switch": 8,
+            "switch": 12,
             "transform": [0, 0.15, -0.15, 0, 6.14, 4.5002],
             "y": 1,
             "tilt": true,
@@ -6265,7 +6331,7 @@
           "meta": {
             "decor": true,
             "quad": true,
-            "switch": 9,
+            "switch": 13,
             "transform": [0, 0.15, -0.15, 0, 7.5325, 8.85],
             "y": 1,
             "tilt": true,
@@ -6280,7 +6346,7 @@
           "meta": {
             "decor": true,
             "quad": true,
-            "switch": 9,
+            "switch": 13,
             "transform": [0, 0.15, -0.15, 0, 7.6325, 8.85],
             "y": 1,
             "tilt": true,
@@ -6295,7 +6361,7 @@
           "meta": {
             "decor": true,
             "quad": true,
-            "switch": 10,
+            "switch": 14,
             "transform": [0, 0.15, -0.15, 0, 24.01, 5.85],
             "y": 1,
             "tilt": true,
@@ -6310,7 +6376,7 @@
           "meta": {
             "decor": true,
             "quad": true,
-            "switch": 10,
+            "switch": 14,
             "transform": [0, 0.15, -0.15, 0, 24.13, 5.85],
             "y": 1,
             "tilt": true,
@@ -6325,7 +6391,7 @@
           "meta": {
             "decor": true,
             "quad": true,
-            "switch": 11,
+            "switch": 15,
             "transform": [0, 0.15, -0.15, 0, 22.5175, 8.85],
             "y": 1,
             "tilt": true,
@@ -6340,7 +6406,7 @@
           "meta": {
             "decor": true,
             "quad": true,
-            "switch": 11,
+            "switch": 15,
             "transform": [0, 0.15, -0.15, 0, 22.6325, 8.85],
             "y": 1,
             "tilt": true,

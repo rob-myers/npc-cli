@@ -84,6 +84,11 @@
   - move `w.bubble.say` -> `w.e.say`
   - profile-1 has link listener
 
+- 🚧 hull doors -> two doors
+  - ℹ️ to solve navigation issues relating to offMeshConnections
+  - ✅ 301, 302, 303
+  - 🚧 101, 102, 103
+
 - ✅ pre next.js migration
   - ✅ finish/close wip todos
   - ✅ avoid stationary npc push through door
@@ -216,6 +221,10 @@
 
 ### On hold
 
+- strategy for dealing with "stuck at 0 velocity"
+  - ℹ️ arises from conflicting separationWeights
+  - e.g. relax target distance when neighbour detected
+- gridMin, gridMax should align with geomorph grid
 - npc diffuse does not apply to selector or label
 - can only spawn onto navigable floor or do point
 - spawn onto do point uses orient
@@ -403,7 +412,7 @@ WorldMenu log extras
   - they have large white borders
   - try instance color
 
-- prevent NPCs going through closed doors
+- ✅ prevent NPCs going through closed doors
   - i.e. color nav query
 - ✅ use rapier physics 3d in web worker
   - i.e. static triggers
