@@ -1,11 +1,11 @@
 {
   "meta": {
-    "101--hull": {"outputHash": 1718510756, "pngHash": 568633107},
-    "102--hull": {"outputHash": -1894478514, "pngHash": 184103855},
-    "103--hull": {"outputHash": -2101221471, "pngHash": -1937509879},
-    "301--hull": {"outputHash": 2104719227, "pngHash": 787602800},
-    "302--hull": {"outputHash": -305603942, "pngHash": -1557128953},
-    "303--hull": {"outputHash": -1183445679, "pngHash": -299838577},
+    "101--hull": {"outputHash": 1288838596, "pngHash": 568633107},
+    "102--hull": {"outputHash": 734263342, "pngHash": 184103855},
+    "103--hull": {"outputHash": 1598536321, "pngHash": -1937509879},
+    "301--hull": {"outputHash": 265220871, "pngHash": 787602800},
+    "302--hull": {"outputHash": 1129493134, "pngHash": -1557128953},
+    "303--hull": {"outputHash": -1596747555, "pngHash": -299838577},
     "bed--003--1x1.6": {
       "outputHash": -2001357850,
       "pngHash": -1845623984,
@@ -1551,97 +1551,97 @@
       "doors": [
         {
           "type": "Polygon",
-          "coordinates": [[[0.1, 6.3], [0.1, 7.5], [-0.1, 7.5], [-0.1, 6.3]]],
+          "coordinates": [[[0.1, 6.2], [0.1, 7.4], [-0.1, 7.4], [-0.1, 6.2]]],
           "meta": {"door": true, "hull": true, "edge": "w"}
         },
         {
           "type": "Polygon",
-          "coordinates": [[[0.1, 7.5], [0.1, 8.7], [-0.1, 8.7], [-0.1, 7.5]]],
-          "meta": {"door": true, "hull": true, "edge": "w"}
-        },
-        {
-          "type": "Polygon",
-          "coordinates": [
-            [[0.1, 21.3], [0.1, 22.5], [-0.1, 22.5], [-0.1, 21.3]]
-          ],
+          "coordinates": [[[0.1, 7.6], [0.1, 8.8], [-0.1, 8.8], [-0.1, 7.6]]],
           "meta": {"door": true, "hull": true, "edge": "w"}
         },
         {
           "type": "Polygon",
           "coordinates": [
-            [[0.1, 22.5], [0.1, 23.7], [-0.1, 23.7], [-0.1, 22.5]]
+            [[0.1, 21.2], [0.1, 22.4], [-0.1, 22.4], [-0.1, 21.2]]
           ],
           "meta": {"door": true, "hull": true, "edge": "w"}
         },
         {
           "type": "Polygon",
-          "coordinates": [[[30.1, 6.3], [30.1, 7.5], [29.9, 7.5], [29.9, 6.3]]],
+          "coordinates": [
+            [[0.1, 22.6], [0.1, 23.8], [-0.1, 23.8], [-0.1, 22.6]]
+          ],
+          "meta": {"door": true, "hull": true, "edge": "w"}
+        },
+        {
+          "type": "Polygon",
+          "coordinates": [[[30.1, 6.2], [30.1, 7.4], [29.9, 7.4], [29.9, 6.2]]],
           "meta": {"door": true, "hull": true, "edge": "e"}
         },
         {
           "type": "Polygon",
-          "coordinates": [[[30.1, 7.5], [30.1, 8.7], [29.9, 8.7], [29.9, 7.5]]],
+          "coordinates": [[[30.1, 7.6], [30.1, 8.8], [29.9, 8.8], [29.9, 7.6]]],
           "meta": {"door": true, "hull": true, "edge": "e"}
         },
         {
           "type": "Polygon",
           "coordinates": [
-            [[30.1, 21.3], [30.1, 22.5], [29.9, 22.5], [29.9, 21.3]]
+            [[30.1, 21.2], [30.1, 22.4], [29.9, 22.4], [29.9, 21.2]]
           ],
           "meta": {"door": true, "hull": true, "edge": "e"}
         },
         {
           "type": "Polygon",
           "coordinates": [
-            [[30.1, 22.5], [30.1, 23.7], [29.9, 23.7], [29.9, 22.5]]
+            [[30.1, 22.6], [30.1, 23.8], [29.9, 23.8], [29.9, 22.6]]
           ],
           "meta": {"door": true, "hull": true, "edge": "e"}
         },
         {
           "type": "Polygon",
-          "coordinates": [[[7.5, -0.1], [7.5, 0.1], [6.3, 0.1], [6.3, -0.1]]],
+          "coordinates": [[[7.4, -0.1], [7.4, 0.1], [6.2, 0.1], [6.2, -0.1]]],
           "meta": {"door": true, "hull": true, "edge": "n"}
         },
         {
           "type": "Polygon",
-          "coordinates": [[[8.7, -0.1], [8.7, 0.1], [7.5, 0.1], [7.5, -0.1]]],
+          "coordinates": [[[8.8, -0.1], [8.8, 0.1], [7.6, 0.1], [7.6, -0.1]]],
           "meta": {"door": true, "hull": true, "edge": "n"}
         },
         {
           "type": "Polygon",
           "coordinates": [
-            [[22.5, -0.1], [22.5, 0.1], [21.3, 0.1], [21.3, -0.1]]
+            [[22.4, -0.1], [22.4, 0.1], [21.2, 0.1], [21.2, -0.1]]
           ],
           "meta": {"door": true, "hull": true, "edge": "n"}
         },
         {
           "type": "Polygon",
           "coordinates": [
-            [[23.7, -0.1], [23.7, 0.1], [22.5, 0.1], [22.5, -0.1]]
+            [[23.8, -0.1], [23.8, 0.1], [22.6, 0.1], [22.6, -0.1]]
           ],
           "meta": {"door": true, "hull": true, "edge": "n"}
         },
         {
           "type": "Polygon",
-          "coordinates": [[[7.5, 29.9], [7.5, 30.1], [6.3, 30.1], [6.3, 29.9]]],
+          "coordinates": [[[7.4, 29.9], [7.4, 30.1], [6.2, 30.1], [6.2, 29.9]]],
           "meta": {"door": true, "hull": true, "edge": "s"}
         },
         {
           "type": "Polygon",
-          "coordinates": [[[8.7, 29.9], [8.7, 30.1], [7.5, 30.1], [7.5, 29.9]]],
-          "meta": {"door": true, "hull": true, "edge": "s"}
-        },
-        {
-          "type": "Polygon",
-          "coordinates": [
-            [[22.5, 29.9], [22.5, 30.1], [21.3, 30.1], [21.3, 29.9]]
-          ],
+          "coordinates": [[[8.8, 29.9], [8.8, 30.1], [7.6, 30.1], [7.6, 29.9]]],
           "meta": {"door": true, "hull": true, "edge": "s"}
         },
         {
           "type": "Polygon",
           "coordinates": [
-            [[23.7, 29.9], [23.7, 30.1], [22.5, 30.1], [22.5, 29.9]]
+            [[22.4, 29.9], [22.4, 30.1], [21.2, 30.1], [21.2, 29.9]]
+          ],
+          "meta": {"door": true, "hull": true, "edge": "s"}
+        },
+        {
+          "type": "Polygon",
+          "coordinates": [
+            [[23.8, 29.9], [23.8, 30.1], [22.6, 30.1], [22.6, 29.9]]
           ],
           "meta": {"door": true, "hull": true, "edge": "s"}
         },
@@ -2633,97 +2633,97 @@
       "doors": [
         {
           "type": "Polygon",
-          "coordinates": [[[0.1, 6.3], [0.1, 7.5], [-0.1, 7.5], [-0.1, 6.3]]],
+          "coordinates": [[[0.1, 6.2], [0.1, 7.4], [-0.1, 7.4], [-0.1, 6.2]]],
           "meta": {"door": true, "hull": true, "edge": "w"}
         },
         {
           "type": "Polygon",
-          "coordinates": [[[0.1, 7.5], [0.1, 8.7], [-0.1, 8.7], [-0.1, 7.5]]],
-          "meta": {"door": true, "hull": true, "edge": "w"}
-        },
-        {
-          "type": "Polygon",
-          "coordinates": [
-            [[0.1, 21.3], [0.1, 22.5], [-0.1, 22.5], [-0.1, 21.3]]
-          ],
+          "coordinates": [[[0.1, 7.6], [0.1, 8.8], [-0.1, 8.8], [-0.1, 7.6]]],
           "meta": {"door": true, "hull": true, "edge": "w"}
         },
         {
           "type": "Polygon",
           "coordinates": [
-            [[0.1, 22.5], [0.1, 23.7], [-0.1, 23.7], [-0.1, 22.5]]
+            [[0.1, 21.2], [0.1, 22.4], [-0.1, 22.4], [-0.1, 21.2]]
           ],
           "meta": {"door": true, "hull": true, "edge": "w"}
         },
         {
           "type": "Polygon",
-          "coordinates": [[[30.1, 6.3], [30.1, 7.5], [29.9, 7.5], [29.9, 6.3]]],
+          "coordinates": [
+            [[0.1, 22.6], [0.1, 23.8], [-0.1, 23.8], [-0.1, 22.6]]
+          ],
+          "meta": {"door": true, "hull": true, "edge": "w"}
+        },
+        {
+          "type": "Polygon",
+          "coordinates": [[[30.1, 6.2], [30.1, 7.4], [29.9, 7.4], [29.9, 6.2]]],
           "meta": {"door": true, "hull": true, "edge": "e"}
         },
         {
           "type": "Polygon",
-          "coordinates": [[[30.1, 7.5], [30.1, 8.7], [29.9, 8.7], [29.9, 7.5]]],
+          "coordinates": [[[30.1, 7.6], [30.1, 8.8], [29.9, 8.8], [29.9, 7.6]]],
           "meta": {"door": true, "hull": true, "edge": "e"}
         },
         {
           "type": "Polygon",
           "coordinates": [
-            [[30.1, 21.3], [30.1, 22.5], [29.9, 22.5], [29.9, 21.3]]
+            [[30.1, 21.2], [30.1, 22.4], [29.9, 22.4], [29.9, 21.2]]
           ],
           "meta": {"door": true, "hull": true, "edge": "e"}
         },
         {
           "type": "Polygon",
           "coordinates": [
-            [[30.1, 22.5], [30.1, 23.7], [29.9, 23.7], [29.9, 22.5]]
+            [[30.1, 22.6], [30.1, 23.8], [29.9, 23.8], [29.9, 22.6]]
           ],
           "meta": {"door": true, "hull": true, "edge": "e"}
         },
         {
           "type": "Polygon",
-          "coordinates": [[[7.5, -0.1], [7.5, 0.1], [6.3, 0.1], [6.3, -0.1]]],
+          "coordinates": [[[7.4, -0.1], [7.4, 0.1], [6.2, 0.1], [6.2, -0.1]]],
           "meta": {"door": true, "hull": true, "edge": "n"}
         },
         {
           "type": "Polygon",
-          "coordinates": [[[8.7, -0.1], [8.7, 0.1], [7.5, 0.1], [7.5, -0.1]]],
+          "coordinates": [[[8.8, -0.1], [8.8, 0.1], [7.6, 0.1], [7.6, -0.1]]],
           "meta": {"door": true, "hull": true, "edge": "n"}
         },
         {
           "type": "Polygon",
           "coordinates": [
-            [[22.5, -0.1], [22.5, 0.1], [21.3, 0.1], [21.3, -0.1]]
+            [[22.4, -0.1], [22.4, 0.1], [21.2, 0.1], [21.2, -0.1]]
           ],
           "meta": {"door": true, "hull": true, "edge": "n"}
         },
         {
           "type": "Polygon",
           "coordinates": [
-            [[23.7, -0.1], [23.7, 0.1], [22.5, 0.1], [22.5, -0.1]]
+            [[23.8, -0.1], [23.8, 0.1], [22.6, 0.1], [22.6, -0.1]]
           ],
           "meta": {"door": true, "hull": true, "edge": "n"}
         },
         {
           "type": "Polygon",
-          "coordinates": [[[7.5, 29.9], [7.5, 30.1], [6.3, 30.1], [6.3, 29.9]]],
+          "coordinates": [[[7.4, 29.9], [7.4, 30.1], [6.2, 30.1], [6.2, 29.9]]],
           "meta": {"door": true, "hull": true, "edge": "s"}
         },
         {
           "type": "Polygon",
-          "coordinates": [[[8.7, 29.9], [8.7, 30.1], [7.5, 30.1], [7.5, 29.9]]],
-          "meta": {"door": true, "hull": true, "edge": "s"}
-        },
-        {
-          "type": "Polygon",
-          "coordinates": [
-            [[22.5, 29.9], [22.5, 30.1], [21.3, 30.1], [21.3, 29.9]]
-          ],
+          "coordinates": [[[8.8, 29.9], [8.8, 30.1], [7.6, 30.1], [7.6, 29.9]]],
           "meta": {"door": true, "hull": true, "edge": "s"}
         },
         {
           "type": "Polygon",
           "coordinates": [
-            [[23.7, 29.9], [23.7, 30.1], [22.5, 30.1], [22.5, 29.9]]
+            [[22.4, 29.9], [22.4, 30.1], [21.2, 30.1], [21.2, 29.9]]
+          ],
+          "meta": {"door": true, "hull": true, "edge": "s"}
+        },
+        {
+          "type": "Polygon",
+          "coordinates": [
+            [[23.8, 29.9], [23.8, 30.1], [22.6, 30.1], [22.6, 29.9]]
           ],
           "meta": {"door": true, "hull": true, "edge": "s"}
         },
@@ -3318,97 +3318,97 @@
       "doors": [
         {
           "type": "Polygon",
-          "coordinates": [[[0.1, 6.3], [0.1, 7.5], [-0.1, 7.5], [-0.1, 6.3]]],
+          "coordinates": [[[0.1, 6.2], [0.1, 7.4], [-0.1, 7.4], [-0.1, 6.2]]],
           "meta": {"door": true, "hull": true, "edge": "w"}
         },
         {
           "type": "Polygon",
-          "coordinates": [[[0.1, 7.5], [0.1, 8.7], [-0.1, 8.7], [-0.1, 7.5]]],
-          "meta": {"door": true, "hull": true, "edge": "w"}
-        },
-        {
-          "type": "Polygon",
-          "coordinates": [
-            [[0.1, 21.3], [0.1, 22.5], [-0.1, 22.5], [-0.1, 21.3]]
-          ],
+          "coordinates": [[[0.1, 7.6], [0.1, 8.8], [-0.1, 8.8], [-0.1, 7.6]]],
           "meta": {"door": true, "hull": true, "edge": "w"}
         },
         {
           "type": "Polygon",
           "coordinates": [
-            [[0.1, 22.5], [0.1, 23.7], [-0.1, 23.7], [-0.1, 22.5]]
+            [[0.1, 21.2], [0.1, 22.4], [-0.1, 22.4], [-0.1, 21.2]]
           ],
           "meta": {"door": true, "hull": true, "edge": "w"}
         },
         {
           "type": "Polygon",
-          "coordinates": [[[30.1, 6.3], [30.1, 7.5], [29.9, 7.5], [29.9, 6.3]]],
+          "coordinates": [
+            [[0.1, 22.6], [0.1, 23.8], [-0.1, 23.8], [-0.1, 22.6]]
+          ],
+          "meta": {"door": true, "hull": true, "edge": "w"}
+        },
+        {
+          "type": "Polygon",
+          "coordinates": [[[30.1, 6.2], [30.1, 7.4], [29.9, 7.4], [29.9, 6.2]]],
           "meta": {"door": true, "hull": true, "edge": "e"}
         },
         {
           "type": "Polygon",
-          "coordinates": [[[30.1, 7.5], [30.1, 8.7], [29.9, 8.7], [29.9, 7.5]]],
+          "coordinates": [[[30.1, 7.6], [30.1, 8.8], [29.9, 8.8], [29.9, 7.6]]],
           "meta": {"door": true, "hull": true, "edge": "e"}
         },
         {
           "type": "Polygon",
           "coordinates": [
-            [[30.1, 21.3], [30.1, 22.5], [29.9, 22.5], [29.9, 21.3]]
+            [[30.1, 21.2], [30.1, 22.4], [29.9, 22.4], [29.9, 21.2]]
           ],
           "meta": {"door": true, "hull": true, "edge": "e"}
         },
         {
           "type": "Polygon",
           "coordinates": [
-            [[30.1, 22.5], [30.1, 23.7], [29.9, 23.7], [29.9, 22.5]]
+            [[30.1, 22.6], [30.1, 23.8], [29.9, 23.8], [29.9, 22.6]]
           ],
           "meta": {"door": true, "hull": true, "edge": "e"}
         },
         {
           "type": "Polygon",
-          "coordinates": [[[7.5, -0.1], [7.5, 0.1], [6.3, 0.1], [6.3, -0.1]]],
+          "coordinates": [[[7.4, -0.1], [7.4, 0.1], [6.2, 0.1], [6.2, -0.1]]],
           "meta": {"door": true, "hull": true, "edge": "n"}
         },
         {
           "type": "Polygon",
-          "coordinates": [[[8.7, -0.1], [8.7, 0.1], [7.5, 0.1], [7.5, -0.1]]],
+          "coordinates": [[[8.8, -0.1], [8.8, 0.1], [7.6, 0.1], [7.6, -0.1]]],
           "meta": {"door": true, "hull": true, "edge": "n"}
         },
         {
           "type": "Polygon",
           "coordinates": [
-            [[22.5, -0.1], [22.5, 0.1], [21.3, 0.1], [21.3, -0.1]]
+            [[22.4, -0.1], [22.4, 0.1], [21.2, 0.1], [21.2, -0.1]]
           ],
           "meta": {"door": true, "hull": true, "edge": "n"}
         },
         {
           "type": "Polygon",
           "coordinates": [
-            [[23.7, -0.1], [23.7, 0.1], [22.5, 0.1], [22.5, -0.1]]
+            [[23.8, -0.1], [23.8, 0.1], [22.6, 0.1], [22.6, -0.1]]
           ],
           "meta": {"door": true, "hull": true, "edge": "n"}
         },
         {
           "type": "Polygon",
-          "coordinates": [[[7.5, 29.9], [7.5, 30.1], [6.3, 30.1], [6.3, 29.9]]],
+          "coordinates": [[[7.4, 29.9], [7.4, 30.1], [6.2, 30.1], [6.2, 29.9]]],
           "meta": {"door": true, "hull": true, "edge": "s"}
         },
         {
           "type": "Polygon",
-          "coordinates": [[[8.7, 29.9], [8.7, 30.1], [7.5, 30.1], [7.5, 29.9]]],
-          "meta": {"door": true, "hull": true, "edge": "s"}
-        },
-        {
-          "type": "Polygon",
-          "coordinates": [
-            [[22.5, 29.9], [22.5, 30.1], [21.3, 30.1], [21.3, 29.9]]
-          ],
+          "coordinates": [[[8.8, 29.9], [8.8, 30.1], [7.6, 30.1], [7.6, 29.9]]],
           "meta": {"door": true, "hull": true, "edge": "s"}
         },
         {
           "type": "Polygon",
           "coordinates": [
-            [[23.7, 29.9], [23.7, 30.1], [22.5, 30.1], [22.5, 29.9]]
+            [[22.4, 29.9], [22.4, 30.1], [21.2, 30.1], [21.2, 29.9]]
+          ],
+          "meta": {"door": true, "hull": true, "edge": "s"}
+        },
+        {
+          "type": "Polygon",
+          "coordinates": [
+            [[23.8, 29.9], [23.8, 30.1], [22.6, 30.1], [22.6, 29.9]]
           ],
           "meta": {"door": true, "hull": true, "edge": "s"}
         }
@@ -4115,45 +4115,45 @@
       "doors": [
         {
           "type": "Polygon",
-          "coordinates": [[[0.1, 6.3], [0.1, 7.5], [-0.1, 7.5], [-0.1, 6.3]]],
+          "coordinates": [[[0.1, 6.2], [0.1, 7.4], [-0.1, 7.4], [-0.1, 6.2]]],
           "meta": {"door": true, "hull": true, "edge": "w"}
         },
         {
           "type": "Polygon",
-          "coordinates": [[[0.1, 7.5], [0.1, 8.7], [-0.1, 8.7], [-0.1, 7.5]]],
+          "coordinates": [[[0.1, 7.6], [0.1, 8.8], [-0.1, 8.8], [-0.1, 7.6]]],
           "meta": {"door": true, "hull": true, "edge": "w"}
         },
         {
           "type": "Polygon",
-          "coordinates": [[[30.1, 6.3], [30.1, 7.5], [29.9, 7.5], [29.9, 6.3]]],
+          "coordinates": [[[30.1, 6.2], [30.1, 7.4], [29.9, 7.4], [29.9, 6.2]]],
           "meta": {"door": true, "hull": true, "edge": "e"}
         },
         {
           "type": "Polygon",
-          "coordinates": [[[30.1, 7.5], [30.1, 8.7], [29.9, 8.7], [29.9, 7.5]]],
+          "coordinates": [[[30.1, 7.6], [30.1, 8.8], [29.9, 8.8], [29.9, 7.6]]],
           "meta": {"door": true, "hull": true, "edge": "e"}
         },
         {
           "type": "Polygon",
-          "coordinates": [[[7.5, 14.9], [7.5, 15.1], [6.3, 15.1], [6.3, 14.9]]],
+          "coordinates": [[[7.4, 14.9], [7.4, 15.1], [6.2, 15.1], [6.2, 14.9]]],
           "meta": {"door": true, "hull": true, "edge": "s"}
         },
         {
           "type": "Polygon",
-          "coordinates": [[[8.7, 14.9], [8.7, 15.1], [7.5, 15.1], [7.5, 14.9]]],
+          "coordinates": [[[8.8, 14.9], [8.8, 15.1], [7.6, 15.1], [7.6, 14.9]]],
           "meta": {"door": true, "hull": true, "edge": "s"}
         },
         {
           "type": "Polygon",
           "coordinates": [
-            [[22.5, 14.9], [22.5, 15.1], [21.3, 15.1], [21.3, 14.9]]
+            [[22.4, 14.9], [22.4, 15.1], [21.2, 15.1], [21.2, 14.9]]
           ],
           "meta": {"door": true, "hull": true, "edge": "s"}
         },
         {
           "type": "Polygon",
           "coordinates": [
-            [[23.7, 14.9], [23.7, 15.1], [22.5, 15.1], [22.5, 14.9]]
+            [[23.8, 14.9], [23.8, 15.1], [22.6, 15.1], [22.6, 14.9]]
           ],
           "meta": {"door": true, "hull": true, "edge": "s"}
         },
@@ -4991,45 +4991,45 @@
       "doors": [
         {
           "type": "Polygon",
-          "coordinates": [[[0.1, 6.3], [0.1, 7.5], [-0.1, 7.5], [-0.1, 6.3]]],
+          "coordinates": [[[0.1, 6.2], [0.1, 7.4], [-0.1, 7.4], [-0.1, 6.2]]],
           "meta": {"door": true, "hull": true, "edge": "w"}
         },
         {
           "type": "Polygon",
-          "coordinates": [[[0.1, 7.5], [0.1, 8.7], [-0.1, 8.7], [-0.1, 7.5]]],
+          "coordinates": [[[0.1, 7.6], [0.1, 8.8], [-0.1, 8.8], [-0.1, 7.6]]],
           "meta": {"door": true, "hull": true, "edge": "w"}
         },
         {
           "type": "Polygon",
-          "coordinates": [[[30.1, 6.3], [30.1, 7.5], [29.9, 7.5], [29.9, 6.3]]],
+          "coordinates": [[[30.1, 6.2], [30.1, 7.4], [29.9, 7.4], [29.9, 6.2]]],
           "meta": {"door": true, "hull": true, "edge": "e"}
         },
         {
           "type": "Polygon",
-          "coordinates": [[[30.1, 7.5], [30.1, 8.7], [29.9, 8.7], [29.9, 7.5]]],
+          "coordinates": [[[30.1, 7.6], [30.1, 8.8], [29.9, 8.8], [29.9, 7.6]]],
           "meta": {"door": true, "hull": true, "edge": "e"}
         },
         {
           "type": "Polygon",
-          "coordinates": [[[7.5, 14.9], [7.5, 15.1], [6.3, 15.1], [6.3, 14.9]]],
+          "coordinates": [[[7.4, 14.9], [7.4, 15.1], [6.2, 15.1], [6.2, 14.9]]],
           "meta": {"door": true, "hull": true, "edge": "s"}
         },
         {
           "type": "Polygon",
-          "coordinates": [[[8.7, 14.9], [8.7, 15.1], [7.5, 15.1], [7.5, 14.9]]],
+          "coordinates": [[[8.8, 14.9], [8.8, 15.1], [7.6, 15.1], [7.6, 14.9]]],
           "meta": {"door": true, "hull": true, "edge": "s"}
         },
         {
           "type": "Polygon",
           "coordinates": [
-            [[22.5, 14.9], [22.5, 15.1], [21.3, 15.1], [21.3, 14.9]]
+            [[22.4, 14.9], [22.4, 15.1], [21.2, 15.1], [21.2, 14.9]]
           ],
           "meta": {"door": true, "hull": true, "edge": "s"}
         },
         {
           "type": "Polygon",
           "coordinates": [
-            [[23.7, 14.9], [23.7, 15.1], [22.5, 15.1], [22.5, 14.9]]
+            [[23.8, 14.9], [23.8, 15.1], [22.6, 15.1], [22.6, 14.9]]
           ],
           "meta": {"door": true, "hull": true, "edge": "s"}
         },
@@ -6033,45 +6033,45 @@
       "doors": [
         {
           "type": "Polygon",
-          "coordinates": [[[0.1, 6.3], [0.1, 7.5], [-0.1, 7.5], [-0.1, 6.3]]],
+          "coordinates": [[[0.1, 6.2], [0.1, 7.4], [-0.1, 7.4], [-0.1, 6.2]]],
           "meta": {"door": true, "hull": true, "edge": "w"}
         },
         {
           "type": "Polygon",
-          "coordinates": [[[0.1, 7.5], [0.1, 8.7], [-0.1, 8.7], [-0.1, 7.5]]],
+          "coordinates": [[[0.1, 7.6], [0.1, 8.8], [-0.1, 8.8], [-0.1, 7.6]]],
           "meta": {"door": true, "hull": true, "edge": "w"}
         },
         {
           "type": "Polygon",
-          "coordinates": [[[30.1, 6.3], [30.1, 7.5], [29.9, 7.5], [29.9, 6.3]]],
+          "coordinates": [[[30.1, 6.2], [30.1, 7.4], [29.9, 7.4], [29.9, 6.2]]],
           "meta": {"door": true, "hull": true, "edge": "e"}
         },
         {
           "type": "Polygon",
-          "coordinates": [[[30.1, 7.5], [30.1, 8.7], [29.9, 8.7], [29.9, 7.5]]],
+          "coordinates": [[[30.1, 7.6], [30.1, 8.8], [29.9, 8.8], [29.9, 7.6]]],
           "meta": {"door": true, "hull": true, "edge": "e"}
         },
         {
           "type": "Polygon",
-          "coordinates": [[[7.5, 14.9], [7.5, 15.1], [6.3, 15.1], [6.3, 14.9]]],
+          "coordinates": [[[7.4, 14.9], [7.4, 15.1], [6.2, 15.1], [6.2, 14.9]]],
           "meta": {"door": true, "hull": true, "edge": "s"}
         },
         {
           "type": "Polygon",
-          "coordinates": [[[8.7, 14.9], [8.7, 15.1], [7.5, 15.1], [7.5, 14.9]]],
+          "coordinates": [[[8.8, 14.9], [8.8, 15.1], [7.6, 15.1], [7.6, 14.9]]],
           "meta": {"door": true, "hull": true, "edge": "s"}
         },
         {
           "type": "Polygon",
           "coordinates": [
-            [[22.5, 14.9], [22.5, 15.1], [21.3, 15.1], [21.3, 14.9]]
+            [[22.4, 14.9], [22.4, 15.1], [21.2, 15.1], [21.2, 14.9]]
           ],
           "meta": {"door": true, "hull": true, "edge": "s"}
         },
         {
           "type": "Polygon",
           "coordinates": [
-            [[23.7, 14.9], [23.7, 15.1], [22.5, 15.1], [22.5, 14.9]]
+            [[23.8, 14.9], [23.8, 15.1], [22.6, 15.1], [22.6, 14.9]]
           ],
           "meta": {"door": true, "hull": true, "edge": "s"}
         },
