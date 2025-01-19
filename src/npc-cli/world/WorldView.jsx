@@ -361,7 +361,9 @@ export default function WorldView(props) {
         }
       });
       renderList.transparent.forEach(x => {
-        if (x.object.name === 'walls' && w.wall.opacity < 1) {
+        if (w.wall.opacity < 1 && (
+          x.object.name === 'walls' || x.object.name === 'multi-tex-ceiling'
+        )) {
           return;
         }
         if (hasObjectPickShaderMaterial(x)) {
