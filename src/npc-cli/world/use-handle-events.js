@@ -275,6 +275,7 @@ export default function useHandleEvents(w) {
           (state.npcToDoors[e.npcKey] ??= { inside: null, nearby: new Set() }).inside = offMesh.gdKey;
 
           // 🔔 avoid jerky other npc near src corner (slight penetration when other npc near dst)
+          // 🚧 put together with "switch off" at midpoint of offMeshConnection
           npc.agent?.updateParameters({ radius: npc.getRadius() * 0.5 });
 
           w.door.toggleDoorRaw(door, { open: true, access: true }); // force open door
@@ -287,9 +288,6 @@ export default function useHandleEvents(w) {
             x => x.npcKey !== e.npcKey
           );
           (state.npcToDoors[e.npcKey] ??= { inside: null, nearby: new Set() }).inside = null;
-          
-          npc.agent?.updateParameters({ radius: npc.getRadius() });
-
           // w.nav.navMesh.setPolyFlags(state.npcToOffMesh[e.npcKey].offMeshRef, w.lib.navPolyFlag.walkable);
           w.events.next({ key: 'enter-room', npcKey: e.npcKey, ...w.lib.getGmRoomId(e.offMesh.dstGrKey) });
           break;

@@ -689,6 +689,11 @@ export class Npc {
     const anim = /** @type {dtCrowdAgentAnimation} */ (this.agentAnim);
     offMesh.seg = anim.t < anim.tmid ? 'init' : 'main'; // also for external use?
 
+    // 🚧 only set once
+    if (anim.t >= 0.5 * (anim.tmid + anim.tmax)) {
+      agent.updateParameters({ radius: this.getRadius() });
+    }
+
     let dirX = 0, dirY = 0;
     if (offMesh.seg === 'init') {
       // 🤔 should init/main be unit vectors?
@@ -898,7 +903,7 @@ export class Npc {
   }
 }
 
-const staticMaxAcceleration = 4;
+const staticMaxAcceleration = 8;
 const movingMaxAcceleration = 8;
 const staticSeparationWeight = 2;
 const movingSeparationWeight = 0.5;

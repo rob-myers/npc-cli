@@ -102,7 +102,7 @@
     - ℹ️ this permits slight penetration on other side of offMeshConnection
 
 - 🚧 offMeshConnection multiple agent follow up
-  - can we smoothly de/increase npc radius?
+  - ℹ️ jerky when run from other side
 
 - remove event `way-point`
   - ℹ️ changing target does not correspond to reaching waypoint e.g. due to re-planning
