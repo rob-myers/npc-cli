@@ -1,6 +1,37 @@
 
 ## Bits and pieces
 
+### Bump versions in our branch of recast-navigation-js
+
+```sh
+# at recast-navigation-js repo root
+
+# generate changesets
+yarn change
+# bump respective versions
+yarn changeset version
+
+# 🔔 manually bump sub-versions
+
+# commit and push
+# e.g. branch feat/expose-off-mesh-anim
+# then finally:
+yarn publish
+
+# at npc-cli repo
+
+# bump package.json versions, e.g.
+# "@recast-navigation/core": "npm:@rob-myers/recast-navigation__core@0.38.4",
+# "@recast-navigation/generators": "npm:@rob-myers/recast-navigation__generators@0.38.4",
+# "@recast-navigation/three": "npm:@rob-myers/recast-navigation__three@0.38.4",
+# "@recast-navigation/wasm": "npm:@rob-myers/recast-navigation__wasm@0.38.4",
+
+# finally
+npm i
+
+```
+
+
 ### Get closest position relative ancestor 
 
 > https://css-irl.info/finding-an-elements-nearest-relative-positioned-ancestor/
