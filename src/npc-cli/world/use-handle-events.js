@@ -363,12 +363,6 @@ export default function useHandleEvents(w) {
         case "speech":
           w.menu.say(e.npcKey, e.speech);
           break;
-        case "way-point": {
-          if (e.index !== 0 && npc.position.distanceTo(npc.lastTarget) < 1.5) {
-            npc.s.lookSecs = 0.3; // 🔔 slower final turn
-          }
-          break;
-        }
       }
     },
     npcCanAccess(npcKey, gdKey) {

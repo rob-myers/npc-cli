@@ -367,10 +367,6 @@ multiSpawn
 ```sh
 npc events | filter 'x => x.key === "stopped-moving"'
 npc events | filter /stopped-moving/
-
-npc events | filter 'x => x.key === "way-point" && x.meta.key === "exit-room"'
-
-npc events | filter 'x => x.key === "way-point" && x.meta.key === "decor-collide"' | map 'x => x.meta.type'
 ```
 
 ```sh
