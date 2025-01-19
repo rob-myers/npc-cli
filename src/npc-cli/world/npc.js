@@ -301,6 +301,27 @@ export class Npc {
   }
 
   /**
+   * Recast-Detour does not handle collisions during offMeshConnection traversal,
+   * in particular during the initial segment (before actual connection).
+   * 
+   * Also, to get neighbours working during offMeshConnections, we modified
+   * dtCrowd::update to admit DT_CROWDAGENT_STATE_OFFMESH
+   * @param {NPC.CrowdAgent} agent
+   */
+  handleOffMeshConnectionCollisions(agent) {
+    const { nneis } = agent.raw;
+    for (let i = 0; i < nneis; i++) {
+      if (agent.raw.get_neis(i).dist < helper.defaults.radius) {
+        // cancel traversal
+        const agentAnim = this.w.crowd.raw.getAgentAnimation(agent.agentIndex);
+        agentAnim.set_active(false);
+        this.stopMoving();
+        break;
+      }
+    }
+  }
+
+  /**
    * Initialization we can do before mounting
    * @param {import('three-stdlib').GLTF & import('@react-three/fiber').ObjectMap} gltf
    */
@@ -387,7 +408,7 @@ export class Npc {
     this.s.lookSecs = 0.15;
 
     this.agent.updateParameters({
-      maxAcceleration,
+      maxAcceleration: movingMaxAcceleration,
       maxSpeed: this.getMaxSpeed(),
       radius: (this.s.run ? 3 : 2) * helper.defaults.radius, // reset
       collisionQueryRange: movingCollisionQueryRange,
@@ -395,6 +416,11 @@ export class Npc {
       queryFilterType: this.w.lib.queryFilterType.excludeDoors,
     });
     this.agent.requestMoveTarget(closest);
+
+    // prevents initially going through useless nearby offMeshConnection
+    // 🚧 only run this sometimes
+    this.agent.raw.set_targetReplan(true);
+
     this.s.target = this.lastTarget.copy(closest);
     const nextAct = this.s.run ? 'Run' : 'Walk';
     if (this.s.act !== nextAct) {
@@ -601,6 +627,10 @@ export class Npc {
       this.s.agentState = state;
     }
 
+    if (this.s.offMesh?.seg === 'init') {
+      this.handleOffMeshConnectionCollisions(agent);
+    }
+
     if (this.s.target === null) {
       return;
     }
@@ -647,7 +677,7 @@ export class Npc {
     
     const anim = /** @type {dtCrowdAgentAnimation} */ (this.agentAnim);
     offMesh.seg = anim.t < anim.tmid ? 'init' : 'main'; // also for external use?
-    
+
     let dirX = 0, dirY = 0;
     if (offMesh.seg === 'init') {
       // 🤔 should init/main be unit vectors?
@@ -815,7 +845,7 @@ export class Npc {
     this.s.lookAngleDst = null;
     this.agent.updateParameters({
       maxSpeed: this.getMaxSpeed() * 0.75,
-      maxAcceleration: maxAcceleration,
+      maxAcceleration: staticMaxAcceleration,
       updateFlags: defaultAgentUpdateFlags,
       radius: helper.defaults.radius,
       collisionQueryRange: staticCollisionQueryRange,
@@ -857,16 +887,17 @@ export class Npc {
   }
 }
 
-const maxAcceleration = 8;
+const staticMaxAcceleration = 8;
+const movingMaxAcceleration = 8;
 const staticSeparationWeight = 2;
 const movingCollisionQueryRange = 1.5;
-const staticCollisionQueryRange = 1;
+const staticCollisionQueryRange = 0.8;
 
 /** @type {Partial<import("@recast-navigation/core").CrowdAgentParams>} */
 export const crowdAgentParams = {
   radius: helper.defaults.radius, // 🔔 too large causes jerky collisions
   height: 1.5,
-  maxAcceleration: maxAcceleration,
+  maxAcceleration: staticMaxAcceleration,
   pathOptimizationRange: helper.defaults.radius * 30,
   collisionQueryRange: staticCollisionQueryRange,
   separationWeight: staticSeparationWeight,

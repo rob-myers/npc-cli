@@ -84,13 +84,30 @@
   - move `w.bubble.say` -> `w.e.say`
   - profile-1 has link listener
 
-- 🚧 hull doors -> two doors
+- ✅ hull doors -> two doors
   - ℹ️ to solve navigation issues relating to offMeshConnections
   - ✅ 301, 302, 303
   - ✅ 101, 102, 103
   - ✅ try small separation between doors
   - ✅ adjust door switches
   - ✅ fix z-fighting above hull doors
+
+- 🚧 prevent npc from going thru offMeshConnection initially when have to come straight back
+  - ℹ️ can trigger via far-off target in direction of very nearby offMeshConnection
+  - ℹ️ can fix via `this.agent.raw.set_targetReplan(true)` just after `requestMoveTarget`
+  - ✅ always replan immediately after request (fixes issue)
+  - 🚧 only replan when needed: early offMeshConnection + gmRoomGraph search
+
+- 🚧 avoid jerk when static npc on offMeshConnection and moving npc goes through it
+  - ℹ️ particularly bad in "corner" of hull doors
+  - ℹ️ made worse by replan, but happens regardless
+  - ❌ could have only one "small" door
+    - the problem also arises for other double doors and single doors e.g. 101 
+  - ❌ could detect when other npc nearby door is directly over and cancel traversal
+  - ✅ detect if penetrate nearby npcs and cancel traversal
+
+- remove event `way-point`
+  - ℹ️ changing target does not correspond to reaching waypoint e.g. due to re-planning
 
 - ✅ pre next.js migration
   - ✅ finish/close wip todos
