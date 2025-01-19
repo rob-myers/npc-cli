@@ -5,7 +5,7 @@ import { createDefaultTileCacheMeshProcess, dtIlog2, dtNextPow2, getBoundingBox,
 import { wallOutset } from "./const";
 import { range, toPrecision } from "./generic";
 import { geom } from "./geom";
-import { decompToXZGeometry } from "./three";
+import { decompToXZGeometry, toV3 } from "./three";
 import { helper } from "./helper";
 
 /**
@@ -18,7 +18,7 @@ export function computeGmInstanceMesh(gm) {
   mesh.updateMatrixWorld();
   
   const customAreaDefs = /** @type {NPC.TileCacheConvexAreaDef[]} */ ([]);
-  // gm.hullDoors.forEach(door => {
+  // gm.doors.forEach(door => {
   //   const poly = door.computeDoorway().applyMatrix(gm.matrix);
   //   customAreaDefs.push({
   //     areaId: 1,
