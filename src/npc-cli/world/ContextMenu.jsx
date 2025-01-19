@@ -277,7 +277,7 @@ function ContextMenuUi({ state: cm }) {
         >
           <option value="">no npc</option>
           {cm.selectNpcKeys.map(npcKey => 
-            <option value={npcKey}>{npcKey}</option>
+            <option key={npcKey} value={npcKey}>{npcKey}</option>
           )}
         </select>
 
