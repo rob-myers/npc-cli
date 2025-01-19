@@ -247,7 +247,8 @@ export default function useHandleEvents(w) {
           const conflictingTraversal = state.doorToOffMesh[offMesh.gdKey]?.findLast(other => 
             // opposite direction
             other.orig.srcGrKey !== offMesh.srcGrKey
-            // || other.seg === 'init' // hasn't reached main segment
+             // hasn't reached main segment
+            || other.seg === 'init'
             // || w.n[other.npcKey].position.distanceTo(npc.position) < 1.2 * npc.getRadius()
           );
 
@@ -276,7 +277,7 @@ export default function useHandleEvents(w) {
 
           // 🔔 avoid jerky other npc near src corner (slight penetration when other npc near dst)
           // 🚧 put together with "switch off" at midpoint of offMeshConnection
-          npc.agent?.updateParameters({ radius: npc.getRadius() * 0.5 });
+          npc.agent?.updateParameters({ radius: npc.getRadius() * 0.4 });
 
           w.door.toggleDoorRaw(door, { open: true, access: true }); // force open door
           w.events.next({ key: 'exit-room', npcKey: e.npcKey, ...w.lib.getGmRoomId(e.offMesh.srcGrKey) });

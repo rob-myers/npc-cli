@@ -323,7 +323,7 @@ export class Npc {
     let nei;
     for (let i = 0; i < nneis; i++) {
       nei = agent.raw.get_neis(i);
-      if (nei.dist < helper.defaults.radius * 0.8) {// cancel traversal
+      if (nei.dist < helper.defaults.radius * 0.7) {// cancel traversal
         const agentAnim = this.w.crowd.raw.getAgentAnimation(agent.agentIndex);
         agentAnim.set_active(false);
         this.stopMoving();

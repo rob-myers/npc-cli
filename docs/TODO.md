@@ -91,18 +91,13 @@
   - ✅ always replan immediately after request (fixes issue)
   - 🚧 only replan when needed: early offMeshConnection + gmRoomGraph search
 
-- ✅ avoid jerk when static npc on offMeshConnection and moving npc goes through it
-  - ℹ️ particularly bad in "corner" of hull doors
-  - ℹ️ made worse by replan, but happens regardless
-  - ❌ could have only one "small" door
-    - the problem also arises for other double doors and single doors e.g. 101 
-  - ❌ could detect when other npc nearby door is directly over and cancel traversal
-  - ✅ detect if penetrate nearby npcs and cancel traversal
-  - ✅ avoid jerk when pass nearby npc at corner by temp reducing radius
-    - ℹ️ this permits slight penetration on other side of offMeshConnection
-
 - 🚧 offMeshConnection multiple agent follow up
   - ℹ️ jerky when run from other side
+  - clean up "midpoint offMeshConnection radius change"
+  - small toilet: coinciding agents at dst
+    - forbid multiple npcs
+  - avoid runner catching up inside offMeshConnection
+    - forbid faster following slower
 
 - remove event `way-point`
   - ℹ️ changing target does not correspond to reaching waypoint e.g. due to re-planning
@@ -3548,3 +3543,13 @@ done
   - ✅ try small separation between doors
   - ✅ adjust door switches
   - ✅ fix z-fighting above hull doors
+
+- ✅ avoid jerk when static npc on offMeshConnection and moving npc goes through it
+  - ℹ️ particularly bad in "corner" of hull doors
+  - ℹ️ made worse by replan, but happens regardless
+  - ❌ could have only one "small" door
+    - the problem also arises for other double doors and single doors e.g. 101 
+  - ❌ could detect when other npc nearby door is directly over and cancel traversal
+  - ✅ detect if penetrate nearby npcs and cancel traversal
+  - ✅ avoid jerk when pass nearby npc at corner by temp reducing radius
+    - ℹ️ this permits slight penetration on other side of offMeshConnection
