@@ -275,7 +275,7 @@ export default function useHandleEvents(w) {
           (state.npcToDoors[e.npcKey] ??= { inside: null, nearby: new Set() }).inside = offMesh.gdKey;
 
           // 🔔 avoid jerky other npc near src corner (slight penetration when other npc near dst)
-          npc.agent?.updateParameters({ radius: npc.getRadius() / 2 });
+          npc.agent?.updateParameters({ radius: npc.getRadius() * 0.5 });
 
           w.door.toggleDoorRaw(door, { open: true, access: true }); // force open door
           w.events.next({ key: 'exit-room', npcKey: e.npcKey, ...w.lib.getGmRoomId(e.offMesh.srcGrKey) });

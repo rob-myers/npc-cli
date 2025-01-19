@@ -84,13 +84,6 @@
   - move `w.bubble.say` -> `w.e.say`
   - profile-1 has link listener
 
-- ✅ hull doors -> two doors
-  - ℹ️ to solve navigation issues relating to offMeshConnections
-  - ✅ 301, 302, 303
-  - ✅ 101, 102, 103
-  - ✅ try small separation between doors
-  - ✅ adjust door switches
-  - ✅ fix z-fighting above hull doors
 
 - 🚧 prevent npc from going thru offMeshConnection initially when have to come straight back
   - ℹ️ can trigger via far-off target in direction of very nearby offMeshConnection
@@ -108,123 +101,11 @@
   - ✅ avoid jerk when pass nearby npc at corner by temp reducing radius
     - ℹ️ this permits slight penetration on other side of offMeshConnection
 
+- 🚧 offMeshConnection multiple agent follow up
+  - can we smoothly de/increase npc radius?
+
 - remove event `way-point`
   - ℹ️ changing target does not correspond to reaching waypoint e.g. due to re-planning
-
-- ✅ pre next.js migration
-  - ✅ finish/close wip todos
-  - ✅ avoid stationary npc push through door
-    - ✅ create a queryFilter with a doorway excluded and prevent a single agent from moving through it
-    - ℹ️ `ch: 0.05` broke "door triangles"
-    - ℹ️ `cs: 0.9` fixed bridge symbol disconnected component
-    - ✅ npc.s.moving -> npc.s.target !== null
-    - ✅ moved "stationary agents" should trigger sensor
-    - ✅ on trigger nearby door, ensure excludeDoor queryFilter includes doors
-    - ✅ maintain excludeDoors query filter where seen doorways are excluded
-    - ✅ in case agent stops inside a door, prevent them from "moving aside" instead
-  - ✅ avoid spinning targetless NPCs
-    - collision could cause other to look but only at a "higher level of behaviour"
-  - ✅ support windows
-    - ✅ still need wall, implicit via window
-    - ✅ exclude complex outer window: `window` -> `external-window`
-    - ✅ fix object-pick
-    - ✅ can specify window structure via `y` and `h`
-    - ✅ Obstacles hmr not working i.e. onchange obstacle y=0 or y=0.5
-    - ✅ need top of low wall e.g. via obstacle in symbol `window--007--0x2.4`
-    - ✅ finish lab windows
-    - finish other windows
-  - ✅ touch indicator for mobile
-    - ℹ️ https://codepen.io/mike_hendriks/pen/JjoxrON
-    - ✅ cancel on move a bit
-    - ✅ clean into own component
-    - ✅ test on phone
-  - ✅ refactor ContextMenu as own component
-  - ✅ restyle ContextMenu
-  - ✅ ContextMenu has "select" with nearby npc keys
-  - ✅ ContextMenu moves in 3D
-    - fix click on ContextMenu
-    - fix right click on ContextMenu
-    - fix unfocus tab then click
-  - ✅ ContextMenu
-    - ✅ has close button
-    - ✅ has options panel
-    - ✅ start options panel
-      - ✅ has persist checkbox
-      - ✅ auto-close if persist checkbox not ticked
-        - ℹ️ see old `state.hide()`
-      - ✅ can toggle mini view
-      - ✅ SideNote "data root" should be World
-      - ❌ can choose left/right/top/bottom to not block door?
-        - ℹ️ too complex? e.g. doesn't
-    - ✅ has small sphere indicating contact point
-    - ✅ can track moving NPC?
-      - ✅ `w n.rob.m.group | w --stdin cm.track`
-      - ✅ `w cm.track`
-      - auto track npcs
-    - ❌ transparent for doors/walls when "behind contact normal"
-  - ✅ ContextMenu: resize -> lock
-  - ✅ ContextMenu: customize @react-three/drei Html
-    - ✅ create JavaScript projection
-    - ✅ expose object3d
-    - ✅ can force update
-    - ✅ can CSS animate scale
-  - ❌ ContextMenu: preserve open SideNote during HMR of Html3d
-    - ℹ️ happens because we root.unmount() in useLayoutEffect
-    - ℹ️ don't want to start caching roots per instance
-  - ❌ ContextMenu simplify "key values"
-    - ✅ switch decor have gdKey
-    - ❌ picked value, grKey, gdKey, symbolKey
-    - ❌ complex values optionally showable
-  - ✅ object-pick provides normal
-    - ✅ Walls material should be one-sided i.e. walls + lintels + windows
-    - ✅ compute lastDown.normal
-    - ✅ Decor quads
-      - ❌ material should be one-sided (subtle e.g. need to flip document icons)
-      - ✅ fix normal direction (flip) using camera direction
-    - ✅ Decor cuboids
-    - ✅ Doors should be two quads so get correct normal
-  - ✅ ContextMenu use circle instead of sphere
-  - ✅ fix 301 room 11 i.e. bridge room should be split in two
-  - ✅ ContextMenu has select with possible actions
-    - ✅ switches: can open doors
-    - ✅ switches: can close doors
-    - ✅ switches: can lock/unlock doors
-    - ✅ switch `inner` but not `secure` can be opened by anyone
-      - on leave room refresh ContextMenu
-    - ✅ npc in room with locked door can still leave
-    - ✅ BUG unlocked auto door
-      - ℹ️ trigger auto doors in case they've been manually closed
-    - ✅ BUG closed auto door
-      - ℹ️ trigger auto doors in case they've been manually closed
-    - ✅ ContextMenu strategy
-      - ✅ hide when camera normal has +ve dot product with normal
-      - ✅ list all npcs ever seen i.e. keep adding
-      - ✅ show actions independently of npc distance
-      - ✅ acts fail if npc too far
-      - ✅ acts fail if npc in another room
-      - ✅ if acts fail/succeed then coloured red/green
-      - ❌ can open/close directly from door
-        - cannot infer `meta.inner` unlike switches
-      - ℹ️ for Player would probably hide ContextMenu on exit room/area (via sensor)
-    - ✅ updateFromLastDown -> useHandleEvents
-  - ✅ long press do point: actual nav mesh may be strictly smaller
-    - ✅ from off-mesh closest point on nav mesh
-    - ✅ still seeing long-press issues on mobile e.g. to bed from floor
-  - ✅ meta.doPoint should be defined on all do points
-  - ✅ World shows closable message until `awaitWorld` resolves
-    - ℹ️ "connect a tty e.g. by clicking its tab then coming back"
-  - ❌ fix stationary npc without access trapped next to closed door
-    - no repro
-  - ✅ can turn transparent walls on/off
-  - ✅ ContextMenu: move "pin" inside pop-up
-  - ✅ assets.js also converts icon--* directly to PNGs and WEBPs
-  - ✅ ContextMenu: icons for open/close/lock/unlock
-  - fire event onchange agent neighbours
-    - ℹ️ could use it to reposition stationary npc (via process)
-  - stationary npcs should rotate a bit when they move out of the way
-    - ℹ️ use desiredVelocity to move ±5deg base direction
-  - ✅ auto-open accessible door earlier
-    - e.g. check up to two corners in this case
 
 - 🚧 integrate Viewer into blog
   - 🚧 screenshots in 1st blog
@@ -3543,3 +3424,127 @@ done
   - ✅ Fix npc speech height
     - ✅ change height offset onchange animation
     - ✅ walk/run/idle , ✅ sit, ✅ lie
+
+
+- ✅ pre next.js migration
+  - ✅ finish/close wip todos
+  - ✅ avoid stationary npc push through door
+    - ✅ create a queryFilter with a doorway excluded and prevent a single agent from moving through it
+    - ℹ️ `ch: 0.05` broke "door triangles"
+    - ℹ️ `cs: 0.9` fixed bridge symbol disconnected component
+    - ✅ npc.s.moving -> npc.s.target !== null
+    - ✅ moved "stationary agents" should trigger sensor
+    - ✅ on trigger nearby door, ensure excludeDoor queryFilter includes doors
+    - ✅ maintain excludeDoors query filter where seen doorways are excluded
+    - ✅ in case agent stops inside a door, prevent them from "moving aside" instead
+  - ✅ avoid spinning targetless NPCs
+    - collision could cause other to look but only at a "higher level of behaviour"
+  - ✅ support windows
+    - ✅ still need wall, implicit via window
+    - ✅ exclude complex outer window: `window` -> `external-window`
+    - ✅ fix object-pick
+    - ✅ can specify window structure via `y` and `h`
+    - ✅ Obstacles hmr not working i.e. onchange obstacle y=0 or y=0.5
+    - ✅ need top of low wall e.g. via obstacle in symbol `window--007--0x2.4`
+    - ✅ finish lab windows
+    - finish other windows
+  - ✅ touch indicator for mobile
+    - ℹ️ https://codepen.io/mike_hendriks/pen/JjoxrON
+    - ✅ cancel on move a bit
+    - ✅ clean into own component
+    - ✅ test on phone
+  - ✅ refactor ContextMenu as own component
+  - ✅ restyle ContextMenu
+  - ✅ ContextMenu has "select" with nearby npc keys
+  - ✅ ContextMenu moves in 3D
+    - fix click on ContextMenu
+    - fix right click on ContextMenu
+    - fix unfocus tab then click
+  - ✅ ContextMenu
+    - ✅ has close button
+    - ✅ has options panel
+    - ✅ start options panel
+      - ✅ has persist checkbox
+      - ✅ auto-close if persist checkbox not ticked
+        - ℹ️ see old `state.hide()`
+      - ✅ can toggle mini view
+      - ✅ SideNote "data root" should be World
+      - ❌ can choose left/right/top/bottom to not block door?
+        - ℹ️ too complex? e.g. doesn't
+    - ✅ has small sphere indicating contact point
+    - ✅ can track moving NPC?
+      - ✅ `w n.rob.m.group | w --stdin cm.track`
+      - ✅ `w cm.track`
+      - auto track npcs
+    - ❌ transparent for doors/walls when "behind contact normal"
+  - ✅ ContextMenu: resize -> lock
+  - ✅ ContextMenu: customize @react-three/drei Html
+    - ✅ create JavaScript projection
+    - ✅ expose object3d
+    - ✅ can force update
+    - ✅ can CSS animate scale
+  - ❌ ContextMenu: preserve open SideNote during HMR of Html3d
+    - ℹ️ happens because we root.unmount() in useLayoutEffect
+    - ℹ️ don't want to start caching roots per instance
+  - ❌ ContextMenu simplify "key values"
+    - ✅ switch decor have gdKey
+    - ❌ picked value, grKey, gdKey, symbolKey
+    - ❌ complex values optionally showable
+  - ✅ object-pick provides normal
+    - ✅ Walls material should be one-sided i.e. walls + lintels + windows
+    - ✅ compute lastDown.normal
+    - ✅ Decor quads
+      - ❌ material should be one-sided (subtle e.g. need to flip document icons)
+      - ✅ fix normal direction (flip) using camera direction
+    - ✅ Decor cuboids
+    - ✅ Doors should be two quads so get correct normal
+  - ✅ ContextMenu use circle instead of sphere
+  - ✅ fix 301 room 11 i.e. bridge room should be split in two
+  - ✅ ContextMenu has select with possible actions
+    - ✅ switches: can open doors
+    - ✅ switches: can close doors
+    - ✅ switches: can lock/unlock doors
+    - ✅ switch `inner` but not `secure` can be opened by anyone
+      - on leave room refresh ContextMenu
+    - ✅ npc in room with locked door can still leave
+    - ✅ BUG unlocked auto door
+      - ℹ️ trigger auto doors in case they've been manually closed
+    - ✅ BUG closed auto door
+      - ℹ️ trigger auto doors in case they've been manually closed
+    - ✅ ContextMenu strategy
+      - ✅ hide when camera normal has +ve dot product with normal
+      - ✅ list all npcs ever seen i.e. keep adding
+      - ✅ show actions independently of npc distance
+      - ✅ acts fail if npc too far
+      - ✅ acts fail if npc in another room
+      - ✅ if acts fail/succeed then coloured red/green
+      - ❌ can open/close directly from door
+        - cannot infer `meta.inner` unlike switches
+      - ℹ️ for Player would probably hide ContextMenu on exit room/area (via sensor)
+    - ✅ updateFromLastDown -> useHandleEvents
+  - ✅ long press do point: actual nav mesh may be strictly smaller
+    - ✅ from off-mesh closest point on nav mesh
+    - ✅ still seeing long-press issues on mobile e.g. to bed from floor
+  - ✅ meta.doPoint should be defined on all do points
+  - ✅ World shows closable message until `awaitWorld` resolves
+    - ℹ️ "connect a tty e.g. by clicking its tab then coming back"
+  - ❌ fix stationary npc without access trapped next to closed door
+    - no repro
+  - ✅ can turn transparent walls on/off
+  - ✅ ContextMenu: move "pin" inside pop-up
+  - ✅ assets.js also converts icon--* directly to PNGs and WEBPs
+  - ✅ ContextMenu: icons for open/close/lock/unlock
+  - fire event onchange agent neighbours
+    - ℹ️ could use it to reposition stationary npc (via process)
+  - stationary npcs should rotate a bit when they move out of the way
+    - ℹ️ use desiredVelocity to move ±5deg base direction
+  - ✅ auto-open accessible door earlier
+    - e.g. check up to two corners in this case
+
+- ✅ hull doors -> two doors
+  - ℹ️ to solve navigation issues relating to offMeshConnections
+  - ✅ 301, 302, 303
+  - ✅ 101, 102, 103
+  - ✅ try small separation between doors
+  - ✅ adjust door switches
+  - ✅ fix z-fighting above hull doors

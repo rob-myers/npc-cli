@@ -292,8 +292,17 @@ export class Npc {
     return this.position;
   }
 
+  /**
+   * Radius depends on whether idle, walking or running.
+   */
   getRadius() {
-    return helper.defaults.radius;
+    if (this.s.target === null) {
+      return helper.defaults.radius;
+    } else if (this.s.run === true) {
+      return helper.defaults.radius * 3;
+    } else {
+      return helper.defaults.radius * 2;
+    }
   }
 
   getMaxSpeed() {
@@ -314,7 +323,7 @@ export class Npc {
     let nei;
     for (let i = 0; i < nneis; i++) {
       nei = agent.raw.get_neis(i);
-      if (nei.dist < helper.defaults.radius) {// cancel traversal
+      if (nei.dist < helper.defaults.radius * 0.8) {// cancel traversal
         const agentAnim = this.w.crowd.raw.getAgentAnimation(agent.agentIndex);
         agentAnim.set_active(false);
         this.stopMoving();
