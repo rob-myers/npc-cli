@@ -98,6 +98,8 @@
     - forbid multiple npcs
   - avoid runner catching up inside offMeshConnection
     - forbid faster following slower
+  - only block npc if "door has nearby corners"
+    - e.g. hull doors, various doors in 101
 
 - remove event `way-point`
   - ℹ️ changing target does not correspond to reaching waypoint e.g. due to re-planning

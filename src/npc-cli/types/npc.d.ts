@@ -225,7 +225,10 @@ declare namespace NPC {
     npcKey: string;
     /** Original connection */
     orig: OffMeshLookupValue;
-    /** The `init` segment leads from npc's current position to the `main` segment (src, dst)  */
+    /**
+     * The current segment.
+     * The `init` segment leads from npc's current position to the `main` segment (src, dst).
+     */
     seg: 'init' | 'main';
     /** Segment from "initial npc position" to "offMeshConnection src" */
     init: Geom.VectJson;
