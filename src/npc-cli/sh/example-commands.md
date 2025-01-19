@@ -1,6 +1,8 @@
 # Examples of commands
 
-🚧 update/remove commands from prev npc-cli
+🚧 needs a clean!
+🚧 e.g. separate abstract tty vs npc
+
 
 ```sh
 # directly invoking native functions
@@ -94,6 +96,7 @@ test $( call 'x => x.home.d === 0' )
 # example of bounded loop
 seq 29 | map '(x, {w}) => w.c.say(`rob_${x}`, "yoyoyoy")'
 
+w npc.remove rob_{0..10}
 ```
 
 ```sh

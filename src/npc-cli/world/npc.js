@@ -309,10 +309,12 @@ export class Npc {
    * @param {NPC.CrowdAgent} agent
    */
   handleOffMeshConnectionCollisions(agent) {
-    const { nneis } = agent.raw;
+    const nneis  = agent.raw.nneis;
+    /** @type {import('@recast-navigation/wasm').default.dtCrowdNeighbour} */
+    let nei;
     for (let i = 0; i < nneis; i++) {
-      if (agent.raw.get_neis(i).dist < helper.defaults.radius) {
-        // cancel traversal
+      nei = agent.raw.get_neis(i);
+      if (nei.dist < helper.defaults.radius) {// cancel traversal
         const agentAnim = this.w.crowd.raw.getAgentAnimation(agent.agentIndex);
         agentAnim.set_active(false);
         this.stopMoving();
@@ -412,7 +414,7 @@ export class Npc {
       maxSpeed: this.getMaxSpeed(),
       radius: (this.s.run ? 3 : 2) * helper.defaults.radius, // reset
       collisionQueryRange: movingCollisionQueryRange,
-      separationWeight: 0.4,
+      separationWeight: movingSeparationWeight,
       queryFilterType: this.w.lib.queryFilterType.excludeDoors,
     });
     this.agent.requestMoveTarget(closest);
@@ -887,11 +889,12 @@ export class Npc {
   }
 }
 
-const staticMaxAcceleration = 8;
+const staticMaxAcceleration = 4;
 const movingMaxAcceleration = 8;
 const staticSeparationWeight = 2;
+const movingSeparationWeight = 0.5;
 const movingCollisionQueryRange = 1.5;
-const staticCollisionQueryRange = 0.8;
+const staticCollisionQueryRange = 1;
 
 /** @type {Partial<import("@recast-navigation/core").CrowdAgentParams>} */
 export const crowdAgentParams = {

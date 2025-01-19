@@ -244,17 +244,14 @@ export default function useHandleEvents(w) {
           const { offMesh } = e;
           const door = w.door.byKey[offMesh.gdKey];
           
-          /** Most recent user of offMeshConnection (if any) */
-          const other = state.doorToOffMesh[offMesh.gdKey]?.findLast(x =>
-            x.orig.key === offMesh.key || x.orig.key === offMesh.reverseKey
-          );
-          const doorInUse = other !== undefined && (
-            other.orig !== offMesh // opposite direction
-            || other.seg === 'init' // other hasn't reached main segment
-            || w.n[other.npcKey].position.distanceTo(npc.position) < 1.2 * npc.getRadius()
+          const conflictingTraversal = state.doorToOffMesh[offMesh.gdKey]?.findLast(other => 
+            // opposite direction
+            other.orig.srcGrKey !== offMesh.srcGrKey
+            // || other.seg === 'init' // hasn't reached main segment
+            // || w.n[other.npcKey].position.distanceTo(npc.position) < 1.2 * npc.getRadius()
           );
 
-          if (doorInUse || (
+          if (conflictingTraversal !== undefined || (
             door.open === false &&
             state.toggleDoor(offMesh.gdKey, { open: true, npcKey: e.npcKey }) === false
           )) {
@@ -277,6 +274,9 @@ export default function useHandleEvents(w) {
           (state.doorToOffMesh[offMesh.gdKey] ??= []).push(npc.s.offMesh);
           (state.npcToDoors[e.npcKey] ??= { inside: null, nearby: new Set() }).inside = offMesh.gdKey;
 
+          // 🔔 avoid jerky other npc near src corner (slight penetration when other npc near dst)
+          npc.agent?.updateParameters({ radius: npc.getRadius() / 2 });
+
           w.door.toggleDoorRaw(door, { open: true, access: true }); // force open door
           w.events.next({ key: 'exit-room', npcKey: e.npcKey, ...w.lib.getGmRoomId(e.offMesh.srcGrKey) });
           break;
@@ -288,6 +288,8 @@ export default function useHandleEvents(w) {
           );
           (state.npcToDoors[e.npcKey] ??= { inside: null, nearby: new Set() }).inside = null;
           
+          npc.agent?.updateParameters({ radius: npc.getRadius() });
+
           // w.nav.navMesh.setPolyFlags(state.npcToOffMesh[e.npcKey].offMeshRef, w.lib.navPolyFlag.walkable);
           w.events.next({ key: 'enter-room', npcKey: e.npcKey, ...w.lib.getGmRoomId(e.offMesh.dstGrKey) });
           break;
