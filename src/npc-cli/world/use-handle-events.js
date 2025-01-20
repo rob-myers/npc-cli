@@ -240,59 +240,12 @@ export default function useHandleEvents(w) {
             state.onExitDoorCollider(e);
           }
           break;
-        case "enter-off-mesh": {
-          const { offMesh } = e;
-          const door = w.door.byKey[offMesh.gdKey];
-          
-          const conflictingTraversal = state.doorToOffMesh[offMesh.gdKey]?.findLast(other => 
-            // opposite direction
-            other.orig.srcGrKey !== offMesh.srcGrKey
-             // hasn't reached main segment
-            || other.seg === 'init'
-            // || w.n[other.npcKey].position.distanceTo(npc.position) < 1.2 * npc.getRadius()
-          );
-
-          if (conflictingTraversal !== undefined || (
-            door.open === false &&
-            state.toggleDoor(offMesh.gdKey, { open: true, npcKey: e.npcKey }) === false
-          )) {
-            // cancel traversal
-            const agent = /** @type {NPC.CrowdAgent} */ (npc.agent);
-            const agentAnim = w.crowd.raw.getAgentAnimation(agent.agentIndex);
-            agentAnim.set_active(false);
-            npc.stopMoving();
-            return;
-          }
-          
-          // register traversal
-          npc.s.offMesh = {
-            npcKey: e.npcKey,
-            seg: 'init',
-            init: { x: offMesh.src.x - npc.position.x, y: offMesh.src.z - npc.position.z },
-            main: { x: offMesh.dst.x - offMesh.src.x, y: offMesh.dst.z - offMesh.src.z },
-            orig: offMesh,
-          };
-          (state.doorToOffMesh[offMesh.gdKey] ??= []).push(npc.s.offMesh);
-          (state.npcToDoors[e.npcKey] ??= { inside: null, nearby: new Set() }).inside = offMesh.gdKey;
-
-          // 🔔 avoid jerky other npc near src corner (slight penetration when other npc near dst)
-          // 🚧 put together with "switch off" at midpoint of offMeshConnection
-          npc.agent?.updateParameters({ radius: npc.getRadius() * 0.4 });
-
-          w.door.toggleDoorRaw(door, { open: true, access: true }); // force open door
-          w.events.next({ key: 'exit-room', npcKey: e.npcKey, ...w.lib.getGmRoomId(e.offMesh.srcGrKey) });
+        case "enter-off-mesh":
+          state.onEnterOffMeshConnection(e, npc);
           break;
-        }
-        case "exit-off-mesh": {
-          npc.s.offMesh = null;
-          state.doorToOffMesh[e.offMesh.gdKey] = state.doorToOffMesh[e.offMesh.gdKey].filter(
-            x => x.npcKey !== e.npcKey
-          );
-          (state.npcToDoors[e.npcKey] ??= { inside: null, nearby: new Set() }).inside = null;
-          // w.nav.navMesh.setPolyFlags(state.npcToOffMesh[e.npcKey].offMeshRef, w.lib.navPolyFlag.walkable);
-          w.events.next({ key: 'enter-room', npcKey: e.npcKey, ...w.lib.getGmRoomId(e.offMesh.dstGrKey) });
+        case "exit-off-mesh":
+          state.onExitOffMeshConnection(e, npc);
           break;
-        }
         case "enter-room": {
           const { npcKey, gmId, roomId, grKey } = e;
           state.npcToRoom.set(npcKey, { gmId, roomId, grKey });
@@ -397,6 +350,48 @@ export default function useHandleEvents(w) {
         return; // opened auto unlocked door
       }
     },
+    onEnterOffMeshConnection(e, npc) {
+      const { offMesh } = e;
+      const door = w.door.byKey[offMesh.gdKey];
+      
+      const conflictingTraversal = state.doorToOffMesh[offMesh.gdKey]?.findLast(other => 
+        // opposite direction
+        other.orig.srcGrKey !== offMesh.srcGrKey
+          // hasn't reached main segment
+        || other.seg === 'init'
+        // || w.n[other.npcKey].position.distanceTo(npc.position) < 1.2 * npc.getRadius()
+      );
+
+      if (conflictingTraversal !== undefined || (
+        door.open === false &&
+        state.toggleDoor(offMesh.gdKey, { open: true, npcKey: e.npcKey }) === false
+      )) {
+        // cancel traversal
+        const agent = /** @type {NPC.CrowdAgent} */ (npc.agent);
+        const agentAnim = w.crowd.raw.getAgentAnimation(agent.agentIndex);
+        agentAnim.set_active(false);
+        npc.stopMoving();
+        return;
+      }
+      
+      // register traversal
+      npc.s.offMesh = {
+        npcKey: e.npcKey,
+        seg: 'init',
+        init: { x: offMesh.src.x - npc.position.x, y: offMesh.src.z - npc.position.z },
+        main: { x: offMesh.dst.x - offMesh.src.x, y: offMesh.dst.z - offMesh.src.z },
+        orig: offMesh,
+      };
+      (state.doorToOffMesh[offMesh.gdKey] ??= []).push(npc.s.offMesh);
+      (state.npcToDoors[e.npcKey] ??= { inside: null, nearby: new Set() }).inside = offMesh.gdKey;
+
+      // 🔔 avoid jerky other npc near src corner (slight penetration when other npc near dst)
+      // 🚧 put together with "switch off" at midpoint of offMeshConnection
+      npc.agent?.updateParameters({ radius: npc.getRadius() * 0.4 });
+
+      w.door.toggleDoorRaw(door, { open: true, access: true }); // force open door
+      w.events.next({ key: 'exit-room', npcKey: e.npcKey, ...w.lib.getGmRoomId(e.offMesh.srcGrKey) });
+    },
     onExitDoorCollider(e) {// e.type === 'nearby'
       const door = w.door.byKey[e.gdKey];
 
@@ -413,6 +408,15 @@ export default function useHandleEvents(w) {
         // if auto and none nearby, try close 
         state.tryCloseDoor(door.gmId, door.doorId);
       }
+    },
+    onExitOffMeshConnection(e, npc) {
+      npc.s.offMesh = null;
+      state.doorToOffMesh[e.offMesh.gdKey] = state.doorToOffMesh[e.offMesh.gdKey].filter(
+        x => x.npcKey !== e.npcKey
+      );
+      (state.npcToDoors[e.npcKey] ??= { inside: null, nearby: new Set() }).inside = null;
+      // w.nav.navMesh.setPolyFlags(state.npcToOffMesh[e.npcKey].offMeshRef, w.lib.navPolyFlag.walkable);
+      w.events.next({ key: 'enter-room', npcKey: e.npcKey, ...w.lib.getGmRoomId(e.offMesh.dstGrKey) });
     },
     onPointerUpMenuDesktop(e) {
       if (e.rmb && e.distancePx <= 5) {
@@ -541,7 +545,9 @@ export default function useHandleEvents(w) {
  * @property {(e: NPC.Event) => void} handleEvents
  * @property {(e: Extract<NPC.Event, { npcKey?: string }>) => void} handleNpcEvents
  * @property {(e: Extract<NPC.Event, { key: 'enter-collider'; type: 'nearby' }>) => void} onEnterDoorCollider
+ * @property {(e: Extract<NPC.Event, { key: 'enter-off-mesh' }>, npc: NPC.NPC) => void} onEnterOffMeshConnection
  * @property {(e: Extract<NPC.Event, { key: 'exit-collider'; type: 'nearby' }>) => void} onExitDoorCollider
+ * @property {(e: Extract<NPC.Event, { key: 'exit-off-mesh' }>, npc: NPC.NPC) => void} onExitOffMeshConnection
  * @property {(npcKey: string, gdKey: Geomorph.GmDoorKey) => boolean} npcNearDoor
  * @property {(e: NPC.PointerUpEvent) => void} onPointerUpMenuDesktop
  * @property {(npcKey: string) => void} removeFromSensors

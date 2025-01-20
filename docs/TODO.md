@@ -91,8 +91,8 @@
   - ℹ️ can fix via `this.agent.raw.set_targetReplan(true)` just after `requestMoveTarget`
   - ✅ always replan immediately after request (fixes issue)
   - 🚧 only replan when needed
-    - early offMeshConnection
-    - room not current nor adjacent
+    - 🚧 early offMeshConnection
+    - 🚧 room not current nor adjacent
     - gmRoomGraph search (?)
 
 - 🚧 offMeshConnection multiple agent follow up
