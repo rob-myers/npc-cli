@@ -424,7 +424,7 @@ export class Npc {
 
     // prevents initially going through useless nearby offMeshConnection
     // 🚧 only run this sometimes
-    this.agent.raw.set_targetReplan(true);
+    // this.agent.raw.set_targetReplan(true);
 
     this.s.target = this.lastTarget.copy(closest);
     const nextAct = this.s.run ? 'Run' : 'Walk';

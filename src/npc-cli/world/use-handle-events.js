@@ -316,6 +316,11 @@ export default function useHandleEvents(w) {
         case "speech":
           w.menu.say(e.npcKey, e.speech);
           break;
+        case "started-moving":
+          // 🚧 avoid initial incorrect offMeshConnection traversal
+          // 🚧 replan whenever (a) nearby some door, (b) dst gmRoomId not current one or adjacent
+          npc.agent?.raw.set_targetReplan(true);
+          break;
       }
     },
     npcCanAccess(npcKey, gdKey) {
@@ -353,11 +358,11 @@ export default function useHandleEvents(w) {
     onEnterOffMeshConnection(e, npc) {
       const { offMesh } = e;
       const door = w.door.byKey[offMesh.gdKey];
-      
+
       const conflictingTraversal = state.doorToOffMesh[offMesh.gdKey]?.findLast(other => 
         // opposite direction
         other.orig.srcGrKey !== offMesh.srcGrKey
-          // hasn't reached main segment
+        // hasn't reached main segment
         || other.seg === 'init'
         // || w.n[other.npcKey].position.distanceTo(npc.position) < 1.2 * npc.getRadius()
       );
