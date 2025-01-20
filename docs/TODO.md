@@ -74,6 +74,7 @@
     - 🚧 mobile drag disabled by default
     - PopUp has sliders
   - ContextMenu: prevent link action when drag (again)
+  - ContextMenu should remember docked position
   - Logger/ContextMenu z-index changes onclick
   - Draggables are sticky e.g. to bottom, to right
   - Still seeing flicker on change "embed" -> "docked" on mobile
@@ -100,9 +101,6 @@
     - forbid faster following slower
   - only block npc if "door has nearby corners"
     - e.g. hull doors, various doors in 101
-
-- ✅ remove event `way-point`
-  - ℹ️ changing target does not correspond to reaching waypoint e.g. due to re-planning
 
 - 🚧 integrate Viewer into blog
   - 🚧 screenshots in 1st blog
@@ -3555,3 +3553,6 @@ done
   - ✅ detect if penetrate nearby npcs and cancel traversal
   - ✅ avoid jerk when pass nearby npc at corner by temp reducing radius
     - ℹ️ this permits slight penetration on other side of offMeshConnection
+
+- ✅ remove event `way-point`
+  - ℹ️ changing target does not correspond to reaching waypoint e.g. due to re-planning
