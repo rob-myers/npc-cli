@@ -90,16 +90,20 @@
   - ℹ️ can trigger via far-off target in direction of very nearby offMeshConnection
   - ℹ️ can fix via `this.agent.raw.set_targetReplan(true)` just after `requestMoveTarget`
   - ✅ always replan immediately after request (fixes issue)
-  - 🚧 only replan when needed: early offMeshConnection + gmRoomGraph search
+  - 🚧 only replan when needed
+    - early offMeshConnection
+    - room not current nor adjacent
+    - gmRoomGraph search (?)
 
 - 🚧 offMeshConnection multiple agent follow up
   - ℹ️ jerky when run from other side
-  - clean up "midpoint offMeshConnection radius change"
-  - small toilet: coinciding agents at dst
-    - forbid multiple npcs
+  - clean "midpoint offMeshConnection radius change"
+  - avoid coinciding agents at offMeshConnection dst in small rooms
+    - ℹ️ e.g. small toilet
+    - forbid multiple npcs in small rooms
   - avoid runner catching up inside offMeshConnection
     - forbid faster following slower
-  - only block npc if "door has nearby corners"
+  - ❌ only block npc if "door has nearby corners"
     - e.g. hull doors, various doors in 101
 
 - 🚧 integrate Viewer into blog
@@ -119,7 +123,7 @@
 
 ### On hold
 
-- inconsistent symbol ids e.g. 301--hull.svg vs 302--hull.svg, decor-unit-quad
+- ✅ inconsistent symbol ids e.g. 301--hull.svg vs 302--hull.svg, decor-unit-quad
 - isolated hull doors should be locked
 - strategy for dealing with "stuck at 0 velocity"
   - ℹ️ arises from conflicting separationWeights
