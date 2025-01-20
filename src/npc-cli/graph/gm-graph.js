@@ -437,9 +437,7 @@ export class GmGraphClass extends BaseGraph {
        * may contain multiple disjoint navmeshes e.g. 102
        */
       ...gms.flatMap((gm, gmId) =>
-        /**
-         * 🚧 pre-compute navPolyWithDoors rects and hullDoor intersections
-         */
+        // 🚧 pre-compute navPolyWithDoors rects and hullDoor intersections
         gm.navRects.map(/** @returns {Graph.GmGraphNodeGm} */ (navRect, navRectId) => ({
           type: 'gm',
           gmKey: gm.key,
@@ -451,9 +449,8 @@ export class GmGraphClass extends BaseGraph {
           rect: navRect.clone().applyMatrix(gm.matrix),
 
           ...createBaseAstar({
-            // could change this when starting/ending at a specific geomorph
-            centroid: gm.matrix.transformPoint(gm.pngRect.center),
             // neighbours populated further below
+            centroid: gm.matrix.transformPoint(gm.pngRect.center),
           }),
           index: index++,
         }))

@@ -1,4 +1,4 @@
-import { BaseGraph } from "./base-graph";
+import { BaseGraph, createBaseAstar } from "./base-graph";
 import { helper } from "../service/helper";
 
 /**
@@ -27,13 +27,22 @@ export class GmRoomGraphClass extends BaseGraph {
    */
   static fromGmGraph(gmGraph, gmsData) {
     const graph = new GmRoomGraphClass();
+    /** Index into nodesArray */
+    let index = 0;
 
     /** @type {Graph.GmRoomGraphNode[]} */
     const nodes = gmGraph.gms.flatMap((gm, gmId) =>
-      gm.rooms.map((_, roomId) => ({
+      gm.rooms.map((room, roomId) => ({
         id: helper.getGmRoomKey(gmId, roomId),
         gmId,
         roomId,
+
+        ...createBaseAstar({
+          // 🚧 center needn't be in non-convex room
+          // neighbours populated further below
+          centroid: gm.matrix.transformPoint(room.center),
+        }),
+        index: index++,
       }))
     );
 
@@ -102,6 +111,11 @@ export class GmRoomGraphClass extends BaseGraph {
         }
       })
     });
+
+    // Populate node.astar.neighbours
+    graph.edgesArray.forEach(({ src, dst }) =>
+      src.astar.neighbours.push(dst.index)
+    );
 
     return graph;
   }

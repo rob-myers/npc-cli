@@ -190,11 +190,12 @@ export class BaseGraph {
   }
 
   /**
-   * 
+   * https://dreampuf.github.io/GraphvizOnline/?engine=dot
+   * https://dreampuf.github.io/GraphvizOnline/?engine=fdp
    * @param {string} graphName 
    * @param {(edge: Edge) => string | null} [edgeLabel] 
    */
-  getGraphviz(graphName, edgeLabel = () => null) {
+  getGraphviz(graphName = 'graph1', edgeLabel = () => null) {
     return `
 digraph ${graphName} {
   
