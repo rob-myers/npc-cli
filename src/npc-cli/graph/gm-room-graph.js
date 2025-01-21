@@ -2,23 +2,10 @@ import { BaseGraph, createBaseAstar } from "./base-graph";
 import { helper } from "../service/helper";
 
 /**
+ * Node keys are `Geomorph.GmRoomKeygm`s e.g. `g0r2`.
  * @extends {BaseGraph<Graph.GmRoomGraphNode, Graph.GmRoomGraphEdgeOpts>}
  */
 export class GmRoomGraphClass extends BaseGraph {
-
-  /**
-   * `gmNodeOffset[gmId]` is index of 1st node originally from `gmId`
-   * @type {number[]}
-   */
-  gmNodeOffset = [];
-
-  /**
-   * @param {number} gmId 
-   * @param {number} roomId 
-   */
-  getNode(gmId, roomId) {
-    return this.nodesArray[this.gmNodeOffset[gmId] + roomId];
-  }
 
   /**
    * @param {Graph.GmGraph} gmGraph
@@ -45,12 +32,6 @@ export class GmRoomGraphClass extends BaseGraph {
         index: index++,
       }))
     );
-
-    // For fast node lookup
-    graph.gmNodeOffset = gmGraph.gms.reduce((agg, gm, gmId) => {
-      agg[gmId + 1] = agg[gmId] + gm.rooms.length;
-      return agg;
-    }, /** @type {typeof graph.gmNodeOffset} */ ([0]));
 
     graph.registerNodes(nodes);
     const { lib } = gmGraph.w;
@@ -118,5 +99,19 @@ export class GmRoomGraphClass extends BaseGraph {
     );
 
     return graph;
+  }
+
+  /**
+   * 
+   * @param {Geomorph.GmRoomKey} grKey1 
+   * @param {Geomorph.GmRoomKey} grKey2 
+   */
+  sameOrAdjRooms(grKey1, grKey2) {
+    if (grKey1 === grKey2) {
+      return true;
+    }
+    const src = /** @type {Graph.GmRoomGraphNode} */ (this.getNodeById(grKey1));
+    const dst = /** @type {Graph.GmRoomGraphNode} */ (this.getNodeById(grKey2));
+    return this.succ.get(src)?.get(dst) !== undefined;
   }
 }

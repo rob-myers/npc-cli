@@ -190,7 +190,7 @@ declare namespace Graph {
 
   interface GmRoomGraphNode extends AStarNode {
     /** `g{gmId}-r{roomId}` */
-    id: string;
+    id: Geomorph.GmRoomKey;
     gmId: number;
     roomId: number;
 
