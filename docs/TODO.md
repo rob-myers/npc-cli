@@ -91,13 +91,20 @@
   - ℹ️ can fix via `this.agent.raw.set_targetReplan(true)` just after `requestMoveTarget`
   - ✅ always replan immediately after request (fixes issue)
   - ✅ only initially replan when needed
-    - ✅ store npc.s.targetGrId on moveTo
     - ✅ only initially replan when nearby some door
     - ❌ gmRoomGraph search
 
+- ✅ store npc.s.targetGrId on moveTo
+
 - 🚧 offMeshConnection multiple agent follow up
+  - ✅ seg 'init' or 'main' --> state? {0, 1, 2} i.e. init, offMeshConnection 1st half, offMeshConnection 2nd half
+  - ✅ remove "midpoint offMeshConnection radius change"
   - ℹ️ jerky when run from other side
-  - clean "midpoint offMeshConnection radius change"
+  - ℹ️ https://github.com/recastnavigation/recastnavigation/blob/77f7e54bc8cf5a816f9f087a3e0ac391d2043be3/DetourCrowd/Source/DetourCrowd.cpp#L1211
+  - ℹ️ can turn off agent separation flag
+  - 🚧 C++: separation ignores other agents whose velocity heads away?
+  - nei velocity dot product with this vector?
+    > https://github.com/recastnavigation/recastnavigation/blob/77f7e54bc8cf5a816f9f087a3e0ac391d2043be3/DetourCrowd/Source/DetourCrowd.cpp#L1226
   - avoid coinciding agents at offMeshConnection dst in small rooms
     - ℹ️ e.g. small toilet
     - forbid multiple npcs in small rooms

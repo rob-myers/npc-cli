@@ -140,6 +140,7 @@ export const defaultNpcInteractRadius = geomorphGridMeters;
  */
 // export const defaultAgentUpdateFlags = 1 + 2 + 4;
 // export const defaultAgentUpdateFlags = 1 + 2 + 4 + 8 + 16;
+// export const defaultAgentUpdateFlags = 1 + 8 + 16;
 // 🔔 remove 2 to avoid wobbles due to offMeshConnection
 export const defaultAgentUpdateFlags = 1 + 4 + 8 + 16;
 

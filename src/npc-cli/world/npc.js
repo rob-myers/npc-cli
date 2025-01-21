@@ -57,6 +57,7 @@ export class Npc {
     /** Desired look angle (rotation.y) */
     lookAngleDst: /** @type {null | number} */ (null),
     lookSecs: 0.3,
+    /** An offMeshConnection traversal */
     offMesh: /** @type {null | NPC.OffMeshState} */ (null),
     opacity: 1,
     /** Desired opacity */
@@ -306,26 +307,53 @@ export class Npc {
   }
 
   /**
-   * Recast-Detour does not handle collisions during offMeshConnection traversal,
+   * 1. Handles turns onto and along an offMeshConnection.
+   * 
+   * 2. Also, recast-Detour does not handle collisions during offMeshConnection traversal,
    * in particular during the initial segment (before actual connection).
    * 
-   * Also, to get neighbours working during offMeshConnections, we modified
+   * To get neighbours working during offMeshConnections, we modified
    * dtCrowd::update to admit DT_CROWDAGENT_STATE_OFFMESH
+   *
    * @param {NPC.CrowdAgent} agent
+   * @param {NPC.OffMeshState} offMesh
    */
-  handleOffMeshConnectionCollisions(agent) {
-    const nneis  = agent.raw.nneis;
-    /** @type {import('@recast-navigation/wasm').default.dtCrowdNeighbour} */
-    let nei;
-    for (let i = 0; i < nneis; i++) {
-      nei = agent.raw.get_neis(i);
-      if (nei.dist < helper.defaults.radius * 0.7) {// cancel traversal
-        const agentAnim = this.w.crowd.raw.getAgentAnimation(agent.agentIndex);
-        agentAnim.set_active(false);
-        this.stopMoving();
-        break;
+  handleOffMeshConnection(agent, offMesh) {
+    
+    const anim = /** @type {dtCrowdAgentAnimation} */ (this.agentAnim);
+
+    if (offMesh.seg === 0) {// handle collisions
+      const nneis  = agent.raw.nneis;
+      /** @type {import('@recast-navigation/wasm').default.dtCrowdNeighbour} */
+      let nei;
+      for (let i = 0; i < nneis; i++) {
+        nei = agent.raw.get_neis(i);
+        if (nei.dist < helper.defaults.radius * 0.7) {// cancel traversal
+          anim.set_active(false);
+          this.stopMoving();
+          break;
+        }
       }
     }
+
+    if (offMesh.seg === 0 && anim.t > anim.tmid) {
+      offMesh.seg = 1;
+    } else if (offMesh.seg === 1 && anim.t > 0.5 * (anim.tmid + anim.tmax)) {
+      offMesh.seg = 2;
+    }
+
+    let dirX = 0, dirY = 0;
+    if (offMesh.seg === 0) {
+      // 🤔 should init/main be unit vectors?
+      dirX = offMesh.init.x + (anim.t / anim.tmid)**2 * (offMesh.main.x - offMesh.init.x);
+      dirY = offMesh.init.y + (anim.t / anim.tmid)**2 * (offMesh.main.y - offMesh.init.y);
+    } else {
+      dirX = offMesh.main.x;
+      dirY = offMesh.main.y;
+    }
+    
+    this.s.lookAngleDst = this.getEulerAngle(Math.atan2(-dirY, dirX));
+
   }
 
   /**
@@ -424,6 +452,7 @@ export class Npc {
       maxAcceleration: movingMaxAcceleration,
       maxSpeed: this.getMaxSpeed(),
       radius: (this.s.run ? 3 : 2) * helper.defaults.radius, // reset
+      // radius: helper.defaults.radius * 1.5, // reset
       collisionQueryRange: movingCollisionQueryRange,
       separationWeight: movingSeparationWeight,
       queryFilterType: this.w.lib.queryFilterType.excludeDoors,
@@ -638,8 +667,8 @@ export class Npc {
       this.s.agentState = state;
     }
 
-    if (this.s.offMesh?.seg === 'init') {
-      this.handleOffMeshConnectionCollisions(agent);
+    if (this.s.offMesh !== null) {
+      this.handleOffMeshConnection(agent, this.s.offMesh);
     }
 
     if (this.s.target === null) {
@@ -665,33 +694,7 @@ export class Npc {
 
     if (speedSqr > 0.2 ** 2) {
       this.s.lookAngleDst = this.getEulerAngle(Math.atan2(-vel.z, vel.x));
-      return;
     }
-
-    const { offMesh } = this.s;
-    if (offMesh === null) {
-      return;
-    }
-    
-    const anim = /** @type {dtCrowdAgentAnimation} */ (this.agentAnim);
-    offMesh.seg = anim.t < anim.tmid ? 'init' : 'main'; // also for external use?
-
-    // 🚧 only set once
-    if (anim.t >= 0.5 * (anim.tmid + anim.tmax)) {
-      agent.updateParameters({ radius: this.getRadius() });
-    }
-
-    let dirX = 0, dirY = 0;
-    if (offMesh.seg === 'init') {
-      // 🤔 should init/main be unit vectors?
-      dirX = offMesh.init.x + (anim.t / anim.tmid)**2 * (offMesh.main.x - offMesh.init.x);
-      dirY = offMesh.init.y + (anim.t / anim.tmid)**2 * (offMesh.main.y - offMesh.init.y);
-    } else {
-      dirX = offMesh.main.x;
-      dirY = offMesh.main.y;
-    }
-    
-    this.s.lookAngleDst = this.getEulerAngle(Math.atan2(-dirY, dirX));
   }
 
   removeAgent() {

@@ -1,6 +1,6 @@
 import React from "react";
 import { Vect } from "../geom";
-import { defaultDoorCloseMs, npcNearUiDist, wallHeight } from "../service/const";
+import { defaultDoorCloseMs, wallHeight } from "../service/const";
 import { pause, warn, debug } from "../service/generic";
 import { geom } from "../service/geom";
 import { npcToBodyKey } from "../service/rapier";
@@ -369,7 +369,7 @@ export default function useHandleEvents(w) {
         // opposite direction
         other.orig.srcGrKey !== offMesh.srcGrKey
         // hasn't reached main segment
-        || other.seg === 'init'
+        || other.seg === 0
         // || w.n[other.npcKey].position.distanceTo(npc.position) < 1.2 * npc.getRadius()
       );
 
@@ -388,7 +388,7 @@ export default function useHandleEvents(w) {
       // register traversal
       npc.s.offMesh = {
         npcKey: e.npcKey,
-        seg: 'init',
+        seg: 0,
         init: { x: offMesh.src.x - npc.position.x, y: offMesh.src.z - npc.position.z },
         main: { x: offMesh.dst.x - offMesh.src.x, y: offMesh.dst.z - offMesh.src.z },
         orig: offMesh,
@@ -396,9 +396,9 @@ export default function useHandleEvents(w) {
       (state.doorToOffMesh[offMesh.gdKey] ??= []).push(npc.s.offMesh);
       (state.npcToDoors[e.npcKey] ??= { inside: null, nearby: new Set() }).inside = offMesh.gdKey;
 
-      // 🔔 avoid jerky other npc near src corner (slight penetration when other npc near dst)
       // 🚧 put together with "switch off" at midpoint of offMeshConnection
-      npc.agent?.updateParameters({ radius: npc.getRadius() * 0.4 });
+      // 🔔 avoid jerky other npc near src corner (slight penetration when other npc near dst)
+      // npc.agent?.updateParameters({ radius: npc.getRadius() * 0.4 });
 
       w.door.toggleDoorRaw(door, { open: true, access: true }); // force open door
       w.events.next({ key: 'exit-room', npcKey: e.npcKey, ...w.lib.getGmRoomId(e.offMesh.srcGrKey) });
