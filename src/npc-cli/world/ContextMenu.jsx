@@ -321,8 +321,8 @@ function ContextMenuUi({ state: cm }) {
 
     {cm.showKvs === true && <div className="kvs">
       {cm.kvs.map(x => <>
-        <span className="key">{x.k}</span>
-        {x.v !== '' && <span className="value">{x.v}</span>}
+        <span key={x.k} className="key">{x.k}</span>
+        {x.v !== '' && <span key={x.k + x.v} className="value">{x.v}</span>}
       </>)}
     </div>}
   </div>;
