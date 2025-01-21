@@ -317,9 +317,15 @@ export default function useHandleEvents(w) {
           w.menu.say(e.npcKey, e.speech);
           break;
         case "started-moving":
-          // 🚧 avoid initial incorrect offMeshConnection traversal
-          // 🚧 replan whenever (a) nearby some door, (b) dst gmRoomId not current one or adjacent
-          npc.agent?.raw.set_targetReplan(true);
+          // 🔔 avoid initially incorrect offMeshConnection traversal,
+          // by replanning immediately i.e. before 1st updateRequestMoveTarget
+          for (const gdKey of state.npcToDoors[e.npcKey].nearby ?? []) {
+            const door = w.door.byKey[gdKey];
+            if (door.center.distanceToSquared(npc.getPoint()) < 0.5 ** 2) {
+              /** @type {NPC.CrowdAgent} */ (npc.agent).raw.set_targetReplan(true);
+              break;
+            }
+          }
           break;
       }
     },
@@ -529,7 +535,7 @@ export default function useHandleEvents(w) {
  * @property {{ [gdKey: Geomorph.GmDoorKey]: Set<string> }} doorToNearbyNpcs
  * Relates `Geomorph.GmDoorKey` to nearby/inside `npcKey`s
  * @property {{ [gdKey: Geomorph.GmDoorKey]: NPC.OffMeshState[] }} doorToOffMesh
- * Multiple agents can traverse a single offMeshConnection in the same direction at same direction.
+ * Mapping from doors to in-progress offMeshConnection traversals.
  * @property {Set<string>} externalNpcs
  * `npcKey`s not inside any room
  * @property {{ [npcKey: string]: Set<string> }} npcToAccess
