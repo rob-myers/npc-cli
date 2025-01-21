@@ -64,6 +64,8 @@ export class Npc {
     run: false,
     spawns: 0,
     target: /** @type {null | THREE.Vector3} */ (null),
+    /** Target gmRoomId */
+    targetGrId: /** @type {null | Geomorph.GmRoomId} */ (null),
     selectorColor: /** @type {[number, number, number]} */ ([0.6, 0.6, 1]),
     showSelector: false,
     wayIndex: 0,
@@ -390,7 +392,7 @@ export class Npc {
   }
 
   /**
-   * @param {Geom.VectJson | THREE.Vector3Like} dst
+   * @param {Geom.MaybeMeta<Geom.VectJson | THREE.Vector3Like>} dst
    * @param {object} [opts]
    * @param {boolean} [opts.debugPath]
    */
@@ -403,6 +405,12 @@ export class Npc {
     if (closest === null) {
       throw new Error(`${this.key}: not navigable: ${JSON.stringify(dst)}`);
     }
+
+    // usually have target gmRoomId via dst.meta.grKey in `click`
+    this.s.targetGrId = dst.meta?.grKey !== undefined
+      ? helper.getGmRoomId(dst.meta.grKey)
+      : this.w.gmGraph.findRoomContaining(toXZ(closest))
+    ;
 
     if (opts.debugPath ?? showLastNavPath) {
       const path = this.w.npc.findPath(this.getPosition(), closest);
@@ -837,6 +845,7 @@ export class Npc {
 
     const position = this.agent.position();
     this.s.target = null;
+    this.s.targetGrId = null;
     this.s.lookAngleDst = null;
     this.agent.updateParameters({
       maxSpeed: this.getMaxSpeed() * 0.75,

@@ -90,9 +90,9 @@
   - ℹ️ can trigger via far-off target in direction of very nearby offMeshConnection
   - ℹ️ can fix via `this.agent.raw.set_targetReplan(true)` just after `requestMoveTarget`
   - ✅ always replan immediately after request (fixes issue)
-  - 🚧 only replan when needed
-    - 🚧 early offMeshConnection
-    - 🚧 room not current nor adjacent
+  - 🚧 only initially replan when needed
+    - ✅ store npc.s.targetGrId on moveTo
+    - 🚧 replan whenever (a) nearby some door, (b) dst gmRoomId not current one or adjacent
     - gmRoomGraph search (?)
 
 - 🚧 offMeshConnection multiple agent follow up
