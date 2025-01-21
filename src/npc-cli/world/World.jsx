@@ -4,7 +4,6 @@ import { Subject, firstValueFrom } from "rxjs";
 import { filter } from "rxjs/operators";
 import * as THREE from "three";
 import { Timer } from "three-stdlib";
-import { importTileCache, Crowd } from "@recast-navigation/core";
 import debounce from "debounce";
 
 import { Vect } from "../geom";
@@ -18,7 +17,6 @@ import { fetchGeomorphsJson, getDecorSheetUrl, getObstaclesSheetUrl, WORLD_QUERY
 import { geomorph } from "../service/geomorph";
 import createGmsData from "../service/create-gms-data";
 import { imageLoader, toV3, toXZ } from "../service/three";
-import { disposeCrowd, getTileCacheMeshProcess } from "../service/recast-detour";
 import { helper } from "../service/helper";
 import { TexArray } from "../service/tex-array";
 import { WorldContext } from "./world-context";
@@ -130,26 +128,6 @@ export default function World(props) {
       }
 
       return ready;
-    },
-    loadTiledMesh({ exportedNavMesh, offMeshLookup }) {
-      const tiledCacheResult = /** @type {NPC.TiledCacheResult} */ (
-        importTileCache(exportedNavMesh, getTileCacheMeshProcess(state.nav.offMeshDefs))
-      );
-      
-      Object.assign(state.nav, tiledCacheResult);
-      state.nav.offMeshLookup = offMeshLookup;
-      // console.log({ offMeshLookup }) // 🚧
-
-      if (state.crowd) {
-        disposeCrowd(state.crowd, state.nav.navMesh);
-      }
-      state.crowd = new Crowd(state.nav.navMesh, {
-        // maxAgents: 10,
-        maxAgents: 200,
-        maxAgentRadius: helper.defaults.radius,
-      });
-
-      state.npc?.restore();
     },
     onTick() {
       state.reqAnimId = requestAnimationFrame(state.onTick);
@@ -446,13 +424,12 @@ export default function World(props) {
  * Only populated for geomorph keys seen in some map.
  * @property {GmGraphClass} gmGraph
  * @property {GmRoomGraphClass} gmRoomGraph
- * @property {Crowd} crowd
+ * @property {import('@recast-navigation/core').Crowd} crowd
  * @property {boolean} disconnected
  * @property {boolean} smallViewport Was viewport small when we mounted World?
  *
  * @property {(postAct?: () => void) => void} advance
  * @property {() => boolean} isReady
- * @property {(e: WW.NavMeshResponse) => void} loadTiledMesh
  * @property {() => void} debugTick
  * @property {() => void} onTick
  * @property {(next: State['hmr']) => Record<keyof State['hmr'], boolean>} trackHmr

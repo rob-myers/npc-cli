@@ -1,9 +1,11 @@
 import React from 'react';
-import { init as initRecastNav } from "@recast-navigation/core";
+import { init as initRecastNav, importTileCache, Crowd } from "@recast-navigation/core";
+import RecastWasm from "@recast-navigation/wasm";
 
-import { isDevelopment, warn, debug, testNever } from '../service/generic';
+import { isDevelopment, warn, debug, testNever, info } from '../service/generic';
 import { parsePhysicsBodyKey } from '../service/rapier';
-import { computeOffMeshConnectionsParams } from '../service/recast-detour';
+import { computeOffMeshConnectionsParams, disposeCrowd, getTileCacheMeshProcess } from '../service/recast-detour';
+import { helper } from '../service/helper';
 import { WorldContext } from './world-context';
 import useStateRef from '../hooks/use-state-ref';
 
@@ -58,7 +60,7 @@ export default function WorldWorkers() {
         w.menu.measure('request-nav');
         await initRecastNav();
         state.postProcessNavResponse(msg);
-        w.loadTiledMesh(msg);
+        state.loadTiledMesh(msg);
         w.update(); // for w.npc
         w.events.next({ key: 'nav-updated' });
       }
@@ -99,6 +101,35 @@ export default function WorldWorkers() {
         w.physics.rebuilds++;
         w.menu.measure('setup-physics');
       }
+    },
+
+    loadTiledMesh({ exportedNavMesh, offMeshLookup }) {
+      const tiledCacheResult = /** @type {NPC.TiledCacheResult} */ (
+        importTileCache(exportedNavMesh, getTileCacheMeshProcess(w.nav.offMeshDefs))
+      );
+      
+      Object.assign(w.nav, tiledCacheResult);
+      w.nav.offMeshLookup = offMeshLookup;
+      // console.log({ offMeshLookup }) // 🚧
+
+      if (w.crowd) {
+        disposeCrowd(w.crowd, w.nav.navMesh);
+      }
+      w.crowd = new Crowd(w.nav.navMesh, {
+        maxAgents: 200,
+        // 🔔 maxAgentRadius influences m_agentPlacementHalfExtents
+        // 🔔 maxAgentRadius influences proximity grid
+        // https://github.com/recastnavigation/recastnavigation/blob/77f7e54bc8cf5a816f9f087a3e0ac391d2043be3/DetourCrowd/Source/DetourCrowd.cpp#L394
+        maxAgentRadius: helper.defaults.radius,
+        // maxAgentRadius: helper.defaults.radius * 0.5,
+      });
+
+      const { adaptiveDepth, adaptiveDivs, adaptiveRings, gridSize, horizTime, velBias, weightCurVel, weightSide, weightToi } = w.crowd.raw.getObstacleAvoidanceParams(0);
+      info('dtObstacleAvoidanceParams', { adaptiveDepth, adaptiveDivs, adaptiveRings, gridSize, horizTime, velBias, weightCurVel, weightSide, weightToi });
+      // 🚧 try modify dtObstacleAvoidanceParams
+      // const oap = new RecastWasm.dtObstacleAvoidanceParams();
+      
+      w.npc?.restore();
     },
   }));
 
@@ -161,5 +192,6 @@ if (isDevelopment()) {// propagate HMR to this file onchange worker files
  * @property {(e: MessageEvent<WW.MsgFromNavWorker>) => Promise<void>} handleNavWorkerMessage
  * @property {(npcKey: string, otherKey: WW.PhysicsBodyKey, isEnter?: boolean) => void} handlePhysicsCollision
  * @property {(e: MessageEvent<WW.MsgFromPhysicsWorker>) => Promise<void>} handlePhysicsWorkerMessage
+ * @property {(e: WW.NavMeshResponse) => void} loadTiledMesh
  * @property {(msg: WW.NavMeshResponse) => void} postProcessNavResponse
  */
