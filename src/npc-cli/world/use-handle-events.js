@@ -367,24 +367,27 @@ export default function useHandleEvents(w) {
       const { offMesh } = e;
       const door = w.door.byKey[offMesh.gdKey];
 
-      const conflictingTraversal = state.doorToOffMesh[offMesh.gdKey]?.findLast(other => 
-        // opposite direction
-        other.orig.srcGrKey !== offMesh.srcGrKey
-        // hasn't reached main segment
-        || other.seg === 0
+      // detect conflicting traversal
+      if (state.doorToOffMesh[offMesh.gdKey]?.findLast(other => 
+        other.orig.srcGrKey !== offMesh.srcGrKey // opposite direction
+        || other.seg === 0 // hasn't reached main segment
         // || w.n[other.npcKey].position.distanceTo(npc.position) < 1.2 * npc.getRadius()
-      );
-
-      if (conflictingTraversal !== undefined || (
-        door.open === false &&
-        state.toggleDoor(offMesh.gdKey, { open: true, npcKey: e.npcKey }) === false
       )) {
-        // cancel traversal
-        const agent = /** @type {NPC.CrowdAgent} */ (npc.agent);
-        const agentAnim = w.crowd.raw.getAgentAnimation(agent.agentIndex);
-        agentAnim.set_active(false);
-        npc.stopMoving();
-        return;
+        return npc.stopMoving();
+      }
+
+      // detect conflicting npcKey when dst room small
+      if (offMesh.dstRoomMeta.small === true && Array.from(state.doorToNearbyNpcs[offMesh.gdKey]).find(npcKey =>
+        npcKey !== e.npcKey && w.n[npcKey].position.distanceToSquared(offMesh.dst) < 0.2 ** 2
+      )) {
+        return npc.stopMoving();
+      }
+
+      // detect un-openable door
+      if (door.open === false &&
+        state.toggleDoor(offMesh.gdKey, { open: true, npcKey: e.npcKey }) === false
+      ) {
+        return npc.stopMoving();
       }
       
       // register traversal

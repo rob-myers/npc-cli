@@ -675,12 +675,14 @@ export function customGenerateTileCache({
       
       const srcKey = geom.to2DString(src.x, src.z);
       const dstKey = geom.to2DString(dst.x, dst.z);
+
       // 🔔 computed later in main thread
       const srcGrKey = /** @type {Geomorph.GmRoomKey} */ ('');
       const dstGrKey = /** @type {Geomorph.GmRoomKey} */ ('');
+      const emptyRoomMeta = {};
 
-      offMeshLookup[srcKey] = { src, dst, offMeshRef, key: srcKey, reverseKey: dstKey, ...gdId, srcGrKey, dstGrKey };
-      offMeshLookup[dstKey] = { src: dst, dst: src, offMeshRef, key: dstKey, reverseKey: srcKey, ...gdId, srcGrKey, dstGrKey };
+      offMeshLookup[srcKey] = { src, dst, offMeshRef, key: srcKey, reverseKey: dstKey, ...gdId, srcGrKey, dstGrKey, dstRoomMeta: emptyRoomMeta };
+      offMeshLookup[dstKey] = { src: dst, dst: src, offMeshRef, key: dstKey, reverseKey: srcKey, ...gdId, srcGrKey, dstGrKey, dstRoomMeta: emptyRoomMeta };
     });
   }
 

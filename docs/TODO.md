@@ -94,13 +94,6 @@
     - ✅ only initially replan when nearby some door
     - ❌ gmRoomGraph search
 
-- ✅ store npc.s.targetGrId on moveTo
-- ✅ can `npc.stopMoving()` whilst traversing offMeshConnection without jerk
-- ✅ review room meta `gms[gmId].rooms[roomId].meta`
-  - ✅ exclude `decor`, `meta` and `y` from meta
-  - ✅ "label" replaces "meta" 
-  - ✅ add "small" to relevant metas
-
 - 🚧 offMeshConnection multiple agent follow up
   - ✅ seg 'init' or 'main' --> state? {0, 1, 2} i.e. init, offMeshConnection 1st half, offMeshConnection 2nd half
   - ✅ remove "midpoint offMeshConnection radius change"
@@ -113,10 +106,10 @@
     - https://github.com/recastnavigation/recastnavigation/blob/77f7e54bc8cf5a816f9f087a3e0ac391d2043be3/DetourCrowd/Source/DetourCrowd.cpp#L1226
   - ✅ C++ collisions: ignore offMesh neighbour who hasn't reached "main segment"
     - ✅ this avoids the jerk, but means we need to handle such collisions ourselves
-  - 🚧 avoid coinciding agents at offMeshConnection dst in small rooms e.g. small toilet
+  - ✅ avoid coinciding agents at offMeshConnection dst in small rooms e.g. small toilet
     - ❌ forbid multiple npcs in small rooms
     - ✅ some rooms have meta.small
-    - 🚧 forbid traversal to "small room" if other npc is over dst
+    - ✅ forbid traversal to "small room" if other npc is over dst
   - avoid runner catching up inside offMeshConnection
     - forbid faster following slower
   - ❌ only block npc if "door has nearby corners"
@@ -139,7 +132,8 @@
 
 ### On hold
 
-- ✅ inconsistent symbol ids e.g. 301--hull.svg vs 302--hull.svg, decor-unit-quad
+- avoid npc stepping forward small amounts when e.g. cannot traverse offMeshConnection
+  - could store start point and revert
 - auto-dock ContextMenu in profile-1?
 - isolated hull doors should be locked
 - strategy for dealing with "stuck at 0 velocity"
@@ -3577,3 +3571,11 @@ done
 
 - ✅ remove event `way-point`
   - ℹ️ changing target does not correspond to reaching waypoint e.g. due to re-planning
+
+- ✅ inconsistent symbol ids e.g. 301--hull.svg vs 302--hull.svg, decor-unit-quad
+- ✅ store npc.s.targetGrId on moveTo
+- ✅ can `npc.stopMoving()` whilst traversing offMeshConnection without jerk
+- ✅ review room meta `gms[gmId].rooms[roomId].meta`
+  - ✅ exclude `decor`, `meta` and `y` from meta
+  - ✅ "label" replaces "meta" 
+  - ✅ add "small" to relevant metas

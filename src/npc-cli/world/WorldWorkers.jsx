@@ -21,6 +21,7 @@ export default function WorldWorkers() {
   const state = useStateRef(/** @returns {State} */ () => ({
     seenHash: /** @type {*} */ ({}),
 
+    // 🔔 compute each offMeshLookup[i].{srcGrKey,dstGrKey,dstRoomMeta}
     postProcessNavResponse(msg) {
       for (const value of Object.values(msg.offMeshLookup)) {
         const door = w.door.byKey[value.gdKey];
@@ -47,6 +48,9 @@ export default function WorldWorkers() {
           value.srcGrKey = `g${value.gmId}r${srcRoomId}`;
           value.dstGrKey = `g${value.gmId}r${dstRoomId}`;
         }
+
+        const { gmId, roomId } = helper.getGmRoomId(value.dstGrKey);
+        value.dstRoomMeta = w.gms[gmId].rooms[roomId].meta;
       }
     },
 
