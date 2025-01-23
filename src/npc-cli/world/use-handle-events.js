@@ -117,7 +117,7 @@ export default function useHandleEvents(w) {
 
       if (r === 8) {// npc
         const npcUid = (g << 8) + b;
-        const npcKey = w.npc.pickUid.toKey.get(npcUid);
+        const npcKey = w.npc.uid.toKey.get(npcUid);
         return {
           picked: 'npc',
           npcKey,
@@ -317,8 +317,10 @@ export default function useHandleEvents(w) {
           w.menu.say(e.npcKey, e.speech);
           break;
         case "started-moving":
-          // 🔔 avoid initially incorrect offMeshConnection traversal, by
-          // replanning immediately i.e. before 1st updateRequestMoveTarget
+          /**
+           * 🔔 avoid initially incorrect offMeshConnection traversal, by
+           * replanning immediately i.e. before 1st updateRequestMoveTarget
+           */
           for (const gdKey of state.npcToDoors[e.npcKey]?.nearby ?? []) {
             const door = w.door.byKey[gdKey];
             if (door.center.distanceToSquared(npc.getPoint()) < 0.5 ** 2) {
@@ -395,10 +397,6 @@ export default function useHandleEvents(w) {
       };
       (state.doorToOffMesh[offMesh.gdKey] ??= []).push(npc.s.offMesh);
       (state.npcToDoors[e.npcKey] ??= { inside: null, nearby: new Set() }).inside = offMesh.gdKey;
-
-      // 🚧 put together with "switch off" at midpoint of offMeshConnection
-      // 🔔 avoid jerky other npc near src corner (slight penetration when other npc near dst)
-      // npc.agent?.updateParameters({ radius: npc.getRadius() * 0.4 });
 
       w.door.toggleDoorRaw(door, { open: true, access: true }); // force open door
       w.events.next({ key: 'exit-room', npcKey: e.npcKey, ...w.lib.getGmRoomId(e.offMesh.srcGrKey) });

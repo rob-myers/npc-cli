@@ -307,13 +307,16 @@ export class Npc {
   }
 
   /**
-   * 1. Handles turns onto and along an offMeshConnection.
+   * 1. Handle turns onto/along an offMeshConnection.
    * 
-   * 2. Also, recast-Detour does not handle collisions during offMeshConnection traversal,
-   * in particular during the initial segment (before actual connection).
+   * 2. Handle collisions during initial segment of offMeshConnection.
+   * Recast-Detour doesn't support collisions from `this` agent's perspective,
+   * and we've turned off its handling of the other agent.
    * 
-   * To get neighbours working during offMeshConnections, we modified
-   * dtCrowd::update to admit DT_CROWDAGENT_STATE_OFFMESH
+   * To get neighbours working during offMeshConnections, we modified `dtCrowd::update`.
+   * 
+   * We also changed `dtCrowd::update` to ignore collisions of
+   * a neighbour on initial part of an offMeshConnection.
    *
    * @param {NPC.CrowdAgent} agent
    * @param {NPC.OffMeshState} offMesh
@@ -324,13 +327,13 @@ export class Npc {
 
     if (offMesh.seg === 0) {// handle collisions
       const nneis  = agent.raw.nneis;
-      /** @type {import('@recast-navigation/wasm').default.dtCrowdNeighbour} */
-      let nei;
+      /** @type {dtCrowdNeighbour} */ let nei;
       for (let i = 0; i < nneis; i++) {
         nei = agent.raw.get_neis(i);
-        if (nei.dist < helper.defaults.radius * 0.7) {// cancel traversal
-          anim.set_active(false);
+        if (nei.dist < helper.defaults.radius * 0.7) {// cancel traversal and other
           this.stopMoving();
+          const other = this.w.n[/** @type {string} */ (this.w.npc.uid.toKey.get(nei.idx))];
+          other.stopMoving()
           break;
         }
       }
@@ -846,7 +849,6 @@ export class Npc {
       return;
     }
 
-    const position = this.agent.position();
     this.s.target = null;
     this.s.targetGrId = null;
     this.s.lookAngleDst = null;
@@ -862,12 +864,14 @@ export class Npc {
     
     this.startAnimation('Idle');
 
-    // ℹ️ pin agent + suppress slow down
-    this.agent.teleport(position);
-    this.agent.requestMoveTarget(position);
-    
-    // ℹ️ alternative: keep fixed
-    // this.agent.requestMoveVelocity({ x: 0, y: 0, z: 0 });
+    if (this.s.offMesh === null || this.s.offMesh.seg === 0) {
+      const position = this.agent.position();
+      this.agent.teleport(position);
+      this.agent.requestMoveTarget(position);
+      this.agentAnim?.set_active(false); // when offMesh.seg === 0
+    } else {// on exit traversal stay there
+      this.agent.requestMoveTarget(this.s.offMesh.orig.dst);
+    }
 
     this.resolve.move?.();
     this.w.events.next({ key: 'stopped-moving', npcKey: this.key });
@@ -919,4 +923,8 @@ const showLastNavPath = false;
  * @typedef {ReturnType<
  *  import('@recast-navigation/core').Crowd['raw']['getAgentAnimation']
  * >} dtCrowdAgentAnimation
+ */
+
+/**
+ * @typedef {import('@recast-navigation/wasm').default.dtCrowdNeighbour} dtCrowdNeighbour
  */

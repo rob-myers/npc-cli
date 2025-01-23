@@ -96,18 +96,24 @@
 
 - ✅ store npc.s.targetGrId on moveTo
 
+- ✅ can `npc.stopMoving()` whilst traversing offMeshConnection without jerk
+
 - 🚧 offMeshConnection multiple agent follow up
   - ✅ seg 'init' or 'main' --> state? {0, 1, 2} i.e. init, offMeshConnection 1st half, offMeshConnection 2nd half
   - ✅ remove "midpoint offMeshConnection radius change"
   - ℹ️ jerky when run from other side
   - ℹ️ https://github.com/recastnavigation/recastnavigation/blob/77f7e54bc8cf5a816f9f087a3e0ac391d2043be3/DetourCrowd/Source/DetourCrowd.cpp#L1211
   - ℹ️ can turn off agent separation flag
-  - 🚧 C++: separation ignores other agents whose velocity heads away?
-  - nei velocity dot product with this vector?
-    > https://github.com/recastnavigation/recastnavigation/blob/77f7e54bc8cf5a816f9f087a3e0ac391d2043be3/DetourCrowd/Source/DetourCrowd.cpp#L1226
+  - ℹ️ seems `yarn build` in recast-navigation-wasm is hot-reloading ?!
+  - ❌ C++: separation ignores other agents on offMeshConnection whose velocity heads away?
+    - nei velocity dot product with this vector?
+    - https://github.com/recastnavigation/recastnavigation/blob/77f7e54bc8cf5a816f9f087a3e0ac391d2043be3/DetourCrowd/Source/DetourCrowd.cpp#L1226
+  - ✅ C++ collisions: ignore offMesh neighbour who hasn't reached "main segment"
+    - ✅ this avoids the jerk, but means we need to handle such collisions ourselves
   - avoid coinciding agents at offMeshConnection dst in small rooms
     - ℹ️ e.g. small toilet
-    - forbid multiple npcs in small rooms
+    - ❌ forbid multiple npcs in small rooms
+    - forbid traversal if other npc is over dst
   - avoid runner catching up inside offMeshConnection
     - forbid faster following slower
   - ❌ only block npc if "door has nearby corners"

@@ -4,8 +4,9 @@
 ### Bump versions in our branch of recast-navigation-js
 
 ```sh
+# ---------------------------------
 # at recast-navigation-js repo root
-
+# ---------------------------------
 # generate changesets
 yarn change
 # bump respective versions
@@ -18,8 +19,12 @@ yarn changeset version
 # then finally:
 yarn publish
 
-# at npc-cli repo
+# 🔔 may have to wait a bit for registry to update
+# finally, optionally run `yarn`
 
+# ---------------
+# at npc-cli repo
+# ---------------
 # bump package.json versions, e.g.
 # "@recast-navigation/core": "npm:@rob-myers/recast-navigation__core@0.38.4",
 # "@recast-navigation/generators": "npm:@rob-myers/recast-navigation__generators@0.38.4",

@@ -32,7 +32,7 @@ export default function Npcs(props) {
     },
     npc: {},
     physicsPositions: [],
-    pickUid: {
+    uid: {
       free: new Set(range(maxNumberOfNpcs)),
       toKey: new Map(),
     },
@@ -115,8 +115,8 @@ export default function Npcs(props) {
         npc.removeAgent();
         
         delete state.npc[npcKey];
-        state.pickUid.free.add(npc.def.pickUid);
-        state.pickUid.toKey.delete(npc.def.pickUid);
+        state.uid.free.add(npc.def.pickUid);
+        state.uid.toKey.delete(npc.def.pickUid);
 
         w.events.next({ key: 'removed-npc', npcKey });
       }
@@ -174,13 +174,13 @@ export default function Npcs(props) {
         // Spawn
         npc = state.npc[e.npcKey] = new Npc({
           key: e.npcKey,
-          pickUid: takeFirst(state.pickUid.free),
+          pickUid: takeFirst(state.uid.free),
           angle: e.angle ?? 0,
           classKey: e.classKey ?? defaultClassKey,
           runSpeed: e.runSpeed ?? helper.defaults.runSpeed,
           walkSpeed: e.walkSpeed ?? helper.defaults.walkSpeed,
         }, w);
-        state.pickUid.toKey.set(npc.def.pickUid, e.npcKey);
+        state.uid.toKey.set(npc.def.pickUid, e.npcKey);
 
         npc.initialize(state.gltf[npc.def.classKey]);
       }
@@ -302,9 +302,10 @@ export default function Npcs(props) {
  * @property {number[]} physicsPositions
  * Format `[npc.bodyUid, npc.position.x, npc.position.y, npc.position.z, ...]`
  * @property {Record<NPC.TextureKey, THREE.Texture>} tex
- * @property {{ free: Set<number>; toKey: Map<number, string> }} pickUid
- * `uid.free` are those npc uids not-yet-used.
- * They are removed/added on spawn/remove npc.
+ * @property {{ free: Set<number>; toKey: Map<number, string> }} uid
+ * Correspondence between Recast-Detour CrowdAgent uids and npcKeys.
+ * - also used when object-picking npcs
+ * - `uid.free` are those npc uids not-yet-used.
  *
  * @property {() => void} clearLabels
  * @property {(src: THREE.Vector3Like, dst: THREE.Vector3Like) => null | THREE.Vector3Like[]} findPath

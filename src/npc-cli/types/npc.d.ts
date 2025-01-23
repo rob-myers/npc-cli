@@ -231,9 +231,9 @@ declare namespace NPC {
      * - `2` is 2nd half of offMeshConnection
      */
     seg: 0 | 1 | 2;
-    /** Segment from "initial npc position" to "offMeshConnection src" */
+    /** Vector from "initial npc position" to "offMeshConnection src" */
     init: Geom.VectJson;
-    /** Segment from "offMeshConnection src" to "offMeshConnection dst" */
+    /** Vector from "offMeshConnection src" to "offMeshConnection dst" */
     main: Geom.VectJson;
   };
 
