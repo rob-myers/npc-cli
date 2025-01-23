@@ -378,7 +378,7 @@ export default function useHandleEvents(w) {
 
       // detect conflicting npcKey when dst room small
       if (offMesh.dstRoomMeta.small === true && Array.from(state.doorToNearbyNpcs[offMesh.gdKey]).find(npcKey =>
-        npcKey !== e.npcKey && w.n[npcKey].position.distanceToSquared(offMesh.dst) < 0.2 ** 2
+        npcKey !== e.npcKey && w.n[npcKey].position.distanceToSquared(offMesh.dst) < 0.1 ** 2
       )) {
         return npc.stopMoving();
       }
