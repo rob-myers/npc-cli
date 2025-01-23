@@ -96,10 +96,10 @@
 
 - ✅ store npc.s.targetGrId on moveTo
 - ✅ can `npc.stopMoving()` whilst traversing offMeshConnection without jerk
-- 🚧 review room meta `gms[gmId].rooms[roomId].meta`
+- ✅ review room meta `gms[gmId].rooms[roomId].meta`
   - ✅ exclude `decor`, `meta` and `y` from meta
   - ✅ "label" replaces "meta" 
-  - 🚧 add "small" to relevant metas
+  - ✅ add "small" to relevant metas
 
 - 🚧 offMeshConnection multiple agent follow up
   - ✅ seg 'init' or 'main' --> state? {0, 1, 2} i.e. init, offMeshConnection 1st half, offMeshConnection 2nd half
@@ -115,8 +115,8 @@
     - ✅ this avoids the jerk, but means we need to handle such collisions ourselves
   - 🚧 avoid coinciding agents at offMeshConnection dst in small rooms e.g. small toilet
     - ❌ forbid multiple npcs in small rooms
-    - 🚧 some rooms have meta.small
-    - forbid traversal to "small room" if other npc is over dst
+    - ✅ some rooms have meta.small
+    - 🚧 forbid traversal to "small room" if other npc is over dst
   - avoid runner catching up inside offMeshConnection
     - forbid faster following slower
   - ❌ only block npc if "door has nearby corners"

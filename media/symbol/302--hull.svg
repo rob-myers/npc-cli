@@ -189,7 +189,7 @@
         </image>
         <g xmlns="http://www.w3.org/2000/svg">
                 <title>symbols</title>
-                <use width="600" height="600" transform="matrix(0, 1, -1, 0, -0.000007373776043095859, 600)" style="transform-box: fill-box; transform-origin: 50% 50%;" href="#symbol-14">
+                <use width="600" height="600" transform="matrix(0, 1, -1, 0, 0, 600)" style="transform-box: fill-box; transform-origin: 50% 50%;" href="#symbol-14">
                         <title>office--006--2x2 doors=['e','w']</title>
                 </use>
                 <use width="1200" height="600" transform="matrix(-1, 0, 0, -1, 1200, 2100)" style="transform-box: fill-box; transform-origin: 50% 50%;" href="#symbol-1">
@@ -254,16 +254,16 @@
                 <title>wall hull</title>
         </path>
         <rect width="50" height="50" style="fill-opacity: 0.5; stroke: rgb(0, 0, 0); fill: rgb(0, 255, 0); transform-origin: -20px -20px;" x="5895.499878" y="143.000002">
-                <title>decor label=locker</title>
+                <title>decor label=locker small</title>
         </rect>
         <rect width="50" height="50" style="fill-opacity: 0.5; stroke: rgb(0, 0, 0); fill: rgb(0, 255, 0); transform-origin: -20px -20px;" x="5895.499878" y="442.999992">
-                <title>decor label=locker</title>
+                <title>decor label=locker small</title>
         </rect>
         <rect width="50" height="50" style="fill-opacity: 0.5; stroke: rgb(0, 0, 0); fill: rgb(0, 255, 0); transform-origin: -20px -20px;" x="5895.499878" y="743.000031">
-                <title>decor label=locker</title>
+                <title>decor label=locker small</title>
         </rect>
         <rect width="50" height="50" style="fill-opacity: 0.5; stroke: rgb(0, 0, 0); fill: rgb(0, 255, 0); transform-origin: -20px -20px;" x="5895.499878" y="1043.000031">
-                <title>decor label=locker</title>
+                <title>decor label=locker small</title>
         </rect>
         <rect width="50" height="50" style="fill-opacity: 0.5; stroke: rgb(0, 0, 0); fill: rgb(0, 255, 0); transform-origin: -20px -20px;" x="5645.499878" y="793.000031">
                 <title>decor label=eva</title>

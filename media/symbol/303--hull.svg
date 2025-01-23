@@ -393,6 +393,12 @@
         <rect x="600" y="750" width="25" height="25" style="fill-opacity: 0.9; fill: rgb(0, 255, 0); stroke: rgb(0, 0, 0);" transform="matrix(0, 1, -1, 0, 3950, 700)">
                 <title>decor label='common area'</title>
         </rect>
+        <rect x="1040" y="1280" width="10" height="10" style="fill-opacity: 0.9; stroke: rgb(0, 0, 0); fill: rgb(0, 255, 0);">
+                <title>decor meta small</title>
+        </rect>
+        <rect x="740" y="1280" width="10" height="10" style="fill-opacity: 0.9; stroke: rgb(0, 0, 0); fill: rgb(0, 255, 0);">
+                <title>decor meta small</title>
+        </rect>
         <rect x="1244.820023" y="1236.015015" width="309.909992" height="18.14" style="fill: rgb(255, 0, 0);" transform="matrix(0, 1, -1, 0, 2746.33764648439, 251.927490234351)">
                 <title>wall</title>
         </rect>

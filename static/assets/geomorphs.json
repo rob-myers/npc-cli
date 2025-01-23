@@ -9728,6 +9728,24 @@
       "pngRect": {"x": -0.15, "y": -0.15, "width": 30.3, "height": 30.3},
       "decor": [
         {
+          "type": "point",
+          "key": "",
+          "meta": {"decor": true, "meta": true, "small": true, "y": 0},
+          "bounds2d": {"x": 22.65, "y": 1.6, "width": 4.25, "height": 4.25},
+          "x": 24.775,
+          "y": 3.725,
+          "orient": 0
+        },
+        {
+          "type": "point",
+          "key": "",
+          "meta": {"decor": true, "meta": true, "small": true, "y": 0},
+          "bounds2d": {"x": 22.65, "y": 3.05, "width": 4.25, "height": 4.25},
+          "x": 24.775,
+          "y": 5.175,
+          "orient": 0
+        },
+        {
           "type": "quad",
           "key": "",
           "meta": {
@@ -16781,7 +16799,7 @@
               [24.05, 3.05]
             ]
           ],
-          "meta": {"label": "locker"}
+          "meta": {"small": true, "label": "locker"}
         },
         {
           "type": "Polygon",
@@ -16794,7 +16812,7 @@
               [24.05, 4.55]
             ]
           ],
-          "meta": {"label": "locker"}
+          "meta": {"small": true, "label": "locker"}
         },
         {
           "type": "Polygon",
@@ -20685,6 +20703,15 @@
           "orient": 0
         },
         {
+          "type": "point",
+          "key": "",
+          "meta": {"decor": true, "meta": true, "small": true, "y": 0.01},
+          "bounds2d": {"x": 3.125, "y": 8.725, "width": 4.25, "height": 4.25},
+          "x": 5.25,
+          "y": 10.85,
+          "orient": 0
+        },
+        {
           "type": "quad",
           "key": "",
           "meta": {
@@ -20817,6 +20844,15 @@
           "bounds2d": {"x": 0.625, "y": 9.125, "width": 4.25, "height": 4.25},
           "x": 2.75,
           "y": 11.25,
+          "orient": 0
+        },
+        {
+          "type": "point",
+          "key": "",
+          "meta": {"decor": true, "meta": true, "small": true, "y": 0.01},
+          "bounds2d": {"x": 0.125, "y": 8.725, "width": 4.25, "height": 4.25},
+          "x": 2.25,
+          "y": 10.85,
           "orient": 0
         },
         {
@@ -25809,7 +25845,7 @@
               [1.55, 10.55]
             ]
           ],
-          "meta": {}
+          "meta": {"small": true}
         },
         {
           "type": "Polygon",
@@ -25883,7 +25919,7 @@
               [4.55, 10.55]
             ]
           ],
-          "meta": {}
+          "meta": {"small": true}
         },
         {
           "type": "Polygon",
@@ -29252,7 +29288,7 @@
         {
           "type": "point",
           "key": "",
-          "meta": {"decor": true, "label": "locker", "y": 0},
+          "meta": {"decor": true, "label": "locker", "small": true, "y": 0},
           "bounds2d": {
             "x": 27.4775,
             "y": -1.285,
@@ -29266,7 +29302,7 @@
         {
           "type": "point",
           "key": "",
-          "meta": {"decor": true, "label": "locker", "y": 0},
+          "meta": {"decor": true, "label": "locker", "small": true, "y": 0},
           "bounds2d": {"x": 27.4775, "y": 0.215, "width": 4.25, "height": 4.25},
           "x": 29.6025,
           "y": 2.34,
@@ -29275,7 +29311,7 @@
         {
           "type": "point",
           "key": "",
-          "meta": {"decor": true, "label": "locker", "y": 0},
+          "meta": {"decor": true, "label": "locker", "small": true, "y": 0},
           "bounds2d": {"x": 27.4775, "y": 1.715, "width": 4.25, "height": 4.25},
           "x": 29.6025,
           "y": 3.84,
@@ -29284,7 +29320,7 @@
         {
           "type": "point",
           "key": "",
-          "meta": {"decor": true, "label": "locker", "y": 0},
+          "meta": {"decor": true, "label": "locker", "small": true, "y": 0},
           "bounds2d": {"x": 27.4775, "y": 3.215, "width": 4.25, "height": 4.25},
           "x": 29.6025,
           "y": 5.34,
@@ -30275,7 +30311,7 @@
               [29.324, 0.1]
             ]
           ],
-          "meta": {"label": "locker"}
+          "meta": {"label": "locker", "small": true}
         },
         {
           "type": "Polygon",
@@ -30288,7 +30324,7 @@
               [29.324, 1.55]
             ]
           ],
-          "meta": {"label": "locker"}
+          "meta": {"label": "locker", "small": true}
         },
         {
           "type": "Polygon",
@@ -30301,7 +30337,7 @@
               [29.324, 3.05]
             ]
           ],
-          "meta": {"label": "locker"}
+          "meta": {"label": "locker", "small": true}
         },
         {
           "type": "Polygon",
@@ -30314,7 +30350,7 @@
               [29.324, 4.55]
             ]
           ],
-          "meta": {"label": "locker"}
+          "meta": {"label": "locker", "small": true}
         }
       ],
       "walls": [
@@ -31212,6 +31248,24 @@
       "num": 303,
       "pngRect": {"x": -0.15, "y": -0.15, "width": 30.3, "height": 15.325},
       "decor": [
+        {
+          "type": "point",
+          "key": "",
+          "meta": {"decor": true, "meta": true, "small": true, "y": 0},
+          "bounds2d": {"x": 3.1, "y": 4.3, "width": 4.25, "height": 4.25},
+          "x": 5.225,
+          "y": 6.425,
+          "orient": 0
+        },
+        {
+          "type": "point",
+          "key": "",
+          "meta": {"decor": true, "meta": true, "small": true, "y": 0},
+          "bounds2d": {"x": 1.6, "y": 4.3, "width": 4.25, "height": 4.25},
+          "x": 3.725,
+          "y": 6.425,
+          "orient": 0
+        },
         {
           "type": "quad",
           "key": "",
@@ -32599,6 +32653,20 @@
           "det": 1
         },
         {
+          "type": "point",
+          "key": "",
+          "meta": {"decor": true, "meta": true, "small": true, "y": 0.01},
+          "bounds2d": {
+            "x": 14.0335,
+            "y": 1.6279,
+            "width": 4.25,
+            "height": 4.25
+          },
+          "x": 16.1585,
+          "y": 3.7529,
+          "orient": 0
+        },
+        {
           "type": "cuboid",
           "key": "",
           "meta": {"decor": true, "cuboid": true, "h": 0.2, "y": 0.3},
@@ -32726,6 +32794,15 @@
           "det": 1
         },
         {
+          "type": "point",
+          "key": "",
+          "meta": {"decor": true, "meta": true, "small": true, "y": 0.01},
+          "bounds2d": {"x": 8.0335, "y": 1.6279, "width": 4.25, "height": 4.25},
+          "x": 10.1585,
+          "y": 3.7529,
+          "orient": 0
+        },
+        {
           "type": "cuboid",
           "key": "",
           "meta": {"decor": true, "cuboid": true, "h": 0.2, "y": 0.3},
@@ -32846,6 +32923,20 @@
           "transform": [0, 0.15, -0.15, 0, 13.6299, 4.3],
           "center": {"x": 13.555, "y": 4.375},
           "det": 1
+        },
+        {
+          "type": "point",
+          "key": "",
+          "meta": {"decor": true, "meta": true, "small": true, "y": 0.01},
+          "bounds2d": {
+            "x": 11.0335,
+            "y": 1.6279,
+            "width": 4.25,
+            "height": 4.25
+          },
+          "x": 13.1585,
+          "y": 3.7529,
+          "orient": 0
         },
         {
           "type": "cuboid",
@@ -32973,6 +33064,15 @@
           "transform": [0, 0.15, -0.15, 0, 7.6299, 4.3],
           "center": {"x": 7.555, "y": 4.375},
           "det": 1
+        },
+        {
+          "type": "point",
+          "key": "",
+          "meta": {"decor": true, "meta": true, "small": true, "y": 0.01},
+          "bounds2d": {"x": 5.0335, "y": 1.6279, "width": 4.25, "height": 4.25},
+          "x": 7.1585,
+          "y": 3.7529,
+          "orient": 0
         },
         {
           "type": "cuboid",
@@ -36476,7 +36576,7 @@
               [1.36, 6.075]
             ]
           ],
-          "meta": {}
+          "meta": {"small": true}
         },
         {
           "type": "Polygon",
@@ -36490,7 +36590,7 @@
               [4.5385, 6.0625]
             ]
           ],
-          "meta": {}
+          "meta": {"small": true}
         },
         {
           "type": "Polygon",
@@ -36524,7 +36624,7 @@
               [6.05, 3.05]
             ]
           ],
-          "meta": {}
+          "meta": {"small": true}
         },
         {
           "type": "Polygon",
@@ -36601,7 +36701,7 @@
               [9.05, 3.05]
             ]
           ],
-          "meta": {}
+          "meta": {"small": true}
         },
         {
           "type": "Polygon",
@@ -36661,7 +36761,7 @@
               [12.05, 3.05]
             ]
           ],
-          "meta": {}
+          "meta": {"small": true}
         },
         {
           "type": "Polygon",
@@ -36721,7 +36821,7 @@
               [15.05, 3.05]
             ]
           ],
-          "meta": {}
+          "meta": {"small": true}
         },
         {
           "type": "Polygon",
