@@ -67,14 +67,21 @@ class GeomorphService {
         }
       )
     ));
+
     const rooms = Poly.union(uncutWalls.concat(symbol.windows)).flatMap((x) =>
       x.holes.map((ring) => new Poly(ring).fixOrientation())
     );
-    // room meta comes from decor.meta tagged meta
-    const metaDecor = symbol.decor.filter(x => x.meta.meta);
-    rooms.forEach((room) => Object.assign(
-      room.meta = {}, metaDecor.find((x) => room.contains(x.outline[0]))?.meta, { meta: undefined }
-    ));
+    // room meta comes from decor tagged with "meta"
+    // 🤔 can compute faster client-side via pixel-look-up
+    const metaDecor = new Set(symbol.decor.filter(x => x.meta.meta === true));
+    rooms.forEach((room) => {
+      for (const d of metaDecor) {
+        if (room.contains(d.outline[0])) {
+          metaDecor.delete(d); // at most 1 room
+          Object.assign(room.meta, d.meta, { decor: undefined, meta: undefined, y: undefined });
+        }
+      }
+    });
 
     const decor = /** @type {Geomorph.Decor[]} */ ([]);
     const labels = /** @type {Geomorph.DecorPoint[]} */ ([]);

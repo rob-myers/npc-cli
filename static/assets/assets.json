@@ -251,7 +251,7 @@
     },
     "lab--018--4x4": {"outputHash": -60363701, "pngHash": -664822987},
     "lab--023--4x4": {
-      "outputHash": 515282103,
+      "outputHash": 418313658,
       "pngHash": -1594118441,
       "obsHashes": [1641095410]
     },
@@ -12448,7 +12448,7 @@
         {
           "type": "Polygon",
           "coordinates": [[[2.5, 2.95], [2.55, 2.95], [2.55, 3], [2.5, 3]]],
-          "meta": {"decor": true, "label": "lab"}
+          "meta": {"decor": true, "meta": true, "label": "lab"}
         },
         {
           "type": "Polygon",
