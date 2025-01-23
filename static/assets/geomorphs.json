@@ -39755,7 +39755,7 @@
     },
     "obstacleDims": [{"width": 2210, "height": 2308}],
     "maxObstacleDim": {"width": 2210, "height": 2308},
-    "imagesHash": -479822459,
+    "imagesHash": 322981428,
     "skins": {
       "svgHash": {"cuboid-man": -1087841574, "cuboid-pet": -1224685710},
       "uvMap": {
