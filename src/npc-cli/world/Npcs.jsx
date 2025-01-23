@@ -80,6 +80,10 @@ export default function Npcs(props) {
         return npc;
       }
     },
+    getByNpcUid(uid) {
+      const npcKey = state.uid.toKey.get(uid);
+      return state.npc[/** @type {string} */ (npcKey)];
+    },
     isPointInNavmesh(input) {
       const v3 = toV3(input);
       const { success, point } = w.crowd.navMeshQuery.findClosestPoint(v3, { halfExtents: { x: 0.001, y: 0.001, z: 0.001 } });
@@ -312,6 +316,7 @@ export default function Npcs(props) {
  * @property {(npcKey: string, processApi?: any) => NPC.NPC} getNpc
  * Throws if does not exist 🚧 any -> ProcessApi (?)
  * @property {(p: THREE.Vector3, maxDelta?: number) => null | THREE.Vector3} getClosestNavigable
+ * @property {(uid: number) => NPC.NPC} getByNpcUid
  * @property {(input: Geom.VectJson | THREE.Vector3Like) => boolean} isPointInNavmesh
  * @property {() => void} restore
  * @property {(deltaMs: number) => void} onTick

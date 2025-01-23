@@ -330,10 +330,9 @@ export class Npc {
       /** @type {dtCrowdNeighbour} */ let nei;
       for (let i = 0; i < nneis; i++) {
         nei = agent.raw.get_neis(i);
-        if (nei.dist < helper.defaults.radius * 0.7) {// cancel traversal and other
+        if (nei.dist < helper.defaults.radius * 0.85) {// cancel traversal and other
           this.stopMoving();
-          const other = this.w.n[/** @type {string} */ (this.w.npc.uid.toKey.get(nei.idx))];
-          other.stopMoving()
+          this.w.npc.getByNpcUid(nei.idx).stopMoving();
           break;
         }
       }
