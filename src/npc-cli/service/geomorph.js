@@ -71,14 +71,14 @@ class GeomorphService {
     const rooms = Poly.union(uncutWalls.concat(symbol.windows)).flatMap((x) =>
       x.holes.map((ring) => new Poly(ring).fixOrientation())
     );
-    // room meta comes from decor tagged with "meta"
+    // room meta comes from decor tagged with "label"
     // 🤔 can compute faster client-side via pixel-look-up
-    const metaDecor = new Set(symbol.decor.filter(x => x.meta.meta === true));
+    const metaDecor = new Set(symbol.decor.filter(x => typeof x.meta.label === 'string'));
     rooms.forEach((room) => {
       for (const d of metaDecor) {
         if (room.contains(d.outline[0])) {
           metaDecor.delete(d); // at most 1 room
-          Object.assign(room.meta, d.meta, { decor: undefined, meta: undefined, y: undefined });
+          Object.assign(room.meta, d.meta, { decor: undefined, y: undefined });
         }
       }
     });

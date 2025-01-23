@@ -90,7 +90,7 @@
     <title>decor rect shower collider</title>
   </rect>
   <rect width="5" height="5" style="fill-opacity: 0.5; stroke: rgb(0, 0, 0); fill: rgb(0, 255, 0);" x="360" y="426">
-    <title>decor meta label=stateroom</title>
+    <title>decor label=stateroom</title>
   </rect>
   <rect x="545" y="145" width="10" height="10" style="fill-opacity: 0.9; stroke: rgb(0, 0, 0); fill: rgb(0, 255, 0);">
     <title>decor button shower y=1</title>

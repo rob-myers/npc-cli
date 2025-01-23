@@ -98,7 +98,8 @@
 - ✅ can `npc.stopMoving()` whilst traversing offMeshConnection without jerk
 - 🚧 review room meta `gms[gmId].rooms[roomId].meta`
   - ✅ exclude `decor`, `meta` and `y` from meta
-  - 🚧 ensure every "decor label" in SVG symbols also has "meta"
+  - ✅ "label" replaces "meta" 
+  - 🚧 add "small" to relevant metas
 
 - 🚧 offMeshConnection multiple agent follow up
   - ✅ seg 'init' or 'main' --> state? {0, 1, 2} i.e. init, offMeshConnection 1st half, offMeshConnection 2nd half

@@ -98,7 +98,7 @@
     </use>
   </g>
   <rect width="10" height="10" style="fill-opacity: 0.5; fill: rgb(0, 255, 0); stroke: rgb(0, 0, 0);" x="251.9" y="388.2">
-    <title>decor meta label=fresher</title>
+    <title>decor label=fresher</title>
   </rect>
   <rect y="-10" width="20" height="610" style="fill-opacity: 0.5; fill: rgb(255, 0, 0);" x="590">
     <title>wall</title>

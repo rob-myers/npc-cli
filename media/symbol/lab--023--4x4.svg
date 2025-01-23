@@ -66,7 +66,7 @@
                 </use>
         </g>
         <rect width="10" height="10" style="fill-opacity: 0.5; fill: rgb(0, 255, 0); stroke: rgb(0, 0, 0);" x="60" y="88.080002" transform="matrix(0, -1, 1, 0, 411.919982910156, 660)">
-                <title>decor meta label=lab</title>
+                <title>decor label=lab</title>
         </rect>
         <rect y="1192.5" width="1220" height="20" style="stroke: rgb(0, 0, 0); fill: rgb(255, 0, 0); fill-opacity: 0.5;" x="-10">
                 <title>wall</title>
