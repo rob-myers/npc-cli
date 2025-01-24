@@ -93,6 +93,8 @@
   - ✅ only initially replan when needed
     - ✅ only initially replan when nearby some door
     - ❌ gmRoomGraph search
+- ✅ smoother turn when finish after exiting offMeshConnection
+- ✅ more offMeshConnections without breaking 102
 
 - 🚧 offMeshConnection multiple agent follow up
   - ✅ seg 'init' or 'main' --> state? {0, 1, 2} i.e. init, offMeshConnection 1st half, offMeshConnection 2nd half
