@@ -110,8 +110,9 @@
     - ❌ forbid multiple npcs in small rooms
     - ✅ some rooms have meta.small
     - ✅ forbid traversal to "small room" if other npc is over dst
-  - avoid runner catching up inside offMeshConnection
-    - forbid faster following slower
+  - 🚧 avoid runner catching up inside offMeshConnection
+    - ℹ️ repro: `w n.rob.moveTo ${p} & w n.will.moveTo ${p} &`
+    - 🚧 forbid faster following slower
   - ❌ only block npc if "door has nearby corners"
     - e.g. hull doors, various doors in 101
 

@@ -250,6 +250,10 @@ export default function useHandleEvents(w) {
           const { npcKey, gmId, roomId, grKey } = e;
           state.npcToRoom.set(npcKey, { gmId, roomId, grKey });
           (state.roomToNpcs[gmId][roomId] ??= new Set()).add(npcKey);
+
+          if (npc.s.target !== null && npc.position.distanceTo(npc.s.target) <= 1) {
+            npc.s.lookSecs = 0.3; // slower look if stopping soon
+          }
           break;
         }
         case "exit-room": {
