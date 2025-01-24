@@ -1,8 +1,7 @@
 import * as THREE from "three";
 import { init as initRecastNav, exportTileCache } from "@recast-navigation/core";
 
-import { GmGraphClass } from "../graph/gm-graph";
-import { error, info, debug, warn, removeDups, range } from "../service/generic";
+import { error, info, debug, range } from "../service/generic";
 import { geomorph } from "../service/geomorph";
 import { customThreeToTileCache, getTileCacheGeneratorConfig, getTileCacheMeshProcess, computeGmInstanceMesh } from "../service/recast-detour";
 import { fetchGeomorphsJson } from "../service/fetch-assets";
