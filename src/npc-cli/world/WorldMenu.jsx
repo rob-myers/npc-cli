@@ -155,6 +155,8 @@ export default function WorldMenu(props) {
 }
 
 const loggerPopUpCss = css`
+  pointer-events: all;
+
   .${popUpButtonClassName} {
     color: #8888ff;
     padding: 2px 12px;
@@ -177,6 +179,8 @@ const loggerContainerCss = css`
 
   display: flex;
   flex-direction: column;
+  align-items: start;
+  pointer-events: none;
   
   color: white;
   font-size: 12px;
@@ -185,6 +189,7 @@ const loggerContainerCss = css`
   .logger {
     width: 100%;
     height: calc(100% - 20px);
+    pointer-events: all;
     
     border: 0px solid black;
     border-width: 8px 0 0 16px;
