@@ -43,12 +43,22 @@ export function computeGmInstanceMesh(gm) {
  */
 export function computeOffMeshConnectionsParams(w) {
   
-  // ignore isolated hull doors
-  // ignore 2nd identified hull door
+  /**
+   * - ignore isolated hull doors
+   * - ignore 2nd identified hull door
+   */
   const ignoreGdKeys = /** @type {Set<Geomorph.GmDoorKey>} */ (new Set());
 
+  /** `gms[gmId].doors[doorId]` are the metas of the adjacent rooms */
+  const doorRoomMetas = w.gms.map(gm => {
+    const roomMetas = gm.rooms.map(x => x.meta);
+    return gm.doors.map(({ roomIds }) => 
+      roomIds.flatMap(roomId => roomId !== null ? roomMetas[roomId] : [])
+    );
+  });
+
   return w.gms.flatMap((gm, gmId) => gm.doors.flatMap(/** @returns {import("recast-navigation").OffMeshConnectionParams[]} */
-    ({ center, normal, meta }, doorId) => {
+    ({ center, normal, meta, roomIds }, doorId) => {
 
       if (meta.hull === true) {
         const adj = w.gmGraph.getAdjacentRoomCtxt(gmId, doorId);
@@ -59,10 +69,17 @@ export function computeOffMeshConnectionsParams(w) {
         }
       }
 
+      /**
+       * 🔔 saw nav fail in 102 (top right) when many offMeshConnections, which
+       * we fix via room.meta "small" and "narrow-entrances"
+       */
+      const narrowEntrance = meta.hull === true ? false : doorRoomMetas[gmId][doorId].some(x =>
+        x.small === true || x['narrow-entrances'] === true
+      );
       const halfLength = wallOutset + (meta.hull === true ? 0.25 : 0.125);
-      // 🔔 saw nav fail in 102 (top right) when many offMeshConnections
-      // 🔔 saw collisionQueryRange cause jerk when parallel offMeshConnections too close (hull door)
-      const offsets = meta.hull === true ? [-0.3, 0.01, 0.3] : meta.iris === true ? [-0.25, 0.01, 0.25] : [0.01];
+      // const offsets = meta.hull === true ? [-0.3, 0.01, 0.3] : meta.iris === true ? [-0.25, 0.01, 0.25] : [0.01];
+      const offsets = meta.hull === true ? [-0.3, 0.01, 0.3] : narrowEntrance === false ? [-0.25, 0.01, 0.25] : [0.01];
+
       const src = gm.matrix.transformPoint(center.clone().addScaled(normal, halfLength));
       const dst = gm.matrix.transformPoint(center.clone().addScaled(normal, -halfLength));
       const tangent = { x: -normal.y, y: normal.x };
