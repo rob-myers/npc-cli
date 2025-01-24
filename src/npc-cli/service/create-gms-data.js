@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import { doorDepth, doorHeight, floorTextureDimension, gmFloorExtraScale, gmHitTestExtraScale, hitTestRed, hullDoorDepth, wallHeight, worldToSguScale } from "./const";
+import { doorDepth, doorHeight, gmHitTestExtraScale, hitTestRed, hullDoorDepth, wallHeight, worldToSguScale } from "./const";
 import { mapValues, pause, warn } from "./generic";
 import { drawPolygons } from "./dom";
 import { Poly } from '../geom';
@@ -8,7 +8,6 @@ import { geomorph } from "./geomorph";
 import { BaseGraph } from '../graph/base-graph';
 import { RoomGraphClass } from "../graph/room-graph";
 import { helper } from './helper';
-import { TexArray, emptyTexArray } from './tex-array';
 
 export default function createGmsData() {
   const gmsData = {
