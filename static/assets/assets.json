@@ -1,7 +1,7 @@
 {
   "meta": {
     "101--hull": {"outputHash": 2144351594, "pngHash": 568633107},
-    "102--hull": {"outputHash": 1831387194, "pngHash": 184103855},
+    "102--hull": {"outputHash": -468807365, "pngHash": 184103855},
     "103--hull": {"outputHash": -145902053, "pngHash": -1937509879},
     "301--hull": {"outputHash": 621787023, "pngHash": 787602800},
     "302--hull": {"outputHash": -1512501350, "pngHash": -1557128953},
@@ -2775,8 +2775,12 @@
         },
         {
           "type": "Polygon",
-          "coordinates": [[[28.75, 3.25], [28.5, 3.25], [28.5, 3], [28.75, 3]]],
-          "meta": {"decor": true, "label": "research launch"}
+          "coordinates": [[[28.75, 3.1], [28.65, 3.1], [28.65, 3], [28.75, 3]]],
+          "meta": {
+            "decor": true,
+            "label": "research launch",
+            "narrow-entrances": true
+          }
         },
         {
           "type": "Polygon",
@@ -2793,7 +2797,7 @@
         {
           "type": "Polygon",
           "coordinates": [
-            [[24.8, 5.15], [24.8, 5.2], [24.75, 5.2], [24.75, 5.15]]
+            [[24.8, 5.15], [24.8, 5.25], [24.7, 5.25], [24.7, 5.15]]
           ],
           "meta": {"decor": true, "meta": true, "small": true}
         },

@@ -9740,9 +9740,9 @@
           "type": "point",
           "key": "",
           "meta": {"decor": true, "meta": true, "small": true, "y": 0},
-          "bounds2d": {"x": 22.65, "y": 3.05, "width": 4.25, "height": 4.25},
-          "x": 24.775,
-          "y": 5.175,
+          "bounds2d": {"x": 22.625, "y": 3.075, "width": 4.25, "height": 4.25},
+          "x": 24.75,
+          "y": 5.2,
           "orient": 0
         },
         {
@@ -12942,10 +12942,15 @@
         {
           "type": "point",
           "key": "",
-          "meta": {"decor": true, "label": "research launch", "y": 0},
-          "bounds2d": {"x": 26.5, "y": 1, "width": 4.25, "height": 4.25},
-          "x": 28.625,
-          "y": 3.125,
+          "meta": {
+            "decor": true,
+            "label": "research launch",
+            "narrow-entrances": true,
+            "y": 0
+          },
+          "bounds2d": {"x": 26.575, "y": 0.925, "width": 4.25, "height": 4.25},
+          "x": 28.7,
+          "y": 3.05,
           "orient": 0
         },
         {
@@ -16890,7 +16895,7 @@
               [27.05, 0.1]
             ]
           ],
-          "meta": {"label": "research launch"}
+          "meta": {"label": "research launch", "narrow-entrances": true}
         },
         {
           "type": "Polygon",

@@ -311,8 +311,8 @@
         <rect x="882.464981" y="544.124985" width="50" height="50" style="fill-opacity: 0.9; stroke: rgb(0, 0, 0); fill: rgb(255, 255, 0);">
                 <title>decor label=engineering</title>
         </rect>
-        <rect x="1200" y="1500" width="50" height="50" style="fill-opacity: 0.9; fill: rgb(0, 255, 0); stroke: rgb(0, 0, 0);" transform="matrix(0, 1, -1, 0, 7250, -600)">
-                <title>decor label='research launch'</title>
+        <rect x="480" y="600" width="20" height="20" style="fill-opacity: 0.9; fill: rgb(0, 255, 0); stroke: rgb(0, 0, 0);" transform="matrix(0, 1, -1, 0, 6349.999999999984, 120.000000000001)">
+                <title>decor label='research launch' narrow-entrances</title>
         </rect>
         <rect x="1200" y="1500" width="50" height="50" style="fill-opacity: 0.9; fill: rgb(0, 255, 0); stroke: rgb(0, 0, 0);" transform="matrix(0, 1, -1, 0, 6050, -850)">
                 <title>decor label=corridor</title>
@@ -320,7 +320,7 @@
         <rect x="4950" y="740" width="10" height="10" style="fill-opacity: 0.9; stroke: rgb(0, 0, 0); fill: rgb(0, 255, 0);">
                 <title>decor meta small</title>
         </rect>
-        <rect x="4950" y="1030" width="10" height="10" style="fill-opacity: 0.9; stroke: rgb(0, 0, 0); fill: rgb(0, 255, 0);">
+        <rect x="4940" y="1030" width="20" height="20" style="fill-opacity: 0.9; stroke: rgb(0, 0, 0); fill: rgb(0, 255, 0);">
                 <title>decor meta small</title>
         </rect>
         <rect x="-20" y="1240" width="40" height="240" style="fill: rgb(255, 255, 255); stroke: rgb(0, 0, 0);">
