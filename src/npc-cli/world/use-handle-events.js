@@ -322,16 +322,11 @@ export default function useHandleEvents(w) {
           break;
         case "started-moving":
           /**
-           * 🔔 avoid initially incorrect offMeshConnection traversal, by
-           * replanning immediately i.e. before 1st updateRequestMoveTarget
+           * 🔔 avoid initial incorrect offMeshConnection traversal, by
+           * replanning immediately before 1st updateRequestMoveTarget.
            */
-          for (const gdKey of state.npcToDoors[e.npcKey]?.nearby ?? []) {
-            const door = w.door.byKey[gdKey];
-            if (door.center.distanceToSquared(npc.getPoint()) < 0.5 ** 2) {
-              /** @type {NPC.CrowdAgent} */ (npc.agent).raw.set_targetReplan(true);
-              break;
-            }
-          }
+          // 🚧 better fix e.g. inside Recast-Detour
+          /** @type {NPC.CrowdAgent} */ (npc.agent).raw.set_targetReplan(true);
           break;
       }
     },
