@@ -47,7 +47,7 @@ function createGridPattern(dim, color) {
   tmpCtxt.resetTransform();
   tmpCtxt.clearRect(0, 0, dim, dim);
   tmpCtxt.strokeStyle = color;
-  tmpCtxt.lineWidth = 2;
+  tmpCtxt.lineWidth = 1;
   tmpCtxt.strokeRect(0, 0, dim, dim);
   tmpCtxt.resetTransform();
   return /** @type {CanvasPattern} */ (tmpCtxt.createPattern(tmpCtxt.canvas, 'repeat'));
