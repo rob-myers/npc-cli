@@ -375,14 +375,14 @@ export default function useHandleEvents(w) {
       }
 
       // detect blocking npcKey in small room
-      if (offMesh.dstRoomMeta.small === true && Array.from(state.doorToNearbyNpcs[offMesh.gdKey]).find(npcKey =>
+      if (offMesh.dstRoomMeta.small === true && Array.from(state.doorToNearbyNpcs[offMesh.gdKey] ?? []).find(npcKey =>
         npcKey !== e.npcKey && w.n[npcKey].position.distanceToSquared(offMesh.dst) < 0.1 ** 2
       )) {
         return npc.stopMoving();
       }
       
       // detect slower npcKey
-      if (npc.s.run === true && state.doorToOffMesh[offMesh.gdKey].some(x => w.n[x.npcKey].s.run === false)) {
+      if (npc.s.run === true && state.doorToOffMesh[offMesh.gdKey]?.some(x => w.n[x.npcKey].s.run === false)) {
         return npc.stopMoving();
       }
 
