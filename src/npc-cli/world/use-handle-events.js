@@ -370,15 +370,19 @@ export default function useHandleEvents(w) {
       if (state.doorToOffMesh[offMesh.gdKey]?.findLast(other => 
         other.orig.srcGrKey !== offMesh.srcGrKey // opposite direction
         || other.seg === 0 // hasn't reached main segment
-        // || w.n[other.npcKey].position.distanceTo(npc.position) < 1.2 * npc.getRadius()
       )) {
         return npc.stopMoving();
       }
 
-      // detect conflicting npcKey when dst room small
+      // detect blocking npcKey in small room
       if (offMesh.dstRoomMeta.small === true && Array.from(state.doorToNearbyNpcs[offMesh.gdKey]).find(npcKey =>
         npcKey !== e.npcKey && w.n[npcKey].position.distanceToSquared(offMesh.dst) < 0.1 ** 2
       )) {
+        return npc.stopMoving();
+      }
+      
+      // detect slower npcKey
+      if (npc.s.run === true && state.doorToOffMesh[offMesh.gdKey].some(x => w.n[x.npcKey].s.run === false)) {
         return npc.stopMoving();
       }
 

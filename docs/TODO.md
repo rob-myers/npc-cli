@@ -101,13 +101,13 @@
     - ❌ forbid multiple npcs in small rooms
     - ✅ some rooms have meta.small
     - ✅ forbid traversal to "small room" if other npc is over dst
-  - 🚧 avoid runner catching up inside offMeshConnection
+  - ✅ avoid runner catching up inside offMeshConnection
     - ℹ️ repro: `w n.rob.moveTo ${p} & w n.will.moveTo ${p} &`
-    - 🚧 forbid faster following slower
+    - ✅ ✅
   - ❌ only block npc if "door has nearby corners"
     - e.g. hull doors, various doors in 101
 
-- 🚧 variable angle offMeshConnections
+- ✅ variable angle offMeshConnections
   - ✅ on enter offMeshConnection can see corner after dst
     - `[6, 7, 8].map(i => npc.agent.raw.get_cornerVerts(i))`
   - ✅ get `agent.corners()` working for offMeshConnections by changing DetourCrowd.cpp (local only)
@@ -121,7 +121,8 @@
     - ✅ compute targetSeg
   - ✅ try compute better dst via leeway
   - ✅ fix turning
-  - 🚧 handle offMeshConnection collisions
+  - ✅ handle offMeshConnection collisions
+    - not seeing any new issues
 
 
 - 🚧 integrate Viewer into blog
