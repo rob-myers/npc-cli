@@ -418,7 +418,7 @@ class geomServiceClass {
    * @param {Geom.VectJson} b
    * @returns {Geom.VectJson & { dst: number }}
    */
-  getClosestOnLineSeg(p, a, b) {
+  getClosestOnSeg(p, a, b) {
     const x = p.x;
     const y = p.y;
     const x1 = a.x;
@@ -459,6 +459,25 @@ class geomServiceClass {
   }
 
   /**
+   * Find closest point on segment `[p0, p1]` to segment `[q0, q1]`
+   * @param {Geom.VectJson} p0 
+   * @param {Geom.VectJson} p1 
+   * @param {Geom.VectJson} q0 
+   * @param {Geom.VectJson} q1 
+   */
+  getClosestOnSegToLine(p0, p1, q0, q1) {
+    const lambda = this.getLineSegsIntersection(p0, p1, q0, q1);
+    if (lambda === null) {
+      const normal = tmpVec1.set(-(q1.y - q0.y), q1.x - q0.x).normalize();
+      const dist0 = Math.abs(normal.dot(tmpVec2.copy(p0).sub(q0)));
+      const dist1 = Math.abs(normal.dot(tmpVec2.copy(p1).sub(q0)));
+      return dist0 < dist1 ? p0 : p1;
+    } else {// p0 + (p1 - p0) * lambda
+      return Vect.from(p0).addScaled(Vect.from(p1).sub(p0), lambda);
+    }
+  }
+
+  /**
    * Source: https://github.com/martywallace/polyk/blob/90757dbd3d358f68c3a1a54e50710548a435ee7a/index.js#L390
    * @param {Geom.VectJson} point
    * @param {Geom.VectJson[]} outline
@@ -479,7 +498,7 @@ class geomServiceClass {
     for (var i = 0; i < p.length; i++) {
       b1.copy(p[i]);
       b2.copy(p[(i + 1) % p.length]);
-      const result = this.getClosestOnLineSeg(a1, b1, b2);
+      const result = this.getClosestOnSeg(a1, b1, b2);
       if (result.dst < isc.dist) {
         isc.dist = result.dst;
         isc.edgeId = i;
