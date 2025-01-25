@@ -59,6 +59,9 @@ export default function WorldMenu(props) {
     onOverlayPointerUp() {
       props.setTabsEnabled(true);
     },
+    onResizeLoggerHeight(e) {
+      console.log(Number(e.currentTarget.value));
+    },
     say(npcKey, ...parts) {
       const line = parts.join(' ');
       state.logger.xterm.writeln(
@@ -109,31 +112,36 @@ export default function WorldMenu(props) {
       </button>
     </div>}
 
-    {/* 🚧 move measures option into paused menu */}
-    {/* <div className="controls">
-      <label>
-        <input
-          type="checkbox"
-          defaultChecked={state.showMeasures}
-          onChange={state.changeShowMeasures}
-        />
-        measure
-      </label>
-    </div> */}
-    
     {w.view.rootEl && createPortal(
       <Draggable
         className={loggerContainerCss}
         container={w.view.rootEl}
         initPos={{ x: 0, y: 0 }}
-        // 🚧 disable by default on mobile
         enabled={state.canDragLogger}
       >
         <PopUp
           label="⋯"
           className={loggerPopUpCss}
         >
-          Foo bar baz
+          <label>
+            <input
+              type="checkbox"
+              defaultChecked={state.showMeasures}
+              onChange={state.changeShowMeasures}
+            />
+            debug
+          </label>
+
+          <label>
+            <input
+              type="range"
+              className="vertical-size"
+              min={0}
+              max={20}
+              onChange={state.onResizeLoggerHeight}
+            />
+            h
+          </label>
         </PopUp>
         <Logger
           ref={state.ref('logger')}
@@ -169,6 +177,18 @@ const loggerPopUpCss = css`
     display: flex;
     justify-content: center;
     align-items: center;
+    gap: 8px;
+
+    font-size: smaller;
+    
+    label {
+      display: flex;
+      gap: 4px;
+    }
+
+    .vertical-size {
+      width: 60px;
+    }
   }
 `;
 
@@ -255,6 +275,7 @@ const cssTtyDisconnectedMessage = css`
  * Measure durations by sending same `msg` twice.
  * @property {(e: NPC.ClickLinkEvent) => void} onClickLoggerLink
  * @property {() => void} onOverlayPointerUp
+ * @property {(e: React.ChangeEvent<HTMLInputElement>) => void} onResizeLoggerHeight
  * @property {(npcKey: string, line: string) => void} say
  * @property {() => void} toggleDebug
  * @property {() => void} toggleXRay
