@@ -202,7 +202,14 @@ const loggerContainerCss = css`
   
   /* 🚧 */
   max-width: 800px;
+
   height: 120px;
+  > div:nth-child(1) {
+    height: 20px;
+  }
+  > div:nth-child(2) {
+    height: 100px;
+  }
 
   display: flex;
   flex-direction: column;
