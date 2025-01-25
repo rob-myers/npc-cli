@@ -146,7 +146,7 @@ const rootPopupCss = css`
     
     font-size: 0.95rem;
     font-style: normal;
-    text-align: center;
+    /* text-align: center; */
     white-space: nowrap;
     
     .${popUpContentClassName} {

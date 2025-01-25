@@ -85,46 +85,6 @@
   - move `w.bubble.say` -> `w.e.say`
   - profile-1 has link listener
 
-- 🚧 offMeshConnection multiple agent follow up
-  - ✅ seg 'init' or 'main' --> state? {0, 1, 2} i.e. init, offMeshConnection 1st half, offMeshConnection 2nd half
-  - ✅ remove "midpoint offMeshConnection radius change"
-  - ℹ️ jerky when run from other side
-  - ℹ️ https://github.com/recastnavigation/recastnavigation/blob/77f7e54bc8cf5a816f9f087a3e0ac391d2043be3/DetourCrowd/Source/DetourCrowd.cpp#L1211
-  - ℹ️ can turn off agent separation flag
-  - ℹ️ seems `yarn build` in recast-navigation-wasm is hot-reloading ?!
-  - ❌ C++: separation ignores other agents on offMeshConnection whose velocity heads away?
-    - nei velocity dot product with this vector?
-    - https://github.com/recastnavigation/recastnavigation/blob/77f7e54bc8cf5a816f9f087a3e0ac391d2043be3/DetourCrowd/Source/DetourCrowd.cpp#L1226
-  - ✅ C++ collisions: ignore offMesh neighbour who hasn't reached "main segment"
-    - ✅ this avoids the jerk, but means we need to handle such collisions ourselves
-  - ✅ avoid coinciding agents at offMeshConnection dst in small rooms e.g. small toilet
-    - ❌ forbid multiple npcs in small rooms
-    - ✅ some rooms have meta.small
-    - ✅ forbid traversal to "small room" if other npc is over dst
-  - ✅ avoid runner catching up inside offMeshConnection
-    - ℹ️ repro: `w n.rob.moveTo ${p} & w n.will.moveTo ${p} &`
-    - ✅ ✅
-  - ❌ only block npc if "door has nearby corners"
-    - e.g. hull doors, various doors in 101
-
-- ✅ variable angle offMeshConnections
-  - ✅ on enter offMeshConnection can see corner after dst
-    - `[6, 7, 8].map(i => npc.agent.raw.get_cornerVerts(i))`
-  - ✅ get `agent.corners()` working for offMeshConnections by changing DetourCrowd.cpp (local only)
-  - ✅ try recompute agentAnim on enter offMeshConnection
-    - e.g. shift it to right
-  - ✅ try compute better src via leeway
-    - ℹ️ closest point on "entrance segment" to seg "npc.position -> npc.agent.corners[2]"
-    - ✅ precompute door.entrances
-    - ✅ fix door.entrances i.e. cannot use `door.seg` because it includes non-navigable part
-    - ✅ compute entranceSeg using entrances and offMesh.aligned
-    - ✅ compute targetSeg
-  - ✅ try compute better dst via leeway
-  - ✅ fix turning
-  - ✅ handle offMeshConnection collisions
-    - not seeing any new issues
-
-
 - 🚧 integrate Viewer into blog
   - 🚧 screenshots in 1st blog
     - ✅ screenshot data-url i.e. `w view.toDataURL`
@@ -3599,3 +3559,42 @@ done
     - ❌ gmRoomGraph search
 - ✅ smoother turn when finish after exiting offMeshConnection
 - ✅ more offMeshConnections without breaking 102
+
+- ✅ offMeshConnection multiple agent follow up
+  - ✅ seg 'init' or 'main' --> state? {0, 1, 2} i.e. init, offMeshConnection 1st half, offMeshConnection 2nd half
+  - ✅ remove "midpoint offMeshConnection radius change"
+  - ℹ️ jerky when run from other side
+  - ℹ️ https://github.com/recastnavigation/recastnavigation/blob/77f7e54bc8cf5a816f9f087a3e0ac391d2043be3/DetourCrowd/Source/DetourCrowd.cpp#L1211
+  - ℹ️ can turn off agent separation flag
+  - ℹ️ seems `yarn build` in recast-navigation-wasm is hot-reloading ?!
+  - ❌ C++: separation ignores other agents on offMeshConnection whose velocity heads away?
+    - nei velocity dot product with this vector?
+    - https://github.com/recastnavigation/recastnavigation/blob/77f7e54bc8cf5a816f9f087a3e0ac391d2043be3/DetourCrowd/Source/DetourCrowd.cpp#L1226
+  - ✅ C++ collisions: ignore offMesh neighbour who hasn't reached "main segment"
+    - ✅ this avoids the jerk, but means we need to handle such collisions ourselves
+  - ✅ avoid coinciding agents at offMeshConnection dst in small rooms e.g. small toilet
+    - ❌ forbid multiple npcs in small rooms
+    - ✅ some rooms have meta.small
+    - ✅ forbid traversal to "small room" if other npc is over dst
+  - ✅ avoid runner catching up inside offMeshConnection
+    - ℹ️ repro: `w n.rob.moveTo ${p} & w n.will.moveTo ${p} &`
+    - ✅ ✅
+  - ❌ only block npc if "door has nearby corners"
+    - e.g. hull doors, various doors in 101
+
+- ✅ variable angle offMeshConnections
+  - ✅ on enter offMeshConnection can see corner after dst
+    - `[6, 7, 8].map(i => npc.agent.raw.get_cornerVerts(i))`
+  - ✅ get `agent.corners()` working for offMeshConnections by changing DetourCrowd.cpp (local only)
+  - ✅ try recompute agentAnim on enter offMeshConnection
+    - e.g. shift it to right
+  - ✅ try compute better src via leeway
+    - ℹ️ closest point on "entrance segment" to seg "npc.position -> npc.agent.corners[2]"
+    - ✅ precompute door.entrances
+    - ✅ fix door.entrances i.e. cannot use `door.seg` because it includes non-navigable part
+    - ✅ compute entranceSeg using entrances and offMesh.aligned
+    - ✅ compute targetSeg
+  - ✅ try compute better dst via leeway
+  - ✅ fix turning
+  - ✅ handle offMeshConnection collisions
+    - not seeing any new issues

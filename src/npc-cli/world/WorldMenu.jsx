@@ -9,7 +9,7 @@ import useStateRef from "../hooks/use-state-ref";
 import useUpdate from "../hooks/use-update";
 import { faderOverlayCss, pausedControlsCss } from "./overlay-menu-css";
 import { Draggable } from "../components/Draggable";
-import { PopUp, popUpButtonClassName } from "../components/PopUp";
+import { PopUp, popUpButtonClassName, popUpContentClassName } from "../components/PopUp";
 import { Logger } from "../terminal/Logger";
 import TouchIndicator from "./TouchIndicator";
 
@@ -24,6 +24,7 @@ export default function WorldMenu(props) {
 
   const state = useStateRef(/** @returns {State} */ () => ({
 
+    canDragLogger: w.smallViewport === false,
     debugWhilePaused: false,
     durationKeys: {},
     initHeight: tryLocalStorageGetParsed(`log-height-px@${w.key}`) ?? 200,
@@ -126,6 +127,7 @@ export default function WorldMenu(props) {
         container={w.view.rootEl}
         initPos={{ x: 0, y: 0 }}
         // 🚧 disable by default on mobile
+        enabled={state.canDragLogger}
       >
         <PopUp
           label="⋯"
@@ -162,9 +164,12 @@ const loggerPopUpCss = css`
     padding: 2px 12px;
     text-decoration: underline;
   }
-  /* &.open .${popUpButtonClassName} {
-    font-weight: bold;
-  } */
+
+  .${popUpContentClassName} {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
 `;
 
 const loggerContainerCss = css`
@@ -237,6 +242,7 @@ const cssTtyDisconnectedMessage = css`
 
 /**
  * @typedef State
+ * @property {boolean} canDragLogger
  * @property {boolean} debugWhilePaused Is the camera usable whilst paused?
  * @property {{ [durKey: string]: number }} durationKeys
  * @property {import('../terminal/Logger').State} logger
