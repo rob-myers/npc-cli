@@ -147,7 +147,6 @@ export default function WorldMenu(props) {
         </PopUp>
         <Logger
           ref={state.ref('logger')}
-          className="logger"
           onClickLink={state.onClickLoggerLink}
         />
       </Draggable>,
@@ -182,6 +181,7 @@ const loggerPopUpCss = css`
     gap: 8px;
 
     font-size: smaller;
+    color: white;
     
     label {
       display: flex;
@@ -209,23 +209,8 @@ const loggerContainerCss = css`
   align-items: start;
   pointer-events: none;
   
-  color: white;
   font-size: 12px;
   padding: 0px;
-  
-  .logger {
-    width: 100%;
-    height: calc(100% - 20px);
-    pointer-events: all;
-    
-    padding-left: 8px solid transparent;
-    background: rgba(0, 0, 0, 0.6);
-    
-    // 🔔 override textual selection cursor
-    canvas { cursor: auto !important; }
-    // 🔔 Hide xterm cursor
-    textarea { visibility: hidden; }
-  }
 `;
 
 const cssTtyDisconnectedMessage = css`

@@ -1,5 +1,6 @@
 import React from "react";
 import useMeasure from 'react-use-measure';
+import { css } from "@emotion/css";
 
 import { Terminal } from "@xterm/xterm";
 import { FitAddon } from "@xterm/addon-fit";
@@ -137,14 +138,13 @@ export const Logger = React.forwardRef(function Logger(props, ref) {
   return (
     <div
       ref={state.containerRef}
-      className={props.className}
+      className={loggerCss}
     />
   );
 });
 
 /**
  * @typedef Props
- * @property {string} [className]
  * @property {(e: NPC.ClickLinkEvent) => void} onClickLink
  */
 
@@ -164,3 +164,18 @@ export const Logger = React.forwardRef(function Logger(props, ref) {
  * @property {(rowNumber: number) => { fullLine: string; startRow: number; endRow: number; }} getFullLine
  * Given 0-based rowNumber in active buffer, compute the whole (possibly-wrapped) line.
  */
+
+const loggerCss = css`
+  width: 100%;
+  height: calc(100% - 20px);
+  pointer-events: all;
+  
+  padding-left: 8px solid transparent;
+  background: rgba(0, 0, 0, 0.6);
+  
+  // 🔔 override textual selection cursor
+  canvas { cursor: auto !important; }
+  // 🔔 Hide xterm cursor
+  textarea { visibility: hidden; }
+
+`;
