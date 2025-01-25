@@ -85,17 +85,6 @@
   - move `w.bubble.say` -> `w.e.say`
   - profile-1 has link listener
 
-
-- ✅ prevent npc from going thru offMeshConnection initially when have to come straight back
-  - ℹ️ can trigger via far-off target in direction of very nearby offMeshConnection
-  - ℹ️ can fix via `this.agent.raw.set_targetReplan(true)` just after `requestMoveTarget`
-  - ✅ always replan immediately after request (fixes issue)
-  - ✅ only initially replan when needed
-    - ✅ only initially replan when nearby some door
-    - ❌ gmRoomGraph search
-- ✅ smoother turn when finish after exiting offMeshConnection
-- ✅ more offMeshConnections without breaking 102
-
 - 🚧 offMeshConnection multiple agent follow up
   - ✅ seg 'init' or 'main' --> state? {0, 1, 2} i.e. init, offMeshConnection 1st half, offMeshConnection 2nd half
   - ✅ remove "midpoint offMeshConnection radius change"
@@ -117,6 +106,19 @@
     - 🚧 forbid faster following slower
   - ❌ only block npc if "door has nearby corners"
     - e.g. hull doors, various doors in 101
+
+- 🚧 variable angle offMeshConnections
+  - ✅ on enter offMeshConnection can see corner after dst
+    - `[6, 7, 8].map(i => npc.agent.raw.get_cornerVerts(i))`
+  - ✅ get `agent.corners()` working for offMeshConnections by changing DetourCrowd.cpp (local only)
+  - ✅ try recompute agentAnim on enter offMeshConnection
+    - e.g. shift it to right
+  - 🚧 try compute better src via leeway
+    - ℹ️ closest point on "entrance segment" to seg "npc.position -> npc.agent.corners[2]"
+    - compute: entranceSeg 🚧 targetSeg 🚧
+  - try compute better dst via leeway
+  - handle offMeshConnection collisions
+
 
 - 🚧 integrate Viewer into blog
   - 🚧 screenshots in 1st blog
@@ -3582,3 +3584,13 @@ done
   - ✅ exclude `decor`, `meta` and `y` from meta
   - ✅ "label" replaces "meta" 
   - ✅ add "small" to relevant metas
+
+- ✅ prevent npc from going thru offMeshConnection initially when have to come straight back
+  - ℹ️ can trigger via far-off target in direction of very nearby offMeshConnection
+  - ℹ️ can fix via `this.agent.raw.set_targetReplan(true)` just after `requestMoveTarget`
+  - ✅ always replan immediately after request (fixes issue)
+  - ✅ only initially replan when needed
+    - ✅ only initially replan when nearby some door
+    - ❌ gmRoomGraph search
+- ✅ smoother turn when finish after exiting offMeshConnection
+- ✅ more offMeshConnections without breaking 102

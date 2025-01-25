@@ -384,3 +384,8 @@ export const pickedTypesInSomeRoom = {
     npc: true, // technically not
     'lock-light': false,
 };
+
+export const offMeshConnectionHalfLength = {
+  hull: wallOutset + 0.25,
+  nonHull: wallOutset + 0.125,
+};
