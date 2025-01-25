@@ -80,7 +80,7 @@ export const PopUp = React.forwardRef(function PopUp(props, ref) {
         })}
       >
         <div className="arrow"/>
-        <div className="info">
+        <div className={popUpContentClassName}>
           {props.children}
         </div>
       </div>
@@ -117,6 +117,8 @@ export const popUpRootDataAttribute = 'data-pop-up-root';
 
 export const popUpButtonClassName = 'pop-up-button';
 
+export const popUpContentClassName = 'pop-up-content';
+
 
 const rootPopupCss = css`
   --top-offset: 16px;
@@ -147,7 +149,7 @@ const rootPopupCss = css`
     text-align: center;
     white-space: nowrap;
     
-    .info {
+    .${popUpContentClassName} {
       min-height: 60px;
       position: absolute;
       width: var(--info-width);
@@ -178,7 +180,7 @@ const rootPopupCss = css`
     }
 
     &.left {
-      .info {
+      .${popUpContentClassName} {
         left: calc(-1 * var(--info-width) - 2 * var(--info-arrow-delta-x));
       }
       .arrow {
@@ -191,7 +193,7 @@ const rootPopupCss = css`
     }
 
     &.right {
-      .info {
+      .${popUpContentClassName} {
         left: calc(var(--info-arrow-delta-x) - 2px);
       }
       .arrow {
@@ -203,23 +205,23 @@ const rootPopupCss = css`
       }
     }
 
-    &.top .info {
+    &.top .${popUpContentClassName} {
       bottom: calc(-1 * var(--info-arrow-height));
     }
     &.bottom {
-      .info, .arrow {
+      .${popUpContentClassName}, .arrow {
         top: 2px;
       }
     }
   }
 
   &.open .arrow,
-  &.open .info
+  &.open .${popUpContentClassName}
   {
     visibility: visible;
     opacity: 1;
   }
-  &:not(.open) .info {
+  &:not(.open) .${popUpContentClassName} {
     right: 0; // prevent overflow scroll
   }
 `;

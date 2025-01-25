@@ -8,7 +8,7 @@ import { Vect } from "../geom";
 import { WorldContext } from "./world-context";
 import useUpdate from "../hooks/use-update";
 import useStateRef from "../hooks/use-state-ref";
-import { PopUp } from "../components/PopUp";
+import { PopUp, popUpContentClassName } from "../components/PopUp";
 import { Html3d, objectScale } from "../components/Html3d";
 import { Draggable } from "../components/Draggable";
 
@@ -404,7 +404,7 @@ export const contextMenuCss = css`
 `;
 
 const popUpInfoCss = css`
-  .info {
+  .${popUpContentClassName} {
     display: flex;
     justify-content: space-around;
     align-items: center;
