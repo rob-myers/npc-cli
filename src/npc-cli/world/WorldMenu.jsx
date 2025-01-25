@@ -165,6 +165,32 @@ export default function WorldMenu(props) {
   </>;
 }
 
+const loggerContainerCss = css`
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  
+  /* 🚧 */
+  max-width: 800px;
+
+  height: 120px;
+  > div:nth-child(1) {
+    height: 20px;
+  }
+  > div:nth-child(2) {
+    height: 100px;
+    padding: 8px 0 0 12px;
+  }
+  
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+  pointer-events: none;
+  
+  font-size: 12px;
+`;
+
 const loggerPopUpCss = css`
   pointer-events: all;
 
@@ -192,32 +218,6 @@ const loggerPopUpCss = css`
       width: 60px;
     }
   }
-`;
-
-const loggerContainerCss = css`
-  position: absolute;
-  left: 0;
-  top: 0;
-  width: 100%;
-  
-  /* 🚧 */
-  max-width: 800px;
-
-  height: 120px;
-  > div:nth-child(1) {
-    height: 20px;
-  }
-  > div:nth-child(2) {
-    height: 100px;
-  }
-
-  display: flex;
-  flex-direction: column;
-  align-items: start;
-  pointer-events: none;
-  
-  font-size: 12px;
-  padding: 0px;
 `;
 
 const cssTtyDisconnectedMessage = css`
