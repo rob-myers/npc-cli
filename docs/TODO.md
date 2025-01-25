@@ -79,11 +79,13 @@
   - Draggables are sticky e.g. to bottom, to right
   - Still seeing flicker on change "embed" -> "docked" on mobile
   - Logger logs disconnected/connected message
-  - Paused "Opts" with PopUp and Logger measure option
+    - remove hard-coded message
+  - ❌ Paused "Opts" with PopUp and Logger measure option
   - X-ray slider always visible
     - x-ray should be default view
   - move `w.bubble.say` -> `w.e.say`
   - profile-1 has link listener
+  - fix npc speech styling
 
 - 🚧 integrate Viewer into blog
   - 🚧 screenshots in 1st blog
@@ -102,6 +104,7 @@
 
 ### On hold
 
+- thinner fuel/machine symbols, or add dark poly border
 - avoid npc stepping forward small amounts when e.g. cannot traverse offMeshConnection
   - could store start point and revert
 - auto-dock ContextMenu in profile-1?
