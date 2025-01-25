@@ -385,7 +385,7 @@ export const pickedTypesInSomeRoom = {
     'lock-light': false,
 };
 
-export const offMeshConnectionHalfLength = {
+export const offMeshConnectionHalfDepth = {
   hull: wallOutset + 0.25,
   nonHull: wallOutset + 0.125,
 };

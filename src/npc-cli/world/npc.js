@@ -453,6 +453,7 @@ export class Npc {
     this.agent.updateParameters({
       maxAcceleration: movingMaxAcceleration,
       maxSpeed: this.getMaxSpeed(),
+      // maxSpeed: 0.5,
       radius: (this.s.run ? 3 : 2) * helper.defaults.radius, // reset
       // radius: helper.defaults.radius * 1.5, // reset
       collisionQueryRange: movingCollisionQueryRange,

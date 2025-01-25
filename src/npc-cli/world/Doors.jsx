@@ -3,7 +3,7 @@ import * as THREE from "three";
 import { damp } from "maath/easing"
 
 import { Mat, Vect } from "../geom";
-import { doorDepth, doorHeight, doorLockedColor, doorUnlockedColor, hullDoorDepth, precision, wallOutset } from "../service/const";
+import { doorDepth, doorHeight, doorLockedColor, doorUnlockedColor, hullDoorDepth, offMeshConnectionHalfDepth, precision, wallOutset } from "../service/const";
 import * as glsl from "../service/glsl";
 import { getBoxGeometry, getColor, getQuadGeometryXY } from "../service/three";
 import { geomorph } from "../service/geomorph";
@@ -88,13 +88,9 @@ export default function Doors(props) {
           const hull = gm.isHullDoor(doorId);
 
           // Compute navigable doorway
-          const doorwayPoints = door.computeDoorway().outline.map(x => tmpMat1.transformPoint(x).precision(precision));
-          /** @type {[Geom.Seg, Geom.Seg]} 1st entrance pointed to by `normal` */
-          const entrances = [
-            { src: doorwayPoints[0].json, dst: doorwayPoints[1].json },
-            { src: doorwayPoints[2].json, dst: doorwayPoints[3].json },
-          ];
-
+          // 🔔 align to offMeshConnection depths
+          const entrances = door.computeEntrances().map(x => tmpMat1.transformPoint(x).precision(precision).json);
+          
           state.byKey[gdKey] = state.byPos[posKey] = byGmId[doorId] = {
             gdKey, gmId, doorId,
             instanceId: instId,
@@ -117,7 +113,10 @@ export default function Doors(props) {
             dir: { x : Math.cos(radians), y: Math.sin(radians) },
             normal: tmpMat1.transformSansTranslate(door.normal.clone()),
             segLength: u.distanceTo(v),
-            entrances,
+            entrances: [
+              { src: entrances[0], dst: entrances[1] },
+              { src: entrances[2], dst: entrances[3] },
+            ],
 
             collidePoly,
             collideRect: collidePoly.rect.precision(precision),
@@ -292,12 +291,14 @@ export default function Doors(props) {
   w.door = state;
 
   React.useEffect(() => {
+    w.menu.measure('door[useEffect]');
     state.buildLookups();
     state.positionInstances();
     state.addCuboidAttributes();
     state.addUvs();
     w.d = state.byKey;
     state.ready = true
+    w.menu.measure('door[useEffect]');
   }, [w.mapKey, w.hash.full, w.gmsData.doorCount]);
 
   return <>

@@ -365,6 +365,33 @@ export default function useHandleEvents(w) {
     onEnterOffMeshConnection(e, npc) {
       const { offMesh } = e;
       const door = w.door.byKey[offMesh.gdKey];
+      
+      // 🚧 WIP
+      const npcPoint = Vect.from(npc.getPoint());
+      const agent = /** @type {NPC.CrowdAgent} */ (npc.agent);
+      const anim = /** @type {import("./npc").dtCrowdAgentAnimation} */ (npc.agentAnim);
+      const corner = { x: agent.raw.get_cornerVerts(6 + 0), y: agent.raw.get_cornerVerts(6 + 2) };
+      /** Entrances are aligned to offMeshConnections */
+      const entranceSeg = door.entrances[offMesh.aligned === true ? 0 : 1];
+      const exitSeg = door.entrances[offMesh.aligned === true ? 1 : 0];
+      // corners() not available because ag->ncorners is 0
+      const targetSeg = { src: npcPoint, dst: corner };
+      const adjustedSrc = geom.getClosestOnSegToLine(entranceSeg.src, entranceSeg.dst, targetSeg.src, targetSeg.dst);
+      const adjustedDst = geom.getClosestOnSegToLine(exitSeg.src, exitSeg.dst, targetSeg.src, targetSeg.dst);
+      console.log({
+        src: offMesh.src,
+        dst: offMesh.dst,
+        corner,
+        adjustedSrc,
+        adjustedDst,
+      });
+      anim.set_startPos(0, adjustedSrc.x);
+      anim.set_startPos(2, adjustedSrc.y);
+      anim.set_endPos(0, adjustedDst.x);
+      anim.set_endPos(2, adjustedDst.y);
+      // adjust "times"
+      anim.set_tmid( npcPoint.distanceTo(adjustedSrc) / npc.getMaxSpeed() );
+      anim.set_tmax(anim.tmid + ( Vect.from(adjustedSrc).distanceTo(adjustedDst) / npc.getMaxSpeed() ));
 
       // detect conflicting traversal
       if (state.doorToOffMesh[offMesh.gdKey]?.findLast(other => 

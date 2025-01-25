@@ -2,7 +2,7 @@ import * as THREE from "three";
 import { NavMesh, RecastBuildContext, TileCache, TileCacheMeshProcess, freeCompactHeightfield, freeHeightfield, TileCacheData, freeHeightfieldLayerSet, VerticesArray, TrianglesArray, ChunkIdsArray, TriangleAreasArray, createRcConfig, calcGridSize, DetourTileCacheParams, Raw, vec3, NavMeshParams, RecastChunkyTriMesh, cloneRcConfig, allocHeightfield, createHeightfield, markWalkableTriangles, rasterizeTriangles, filterLowHangingWalkableObstacles, filterLedgeSpans, filterWalkableLowHeightSpans, allocCompactHeightfield, buildCompactHeightfield, erodeWalkableArea, allocHeightfieldLayerSet, buildHeightfieldLayers, getHeightfieldLayerHeights, getHeightfieldLayerAreas, getHeightfieldLayerCons, buildTileCacheLayer,  markConvexPolyArea, Crowd } from "@recast-navigation/core";
 import { getPositionsAndIndices } from "@recast-navigation/three";
 import { createDefaultTileCacheMeshProcess, dtIlog2, dtNextPow2, getBoundingBox, tileCacheGeneratorConfigDefaults } from "@recast-navigation/generators";
-import { offMeshConnectionHalfLength, wallOutset } from "./const";
+import { offMeshConnectionHalfDepth, wallOutset } from "./const";
 import { range, toPrecision } from "./generic";
 import { geom } from "./geom";
 import { decompToXZGeometry, toV3 } from "./three";
@@ -67,7 +67,7 @@ export function computeOffMeshConnectionsParams(w) {
         }
       }
 
-      const halfLength = meta.hull === true ? offMeshConnectionHalfLength.hull : offMeshConnectionHalfLength.nonHull;
+      const halfLength = meta.hull === true ? offMeshConnectionHalfDepth.hull : offMeshConnectionHalfDepth.nonHull;
       const halfWidth = 0.5 * baseRect.width - wallOutset;
 
       /**
@@ -84,6 +84,7 @@ export function computeOffMeshConnectionsParams(w) {
         ? [-halfWidth, 0.01, halfWidth]
         : narrowEntrance === false ? [-halfWidth, 0.01, halfWidth] : [0.01]
       ;
+      // const offsets = [0.01];
 
       const src = gm.matrix.transformPoint(center.clone().addScaled(normal, halfLength));
       const dst = gm.matrix.transformPoint(center.clone().addScaled(normal, -halfLength));

@@ -1,7 +1,7 @@
 import * as htmlparser2 from "htmlparser2";
 import * as THREE from "three";
 
-import { sguToWorldScale, precision, wallOutset, obstacleOutset, hullDoorDepth, doorDepth, decorIconRadius, sguSymbolScaleDown, doorSwitchHeight, doorSwitchDecorImgKey, specialWallMetaKeys, wallHeight } from "./const";
+import { sguToWorldScale, precision, wallOutset, obstacleOutset, hullDoorDepth, doorDepth, decorIconRadius, sguSymbolScaleDown, doorSwitchHeight, doorSwitchDecorImgKey, specialWallMetaKeys, wallHeight, offMeshConnectionHalfDepth } from "./const";
 import { Mat, Poly, Rect, Vect } from "../geom";
 import {
   info,
@@ -1456,6 +1456,39 @@ export class Connector {
         this.center.y + delta.y * offset - normal.y * (doorHalfDepth + inwardsExtrude),
       ),
     ]).fixOrientationConvex();
+  }
+
+  /**
+   * Cannot re-use `computeDoorway` because it accounts for "outer hull door".
+   * The first segment is pointed to by `normal`.
+   * @returns {[Geom.Vect, Geom.Vect, Geom.Vect, Geom.Vect]} `[srcSeg0, srcSeg1, dstSeg0, dstSeg0]`
+   */
+  computeEntrances() {
+    const entranceHalfDepth = this.meta.hull === true ? offMeshConnectionHalfDepth.hull : offMeshConnectionHalfDepth.nonHull;
+    const normal = this.normal;
+    const delta = tmpVect1.copy(this.seg[1]).sub(this.seg[0]);
+    const length = delta.length;
+    const halfWidth = length / 2 - wallOutset;
+    const offset = halfWidth / length;
+
+    return [
+      new Vect(
+        this.center.x + delta.x * offset + normal.x * entranceHalfDepth,
+        this.center.y + delta.y * offset + normal.y * entranceHalfDepth,
+      ),
+      new Vect(
+        this.center.x - delta.x * offset + normal.x * entranceHalfDepth,
+        this.center.y - delta.y * offset + normal.y * entranceHalfDepth,
+      ),
+      new Vect(
+        this.center.x - delta.x * offset - normal.x * entranceHalfDepth,
+        this.center.y - delta.y * offset - normal.y * entranceHalfDepth,
+      ),
+      new Vect(
+        this.center.x + delta.x * offset - normal.x * entranceHalfDepth,
+        this.center.y + delta.y * offset - normal.y * entranceHalfDepth,
+      ),
+    ];
   }
 
   /**
