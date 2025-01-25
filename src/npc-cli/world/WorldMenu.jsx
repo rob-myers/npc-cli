@@ -218,8 +218,8 @@ const loggerContainerCss = css`
     height: calc(100% - 20px);
     pointer-events: all;
     
-    border-left: 8px solid black;
-    background: rgba(0, 0, 0, 1);
+    padding-left: 8px solid transparent;
+    background: rgba(0, 0, 0, 0.6);
     
     // 🔔 override textual selection cursor
     canvas { cursor: auto !important; }

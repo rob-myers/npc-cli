@@ -78,7 +78,7 @@ export const Logger = React.forwardRef(function Logger(props, ref) {
       disableStdin: true,
       rightClickSelectsWord: true, // mobile: can select single word via long press
       theme: {
-        background: 'rgba(0, 0, 0, 0.5)',
+        background: 'rgba(0, 0, 0, 0)',
         selectionBackground: 'rgb(0, 0, 0)', // 🚧 invisible to fix dragging?
       },
       convertEol: false,
