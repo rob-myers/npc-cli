@@ -307,9 +307,11 @@ export class Npc {
   }
 
   /**
+   * 1. Step `offMesh.seg` through `[0, 1, 2]`
+   * 
    * 1. Handle turns onto/along an offMeshConnection.
    * 
-   * 2. Handle collisions during initial segment of offMeshConnection.
+   * 1. Handle collisions during initial segment of offMeshConnection.
    * Recast-Detour doesn't support collisions from `this` agent's perspective,
    * and we've turned off its handling of the other agent.
    * 
@@ -461,10 +463,6 @@ export class Npc {
       queryFilterType: this.w.lib.queryFilterType.excludeDoors,
     });
     this.agent.requestMoveTarget(closest);
-
-    // prevents initially going through useless nearby offMeshConnection
-    // 🚧 only run this sometimes
-    // this.agent.raw.set_targetReplan(true);
 
     this.s.target = this.lastTarget.copy(closest);
     const nextAct = this.s.run ? 'Run' : 'Walk';

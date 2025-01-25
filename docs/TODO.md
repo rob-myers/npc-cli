@@ -120,8 +120,8 @@
     - ✅ compute entranceSeg using entrances and offMesh.aligned
     - ✅ compute targetSeg
   - ✅ try compute better dst via leeway
-  - 🚧 fix turning
-  - handle offMeshConnection collisions
+  - ✅ fix turning
+  - 🚧 handle offMeshConnection collisions
 
 
 - 🚧 integrate Viewer into blog
