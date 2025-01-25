@@ -22,6 +22,7 @@ export default function WorldWorkers() {
     seenHash: /** @type {*} */ ({}),
 
     // 🔔 compute each offMeshLookup[i].{srcGrKey,dstGrKey,dstRoomMeta}
+    // 🔔 compute "aligned" i.e. whether normal points towards src
     postProcessNavResponse(msg) {
       for (const value of Object.values(msg.offMeshLookup)) {
         const door = w.door.byKey[value.gdKey];
@@ -49,6 +50,7 @@ export default function WorldWorkers() {
           value.dstGrKey = `g${value.gmId}r${dstRoomId}`;
         }
 
+        value.aligned = normalTowardsSrc;
         const { gmId, roomId } = helper.getGmRoomId(value.dstGrKey);
         value.dstRoomMeta = w.gms[gmId].rooms[roomId].meta;
       }

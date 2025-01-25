@@ -217,6 +217,8 @@ declare namespace NPC {
     srcGrKey: Geomorph.GmRoomKey;
     /** Room corresponding to `dst` */
     dstGrKey: Geomorph.GmRoomKey;
+    /** Whether respective door's normal points towards `src` */
+    aligned: boolean;
     /** Meta of dst room e.g. for small rooms */
     dstRoomMeta: Geom.Meta;
   };

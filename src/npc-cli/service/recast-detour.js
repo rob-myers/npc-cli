@@ -702,9 +702,10 @@ export function customGenerateTileCache({
       const srcGrKey = /** @type {Geomorph.GmRoomKey} */ ('');
       const dstGrKey = /** @type {Geomorph.GmRoomKey} */ ('');
       const emptyRoomMeta = {};
+      const aligned = true;
 
-      offMeshLookup[srcKey] = { src, dst, offMeshRef, key: srcKey, reverseKey: dstKey, ...gdId, srcGrKey, dstGrKey, dstRoomMeta: emptyRoomMeta };
-      offMeshLookup[dstKey] = { src: dst, dst: src, offMeshRef, key: dstKey, reverseKey: srcKey, ...gdId, srcGrKey, dstGrKey, dstRoomMeta: emptyRoomMeta };
+      offMeshLookup[srcKey] = { src, dst, offMeshRef, key: srcKey, reverseKey: dstKey, ...gdId, srcGrKey, dstGrKey, dstRoomMeta: emptyRoomMeta, aligned };
+      offMeshLookup[dstKey] = { src: dst, dst: src, offMeshRef, key: dstKey, reverseKey: srcKey, ...gdId, srcGrKey, dstGrKey, dstRoomMeta: emptyRoomMeta, aligned };
     });
   }
 
