@@ -859,6 +859,7 @@ export class Npc {
       collisionQueryRange: staticCollisionQueryRange,
       separationWeight: staticSeparationWeight,
       // queryFilterType: this.w.lib.queryFilterType.excludeDoors,
+      // updateFlags: 1,
     });
     
     this.startAnimation('Idle');
@@ -876,15 +877,6 @@ export class Npc {
     this.w.events.next({ key: 'stopped-moving', npcKey: this.key });
   }
 
-  toJSON() {
-    return {
-      key: this.key,
-      def: this.def,
-      epochMs: this.epochMs,
-      s: this.s,
-    };
-  }
-
   updateUniforms() {
     this.m.material.uniformsNeedUpdate = true;
   }
@@ -897,12 +889,12 @@ export class Npc {
   }
 }
 
-const staticMaxAcceleration = 8;
+const staticMaxAcceleration = 4;
 const movingMaxAcceleration = 8;
 const staticSeparationWeight = 2;
 const movingSeparationWeight = 0.5;
-const movingCollisionQueryRange = 1.5;
 const staticCollisionQueryRange = 1;
+const movingCollisionQueryRange = 1.5;
 
 /** @type {Partial<import("@recast-navigation/core").CrowdAgentParams>} */
 export const crowdAgentParams = {
