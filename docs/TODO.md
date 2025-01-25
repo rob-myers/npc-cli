@@ -116,6 +116,7 @@
   - 🚧 try compute better src via leeway
     - ℹ️ closest point on "entrance segment" to seg "npc.position -> npc.agent.corners[2]"
     - ✅ precompute door.entrances
+    - ✅ fix door.entrances i.e. cannot use `door.seg` because it includes non-navigable part
     - 🚧 compute entranceSeg using entrances and offMesh.aligned
     - 🚧 compute targetSeg
   - try compute better dst via leeway

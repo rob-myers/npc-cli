@@ -87,13 +87,12 @@ export default function Doors(props) {
           const prev = prevDoorByPos[posKey];
           const hull = gm.isHullDoor(doorId);
 
-          const normal = tmpMat1.transformSansTranslate(door.normal.clone());
-          const halfDepth = 0.5 * (hull === true ? hullDoorDepth : doorDepth);
-
+          // Compute navigable doorway
+          const doorwayPoints = door.computeDoorway().outline.map(x => tmpMat1.transformPoint(x).precision(precision));
           /** @type {[Geom.Seg, Geom.Seg]} 1st entrance pointed to by `normal` */
           const entrances = [
-            { src: ut.clone().addScaled(normal, halfDepth).json, dst: vt.clone().addScaled(normal, halfDepth).json },
-            { src: ut.clone().addScaled(normal, -halfDepth).json, dst: vt.clone().addScaled(normal, -halfDepth).json },
+            { src: doorwayPoints[0].json, dst: doorwayPoints[1].json },
+            { src: doorwayPoints[2].json, dst: doorwayPoints[3].json },
           ];
 
           state.byKey[gdKey] = state.byPos[posKey] = byGmId[doorId] = {
@@ -116,7 +115,7 @@ export default function Doors(props) {
             dst: vt.json,
             center,
             dir: { x : Math.cos(radians), y: Math.sin(radians) },
-            normal,
+            normal: tmpMat1.transformSansTranslate(door.normal.clone()),
             segLength: u.distanceTo(v),
             entrances,
 
