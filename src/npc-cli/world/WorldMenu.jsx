@@ -122,25 +122,27 @@ export default function WorldMenu(props) {
         <PopUp
           label="⋯"
           className={loggerPopUpCss}
+          width={200}
         >
-          <label>
-            <input
-              type="checkbox"
-              defaultChecked={state.showMeasures}
-              onChange={state.changeShowMeasures}
-            />
-            debug
-          </label>
-
           <label>
             <input
               type="range"
               className="vertical-size"
               min={0}
-              max={20}
+              max={5}
+              size={1}
               onChange={state.onResizeLoggerHeight}
             />
             h
+          </label>
+
+          <label>
+            debug
+            <input
+              type="checkbox"
+              defaultChecked={state.showMeasures}
+              onChange={state.changeShowMeasures}
+            />
           </label>
         </PopUp>
         <Logger
@@ -175,7 +177,7 @@ const loggerPopUpCss = css`
 
   .${popUpContentClassName} {
     display: flex;
-    justify-content: center;
+    justify-content: space-evenly;
     align-items: center;
     gap: 8px;
 
@@ -183,7 +185,7 @@ const loggerPopUpCss = css`
     
     label {
       display: flex;
-      gap: 4px;
+      gap: 8px;
     }
 
     .vertical-size {
@@ -216,9 +218,7 @@ const loggerContainerCss = css`
     height: calc(100% - 20px);
     pointer-events: all;
     
-    border: 0px solid black;
-    border-width: 8px 0 0 16px;
-    // 🔔 cover bottom scroll spacing
+    border-left: 8px solid black;
     background: rgba(0, 0, 0, 1);
     
     // 🔔 override textual selection cursor
