@@ -102,6 +102,8 @@ declare namespace Geomorph {
     normal: Geom.VectJson;
     /** Length of `door.seg` */
     segLength: number;
+    /** 1st entrance pointed to by `normal` */
+    entrances: [Geom.Seg, Geom.Seg];
     /** As wide as door, slightly less deep than doorway. */
     collidePoly: Geom.Poly;
     /** Bounds of `doorway`. */

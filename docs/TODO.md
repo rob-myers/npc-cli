@@ -115,7 +115,8 @@
     - e.g. shift it to right
   - 🚧 try compute better src via leeway
     - ℹ️ closest point on "entrance segment" to seg "npc.position -> npc.agent.corners[2]"
-    - compute: entranceSeg 🚧 targetSeg 🚧
+    - ✅ precompute door.entrances
+    - 🚧 compute targetSeg
   - try compute better dst via leeway
   - handle offMeshConnection collisions
 

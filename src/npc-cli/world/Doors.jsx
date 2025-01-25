@@ -74,10 +74,10 @@ export default function Doors(props) {
         gm.doors.forEach((door, doorId) => {
           const [u, v] = door.seg;
           tmpMat1.feedFromArray(gm.transform);
-          tmpMat1.transformPoint(tmpVec1.copy(u));
-          tmpMat1.transformPoint(tmpVec2.copy(v));
-          const center = new Vect((tmpVec1.x + tmpVec2.x) / 2, (tmpVec1.y + tmpVec2.y) / 2);
-          const radians = Math.atan2(tmpVec2.y - tmpVec1.y, tmpVec2.x - tmpVec1.x);
+          const ut = tmpMat1.transformPoint(tmpVec1.copy(u));
+          const vt = tmpMat1.transformPoint(tmpVec2.copy(v));
+          const center = new Vect((ut.x + vt.x) / 2, (ut.y + vt.y) / 2);
+          const radians = Math.atan2(vt.y - ut.y, vt.x - ut.x);
           // 🔔 wider and less depth than "computeDoorway()" for better navSeg intersections
           const collidePoly = door.computeThinPoly(2 * wallOutset - 0.05).applyMatrix(tmpMat1).precision(precision);
 
@@ -86,6 +86,15 @@ export default function Doors(props) {
 
           const prev = prevDoorByPos[posKey];
           const hull = gm.isHullDoor(doorId);
+
+          const normal = tmpMat1.transformSansTranslate(door.normal.clone());
+          const halfDepth = 0.5 * (hull === true ? hullDoorDepth : doorDepth);
+
+          /** @type {[Geom.Seg, Geom.Seg]} 1st entrance pointed to by `normal` */
+          const entrances = [
+            { src: ut.clone().addScaled(normal, halfDepth).json, dst: vt.clone().addScaled(normal, halfDepth).json },
+            { src: ut.clone().addScaled(normal, -halfDepth).json, dst: vt.clone().addScaled(normal, -halfDepth).json },
+          ];
 
           state.byKey[gdKey] = state.byPos[posKey] = byGmId[doorId] = {
             gdKey, gmId, doorId,
@@ -103,12 +112,13 @@ export default function Doors(props) {
             hull,
 
             ratio: prev?.ratio ?? 1, // 1 means closed
-            src: tmpVec1.json,
-            dst: tmpVec2.json,
+            src: ut.json,
+            dst: vt.json,
             center,
             dir: { x : Math.cos(radians), y: Math.sin(radians) },
-            normal: tmpMat1.transformSansTranslate(door.normal.clone()),
+            normal,
             segLength: u.distanceTo(v),
+            entrances,
 
             collidePoly,
             collideRect: collidePoly.rect.precision(precision),
