@@ -26,6 +26,7 @@ export default function WorldMenu(props) {
 
     canDragLogger: w.smallViewport === false,
     debugWhilePaused: false,
+    draggable: /** @type {*} */ (null),
     durationKeys: {},
     logger: /** @type {*} */ (null),
     loggerHeight: tryLocalStorageGetParsed(`log-height@${w.key}`) ?? defaultLoggerHeightPx / loggerHeightDelta,
@@ -64,11 +65,13 @@ export default function WorldMenu(props) {
       state.loggerHeight = Number(e.currentTarget.value); // e.g. 2, ..., 10
       state.logger.container.style.height = `${state.loggerHeight * loggerHeightDelta}px`;
       tryLocalStorageSet(`log-height@${w.key}`, `${state.loggerHeight}`);
+      state.draggable.updatePos();
     },
     onResizeLoggerWidth(e) {
       state.loggerWidth = Number(e.currentTarget.value);
       state.logger.container.style.width = `${state.loggerWidth * loggerWidthDelta}px`;
       tryLocalStorageSet(`log-width@${w.key}`, `${state.loggerWidth}`);
+      state.draggable.updatePos();
     },
     say(npcKey, ...parts) {
       const line = parts.join(' ');
@@ -130,6 +133,7 @@ export default function WorldMenu(props) {
     {w.view.rootEl && createPortal(
       <Draggable
         className={loggerContainerCss}
+        ref={state.ref('draggable')}
         container={w.view.rootEl}
         initPos={{ x: 0, y: 0 }}
         enabled={state.canDragLogger}
@@ -214,6 +218,7 @@ const loggerContainerCss = css`
     width: ${defaultLoggerWidthPx}px;
     max-width: 100%;
     padding: 8px 0 0 12px;
+    transition: width 500ms, height 500ms;
   }
   
   display: flex;
@@ -234,6 +239,8 @@ const loggerPopUpCss = css`
   }
 
   .${popUpContentClassName} {
+    filter: sepia(1);
+
     display: flex;
     justify-content: space-evenly;
     align-items: center;
@@ -289,6 +296,7 @@ const cssTtyDisconnectedMessage = css`
  * @typedef State
  * @property {boolean} canDragLogger
  * @property {boolean} debugWhilePaused Is the camera usable whilst paused?
+ * @property {import('../components/Draggable').State} draggable Draggable containing Logger
  * @property {{ [durKey: string]: number }} durationKeys
  * @property {import('../terminal/Logger').State} logger
  * @property {number} loggerHeight
