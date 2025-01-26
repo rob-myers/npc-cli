@@ -12942,12 +12942,7 @@
         {
           "type": "point",
           "key": "",
-          "meta": {
-            "decor": true,
-            "label": "research launch",
-            "narrow-entrances": true,
-            "y": 0
-          },
+          "meta": {"decor": true, "label": "research launch", "y": 0},
           "bounds2d": {"x": 26.575, "y": 0.925, "width": 4.25, "height": 4.25},
           "x": 28.7,
           "y": 3.05,
@@ -16895,7 +16890,7 @@
               [27.05, 0.1]
             ]
           ],
-          "meta": {"label": "research launch", "narrow-entrances": true}
+          "meta": {"label": "research launch"}
         },
         {
           "type": "Polygon",
