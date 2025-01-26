@@ -72,7 +72,8 @@
     - ❌ try extend Draggable
     - ✅ PopUp with "opts" label
     - ✅ mobile drag disabled by default
-    - 🚧 PopUp has resize ui
+    - ✅ PopUp has resize ui
+    - 🚧 can move Logger on mobile via "move" link
   - ContextMenu: prevent link action when drag (again)
   - ContextMenu should remember docked position
   - Logger/ContextMenu z-index changes onclick

@@ -29,6 +29,7 @@ export default function WorldMenu(props) {
     durationKeys: {},
     initHeight: tryLocalStorageGetParsed(`log-height-px@${w.key}`) ?? 200,
     logger: /** @type {*} */ (null),
+    loggerVert: defaultLoggerHeightPx / loggerHeightDelta,
     showMeasures: tryLocalStorageGetParsed(`log-show-measures@${w.key}`) ?? false,
 
     changeShowMeasures(e) {
@@ -60,7 +61,8 @@ export default function WorldMenu(props) {
       props.setTabsEnabled(true);
     },
     onResizeLoggerHeight(e) {
-      console.log(Number(e.currentTarget.value));
+      state.loggerVert = Number(e.currentTarget.value); // 1, 2, ..., 10
+      state.logger.container.style.height = `${state.loggerVert * loggerHeightDelta}px`;
     },
     say(npcKey, ...parts) {
       const line = parts.join(' ');
@@ -128,9 +130,9 @@ export default function WorldMenu(props) {
             <input
               type="range"
               className="vertical-size"
-              min={0}
-              max={5}
-              size={1}
+              min={1}
+              max={10}
+              defaultValue={state.loggerVert}
               onChange={state.onResizeLoggerHeight}
             />
             h
@@ -165,6 +167,10 @@ export default function WorldMenu(props) {
   </>;
 }
 
+const defaultLoggerHeightPx = 100;
+/** Must be a factor of default height */
+const loggerHeightDelta = 20;
+
 const loggerContainerCss = css`
   position: absolute;
   left: 0;
@@ -174,12 +180,11 @@ const loggerContainerCss = css`
   /* 🚧 */
   max-width: 800px;
 
-  height: 120px;
   > div:nth-child(1) {
     height: 20px;
   }
   > div:nth-child(2) {
-    height: 100px;
+    height: ${defaultLoggerHeightPx}px;
     padding: 8px 0 0 12px;
   }
   
@@ -258,6 +263,7 @@ const cssTtyDisconnectedMessage = css`
  * @property {boolean} debugWhilePaused Is the camera usable whilst paused?
  * @property {{ [durKey: string]: number }} durationKeys
  * @property {import('../terminal/Logger').State} logger
+ * @property {number} loggerVert
  * @property {number} initHeight
  * @property {boolean} showMeasures
  *
