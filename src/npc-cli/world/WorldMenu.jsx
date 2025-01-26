@@ -236,6 +236,9 @@ const loggerPopUpCss = css`
 
   .${popUpButtonClassName} {
     color: #8888ff;
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    border-width: 1px 0 0 1px;
+    background: black;
     padding: 2px 12px;
     text-decoration: underline;
   }
@@ -256,13 +259,34 @@ const loggerPopUpCss = css`
       gap: 8px;
     }
 
-    /* 🚧 use component instead */
-    input::-webkit-slider-runnable-track {
-      background-color: #999;
-      height: 2px;
+    /** https://www.smashingmagazine.com/2021/12/create-custom-range-input-consistent-browsers/ */
+    input[type="range"] {
+      -webkit-appearance: none;
+      appearance: none;
+      background: transparent;
+      cursor: pointer;
     }
-    input::-webkit-slider-thumb {
-      margin-top: -8px;
+    input[type="range"]::-webkit-slider-runnable-track {
+      background: #053a5f;
+      height: 0.5rem;
+    }
+    input[type="range"]::-webkit-slider-thumb {
+      -webkit-appearance: none; /* Override default look */
+      appearance: none;
+      background-color: #5cd5eb;
+      height: 8px;
+      width: 8px;
+    }
+    input[type="range"]::-moz-range-track {
+      background: #053a5f;
+      height: 0.5rem;
+    }
+    input[type="range"]::-moz-range-thumb {
+      border: none; /*Removes extra border that FF applies*/
+      border-radius: 0; /*Removes default border-radius that FF applies*/
+      background-color: #5cd5eb;
+      height: 8px;
+      width: 8px;
     }
 
     .change-logger-height, .change-logger-width {

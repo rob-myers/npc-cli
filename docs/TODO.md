@@ -76,7 +76,6 @@
     - ✅ can resize width and height
     - ✅ can remember width and height
     - 🚧 can move Logger on mobile via "move" link
-  - replace native `<input type="range">` with component
   - ContextMenu: prevent link action when drag (again)
   - ContextMenu should remember docked position
   - Logger/ContextMenu z-index changes onclick
