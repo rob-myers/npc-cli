@@ -130,8 +130,8 @@ export default function WorldWorkers() {
         // maxAgentRadius: helper.defaults.radius * 0.5,
       });
 
-      const { adaptiveDepth, adaptiveDivs, adaptiveRings, gridSize, horizTime, velBias, weightCurVel, weightSide, weightToi } = w.crowd.raw.getObstacleAvoidanceParams(0);
-      info('dtObstacleAvoidanceParams', { adaptiveDepth, adaptiveDivs, adaptiveRings, gridSize, horizTime, velBias, weightCurVel, weightSide, weightToi });
+      // const { adaptiveDepth, adaptiveDivs, adaptiveRings, gridSize, horizTime, velBias, weightCurVel, weightSide, weightToi } = w.crowd.raw.getObstacleAvoidanceParams(0);
+      // info('dtObstacleAvoidanceParams', { adaptiveDepth, adaptiveDivs, adaptiveRings, gridSize, horizTime, velBias, weightCurVel, weightSide, weightToi });
       // 🚧 try modify dtObstacleAvoidanceParams
       // const oap = new RecastWasm.dtObstacleAvoidanceParams();
       
