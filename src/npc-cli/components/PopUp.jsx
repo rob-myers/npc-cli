@@ -13,6 +13,7 @@ export const PopUp = React.forwardRef(function PopUp(props, ref) {
   const state = useStateRef(/** @returns {State} */ () => ({
     bubble: /** @type {*} */ (null),
     icon: /** @type {*} */ (null),
+    iconDownAt: null,
     left: false,
     opened: false,
     preventToggle: false,
@@ -24,6 +25,29 @@ export const PopUp = React.forwardRef(function PopUp(props, ref) {
       state.bubble.style.removeProperty('--info-width');
       props.onChange?.(state.opened);
       update();
+    },
+    onPointerDownIcon(e) {
+      state.iconDownAt = { x: e.clientX, y: e.clientY };
+    },
+    onPointerUpIcon(e) {
+      const { iconDownAt } = state;
+      state.iconDownAt = null;
+
+      if (
+        iconDownAt === null
+        || state.preventToggle === true
+        || e.nativeEvent.type !== 'pointerup'
+        || Math.abs(e.clientX - iconDownAt.x) > 5
+        || Math.abs(e.clientY - iconDownAt.y) > 5
+      ) {
+        return;
+      }
+
+      if (state.opened === true) {
+        state.close();
+      } else {
+        state.open(props.width);
+      }
     },
     open(width) {
       state.opened = true;
@@ -58,15 +82,9 @@ export const PopUp = React.forwardRef(function PopUp(props, ref) {
       <button
         ref={state.ref('icon')}
         className={popUpButtonClassName}
-        onClick={e => {
-          if (state.preventToggle) {
-            return;
-          } else if (state.opened) {
-            state.close();
-          } else {
-            state.open(props.width);
-          }
-        }}
+        onPointerDown={state.onPointerDownIcon}
+        onPointerUp={state.onPointerUpIcon}
+        onPointerLeave={state.onPointerUpIcon}
       >
         {props.label ?? '⋯'}
       </button>
@@ -103,11 +121,14 @@ export const PopUp = React.forwardRef(function PopUp(props, ref) {
  * @property {HTMLSpanElement} bubble
  * @property {boolean} opened
  * @property {HTMLSpanElement} icon
+ * @property {null | Geom.VectJson} iconDownAt
  * @property {boolean} left or right
- * @property {(width?: number | undefined) => void} open
  * @property {boolean} preventToggle
  *
  * @property {() => void} close
+ * @property {(e: React.PointerEvent) => void} onPointerDownIcon
+ * @property {(e: React.PointerEvent) => void} onPointerUpIcon
+ * @property {(width?: number | undefined) => void} open
  */
 
 
