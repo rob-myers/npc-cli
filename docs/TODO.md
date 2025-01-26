@@ -76,7 +76,8 @@
     - ✅ can resize width and height
     - ✅ can remember width and height
     - ✅ can move Logger on mobile via "move" link
-  - ContextMenu: prevent link action when drag (again)
+    - avoid xterm scroll while drag e.g. only allow PopUp
+  - ✅ ContextMenu: prevent link action when drag (again)
   - ContextMenu should remember docked position
   - Logger/ContextMenu z-index changes onclick
   - Draggables are sticky e.g. to bottom, to right
