@@ -395,10 +395,12 @@ export default function useHandleEvents(w) {
       
       const adjusted = state.overrideOffMeshConnectionAngle(npc, offMesh, door);
       
-      // register traversal
+      // register adjusted traversal
       npc.s.offMesh = {
         npcKey: e.npcKey,
         seg: 0,
+        src: adjusted.src,
+        dst: adjusted.dst,
         init: { x: adjusted.src.x - npc.position.x, y: adjusted.src.y - npc.position.z },
         main: { x: adjusted.dst.x - adjusted.src.x, y: adjusted.dst.y - adjusted.src.y },
         orig: offMesh,
@@ -449,8 +451,8 @@ export default function useHandleEvents(w) {
       const exitSeg = door.entrances[offMesh.aligned === true ? 1 : 0];
       // corners() not available because ag->ncorners is 0
       const targetSeg = { src: npcPoint, dst: corner };
-      const newSrc = geom.getClosestOnSegToLine(entranceSeg.src, entranceSeg.dst, targetSeg.src, targetSeg.dst);
-      const newDst = geom.getClosestOnSegToLine(exitSeg.src, exitSeg.dst, targetSeg.src, targetSeg.dst);
+      const newSrc = geom.getClosestOnSegToSeg(entranceSeg.src, entranceSeg.dst, targetSeg.src, targetSeg.dst);
+      const newDst = geom.getClosestOnSegToSeg(exitSeg.src, exitSeg.dst, targetSeg.src, targetSeg.dst);
       // console.log({
       //   src: offMesh.src,
       //   dst: offMesh.dst,
@@ -459,13 +461,16 @@ export default function useHandleEvents(w) {
       //   newDst,
       // });
       const anim = /** @type {import("./npc").dtCrowdAgentAnimation} */ (npc.agentAnim);
+      anim.set_initPos(0, npcPoint.x);
+      anim.set_initPos(2, npcPoint.y);
       anim.set_startPos(0, newSrc.x);
       anim.set_startPos(2, newSrc.y);
       anim.set_endPos(0, newDst.x);
       anim.set_endPos(2, newDst.y);
       // adjust "times"
-      anim.set_tmid( npcPoint.distanceTo(newSrc) / npc.getMaxSpeed() );
-      anim.set_tmax(anim.tmid + ( Vect.from(newSrc).distanceTo(newDst) / npc.getMaxSpeed() ));
+      anim.set_t(0);
+      anim.set_tmid(npcPoint.distanceTo(newSrc) / npc.getMaxSpeed());
+      anim.set_tmax(anim.tmid + (Vect.from(newSrc).distanceTo(newDst) / npc.getMaxSpeed()));
 
       return { src: newSrc, dst: newDst };
     },

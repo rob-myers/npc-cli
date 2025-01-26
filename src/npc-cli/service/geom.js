@@ -465,7 +465,7 @@ class geomServiceClass {
    * @param {Geom.VectJson} q0 
    * @param {Geom.VectJson} q1 
    */
-  getClosestOnSegToLine(p0, p1, q0, q1) {
+  getClosestOnSegToSeg(p0, p1, q0, q1) {
     const lambda = this.getLineSegsIntersection(p0, p1, q0, q1);
     if (lambda === null) {
       const normal = tmpVec1.set(-(q1.y - q0.y), q1.x - q0.x).normalize();
