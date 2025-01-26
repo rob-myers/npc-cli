@@ -218,7 +218,7 @@ const loggerContainerCss = css`
     width: ${defaultLoggerWidthPx}px;
     max-width: 100%;
     padding: 8px 0 0 12px;
-    transition: width 500ms, height 500ms;
+    transition: height 500ms;
   }
   
   display: flex;
@@ -231,6 +231,8 @@ const loggerContainerCss = css`
 
 const loggerPopUpCss = css`
   pointer-events: all;
+  transform: scale(.8);
+  z-index: 1;
 
   .${popUpButtonClassName} {
     color: #8888ff;
@@ -239,7 +241,6 @@ const loggerPopUpCss = css`
   }
 
   .${popUpContentClassName} {
-    filter: sepia(1);
 
     display: flex;
     justify-content: space-evenly;
@@ -251,7 +252,17 @@ const loggerPopUpCss = css`
     
     label {
       display: flex;
+      align-items: center;
       gap: 8px;
+    }
+
+    /* 🚧 use component instead */
+    input::-webkit-slider-runnable-track {
+      background-color: #999;
+      height: 2px;
+    }
+    input::-webkit-slider-thumb {
+      margin-top: -8px;
     }
 
     .change-logger-height, .change-logger-width {
