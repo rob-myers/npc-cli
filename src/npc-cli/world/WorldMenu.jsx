@@ -94,13 +94,6 @@ export default function WorldMenu(props) {
 
   w.menu = state;
 
-  React.useLayoutEffect(() => {// remember Logger dimensions
-    if (state.logger?.container) {
-      state.logger.container.style.width = `${state.loggerWidth * loggerWidthDelta}px`;
-      state.logger.container.style.height = `${state.loggerHeight * loggerHeightDelta}px`;
-    }
-  }, [state.logger?.container]);
-
   return <>
     <div
       className={cx(faderOverlayCss, {
@@ -179,6 +172,7 @@ export default function WorldMenu(props) {
         <Logger
           ref={state.ref('logger')}
           onClickLink={state.onClickLoggerLink}
+          initDim={[state.loggerWidth * loggerWidthDelta, state.loggerHeight * loggerHeightDelta]}
         />
       </Draggable>,
       w.view.rootEl,
@@ -214,8 +208,9 @@ const loggerContainerCss = css`
     height: 20px;
   }
   > div:nth-child(2) {
-    height: ${defaultLoggerHeightPx}px;
-    width: ${defaultLoggerWidthPx}px;
+    /* height: ${defaultLoggerHeightPx}px; */
+    /* width: ${defaultLoggerWidthPx}px; */
+    width: 0px;
     max-width: 100%;
     padding: 8px 0 0 12px;
   }
