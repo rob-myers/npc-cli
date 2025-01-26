@@ -218,7 +218,6 @@ const loggerContainerCss = css`
     width: ${defaultLoggerWidthPx}px;
     max-width: 100%;
     padding: 8px 0 0 12px;
-    transition: height 500ms;
   }
   
   display: flex;
