@@ -232,7 +232,7 @@ const loggerContainerCss = css`
 const loggerPopUpCss = css`
   pointer-events: all;
   transform: scale(.8);
-  z-index: 1;
+  z-index: 5;
 
   .${popUpButtonClassName} {
     color: #8888ff;
