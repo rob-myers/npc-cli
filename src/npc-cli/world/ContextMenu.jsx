@@ -18,17 +18,16 @@ export function ContextMenu() {
   const update = useUpdate();
 
   const state = useStateRef(/** @returns {State} */ () => ({
-    baseScale: /** @type {undefined | number} */ (undefined),
+    baseScale: undefined,
     docked: false,
     draggable: null,
     /** For violating React.memo */
     epochMs: 0,
     everDocked: false,
-    position: /** @type {[number, number, number]} */ ([0, 0, 0]),
-    tracked: /** @type {undefined | import('three').Object3D} */ (undefined),
-    offset: /** @type {undefined | import('three').Vector3Like} */ (undefined),
+    position: [0, 0, 0],
+    tracked: undefined,
+    offset: undefined,
     open: false,
-    /** @type {import('../components/Html3d').State} */
     html3d: /** @type {*} */ (null),
 
     pinned: tryLocalStorageGetParsed(`default-context-menu@${w.key}`)?.pinned ?? w.smallViewport,
@@ -36,21 +35,17 @@ export function ContextMenu() {
     showKvs: true,
   
     dockPoint: { x: 0, y: 0 },
-    /** @type {{ k: string; v: string; length: number; }[]} */
     kvs: [],
-    /** @type {HTMLElement} */
     innerRoot: /** @type {*} */ (null),
-    /** @type {NPC.ContextMenuLink[]} */
     links: [],
-    match: /** @type {{ [matcherKey: string]: NPC.ContextMenuMatcher}} */ ({}),
-    meta: /** @type {Geom.Meta} */ ({}),
-    npcKey: /** @type {undefined | string} */ (undefined),
-    /** @type {import('../components/PopUp').State} */
+    match: {},
+    meta: {},
+    npcKey: undefined,
     popUp: /** @type {*} */ (null),
-    selectNpcKeys: /** @type {string[]} */ ([]),
+    selectNpcKeys: [],
 
     /** `cm.dockPoint` when on pointer down */
-    downDockPoint: /** @type {undefined | Geom.VectJson} */ (undefined),
+    downDockPoint: undefined,
     /** Was pointerdown over contextmenu and not yet up? */
     isDown: false,
 
