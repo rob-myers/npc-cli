@@ -73,6 +73,8 @@
     - ✅ PopUp with "opts" label
     - ✅ mobile drag disabled by default
     - ✅ PopUp has resize ui
+    - ✅ can resize width and height
+    - 🚧 can remember width and height
     - 🚧 can move Logger on mobile via "move" link
   - ContextMenu: prevent link action when drag (again)
   - ContextMenu should remember docked position

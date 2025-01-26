@@ -29,7 +29,8 @@ export default function WorldMenu(props) {
     durationKeys: {},
     initHeight: tryLocalStorageGetParsed(`log-height-px@${w.key}`) ?? 200,
     logger: /** @type {*} */ (null),
-    loggerVert: defaultLoggerHeightPx / loggerHeightDelta,
+    loggerHeight: defaultLoggerHeightPx / loggerHeightDelta,
+    loggerWidth: defaultLoggerWidthPx / loggerWidthDelta,
     showMeasures: tryLocalStorageGetParsed(`log-show-measures@${w.key}`) ?? false,
 
     changeShowMeasures(e) {
@@ -61,8 +62,12 @@ export default function WorldMenu(props) {
       props.setTabsEnabled(true);
     },
     onResizeLoggerHeight(e) {
-      state.loggerVert = Number(e.currentTarget.value); // 1, 2, ..., 10
-      state.logger.container.style.height = `${state.loggerVert * loggerHeightDelta}px`;
+      state.loggerHeight = Number(e.currentTarget.value); // e.g. 2, ..., 10
+      state.logger.container.style.height = `${state.loggerHeight * loggerHeightDelta}px`;
+    },
+    onResizeLoggerWidth(e) {
+      state.loggerWidth = Number(e.currentTarget.value);
+      state.logger.container.style.width = `${state.loggerWidth * loggerWidthDelta}px`;
     },
     say(npcKey, ...parts) {
       const line = parts.join(' ');
@@ -124,22 +129,34 @@ export default function WorldMenu(props) {
         <PopUp
           label="⋯"
           className={loggerPopUpCss}
-          width={200}
+          width={300}
         >
           <label>
             <input
               type="range"
-              className="vertical-size"
-              min={1}
+              className="change-logger-height"
+              min={2}
               max={10}
-              defaultValue={state.loggerVert}
+              defaultValue={state.loggerHeight}
               onChange={state.onResizeLoggerHeight}
             />
             h
           </label>
 
           <label>
-            debug
+            <input
+              type="range"
+              className="change-logger-width"
+              min={4}
+              max={10}
+              defaultValue={state.loggerWidth}
+              onChange={state.onResizeLoggerWidth}
+            />
+            w
+          </label>
+
+          <label>
+            log
             <input
               type="checkbox"
               defaultChecked={state.showMeasures}
@@ -168,23 +185,26 @@ export default function WorldMenu(props) {
 }
 
 const defaultLoggerHeightPx = 100;
+const defaultLoggerWidthPx = 800;
 /** Must be a factor of default height */
 const loggerHeightDelta = 20;
+/** Must be a factor of default width */
+const loggerWidthDelta = 100;
+
 
 const loggerContainerCss = css`
   position: absolute;
   left: 0;
   top: 0;
-  width: 100%;
+  max-width: 100%;
   
-  /* 🚧 */
-  max-width: 800px;
-
   > div:nth-child(1) {
     height: 20px;
   }
   > div:nth-child(2) {
     height: ${defaultLoggerHeightPx}px;
+    width: ${defaultLoggerWidthPx}px;
+    max-width: 100%;
     padding: 8px 0 0 12px;
   }
   
@@ -219,7 +239,7 @@ const loggerPopUpCss = css`
       gap: 8px;
     }
 
-    .vertical-size {
+    .change-logger-height, .change-logger-width {
       width: 60px;
     }
   }
@@ -263,7 +283,8 @@ const cssTtyDisconnectedMessage = css`
  * @property {boolean} debugWhilePaused Is the camera usable whilst paused?
  * @property {{ [durKey: string]: number }} durationKeys
  * @property {import('../terminal/Logger').State} logger
- * @property {number} loggerVert
+ * @property {number} loggerHeight
+ * @property {number} loggerWidth
  * @property {number} initHeight
  * @property {boolean} showMeasures
  *
@@ -274,6 +295,7 @@ const cssTtyDisconnectedMessage = css`
  * @property {(e: NPC.ClickLinkEvent) => void} onClickLoggerLink
  * @property {() => void} onOverlayPointerUp
  * @property {(e: React.ChangeEvent<HTMLInputElement>) => void} onResizeLoggerHeight
+ * @property {(e: React.ChangeEvent<HTMLInputElement>) => void} onResizeLoggerWidth
  * @property {(npcKey: string, line: string) => void} say
  * @property {() => void} toggleDebug
  * @property {() => void} toggleXRay
