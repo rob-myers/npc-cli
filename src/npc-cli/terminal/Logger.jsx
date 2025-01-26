@@ -166,6 +166,7 @@ export const Logger = React.forwardRef(function Logger(props, ref) {
  */
 
 const loggerCss = css`
+  overflow: auto;
   width: 100%;
   pointer-events: all;
   
