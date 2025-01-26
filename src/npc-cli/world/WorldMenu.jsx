@@ -3,6 +3,7 @@ import { css, cx } from "@emotion/css";
 import { createPortal } from "react-dom";
 
 import { tryLocalStorageGetParsed, tryLocalStorageSet, warn } from "../service/generic";
+import { isTouchDevice } from "../service/dom";
 import { ansi } from "../sh/const";
 import { WorldContext } from "./world-context";
 import useStateRef from "../hooks/use-state-ref";
@@ -24,7 +25,7 @@ export default function WorldMenu(props) {
 
   const state = useStateRef(/** @returns {State} */ () => ({
 
-    canDragLogger: w.smallViewport === false,
+    canDragLogger: defaultCanDragLogger,
     debugWhilePaused: false,
     draggable: /** @type {*} */ (null),
     durationKeys: {},
@@ -61,11 +62,11 @@ export default function WorldMenu(props) {
     onOverlayPointerUp() {
       props.setTabsEnabled(true);
     },
-    onMoveLinkPointerDown(e) {
+    onMoveLinkTouchStart(e) {
       state.canDragLogger = true;
       update();
     },
-    onMoveLinkPointerUp(e) {
+    onMoveLinkTouchEnd(e) {
       if (state.canDragLogger === true) {
         state.canDragLogger = false;
         update();
@@ -106,15 +107,15 @@ export default function WorldMenu(props) {
 
   React.useEffect(() => {
     if (w.view.rootEl && state.canDragLogger === false) {
-      const { onMoveLinkPointerUp } = state; // for HMR
-      w.view.rootEl.addEventListener('pointerleave', onMoveLinkPointerUp);
-      w.view.rootEl.addEventListener('pointerup', onMoveLinkPointerUp);
+      const { onMoveLinkTouchEnd: onMoveLinkPointerUp } = state; // for HMR
+      w.view.rootEl.addEventListener('touchend', onMoveLinkPointerUp);
+      w.view.rootEl.addEventListener('touchcancel', onMoveLinkPointerUp);
       return () => {
-        w.view.rootEl.removeEventListener('pointerleave', onMoveLinkPointerUp);
-        w.view.rootEl.removeEventListener('pointerup', onMoveLinkPointerUp);
+        w.view.rootEl.removeEventListener('touchend', onMoveLinkPointerUp);
+        w.view.rootEl.removeEventListener('touchcancel', onMoveLinkPointerUp);
       };
     }
-  }, [w.view.rootEl, state.onMoveLinkPointerUp]);
+  }, [w.view.rootEl, state.onMoveLinkTouchEnd]);
 
   
   return <>
@@ -194,9 +195,9 @@ export default function WorldMenu(props) {
             </label>
           </PopUp>
 
-          {w.smallViewport === true && <button
+          {defaultCanDragLogger === false && <button
             className={loggerMoveLinkCss}
-            onPointerDown={state.onMoveLinkPointerDown}
+            onTouchStart={state.onMoveLinkTouchStart}
           >
             move
           </button>}
@@ -221,6 +222,8 @@ export default function WorldMenu(props) {
 
   </>;
 }
+
+const defaultCanDragLogger = !isTouchDevice();
 
 const defaultLoggerHeightPx = 100;
 const defaultLoggerWidthPx = 800;
@@ -380,8 +383,8 @@ const cssTtyDisconnectedMessage = css`
  * @property {(msg: string) => void} measure
  * Measure durations by sending same `msg` twice.
  * @property {(e: NPC.ClickLinkEvent) => void} onClickLoggerLink
- * @property {(e: React.PointerEvent) => void} onMoveLinkPointerDown
- * @property {(e: React.PointerEvent | PointerEvent) => void} onMoveLinkPointerUp
+ * @property {(e: React.TouchEvent) => void} onMoveLinkTouchStart
+ * @property {(e: TouchEvent) => void} onMoveLinkTouchEnd
  * @property {() => void} onOverlayPointerUp
  * @property {(e: React.ChangeEvent<HTMLInputElement>) => void} onResizeLoggerHeight
  * @property {(e: React.ChangeEvent<HTMLInputElement>) => void} onResizeLoggerWidth
