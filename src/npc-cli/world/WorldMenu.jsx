@@ -61,6 +61,16 @@ export default function WorldMenu(props) {
     onOverlayPointerUp() {
       props.setTabsEnabled(true);
     },
+    onMoveLinkPointerDown(e) {
+      state.canDragLogger = true;
+      update();
+    },
+    onMoveLinkPointerUp(e) {
+      if (state.canDragLogger === true) {
+        state.canDragLogger = false;
+        update();
+      } 
+    },
     onResizeLoggerHeight(e) {
       state.loggerHeight = Number(e.currentTarget.value); // e.g. 2, ..., 10
       state.logger.container.style.height = `${state.loggerHeight * loggerHeightDelta}px`;
@@ -94,6 +104,19 @@ export default function WorldMenu(props) {
 
   w.menu = state;
 
+  React.useEffect(() => {
+    if (w.view.rootEl && state.canDragLogger === false) {
+      const { onMoveLinkPointerUp } = state; // for HMR
+      w.view.rootEl.addEventListener('pointerleave', onMoveLinkPointerUp);
+      w.view.rootEl.addEventListener('pointerup', onMoveLinkPointerUp);
+      return () => {
+        w.view.rootEl.removeEventListener('pointerleave', onMoveLinkPointerUp);
+        w.view.rootEl.removeEventListener('pointerup', onMoveLinkPointerUp);
+      };
+    }
+  }, [w.view.rootEl, state.onMoveLinkPointerUp]);
+
+  
   return <>
     <div
       className={cx(faderOverlayCss, {
@@ -131,44 +154,53 @@ export default function WorldMenu(props) {
         initPos={{ x: 0, y: 0 }}
         enabled={state.canDragLogger}
       >
-        <PopUp
-          label="⋯"
-          className={loggerPopUpCss}
-          width={300}
-        >
-          <label>
-            <input
-              type="range"
-              className="change-logger-height"
-              min={2}
-              max={10}
-              defaultValue={state.loggerHeight}
-              onChange={state.onResizeLoggerHeight}
-            />
-            h
-          </label>
+        <div>
+          <PopUp
+            label="⋯"
+            className={loggerPopUpCss}
+            width={300}
+          >
+            <label>
+              <input
+                type="range"
+                className="change-logger-width"
+                min={4}
+                max={w.smallViewport ? 7 : 10}
+                defaultValue={state.loggerWidth}
+                onChange={state.onResizeLoggerWidth}
+              />
+              w
+            </label>
 
-          <label>
-            <input
-              type="range"
-              className="change-logger-width"
-              min={4}
-              max={w.smallViewport ? 7 : 10}
-              defaultValue={state.loggerWidth}
-              onChange={state.onResizeLoggerWidth}
-            />
-            w
-          </label>
+            <label>
+              <input
+                type="range"
+                className="change-logger-height"
+                min={2}
+                max={10}
+                defaultValue={state.loggerHeight}
+                onChange={state.onResizeLoggerHeight}
+              />
+              h
+            </label>
 
-          <label>
-            log
-            <input
-              type="checkbox"
-              defaultChecked={state.showMeasures}
-              onChange={state.changeShowMeasures}
-            />
-          </label>
-        </PopUp>
+            <label>
+              log
+              <input
+                type="checkbox"
+                defaultChecked={state.showMeasures}
+                onChange={state.changeShowMeasures}
+              />
+            </label>
+          </PopUp>
+
+          {w.smallViewport === true && <button
+            className={loggerMoveLinkCss}
+            onPointerDown={state.onMoveLinkPointerDown}
+          >
+            move
+          </button>}
+        </div>
         <Logger
           ref={state.ref('logger')}
           onClickLink={state.onClickLoggerLink}
@@ -206,6 +238,8 @@ const loggerContainerCss = css`
   
   > div:nth-child(1) {
     height: 20px;
+    display: flex;
+    gap: 8px;
   }
   > div:nth-child(2) {
     /* height: ${defaultLoggerHeightPx}px; */
@@ -289,6 +323,15 @@ const loggerPopUpCss = css`
   }
 `;
 
+const loggerMoveLinkCss = css`
+  pointer-events: all;
+  cursor: pointer;
+  text-decoration: underline;
+  color: #aaf;
+  font-size: small;
+  letter-spacing: 1px;
+`;
+
 const cssTtyDisconnectedMessage = css`
   position: absolute;
   bottom: 0;
@@ -337,6 +380,8 @@ const cssTtyDisconnectedMessage = css`
  * @property {(msg: string) => void} measure
  * Measure durations by sending same `msg` twice.
  * @property {(e: NPC.ClickLinkEvent) => void} onClickLoggerLink
+ * @property {(e: React.PointerEvent) => void} onMoveLinkPointerDown
+ * @property {(e: React.PointerEvent | PointerEvent) => void} onMoveLinkPointerUp
  * @property {() => void} onOverlayPointerUp
  * @property {(e: React.ChangeEvent<HTMLInputElement>) => void} onResizeLoggerHeight
  * @property {(e: React.ChangeEvent<HTMLInputElement>) => void} onResizeLoggerWidth

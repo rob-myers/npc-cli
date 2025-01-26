@@ -104,7 +104,7 @@ export const Draggable = React.forwardRef(function Draggable(props, ref) {
       document.body.removeEventListener('mousemove', onMouseMove);
       container.removeEventListener('mouseleave', onMouseUp);
     };
-  }, []);
+  }, [state.onMouseMove]);
 
   React.useEffect(() => {// adjust draggable onresize
     const obs = new ResizeObserver(([entry]) => state.el !== null && state.updatePos());
@@ -112,6 +112,10 @@ export const Draggable = React.forwardRef(function Draggable(props, ref) {
     els.forEach(el => el instanceof HTMLElement && obs.observe(el))
     return () => obs.disconnect();
   }, [props.container, ...props.observeSizes ?? []]);
+
+  if (props.enabled === false) {
+    state.dragging = false;
+  }
 
   return (
     <div
