@@ -2,7 +2,7 @@ import * as THREE from "three";
 import { NavMesh, RecastBuildContext, TileCache, TileCacheMeshProcess, freeCompactHeightfield, freeHeightfield, TileCacheData, freeHeightfieldLayerSet, VerticesArray, TrianglesArray, ChunkIdsArray, TriangleAreasArray, createRcConfig, calcGridSize, DetourTileCacheParams, Raw, vec3, NavMeshParams, RecastChunkyTriMesh, cloneRcConfig, allocHeightfield, createHeightfield, markWalkableTriangles, rasterizeTriangles, filterLowHangingWalkableObstacles, filterLedgeSpans, filterWalkableLowHeightSpans, allocCompactHeightfield, buildCompactHeightfield, erodeWalkableArea, allocHeightfieldLayerSet, buildHeightfieldLayers, getHeightfieldLayerHeights, getHeightfieldLayerAreas, getHeightfieldLayerCons, buildTileCacheLayer,  markConvexPolyArea, Crowd } from "@recast-navigation/core";
 import { getPositionsAndIndices } from "@recast-navigation/three";
 import { createDefaultTileCacheMeshProcess, dtIlog2, dtNextPow2, getBoundingBox, tileCacheGeneratorConfigDefaults } from "@recast-navigation/generators";
-import { offMeshConnectionHalfDepth, wallOutset } from "./const";
+import { offMeshConnectionHalfDepth, precision, wallOutset } from "./const";
 import { range, toPrecision } from "./generic";
 import { geom } from "./geom";
 import { decompToXZGeometry, toV3 } from "./three";
@@ -91,8 +91,8 @@ export function computeOffMeshConnectionsParams(w) {
       const tangent = { x: -normal.y, y: normal.x };
       
       return offsets.map(offset => ({
-        startPosition: { x: toPrecision(src.x + offset * tangent.x), y: 0.001, z: toPrecision(src.y + offset * tangent.y) },
-        endPosition: { x: toPrecision(dst.x + offset * tangent.x), y: 0.001, z: toPrecision(dst.y + offset * tangent.y) },
+        startPosition: { x: toPrecision(src.x + offset * tangent.x, precision), y: 0.001, z: toPrecision(src.y + offset * tangent.y, precision) },
+        endPosition: { x: toPrecision(dst.x + offset * tangent.x, precision), y: 0.001, z: toPrecision(dst.y + offset * tangent.y, precision) },
         radius: 0.04,
         bidirectional: true,
         // 🔔 Encode (gmId, doorId) assuming 0 ≤ gmId, doorId ≤ 255
