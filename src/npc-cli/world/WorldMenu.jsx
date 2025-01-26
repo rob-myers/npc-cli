@@ -27,10 +27,9 @@ export default function WorldMenu(props) {
     canDragLogger: w.smallViewport === false,
     debugWhilePaused: false,
     durationKeys: {},
-    initHeight: tryLocalStorageGetParsed(`log-height-px@${w.key}`) ?? 200,
     logger: /** @type {*} */ (null),
-    loggerHeight: defaultLoggerHeightPx / loggerHeightDelta,
-    loggerWidth: defaultLoggerWidthPx / loggerWidthDelta,
+    loggerHeight: tryLocalStorageGetParsed(`log-height@${w.key}`) ?? defaultLoggerHeightPx / loggerHeightDelta,
+    loggerWidth: tryLocalStorageGetParsed(`log-width@${w.key}`) ?? defaultLoggerWidthPx / loggerWidthDelta,
     showMeasures: tryLocalStorageGetParsed(`log-show-measures@${w.key}`) ?? false,
 
     changeShowMeasures(e) {
@@ -64,10 +63,12 @@ export default function WorldMenu(props) {
     onResizeLoggerHeight(e) {
       state.loggerHeight = Number(e.currentTarget.value); // e.g. 2, ..., 10
       state.logger.container.style.height = `${state.loggerHeight * loggerHeightDelta}px`;
+      tryLocalStorageSet(`log-height@${w.key}`, `${state.loggerHeight}`);
     },
     onResizeLoggerWidth(e) {
       state.loggerWidth = Number(e.currentTarget.value);
       state.logger.container.style.width = `${state.loggerWidth * loggerWidthDelta}px`;
+      tryLocalStorageSet(`log-width@${w.key}`, `${state.loggerWidth}`);
     },
     say(npcKey, ...parts) {
       const line = parts.join(' ');
@@ -89,6 +90,13 @@ export default function WorldMenu(props) {
   }));
 
   w.menu = state;
+
+  React.useLayoutEffect(() => {// remember Logger dimensions
+    if (state.logger?.container) {
+      state.logger.container.style.width = `${state.loggerWidth * loggerWidthDelta}px`;
+      state.logger.container.style.height = `${state.loggerHeight * loggerHeightDelta}px`;
+    }
+  }, [state.logger?.container]);
 
   return <>
     <div
@@ -148,7 +156,7 @@ export default function WorldMenu(props) {
               type="range"
               className="change-logger-width"
               min={4}
-              max={10}
+              max={w.smallViewport ? 7 : 10}
               defaultValue={state.loggerWidth}
               onChange={state.onResizeLoggerWidth}
             />
@@ -285,7 +293,6 @@ const cssTtyDisconnectedMessage = css`
  * @property {import('../terminal/Logger').State} logger
  * @property {number} loggerHeight
  * @property {number} loggerWidth
- * @property {number} initHeight
  * @property {boolean} showMeasures
  *
  * @property {(e: React.ChangeEvent<HTMLInputElement>) => void} changeShowMeasures
