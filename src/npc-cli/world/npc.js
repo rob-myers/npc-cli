@@ -303,6 +303,7 @@ export class Npc {
   }
 
   getMaxSpeed() {
+    // return 0.5;
     return this.s.run === true ? this.def.runSpeed : this.def.walkSpeed;
   }
 
@@ -455,7 +456,6 @@ export class Npc {
     this.agent.updateParameters({
       maxAcceleration: movingMaxAcceleration,
       maxSpeed: this.getMaxSpeed(),
-      // maxSpeed: 0.5,
       radius: (this.s.run ? 3 : 2) * helper.defaults.radius, // reset
       // radius: helper.defaults.radius * 1.5, // reset
       collisionQueryRange: movingCollisionQueryRange,
@@ -670,6 +670,7 @@ export class Npc {
 
     if (this.s.offMesh !== null) {
       this.handleOffMeshConnection(agent, this.s.offMesh);
+      return; // Avoid stopMoving whilst offMesh
     }
 
     if (this.s.target === null) {
@@ -843,7 +844,7 @@ export class Npc {
   }
 
   stopMoving() {
-    if (this.agent == null) {
+    if (this.agent === null) {
       return;
     }
 
@@ -863,13 +864,14 @@ export class Npc {
     
     this.startAnimation('Idle');
 
-    if (this.s.offMesh === null || this.s.offMesh.seg === 0) {
+    if (this.s.offMesh === null || (this.s.offMesh.seg === 0)) {
       const position = this.agent.position();
       this.agent.teleport(position);
       this.agent.requestMoveTarget(position);
-      this.agentAnim?.set_active(false); // when offMesh.seg === 0
-    } else {// on exit traversal stay there
-      this.agent.requestMoveTarget(this.s.offMesh.orig.dst);
+      // case offMesh.seg === 0:
+      /** @type {dtCrowdAgentAnimation} */ (this.agentAnim).set_active(false);
+    } else {// midway through traversal, so stop when finish
+      this.agent.requestMoveTarget(toV3(this.s.offMesh.dst));
     }
 
     this.resolve.move?.();
