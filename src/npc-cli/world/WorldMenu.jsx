@@ -3,7 +3,6 @@ import { css, cx } from "@emotion/css";
 import { createPortal } from "react-dom";
 
 import { tryLocalStorageGetParsed, tryLocalStorageSet, warn } from "../service/generic";
-import { isTouchDevice } from "../service/dom";
 import { ansi } from "../sh/const";
 import { WorldContext } from "./world-context";
 import useStateRef from "../hooks/use-state-ref";
@@ -25,7 +24,7 @@ export default function WorldMenu(props) {
 
   const state = useStateRef(/** @returns {State} */ () => ({
 
-    canDragLogger: defaultCanDragLogger,
+    canDragLogger: w.smallViewport === false,
     debugWhilePaused: false,
     draggable: /** @type {*} */ (null),
     durationKeys: {},
@@ -34,9 +33,13 @@ export default function WorldMenu(props) {
     loggerWidth: tryLocalStorageGetParsed(`log-width@${w.key}`) ?? defaultLoggerWidthPx / loggerWidthDelta,
     showMeasures: tryLocalStorageGetParsed(`log-show-measures@${w.key}`) ?? false,
 
-    changeShowMeasures(e) {
+    changeLoggerLog(e) {
       state.showMeasures = e.currentTarget.checked;
       tryLocalStorageSet(`log-show-measures@${w.key}`, `${state.showMeasures}`);
+      update();
+    },
+    changeLoggerMove(e) {
+      state.canDragLogger = e.currentTarget.checked;
       update();
     },
     enableAll() {
@@ -61,16 +64,6 @@ export default function WorldMenu(props) {
     },
     onOverlayPointerUp() {
       props.setTabsEnabled(true);
-    },
-    onMoveLinkTouchStart(e) {
-      state.canDragLogger = true;
-      update();
-    },
-    onMoveLinkTouchEnd(e) {
-      if (state.canDragLogger === true) {
-        state.canDragLogger = false;
-        update();
-      } 
     },
     onResizeLoggerHeight(e) {
       state.loggerHeight = Number(e.currentTarget.value); // e.g. 2, ..., 10
@@ -105,19 +98,6 @@ export default function WorldMenu(props) {
 
   w.menu = state;
 
-  React.useEffect(() => {
-    if (w.view.rootEl && state.canDragLogger === false) {
-      const { onMoveLinkTouchEnd: onMoveLinkPointerUp } = state; // for HMR
-      w.view.rootEl.addEventListener('touchend', onMoveLinkPointerUp);
-      w.view.rootEl.addEventListener('touchcancel', onMoveLinkPointerUp);
-      return () => {
-        w.view.rootEl.removeEventListener('touchend', onMoveLinkPointerUp);
-        w.view.rootEl.removeEventListener('touchcancel', onMoveLinkPointerUp);
-      };
-    }
-  }, [w.view.rootEl, state.onMoveLinkTouchEnd]);
-
-  
   return <>
     <div
       className={cx(faderOverlayCss, {
@@ -161,46 +141,53 @@ export default function WorldMenu(props) {
             className={loggerPopUpCss}
             width={300}
           >
-            <label>
-              <input
-                type="range"
-                className="change-logger-width"
-                min={4}
-                max={w.smallViewport ? 7 : 10}
-                defaultValue={state.loggerWidth}
-                onChange={state.onResizeLoggerWidth}
-              />
-              w
-            </label>
+            <div>
+              <label>
+                <input
+                  type="range"
+                  className="change-logger-width"
+                  min={4}
+                  max={w.smallViewport ? 7 : 10}
+                  defaultValue={state.loggerWidth}
+                  onChange={state.onResizeLoggerWidth}
+                />
+                w
+              </label>
 
-            <label>
-              <input
-                type="range"
-                className="change-logger-height"
-                min={2}
-                max={10}
-                defaultValue={state.loggerHeight}
-                onChange={state.onResizeLoggerHeight}
-              />
-              h
-            </label>
+              <label>
+                <input
+                  type="range"
+                  className="change-logger-height"
+                  min={2}
+                  max={10}
+                  defaultValue={state.loggerHeight}
+                  onChange={state.onResizeLoggerHeight}
+                />
+                h
+              </label>
+            </div>
+
+            {w.smallViewport === true && (
+              <label>
+                move
+                <input
+                  type="checkbox"
+                  defaultChecked={state.canDragLogger}
+                  onChange={state.changeLoggerMove}
+                />
+              </label>
+            )}
 
             <label>
               log
               <input
                 type="checkbox"
                 defaultChecked={state.showMeasures}
-                onChange={state.changeShowMeasures}
+                onChange={state.changeLoggerLog}
               />
             </label>
           </PopUp>
 
-          {defaultCanDragLogger === false && <button
-            className={loggerMoveLinkCss}
-            onTouchStart={state.onMoveLinkTouchStart}
-          >
-            move
-          </button>}
         </div>
         <Logger
           ref={state.ref('logger')}
@@ -223,15 +210,12 @@ export default function WorldMenu(props) {
   </>;
 }
 
-const defaultCanDragLogger = !isTouchDevice();
-
 const defaultLoggerHeightPx = 100;
 const defaultLoggerWidthPx = 800;
 /** Must be a factor of default height */
 const loggerHeightDelta = 20;
 /** Must be a factor of default width */
 const loggerWidthDelta = 100;
-
 
 const loggerContainerCss = css`
   position: absolute;
@@ -240,9 +224,10 @@ const loggerContainerCss = css`
   max-width: 100%;
   
   > div:nth-child(1) {
-    height: 20px;
+    height: 24px;
     display: flex;
     gap: 8px;
+    font-size: 1rem;
   }
   > div:nth-child(2) {
     /* height: ${defaultLoggerHeightPx}px; */
@@ -256,13 +241,11 @@ const loggerContainerCss = css`
   flex-direction: column;
   align-items: start;
   pointer-events: none;
-  
-  font-size: 12px;
 `;
 
 const loggerPopUpCss = css`
   pointer-events: all;
-  transform: scale(.8);
+  transform: scale(.85);
   z-index: 5;
 
   .${popUpButtonClassName} {
@@ -288,6 +271,7 @@ const loggerPopUpCss = css`
       display: flex;
       align-items: center;
       gap: 8px;
+      font-family: 'Courier New', Courier, monospace;
     }
 
     /** https://www.smashingmagazine.com/2021/12/create-custom-range-input-consistent-browsers/ */
@@ -324,15 +308,6 @@ const loggerPopUpCss = css`
       width: 60px;
     }
   }
-`;
-
-const loggerMoveLinkCss = css`
-  pointer-events: all;
-  cursor: pointer;
-  text-decoration: underline;
-  color: #aaf;
-  font-size: small;
-  letter-spacing: 1px;
 `;
 
 const cssTtyDisconnectedMessage = css`
@@ -378,13 +353,12 @@ const cssTtyDisconnectedMessage = css`
  * @property {number} loggerWidth
  * @property {boolean} showMeasures
  *
- * @property {(e: React.ChangeEvent<HTMLInputElement>) => void} changeShowMeasures
+ * @property {(e: React.ChangeEvent<HTMLInputElement>) => void} changeLoggerLog
+ * @property {(e: React.ChangeEvent<HTMLInputElement>) => void} changeLoggerMove
  * @property {() => void} enableAll
  * @property {(msg: string) => void} measure
  * Measure durations by sending same `msg` twice.
  * @property {(e: NPC.ClickLinkEvent) => void} onClickLoggerLink
- * @property {(e: React.TouchEvent) => void} onMoveLinkTouchStart
- * @property {(e: TouchEvent) => void} onMoveLinkTouchEnd
  * @property {() => void} onOverlayPointerUp
  * @property {(e: React.ChangeEvent<HTMLInputElement>) => void} onResizeLoggerHeight
  * @property {(e: React.ChangeEvent<HTMLInputElement>) => void} onResizeLoggerWidth
