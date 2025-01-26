@@ -102,8 +102,8 @@ export function ContextMenu() {
 
       if (
         downAt === null
-        || Math.abs(e.clientX - downAt.x) > 5
-        || Math.abs(e.clientY - downAt.y) > 5
+        || Math.abs(e.clientX - downAt.x) > 2
+        || Math.abs(e.clientY - downAt.y) > 2
       ) {
         return;
       } else if (state.docked === false) {
