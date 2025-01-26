@@ -44,10 +44,10 @@ export function ContextMenu() {
     popUp: /** @type {*} */ (null),
     selectNpcKeys: [],
 
+    downAt: null,
     /** `cm.dockPoint` when on pointer down */
     downDockPoint: undefined,
     /** Was pointerdown over contextmenu and not yet up? */
-    isDown: false,
 
     computeKvsFromMeta(meta) {
       const skip = /** @type {Record<string, boolean>} */ ({
@@ -92,15 +92,19 @@ export function ContextMenu() {
       }
     },
     onPointerDown(e) {
-      state.isDown = true;
+      state.downAt = { x: e.clientX, y: e.clientY };
       state.downDockPoint = state.docked ? {...state.dockPoint} : undefined;
     },
     onPointerUp(e) {
-      const { downDockPoint, isDown } = state;
+      const { downDockPoint, downAt } = state;
       state.downDockPoint = undefined;
-      state.isDown = false;
+      state.downAt = null;
 
-      if (isDown === false) {
+      if (
+        downAt === null
+        || Math.abs(e.clientX - downAt.x) > 5
+        || Math.abs(e.clientY - downAt.y) > 5
+      ) {
         return;
       } else if (state.docked === false) {
         state.onToggleLink(e);
@@ -422,7 +426,7 @@ const popUpInfoCss = css`
  *   everDocked: boolean;
  *   html3d: import("../components/Html3d").State;
  *   innerRoot: HTMLElement;
- *   isDown: boolean;
+ *   downAt: null | Geom.VectJson;
  *   kvs: { k: string; v: string; length: number }[];
  *   links: NPC.ContextMenuLink[];
  *   match: { [matcherKey: string]: NPC.ContextMenuMatcher };
