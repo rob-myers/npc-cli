@@ -26,7 +26,7 @@ export default function WorldMenu(props) {
 
     debugWhilePaused: false,
     draggable: /** @type {*} */ (null),
-    dragClassName: w.smallViewport ? 'pop-up-content' : undefined,
+    dragClassName: w.smallViewport ? 'drag-logger-button' : undefined,
     durationKeys: {},
     logger: /** @type {*} */ (null),
     loggerHeight: tryLocalStorageGetParsed(`log-height@${w.key}`) ?? defaultLoggerHeightPx / loggerHeightDelta,
@@ -163,25 +163,22 @@ export default function WorldMenu(props) {
               </label>
             </div>
 
-            {/* {w.smallViewport === true && (
+            <div>
               <label>
-                move
+                log
                 <input
                   type="checkbox"
-                  defaultChecked={state.canDragLogger}
-                  onChange={state.changeLoggerMove}
+                  defaultChecked={state.showMeasures}
+                  onChange={state.changeLoggerLog}
                 />
               </label>
-            )} */}
 
-            <label>
-              log
-              <input
-                type="checkbox"
-                defaultChecked={state.showMeasures}
-                onChange={state.changeLoggerLog}
-              />
-            </label>
+              {w.smallViewport === true && (
+                <button className="drag-logger-button">
+                  move
+                </button>
+              )}
+            </div>
 
           </PopUp>
 
@@ -269,6 +266,11 @@ const loggerPopUpCss = css`
       align-items: center;
       gap: 8px;
       font-family: 'Courier New', Courier, monospace;
+    }
+
+    .drag-logger-button {
+      font-size: 0.9rem;
+      color: #aaf;
     }
 
     /** https://www.smashingmagazine.com/2021/12/create-custom-range-input-consistent-browsers/ */
