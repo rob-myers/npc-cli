@@ -68,7 +68,7 @@
     - ✅ auto-refresh npc select e.g. with debounce
   - ✅ can move Logger
   - ✅ move Logger on mobile via toggle between move/scroll
-  - 🚧 can resize Logger
+  - ✅ can resize Logger
     - ❌ try extend Draggable
     - ✅ PopUp with "opts" label
     - ✅ mobile drag disabled by default
@@ -76,9 +76,14 @@
     - ✅ can resize width and height
     - ✅ can remember width and height
     - ✅ can move Logger on mobile via "move" link
-    - avoid xterm scroll while drag e.g. only allow PopUp
+    - ✅ avoid xterm scroll while drag e.g. only allow PopUp
   - ✅ ContextMenu: prevent link action when drag (again)
-  - ContextMenu should remember docked position
+  - ❌ can add keyed callback to be persisted onbeforeunload
+  - ✅ Draggable remembers last position stored as props.storageKey
+    - remembered position overrides initPos (e.g. ContextMenu initPos aligned bottom-left)
+  - ✅ Logger should remember docked position
+  - 🚧 ContextMenu can be initially docked
+  - 🚧 ContextMenu should remember docked position
   - Logger/ContextMenu z-index changes onclick
   - Draggables are sticky e.g. to bottom, to right
   - Still seeing flicker on change "embed" -> "docked" on mobile

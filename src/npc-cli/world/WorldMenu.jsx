@@ -130,6 +130,7 @@ export default function WorldMenu(props) {
         container={w.view.rootEl}
         dragClassName={state.dragClassName}
         initPos={{ x: 0, y: 0 }}
+        localStorageKey={`logger:drag-pos@${w.key}`}
       >
         <div>
           <PopUp

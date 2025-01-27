@@ -1,4 +1,7 @@
 import React from "react";
+import debounce from "debounce";
+
+import { tryLocalStorageGetParsed, tryLocalStorageSet } from "../service/generic";
 import useStateRef from "../hooks/use-state-ref";
 
 /**
@@ -10,7 +13,7 @@ export const Draggable = React.forwardRef(function Draggable(props, ref) {
   const state = useStateRef(/** @returns {State} */ () => ({
     dragging: false,
     el: /** @type {*} */ (null),
-    pos: {...props.initPos ?? { x: 0, y: 0 }},
+    pos: tryLocalStorageGetParsed(props.localStorageKey ?? '') ?? {...props.initPos ?? { x: 0, y: 0 }},
     rel: { x: 0, y: 0 },
     touchId: /** @type {undefined | number} */ (undefined),
 
@@ -86,6 +89,10 @@ export const Draggable = React.forwardRef(function Draggable(props, ref) {
       const touchObj = /** @type {{clientX: number, clientY: number}} */ (state.getTouch(e, /** @type {number} */ (state.touchId)));
       state.updatePos(touchObj.clientX - state.rel.x, touchObj.clientY - state.rel.y);
     },
+    persist: debounce(() => {
+      if (props.localStorageKey !== undefined)
+        tryLocalStorageSet(props.localStorageKey, JSON.stringify(state.pos))
+    }, 300),
     updatePos(x = state.pos.x, y = state.pos.y) {
       // ensure within bounds
       const container = props.container ?? document.body;
@@ -93,8 +100,9 @@ export const Draggable = React.forwardRef(function Draggable(props, ref) {
       state.pos.y = Math.max(0, Math.min(container.clientHeight - state.el.offsetHeight, y));
       state.el.style.left = `${state.pos.x}px`;
       state.el.style.top = `${state.pos.y}px`;
+      state.persist();
     },
-  }), { deps: [props.container, props.dragClassName] });
+  }), { deps: [props.container, props.dragClassName, props.localStorageKey] });
 
   React.useImperativeHandle(ref, () => state, []);
   
@@ -110,7 +118,10 @@ export const Draggable = React.forwardRef(function Draggable(props, ref) {
   }, [state.onMouseMove]);
 
   React.useEffect(() => {// adjust draggable onresize
-    const obs = new ResizeObserver(([entry]) => state.el !== null && state.updatePos());
+    const obs = new ResizeObserver(([entry]) => {
+      // 🔔 setTimeout for initial resize when viewport changed
+      state.el !== null && setTimeout(() => state.updatePos());
+    });
     const els = (props.observeSizes?.filter(x => x !== props.container) ?? []).concat(props.container ?? []);
     els.forEach(el => el instanceof HTMLElement && obs.observe(el))
     return () => obs.disconnect();
@@ -148,6 +159,7 @@ export const Draggable = React.forwardRef(function Draggable(props, ref) {
  * @property {string} [dragClassName]
  * If defined, can only drag element matching it
  * @property {Geom.VectJson} [initPos]
+ * @property {string} [localStorageKey]
  * @property {HTMLElement[]} [observeSizes]
  * Elements whose size can effect the Draggable's position
  */
@@ -168,6 +180,7 @@ export const Draggable = React.forwardRef(function Draggable(props, ref) {
  *   onTouchStart(e: React.TouchEvent): null | undefined;
  *   onTouchEnd(e: React.TouchEvent): void;
  *   onTouchMove(e: React.TouchEvent): void;
+ *   persist(): void;
  *   updatePos(x?: number, y?: number): void;
  * }} State
  */
