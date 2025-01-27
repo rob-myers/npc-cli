@@ -24,9 +24,9 @@ export default function WorldMenu(props) {
 
   const state = useStateRef(/** @returns {State} */ () => ({
 
-    canDragLogger: w.smallViewport === false,
     debugWhilePaused: false,
     draggable: /** @type {*} */ (null),
+    dragClassName: w.smallViewport ? 'pop-up-content' : undefined,
     durationKeys: {},
     logger: /** @type {*} */ (null),
     loggerHeight: tryLocalStorageGetParsed(`log-height@${w.key}`) ?? defaultLoggerHeightPx / loggerHeightDelta,
@@ -36,10 +36,6 @@ export default function WorldMenu(props) {
     changeLoggerLog(e) {
       state.showMeasures = e.currentTarget.checked;
       tryLocalStorageSet(`log-show-measures@${w.key}`, `${state.showMeasures}`);
-      update();
-    },
-    changeLoggerMove(e) {
-      state.canDragLogger = e.currentTarget.checked;
       update();
     },
     enableAll() {
@@ -132,8 +128,8 @@ export default function WorldMenu(props) {
         className={loggerContainerCss}
         ref={state.ref('draggable')}
         container={w.view.rootEl}
+        dragClassName={state.dragClassName}
         initPos={{ x: 0, y: 0 }}
-        enabled={state.canDragLogger}
       >
         <div>
           <PopUp
@@ -167,7 +163,7 @@ export default function WorldMenu(props) {
               </label>
             </div>
 
-            {w.smallViewport === true && (
+            {/* {w.smallViewport === true && (
               <label>
                 move
                 <input
@@ -176,7 +172,7 @@ export default function WorldMenu(props) {
                   onChange={state.changeLoggerMove}
                 />
               </label>
-            )}
+            )} */}
 
             <label>
               log
@@ -186,6 +182,7 @@ export default function WorldMenu(props) {
                 onChange={state.changeLoggerLog}
               />
             </label>
+
           </PopUp>
 
         </div>
@@ -341,12 +338,11 @@ const cssTtyDisconnectedMessage = css`
   }
 `;
 
-
 /**
  * @typedef State
- * @property {boolean} canDragLogger
  * @property {boolean} debugWhilePaused Is the camera usable whilst paused?
  * @property {import('../components/Draggable').State} draggable Draggable containing Logger
+ * @property {string} [dragClassName] We can restrict Logger dragging to this className
  * @property {{ [durKey: string]: number }} durationKeys
  * @property {import('../terminal/Logger').State} logger
  * @property {number} loggerHeight
@@ -354,7 +350,6 @@ const cssTtyDisconnectedMessage = css`
  * @property {boolean} showMeasures
  *
  * @property {(e: React.ChangeEvent<HTMLInputElement>) => void} changeLoggerLog
- * @property {(e: React.ChangeEvent<HTMLInputElement>) => void} changeLoggerMove
  * @property {() => void} enableAll
  * @property {(msg: string) => void} measure
  * Measure durations by sending same `msg` twice.
