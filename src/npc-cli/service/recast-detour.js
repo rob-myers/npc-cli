@@ -1,11 +1,11 @@
 import * as THREE from "three";
-import { NavMesh, RecastBuildContext, TileCache, TileCacheMeshProcess, freeCompactHeightfield, freeHeightfield, TileCacheData, freeHeightfieldLayerSet, VerticesArray, TrianglesArray, ChunkIdsArray, TriangleAreasArray, createRcConfig, calcGridSize, DetourTileCacheParams, Raw, vec3, NavMeshParams, RecastChunkyTriMesh, cloneRcConfig, allocHeightfield, createHeightfield, markWalkableTriangles, rasterizeTriangles, filterLowHangingWalkableObstacles, filterLedgeSpans, filterWalkableLowHeightSpans, allocCompactHeightfield, buildCompactHeightfield, erodeWalkableArea, allocHeightfieldLayerSet, buildHeightfieldLayers, getHeightfieldLayerHeights, getHeightfieldLayerAreas, getHeightfieldLayerCons, buildTileCacheLayer,  markConvexPolyArea } from "@recast-navigation/core";
+import { NavMesh, RecastBuildContext, TileCache, TileCacheMeshProcess, freeCompactHeightfield, freeHeightfield, TileCacheData, freeHeightfieldLayerSet, VerticesArray, TrianglesArray, ChunkIdsArray, TriangleAreasArray, createRcConfig, calcGridSize, DetourTileCacheParams, Raw, vec3, NavMeshParams, RecastChunkyTriMesh, cloneRcConfig, allocHeightfield, createHeightfield, markWalkableTriangles, rasterizeTriangles, filterLowHangingWalkableObstacles, filterLedgeSpans, filterWalkableLowHeightSpans, allocCompactHeightfield, buildCompactHeightfield, erodeWalkableArea, allocHeightfieldLayerSet, buildHeightfieldLayers, getHeightfieldLayerHeights, getHeightfieldLayerAreas, getHeightfieldLayerCons, buildTileCacheLayer,  markConvexPolyArea, Crowd } from "@recast-navigation/core";
 import { getPositionsAndIndices } from "@recast-navigation/three";
 import { createDefaultTileCacheMeshProcess, dtIlog2, dtNextPow2, getBoundingBox, tileCacheGeneratorConfigDefaults } from "@recast-navigation/generators";
-import { offMeshConnectionHalfDepth, precision } from "./const";
+import { wallOutset } from "./const";
 import { range, toPrecision } from "./generic";
 import { geom } from "./geom";
-import { decompToXZGeometry } from "./three";
+import { decompToXZGeometry, toV3 } from "./three";
 import { helper } from "./helper";
 
 /**
@@ -43,11 +43,22 @@ export function computeGmInstanceMesh(gm) {
  */
 export function computeOffMeshConnectionsParams(w) {
   
-  /** We ignore: isolated hull doors, 2nd "identified" hull door. */
+  /**
+   * - ignore isolated hull doors
+   * - ignore 2nd identified hull door
+   */
   const ignoreGdKeys = /** @type {Set<Geomorph.GmDoorKey>} */ (new Set());
 
+  /** `gms[gmId].doors[doorId]` are the metas of the adj rooms */
+  const doorRoomMetas = w.gms.map(gm => {
+    const roomMetas = gm.rooms.map(x => x.meta);
+    return gm.doors.map(({ roomIds }) => 
+      roomIds.flatMap(roomId => roomId !== null ? roomMetas[roomId] : [])
+    );
+  });
+
   return w.gms.flatMap((gm, gmId) => gm.doors.flatMap(/** @returns {import("recast-navigation").OffMeshConnectionParams[]} */
-    ({ center, normal, meta, }, doorId) => {
+    ({ center, normal, meta, roomIds }, doorId) => {
 
       if (meta.hull === true) {
         const adj = w.gmGraph.getAdjacentRoomCtxt(gmId, doorId);
@@ -57,18 +68,25 @@ export function computeOffMeshConnectionsParams(w) {
           ignoreGdKeys.add(`g${adj.adjGmId}d${adj.adjDoorId}`);
         }
       }
-      
-      const halfLength = meta.hull === true ? offMeshConnectionHalfDepth.hull : offMeshConnectionHalfDepth.nonHull;
+
+      /**
+       * 🔔 saw nav fail in 102 (top right) when many offMeshConnections, which
+       * we fix via room.meta "small" and "narrow-entrances"
+       */
+      const narrowEntrance = meta.hull === true ? false : doorRoomMetas[gmId][doorId].some(x =>
+        x.small === true || x['narrow-entrances'] === true
+      );
+      const halfLength = wallOutset + (meta.hull === true ? 0.25 : 0.125);
+      // const offsets = meta.hull === true ? [-0.3, 0.01, 0.3] : narrowEntrance === false ? [-0.25, 0.01, 0.25] : [0.01];
+      const offsets = [0.01];
+
       const src = gm.matrix.transformPoint(center.clone().addScaled(normal, halfLength));
       const dst = gm.matrix.transformPoint(center.clone().addScaled(normal, -halfLength));
       const tangent = { x: -normal.y, y: normal.x };
       
-      // const offsets = [-halfWidth, 0.01, halfWidth];
-      const offsets = [0.01];
-
       return offsets.map(offset => ({
-        startPosition: { x: toPrecision(src.x + offset * tangent.x, precision), y: 0.001, z: toPrecision(src.y + offset * tangent.y, precision) },
-        endPosition: { x: toPrecision(dst.x + offset * tangent.x, precision), y: 0.001, z: toPrecision(dst.y + offset * tangent.y, precision) },
+        startPosition: { x: toPrecision(src.x + offset * tangent.x), y: 0.001, z: toPrecision(src.y + offset * tangent.y) },
+        endPosition: { x: toPrecision(dst.x + offset * tangent.x), y: 0.001, z: toPrecision(dst.y + offset * tangent.y) },
         radius: 0.04,
         bidirectional: true,
         // 🔔 Encode (gmId, doorId) assuming 0 ≤ gmId, doorId ≤ 255
