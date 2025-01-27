@@ -176,7 +176,6 @@ const loggerCss = css`
   
   background: rgba(0, 0, 0, 0.6);
   border: 1px dashed rgba(255, 255, 255, 0.2);
-  border-radius: 8px;
   
   // 🔔 override textual selection cursor
   canvas { cursor: auto !important; }

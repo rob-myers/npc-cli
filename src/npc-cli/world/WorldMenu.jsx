@@ -9,7 +9,7 @@ import useStateRef from "../hooks/use-state-ref";
 import useUpdate from "../hooks/use-update";
 import { faderOverlayCss, pausedControlsCss } from "./overlay-menu-css";
 import { Draggable } from "../components/Draggable";
-import { PopUp, popUpButtonClassName, popUpContentClassName } from "../components/PopUp";
+import { PopUp, popUpBubbleClassName, popUpButtonClassName, popUpContentClassName } from "../components/PopUp";
 import { Logger } from "../terminal/Logger";
 import TouchIndicator from "./TouchIndicator";
 
@@ -132,50 +132,47 @@ export default function WorldMenu(props) {
         initPos={{ x: 0, y: 0 }}
         localStorageKey={`logger:drag-pos@${w.key}`}
       >
-        <div>
-          <PopUp
-            label="⋯"
-            className={loggerPopUpCss}
-            width={300}
-          >
-            <div>
-              <label>
-                <input
-                  type="range"
-                  className="change-logger-width"
-                  min={4}
-                  max={w.smallViewport ? 7 : 10}
-                  defaultValue={state.loggerWidth}
-                  onChange={state.onResizeLoggerWidth}
-                />
-                w
-              </label>
-
-              <label>
-                <input
-                  type="range"
-                  className="change-logger-height"
-                  min={2}
-                  max={10}
-                  defaultValue={state.loggerHeight}
-                  onChange={state.onResizeLoggerHeight}
-                />
-                h
-              </label>
-            </div>
-
+        <PopUp
+          label="⋯"
+          className={loggerPopUpCss}
+          width={300}
+        >
+          <div>
             <label>
-              log
               <input
-                type="checkbox"
-                defaultChecked={state.showMeasures}
-                onChange={state.changeLoggerLog}
+                type="range"
+                className="change-logger-width"
+                min={4}
+                max={w.smallViewport ? 7 : 10}
+                defaultValue={state.loggerWidth}
+                onChange={state.onResizeLoggerWidth}
               />
+              w
             </label>
 
-          </PopUp>
+            <label>
+              <input
+                type="range"
+                className="change-logger-height"
+                min={2}
+                max={10}
+                defaultValue={state.loggerHeight}
+                onChange={state.onResizeLoggerHeight}
+              />
+              h
+            </label>
+          </div>
 
-        </div>
+          <label>
+            log
+            <input
+              type="checkbox"
+              defaultChecked={state.showMeasures}
+              onChange={state.changeLoggerLog}
+            />
+          </label>
+
+        </PopUp>
         <Logger
           ref={state.ref('logger')}
           onClickLink={state.onClickLoggerLink}
@@ -210,12 +207,6 @@ const loggerContainerCss = css`
   top: 0;
   max-width: 100%;
   
-  > div:nth-child(1) {
-    height: 24px;
-    display: flex;
-    gap: 8px;
-    font-size: 1rem;
-  }
   > div:nth-child(2) {
     /* height: ${defaultLoggerHeightPx}px; */
     /* width: ${defaultLoggerWidthPx}px; */
@@ -232,20 +223,22 @@ const loggerContainerCss = css`
 
 const loggerPopUpCss = css`
   pointer-events: all;
-  transform: scale(.85);
   z-index: 5;
-
+  
   .${popUpButtonClassName} {
     color: #8888ff;
-    border: 1px solid rgba(255, 255, 255, 0.4);
+    border: 1px dashed rgba(255, 255, 255, 0.2);
     border-width: 1px 0 0 1px;
     background: black;
     padding: 2px 12px;
     text-decoration: underline;
   }
 
-  .${popUpContentClassName} {
+  .${popUpBubbleClassName} {
+    transform: scale(.85);
+  }
 
+  .${popUpContentClassName} {
     display: flex;
     justify-content: space-evenly;
     align-items: center;

@@ -137,7 +137,7 @@ const defaultInfoWidthPx = 300;
 export const popUpRootDataAttribute = 'data-pop-up-root';
 
 export const popUpButtonClassName = 'pop-up-button';
-
+export const popUpBubbleClassName = 'pop-up-bubble';
 export const popUpContentClassName = 'pop-up-content';
 
 
