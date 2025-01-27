@@ -110,9 +110,11 @@ export const Draggable = React.forwardRef(function Draggable(props, ref) {
     const container = props.container ?? document.body;
     const { onMouseMove, onMouseUp } = state; // for HMR
     document.body.addEventListener('mousemove', onMouseMove);
+    document.body.addEventListener('mouseup', onMouseUp);
     container.addEventListener('mouseleave', onMouseUp);
     return () => {
       document.body.removeEventListener('mousemove', onMouseMove);
+      document.body.removeEventListener('mouseup', onMouseUp);
       container.removeEventListener('mouseleave', onMouseUp);
     };
   }, [state.onMouseMove]);
