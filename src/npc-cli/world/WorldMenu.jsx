@@ -29,20 +29,20 @@ export default function WorldMenu(props) {
     dragClassName: w.smallViewport ? 'pop-up-button' : undefined,
     durationKeys: {},
     logger: /** @type {*} */ (null),
-    loggerHeight: tryLocalStorageGetParsed(`log-height@${w.key}`) ?? defaultLoggerHeightPx / loggerHeightDelta,
-    loggerWidth: tryLocalStorageGetParsed(`log-width@${w.key}`) ?? defaultLoggerWidthPx / loggerWidthDelta,
-    showMeasures: tryLocalStorageGetParsed(`log-show-measures@${w.key}`) ?? false,
+    loggerHeight: tryLocalStorageGetParsed(`logger:height@${w.key}`) ?? defaultLoggerHeightPx / loggerHeightDelta,
+    loggerWidth: tryLocalStorageGetParsed(`logger:width@${w.key}`) ?? defaultLoggerWidthPx / loggerWidthDelta,
+    showDebug: tryLocalStorageGetParsed(`logger:debug@${w.key}`) ?? false,
 
     changeLoggerLog(e) {
-      state.showMeasures = e.currentTarget.checked;
-      tryLocalStorageSet(`log-show-measures@${w.key}`, `${state.showMeasures}`);
+      state.showDebug = e.currentTarget.checked;
+      tryLocalStorageSet(`logger:debug@${w.key}`, `${state.showDebug}`);
       update();
     },
     enableAll() {
       props.setTabsEnabled(true);
     },
     measure(msg) {
-      if (state.showMeasures === false) {
+      if (state.showDebug === false) {
         return;
       } else if (msg in state.durationKeys) {
         const durationMs = (performance.now() - state.durationKeys[msg]).toFixed(1);
@@ -64,13 +64,13 @@ export default function WorldMenu(props) {
     onResizeLoggerHeight(e) {
       state.loggerHeight = Number(e.currentTarget.value); // e.g. 2, ..., 10
       state.logger.container.style.height = `${state.loggerHeight * loggerHeightDelta}px`;
-      tryLocalStorageSet(`log-height@${w.key}`, `${state.loggerHeight}`);
+      tryLocalStorageSet(`logger:height@${w.key}`, `${state.loggerHeight}`);
       state.draggable.updatePos();
     },
     onResizeLoggerWidth(e) {
       state.loggerWidth = Number(e.currentTarget.value);
       state.logger.container.style.width = `${state.loggerWidth * loggerWidthDelta}px`;
-      tryLocalStorageSet(`log-width@${w.key}`, `${state.loggerWidth}`);
+      tryLocalStorageSet(`logger:width@${w.key}`, `${state.loggerWidth}`);
       state.draggable.updatePos();
     },
     say(npcKey, ...parts) {
@@ -164,10 +164,10 @@ export default function WorldMenu(props) {
           </div>
 
           <label>
-            log
+            debug
             <input
               type="checkbox"
-              defaultChecked={state.showMeasures}
+              defaultChecked={state.showDebug}
               onChange={state.changeLoggerLog}
             />
           </label>
@@ -330,7 +330,7 @@ const cssTtyDisconnectedMessage = css`
  * @property {import('../terminal/Logger').State} logger
  * @property {number} loggerHeight
  * @property {number} loggerWidth
- * @property {boolean} showMeasures
+ * @property {boolean} showDebug
  *
  * @property {(e: React.ChangeEvent<HTMLInputElement>) => void} changeLoggerLog
  * @property {() => void} enableAll
