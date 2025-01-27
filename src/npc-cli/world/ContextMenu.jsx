@@ -234,6 +234,7 @@ export function ContextMenu() {
           container={w.view.rootEl}
           initPos={state.dockPoint}
           observeSizes={[state.innerRoot]}
+          localStorageKey={`contextmenu:dragPos@${w.key}`}
         >
           <ContextMenuUi state={state} />
         </Draggable>

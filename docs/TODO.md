@@ -82,8 +82,8 @@
   - ✅ Draggable remembers last position stored as props.storageKey
     - remembered position overrides initPos (e.g. ContextMenu initPos aligned bottom-left)
   - ✅ Logger should remember docked position
+  - ✅ ContextMenu should remember docked position
   - 🚧 ContextMenu can be initially docked
-  - 🚧 ContextMenu should remember docked position
   - Logger/ContextMenu z-index changes onclick
   - Draggables are sticky e.g. to bottom, to right
   - Still seeing flicker on change "embed" -> "docked" on mobile
