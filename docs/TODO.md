@@ -90,8 +90,10 @@
   - Logger logs disconnected/connected message
     - remove hard-coded message
   - ❌ Paused "Opts" with PopUp and Logger measure option
-  - X-ray slider always visible
+  - Loggers Opts has X-ray slider
     - x-ray should be default view
+  - Loggers Opts has Brightness slider
+  - Docked ContextMenu can focus i.e. panZoom to point
   - move `w.bubble.say` -> `w.e.say`
   - profile-1 has link listener
   - fix npc speech styling
