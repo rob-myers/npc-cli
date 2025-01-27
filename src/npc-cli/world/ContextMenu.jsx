@@ -4,7 +4,6 @@ import { stringify as javascriptStringify } from 'javascript-stringify';
 import debounce from "debounce";
 
 import { tryLocalStorageGetParsed, tryLocalStorageSet, warn } from "../service/generic";
-import { Vect } from "../geom";
 import { WorldContext } from "./world-context";
 import useUpdate from "../hooks/use-update";
 import useStateRef from "../hooks/use-state-ref";
@@ -23,18 +22,16 @@ export function ContextMenu() {
     draggable: null,
     /** For violating React.memo */
     epochMs: 0,
-    everDocked: false,
     position: [0, 0, 0],
     tracked: undefined,
     offset: undefined,
     open: false,
     html3d: /** @type {*} */ (null),
 
-    pinned: tryLocalStorageGetParsed(`default-context-menu@${w.key}`)?.pinned ?? w.smallViewport,
+    pinned: tryLocalStorageGetParsed(`context-menu:pinned@${w.key}`) ?? w.smallViewport,
     scaled: false,
     showKvs: true,
   
-    dockPoint: { x: 0, y: 0 },
     kvs: [],
     innerRoot: /** @type {*} */ (null),
     links: [],
@@ -45,9 +42,6 @@ export function ContextMenu() {
     selectNpcKeys: [],
 
     downAt: null,
-    /** `cm.dockPoint` when on pointer down */
-    downDockPoint: undefined,
-    /** Was pointerdown over contextmenu and not yet up? */
 
     computeKvsFromMeta(meta) {
       const skip = /** @type {Record<string, boolean>} */ ({
@@ -93,11 +87,9 @@ export function ContextMenu() {
     },
     onPointerDown(e) {
       state.downAt = { x: e.clientX, y: e.clientY };
-      state.downDockPoint = state.docked ? {...state.dockPoint} : undefined;
     },
     onPointerUp(e) {
-      const { downDockPoint, downAt } = state;
-      state.downDockPoint = undefined;
+      const { downAt } = state;
       state.downAt = null;
 
       if (
@@ -106,16 +98,8 @@ export function ContextMenu() {
         || Math.abs(e.clientY - downAt.y) > 2
       ) {
         return;
-      } else if (state.docked === false) {
+      } else {
         state.onToggleLink(e);
-      } else if (
-        downDockPoint !== undefined &&
-        tmpVect.copy(downDockPoint).distanceTo(state.dockPoint) < 4
-      ) {// docked click without drag
-        state.onToggleLink(e);
-      } else {// dragged docked click
-        state.popUp.preventToggle = true;
-        setTimeout(() => state.popUp.preventToggle = false);
       }
     },
     onSelectNpc(e) {
@@ -153,10 +137,7 @@ export function ContextMenu() {
       }
     },
     persist() {
-      const { pinned, showKvs, docked } = this;
-      tryLocalStorageSet(`default-context-menu@${w.key}`, JSON.stringify({
-        pinned, showKvs, docked,
-      }));
+      tryLocalStorageSet(`context-menu:pinned@${w.key}`, JSON.stringify(state.pinned));
     },
     refreshPopUp: debounce(() => {
       state.selectNpcKeys = Object.keys(w.n);
@@ -189,12 +170,7 @@ export function ContextMenu() {
       state.docked = !state.docked
       if (state.docked === true) {// About to dock
         state.popUp.close();
-        if (state.everDocked === false) {// initially dock at bottom left
-          const elRect = state.innerRoot.getBoundingClientRect();
-          const rootRect = w.view.rootEl.getBoundingClientRect();
-          state.dockPoint = { x: 0, y: rootRect.height - elRect.height };
-          state.everDocked = true;
-        }
+        setTimeout(() => state.draggable?.updatePos(), 30);
       }
     },
     togglePinned() {
@@ -232,7 +208,7 @@ export function ContextMenu() {
         <Draggable
           ref={state.ref('draggable')}
           container={w.view.rootEl}
-          initPos={state.dockPoint}
+          initPos={{ x: 0, y: 2000 }}
           observeSizes={[state.innerRoot]}
           localStorageKey={`contextmenu:dragPos@${w.key}`}
         >
@@ -328,8 +304,6 @@ function ContextMenuUi({ state: cm }) {
   </div>;
 }
 
-const tmpVect = new Vect();
-
 export const contextMenuCss = css`
   position: absolute;
   left: 0;
@@ -420,11 +394,8 @@ const popUpInfoCss = css`
  * @typedef {{
  *   baseScale: undefined | number;
  *   docked: boolean;
- *   dockPoint: Geom.VectJson;
- *   downDockPoint: undefined | Geom.VectJson;
  *   draggable: null | import('../components/Draggable').State;
  *   epochMs: number;
- *   everDocked: boolean;
  *   html3d: import("../components/Html3d").State;
  *   innerRoot: HTMLElement;
  *   downAt: null | Geom.VectJson;
@@ -438,7 +409,7 @@ const popUpInfoCss = css`
  *   popUp: import("../components/PopUp").State;
  *   position: [number, number, number];
  *   tracked: undefined | import("three").Object3D;
- *   pinned: any;
+ *   pinned: boolean;
  *   scaled: boolean;
  *   selectNpcKeys: string[];
  *   showKvs: boolean;
