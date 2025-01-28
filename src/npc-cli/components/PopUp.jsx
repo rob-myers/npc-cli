@@ -156,11 +156,8 @@ const rootPopupCss = css`
     white-space: nowrap;
   }
 
-
-  .pop-up-bubble {
-    
+  .${popUpBubbleClassName} {
     position: relative;
-    z-index: ${zIndex.speechBubble};
     top: calc(-1 * var(--top-offset));
     /** Prevents bubble span from wrapping to next line? */
     display: inline-block;

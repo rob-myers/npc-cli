@@ -241,7 +241,7 @@ function ContextMenuUi({ state: cm }) {
 
       <PopUp
         ref={cm.ref('popUp')}
-        className={popUpInfoCss}
+        className={optsPopUpCss}
         label="opts"
         onChange={cm.onTogglePopup.bind(cm)}
         width={200}
@@ -377,7 +377,9 @@ export const contextMenuCss = css`
 
 `;
 
-const popUpInfoCss = css`
+const optsPopUpCss = css`
+  z-index: 3;
+
   .${popUpContentClassName} {
     display: flex;
     justify-content: space-around;

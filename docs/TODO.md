@@ -116,6 +116,7 @@
 ### On hold
 
 - ✅ Still seeing flicker on change "embed" -> "docked" on mobile
+- clean z-index e.g. "opts above menu"
 - Docked ContextMenu can focus i.e. panZoom to point
 - thinner fuel/machine symbols, or add dark poly border
 - avoid npc stepping forward small amounts when e.g. cannot traverse offMeshConnection
