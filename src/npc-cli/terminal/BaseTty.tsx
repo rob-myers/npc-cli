@@ -26,10 +26,14 @@ export const BaseTty = React.forwardRef<State, Props>(function BaseTty(props: Pr
     session: undefined as any as Session,
     webglAddon: new WebglAddon(),
     xterm: null as any as ttyXtermClass,
-    // 🔔 setTimeout fixes "Cannot read properties of undefined (reading 'dimensions')"
-    containerRef: (el: null | HTMLDivElement) => el && !state.container &&
-      setTimeout(() => (state.container = el, update())
-    ),
+    
+    containerRef: (el: null | HTMLDivElement) => {
+      if (el === null) {//@ts-ignore
+        state.container = null;
+      } else {// 🔔 setTimeout fixes "Cannot read properties of undefined (reading 'dimensions')"
+        setTimeout(() => (state.container = el, update()));
+      }
+    },
   }));
 
   React.useMemo(() => void (ref as React.RefCallback<State>)?.(state), [ref]);
