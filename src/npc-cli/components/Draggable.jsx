@@ -119,7 +119,7 @@ export const Draggable = React.forwardRef(function Draggable(props, ref) {
     };
   }, [state.onMouseMove]);
 
-  React.useEffect(() => {// adjust draggable onresize
+  React.useLayoutEffect(() => {// adjust draggable onresize
     const obs = new ResizeObserver(([entry]) => {
       if (state.el !== null && entry.contentRect.width > 0) {
         // 🔔 setTimeout for initial resize when viewport changed
