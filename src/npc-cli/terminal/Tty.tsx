@@ -56,6 +56,10 @@ export default function Tty(props: Props) {
           state.pausedPids[p.key] = true;
         });
     },
+    reboot() {
+      state.booted = false;
+      update();
+    },
     async resize() {
       if (state.isTouchDevice) {
         state.fitDebounced();
@@ -172,6 +176,7 @@ export default function Tty(props: Props) {
         ref={state.ref('base')}
         sessionKey={props.sessionKey}
         env={props.env}
+        onUnmount={state.reboot}
       />
       {state.base.session && (
         <TtyMenu

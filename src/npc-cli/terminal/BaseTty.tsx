@@ -88,7 +88,6 @@ export const BaseTty = React.forwardRef<State, Props>(function BaseTty(props: Pr
 
     xterm.open(state.container);
 
-
     return () => {
       useSession.api.persistHistory(props.sessionKey);
       useSession.api.persistHome(props.sessionKey);
@@ -97,10 +96,10 @@ export const BaseTty = React.forwardRef<State, Props>(function BaseTty(props: Pr
       state.xterm.dispose();
       //@ts-ignore
       state.session = state.xterm = null;
+
+      props.onUnmount?.();
     };
   }, []);
-
-  const update = useUpdate();
 
   useBeforeunload(() => {
     useSession.api.persistHistory(props.sessionKey);
@@ -119,6 +118,7 @@ export const BaseTty = React.forwardRef<State, Props>(function BaseTty(props: Pr
 interface Props {
   sessionKey: string;
   env: Partial<Session["var"]>;
+  onUnmount?(): void;
 }
 
 export interface State {
