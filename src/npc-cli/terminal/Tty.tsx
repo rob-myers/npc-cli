@@ -40,10 +40,6 @@ export default function Tty(props: Props) {
     isTouchDevice: isTouchDevice(),
     pausedPids: {} as Record<number, true>,
 
-    onCreateSession() {
-      // state.booted = false;
-      update();
-    },
     onFocus() {
       if (state.inputOnFocus) {
         state.base.xterm.setInput(state.inputOnFocus.input);
@@ -176,7 +172,6 @@ export default function Tty(props: Props) {
         ref={state.ref('base')}
         sessionKey={props.sessionKey}
         env={props.env}
-        onCreateSession={state.onCreateSession}
       />
       {state.base.session && (
         <TtyMenu

@@ -88,7 +88,6 @@ export const BaseTty = React.forwardRef<State, Props>(function BaseTty(props: Pr
 
     xterm.open(state.container);
 
-    props.onCreateSession();
 
     return () => {
       useSession.api.persistHistory(props.sessionKey);
@@ -120,7 +119,6 @@ export const BaseTty = React.forwardRef<State, Props>(function BaseTty(props: Pr
 interface Props {
   sessionKey: string;
   env: Partial<Session["var"]>;
-  onCreateSession(): void;
 }
 
 export interface State {
