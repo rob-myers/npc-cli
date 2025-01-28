@@ -25,7 +25,7 @@ export default function Tty(props: Props) {
   const [rootRef, bounds] = useMeasure({ debounce: 0, scroll: false });
 
   const state = useStateRef(() => ({
-    // 🔔 null value causes many issues
+    // 🚧 use null
     base: {} as BaseTtyState,
     // base: null as any as BaseTtyState,
     /**
@@ -34,14 +34,14 @@ export default function Tty(props: Props) {
      */
     booted: false,
     bounds,
-    fitDebounced: debounce(() => { state.base.fitAddon.fit(); }, 300),
+    fitDebounced: debounce(() => { state.base?.fitAddon.fit(); }, 300),
     functionFiles: {} as Props['functionFiles'],
     inputOnFocus: undefined as undefined | { input: string; cursor: number },
     isTouchDevice: isTouchDevice(),
     pausedPids: {} as Record<number, true>,
 
     onCreateSession() {
-      state.booted = false;
+      // state.booted = false;
       update();
     },
     onFocus() {

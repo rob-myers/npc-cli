@@ -26,23 +26,11 @@ export const BaseTty = React.forwardRef<State, Props>(function BaseTty(props: Pr
     session: undefined as any as Session,
     webglAddon: new WebglAddon(),
     xterm: null as any as ttyXtermClass,
-    
-    containerRef: (el: null | HTMLDivElement) => {
-      if (el === null) {//@ts-ignore
-        state.container = null;
-      } else {// 🔔 setTimeout fixes "Cannot read properties of undefined (reading 'dimensions')"
-        setTimeout(() => (state.container = el, update()));
-      }
-    },
   }));
 
   React.useImperativeHandle(ref, () => state);
   
   React.useEffect(() => {
-    if (state.container === null) {
-      return;
-    }
-
     state.session = useSession.api.createSession(props.sessionKey, props.env);
   
     const xterm = new XTermTerminal({
@@ -108,9 +96,10 @@ export const BaseTty = React.forwardRef<State, Props>(function BaseTty(props: Pr
       useSession.api.removeSession(props.sessionKey);
 
       state.xterm.dispose();
-      state.session = state.xterm = null as any;
+      //@ts-ignore
+      state.session = state.xterm = null;
     };
-  }, [state.container]);
+  }, []);
 
   const update = useUpdate();
 
@@ -121,7 +110,7 @@ export const BaseTty = React.forwardRef<State, Props>(function BaseTty(props: Pr
 
   return (
     <div
-      ref={state.containerRef}
+      ref={state.ref('container')}
       className={cx(xtermContainerCss, "scrollable")}
       onKeyDown={stopKeysPropagating}
     />
@@ -140,7 +129,6 @@ export interface State {
   session: Session;
   webglAddon: WebglAddon;
   xterm: ttyXtermClass;
-  containerRef(el: null | HTMLDivElement): void;
 }
 
 function stopKeysPropagating(e: React.KeyboardEvent) {
