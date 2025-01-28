@@ -36,7 +36,7 @@ export const BaseTty = React.forwardRef<State, Props>(function BaseTty(props: Pr
     },
   }));
 
-  React.useMemo(() => void (ref as React.RefCallback<State>)?.(state), [ref]);
+  React.useImperativeHandle(ref, () => state);
   
   React.useEffect(() => {
     if (state.container === null) {
