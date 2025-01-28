@@ -91,9 +91,9 @@
     - ❌ remove hard-coded message
   - ✅ Logger logs connected message
   - ❌ Paused "Opts" with PopUp and Logger measure option
-  - Loggers Opts has X-ray slider
+  - 🚧 Loggers Opts has X-ray slider
     - x-ray should be default view
-  - Loggers Opts has Brightness slider
+  - 🚧 Loggers Opts has Brightness slider
   - move `w.bubble.say` -> `w.e.say`
   - profile-1 has link listener
   - fix npc speech styling

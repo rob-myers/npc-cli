@@ -13,7 +13,6 @@ import useUpdate from '../hooks/use-update';
 import useSession, { ProcessStatus } from '../sh/session.store';
 import TtyMenu from './TtyMenu';
 import { BaseTty, State as BaseTtyState } from './BaseTty';
-import { ansi } from '../sh/const';
 
 /**
  * A `BaseTty` which can be:
@@ -26,7 +25,9 @@ export default function Tty(props: Props) {
   const [rootRef, bounds] = useMeasure({ debounce: 0, scroll: false });
 
   const state = useStateRef(() => ({
+    // 🔔 null value causes many issues
     base: {} as BaseTtyState,
+    // base: null as any as BaseTtyState,
     /**
      * Have we initiated the profile?
      * We don't want to re-run it on hmr.
@@ -40,7 +41,7 @@ export default function Tty(props: Props) {
     pausedPids: {} as Record<number, true>,
 
     onCreateSession() {
-      state.booted = false;
+      // state.booted = false;
       update();
     },
     onFocus() {
@@ -172,7 +173,7 @@ export default function Tty(props: Props) {
   return (
     <div className={rootCss} ref={rootRef}>
       <BaseTty
-        ref={ts => ts && (state.base = ts)}
+        ref={state.ref('base')}
         sessionKey={props.sessionKey}
         env={props.env}
         onCreateSession={state.onCreateSession}
