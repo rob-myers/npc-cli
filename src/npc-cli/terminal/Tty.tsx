@@ -72,7 +72,7 @@ export default function Tty(props: Props) {
       }
     },
     resumeRunningProcesses() {
-      Object.values(state.base.session?.process ?? {})
+      Object.values(state.base?.session?.process ?? {})
         .filter((p) => state.pausedPids[p.key])
         .forEach((p) => {
           if (p.status === ProcessStatus.Suspended) {
