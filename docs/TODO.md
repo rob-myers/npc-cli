@@ -87,14 +87,13 @@
   - ❌ Logger/ContextMenu z-index changes onclick
     - instead, ContextMenu always in front of Logger
   - ❌ Draggables are sticky e.g. to bottom, to right
-  - 🚧 Still seeing flicker on change "embed" -> "docked" on mobile
-  - Logger logs disconnected/connected message
-    - remove hard-coded message
+  - ❌ Logger logs disconnected message
+    - ❌ remove hard-coded message
+  - ✅ Logger logs connected message
   - ❌ Paused "Opts" with PopUp and Logger measure option
   - Loggers Opts has X-ray slider
     - x-ray should be default view
   - Loggers Opts has Brightness slider
-  - Docked ContextMenu can focus i.e. panZoom to point
   - move `w.bubble.say` -> `w.e.say`
   - profile-1 has link listener
   - fix npc speech styling
@@ -116,6 +115,8 @@
 
 ### On hold
 
+- ✅ Still seeing flicker on change "embed" -> "docked" on mobile
+- Docked ContextMenu can focus i.e. panZoom to point
 - thinner fuel/machine symbols, or add dark poly border
 - avoid npc stepping forward small amounts when e.g. cannot traverse offMeshConnection
   - could store start point and revert

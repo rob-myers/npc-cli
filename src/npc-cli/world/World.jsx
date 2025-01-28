@@ -63,7 +63,6 @@ export default function World(props) {
     gmGraph: new GmGraphClass([]),
     gmRoomGraph: new GmRoomGraphClass(),
     hmr: /** @type {*} */ ({}),
-    disconnected: true,
     smallViewport: isSmallViewport(),
 
     texFloor: new TexArray({ ctKey: 'floor-tex-array', numTextures: 1, width: 0, height: 0 }),
@@ -118,15 +117,12 @@ export default function World(props) {
         () => Object.values(state.bubble.lookup).forEach(cm => cm.html3d.onFrame())
       );
     },
-    isReady() {
+    isReady(connectorKey) {
       const ready = state.crowd !== null && state.decor?.queryStatus === 'success';
-
-      // World is "connected" when `state.isReady()` returns true
-      if (ready === true && state.disconnected === true) {
-        state.disconnected = false;
-        state.menu.update();
+      if (ready === true && typeof connectorKey === 'string') {
+        // "connected" if connectorKey provided
+        state.menu.onConnect(connectorKey);
       }
-
       return ready;
     },
     onTick() {
@@ -425,12 +421,11 @@ export default function World(props) {
  * @property {GmGraphClass} gmGraph
  * @property {GmRoomGraphClass} gmRoomGraph
  * @property {import('@recast-navigation/core').Crowd} crowd
- * @property {boolean} disconnected
  * @property {boolean} smallViewport Was viewport small when we mounted World?
  *
  * @property {(postAct?: () => void) => void} advance
- * @property {() => boolean} isReady
  * @property {() => void} debugTick
+ * @property {(connectorKey?: string) => boolean} isReady
  * @property {() => void} onTick
  * @property {(next: State['hmr']) => Record<keyof State['hmr'], boolean>} trackHmr
  * Has function `createGmsData` changed?

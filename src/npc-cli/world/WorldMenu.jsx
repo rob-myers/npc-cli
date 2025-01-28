@@ -25,6 +25,7 @@ export default function WorldMenu(props) {
   const state = useStateRef(/** @returns {State} */ () => ({
 
     debugWhilePaused: false,
+    disconnected: true,
     draggable: /** @type {*} */ (null),
     dragClassName: w.smallViewport ? popUpButtonClassName : undefined,
     durationKeys: {},
@@ -58,6 +59,11 @@ export default function WorldMenu(props) {
         w.events.next({ key: 'click-npc-link', npcKey, ...e });
       }
     },
+    onConnect(connectorKey) {
+      state.disconnected === true && setTimeout(update);
+      state.disconnected = false;
+      state.logger.xterm.writeln(`[${ansi.Blue}${connectorKey}${ansi.Reset}] connected`);
+    },
     onOverlayPointerUp() {
       props.setTabsEnabled(true);
     },
@@ -89,7 +95,6 @@ export default function WorldMenu(props) {
       w.wall.setOpacity(w.wall.opacity === 0.45 ? 1 : 0.45);
       update();
     },
-    update,
   }));
 
   w.menu = state;
@@ -183,7 +188,7 @@ export default function WorldMenu(props) {
     <TouchIndicator/>
 
     <div className={cx(cssTtyDisconnectedMessage, {
-      hidden: w.disconnected === false
+      hidden: state.disconnected === false
     })}>
       <h3>[disconnected]</h3>
       click or show a tty tab
@@ -324,6 +329,7 @@ const cssTtyDisconnectedMessage = css`
  * @property {boolean} debugWhilePaused Is the camera usable whilst paused?
  * @property {import('../components/Draggable').State} draggable Draggable containing Logger
  * @property {string} [dragClassName] We can restrict Logger dragging to this className
+ * @property {boolean} disconnected
  * @property {{ [durKey: string]: number }} durationKeys
  * @property {import('../terminal/Logger').State} logger
  * @property {number} loggerHeight
@@ -335,11 +341,11 @@ const cssTtyDisconnectedMessage = css`
  * @property {(msg: string) => void} measure
  * Measure durations by sending same `msg` twice.
  * @property {(e: NPC.ClickLinkEvent) => void} onClickLoggerLink
+ * @property {(connectorKey: string) => void} onConnect
  * @property {() => void} onOverlayPointerUp
  * @property {(e: React.ChangeEvent<HTMLInputElement>) => void} onResizeLoggerHeight
  * @property {(e: React.ChangeEvent<HTMLInputElement>) => void} onResizeLoggerWidth
  * @property {(npcKey: string, line: string) => void} say
  * @property {() => void} toggleDebug
  * @property {() => void} toggleXRay
- * @property {() => void} update
  */
