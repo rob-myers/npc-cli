@@ -311,7 +311,6 @@ export const contextMenuCss = css`
   transform-origin: 0 0;
   background: transparent !important;
   pointer-events: none;
-  opacity: 0.8;
 
   > div {
     transform-origin: 0 0;
@@ -319,7 +318,7 @@ export const contextMenuCss = css`
 
     .inner-root {
       width: 200px;
-      background-color: #000;
+      background-color: rgba(0, 0, 0, 0.8);
       border-radius: 0 8px 8px 8px;
       border: 1px solid #333;
       padding: 4px;
@@ -327,7 +326,7 @@ export const contextMenuCss = css`
     }
   }
 
-  z-index: 3; // in front of Logger
+  z-index: 4; // in front of Logger and its PopUp
 
   &.docked {
     transform: unset !important;
