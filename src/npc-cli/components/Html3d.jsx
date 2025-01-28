@@ -101,14 +101,14 @@ export const Html3d = React.forwardRef(({
 
     /** @type {React.CSSProperties} */
     React.useEffect(() => {
-      if (state.rootDiv) {
+      if (docked ? state.innerDiv : state.rootDiv) {
         state.rootDiv.style.visibility = open ? 'visible' : 'hidden';
         state.rootDiv.className = cx(className, { docked });
         if (docked) {
           state.innerDiv.style.transform = 'scale(1)';
         }
       }
-    }, [state.rootDiv, open, docked, className]);
+    }, [state.rootDiv, state.innerDiv, open, docked, className]);
 
     React.useLayoutEffect(() => {
       state.reactRoot?.render(
