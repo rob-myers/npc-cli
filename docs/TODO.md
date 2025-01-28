@@ -84,7 +84,8 @@
   - ✅ Logger should remember docked position
   - ✅ ContextMenu should remember docked position
   - ✅ ContextMenu can be initially docked
-  - Logger/ContextMenu z-index changes onclick
+  - ❌ Logger/ContextMenu z-index changes onclick
+    - instead, ContextMenu always in front of Logger
   - Draggables are sticky e.g. to bottom, to right
   - Still seeing flicker on change "embed" -> "docked" on mobile
   - Logger logs disconnected/connected message

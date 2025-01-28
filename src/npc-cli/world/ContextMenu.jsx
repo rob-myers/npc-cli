@@ -209,8 +209,8 @@ export function ContextMenu() {
           ref={state.ref('draggable')}
           container={w.view.rootEl}
           initPos={{ x: 0, y: 2000 }}
-          observeSizes={[state.innerRoot]}
           localStorageKey={`contextmenu:dragPos@${w.key}`}
+          observeSizes={[state.innerRoot]}
         >
           <ContextMenuUi state={state} />
         </Draggable>
@@ -327,9 +327,9 @@ export const contextMenuCss = css`
     }
   }
 
+  z-index: 3; // in front of Logger
 
   &.docked {
-    z-index: 3; // 🚧
     transform: unset !important;
   }
 

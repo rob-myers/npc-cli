@@ -26,7 +26,7 @@ export default function WorldMenu(props) {
 
     debugWhilePaused: false,
     draggable: /** @type {*} */ (null),
-    dragClassName: w.smallViewport ? 'pop-up-button' : undefined,
+    dragClassName: w.smallViewport ? popUpButtonClassName : undefined,
     durationKeys: {},
     logger: /** @type {*} */ (null),
     loggerHeight: tryLocalStorageGetParsed(`logger:height@${w.key}`) ?? defaultLoggerHeightPx / loggerHeightDelta,
@@ -149,7 +149,6 @@ export default function WorldMenu(props) {
               />
               w
             </label>
-
             <label>
               <input
                 type="range"
@@ -162,7 +161,6 @@ export default function WorldMenu(props) {
               h
             </label>
           </div>
-
           <label>
             debug
             <input
@@ -171,8 +169,8 @@ export default function WorldMenu(props) {
               onChange={state.changeLoggerLog}
             />
           </label>
-
         </PopUp>
+
         <Logger
           ref={state.ref('logger')}
           onClickLink={state.onClickLoggerLink}
@@ -223,7 +221,7 @@ const loggerContainerCss = css`
 
 const loggerPopUpCss = css`
   pointer-events: all;
-  z-index: 5;
+  z-index: 4;
   
   .${popUpButtonClassName} {
     color: #8888ff;
