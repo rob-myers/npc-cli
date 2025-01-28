@@ -204,7 +204,7 @@ export function ContextMenu() {
       position={state.position}
       tracked={state.tracked}
     >
-      {state.docked === true && (
+      {state.docked === true ? (
         <Draggable
           ref={state.ref('draggable')}
           container={w.view.rootEl}
@@ -214,9 +214,9 @@ export function ContextMenu() {
         >
           <ContextMenuUi state={state} />
         </Draggable>
+      ) : (
+        <ContextMenuUi state={state} />
       )}
-      
-      {state.docked === false && <ContextMenuUi state={state} />}
     </Html3d>
   );
 

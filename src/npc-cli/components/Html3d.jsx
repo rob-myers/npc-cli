@@ -99,17 +99,6 @@ export const Html3d = React.forwardRef(({
       }
     }, [state.domTarget, state.objTarget])
 
-    /** @type {React.CSSProperties} */
-    React.useEffect(() => {
-      if (docked ? state.innerDiv : state.rootDiv) {
-        state.rootDiv.style.visibility = open ? 'visible' : 'hidden';
-        state.rootDiv.className = cx(className, { docked });
-        if (docked) {
-          state.innerDiv.style.transform = 'scale(1)';
-        }
-      }
-    }, [state.rootDiv, state.innerDiv, open, docked, className]);
-
     React.useLayoutEffect(() => {
       state.reactRoot?.render(
         <div
@@ -123,6 +112,17 @@ export const Html3d = React.forwardRef(({
         state.onFrame();
       });
     });
+
+    /** @type {React.CSSProperties} */
+    React.useLayoutEffect(() => {
+      if (docked ? state.innerDiv : state.rootDiv) {
+        state.rootDiv.style.visibility = open ? 'visible' : 'hidden';
+        state.rootDiv.className = cx(className, { docked });
+        if (docked) {
+          state.innerDiv.style.transform = 'scale(1)';
+        }
+      }
+    }, [state.rootDiv, state.innerDiv, open, docked, className]);
 
     useFrame(state.onFrame);
 
