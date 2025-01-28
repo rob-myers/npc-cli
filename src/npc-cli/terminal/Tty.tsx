@@ -41,7 +41,7 @@ export default function Tty(props: Props) {
     pausedPids: {} as Record<number, true>,
 
     onCreateSession() {
-      // state.booted = false;
+      state.booted = false;
       update();
     },
     onFocus() {
