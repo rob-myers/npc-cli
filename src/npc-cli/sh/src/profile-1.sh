@@ -10,9 +10,9 @@ w npc.spawn '{ npcKey: "kate", point: { x: 4.5 * 1.5, y: 7 * 1.5 }, agent: true 
 w n.rob.showSelector true
 selectedNpcKey="rob"
 
-w e.changeNpcAccess rob . +
+w e.grantNpcAccess rob .
 # temp debug doors:
-w e.changeNpcAccess will . +
+w e.grantNpcAccess will .
 
 # write selectedNpcKey on click npc
 click | filter meta.npcKey | map '({ meta, keys }, { home, w }) => {

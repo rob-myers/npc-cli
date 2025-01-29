@@ -34,13 +34,6 @@ export default function useHandleEvents(w) {
       }
       return true;
     },
-    changeNpcAccess(npcKey, regexDef, grant = true) {
-      if (grant === true) {
-        (state.npcToAccess[npcKey] ??= new Set()).add(regexDef);
-      } else {
-        (state.npcToAccess[npcKey] ??= new Set()).delete(regexDef);
-      }
-    },
     decodeObjectPick(r, g, b, a) {
       if (r === 1) {// wall
         const instanceId = (g << 8) + b;
@@ -140,6 +133,9 @@ export default function useHandleEvents(w) {
 
       // warn(`${'decodeObjectPick'}: failed to decode: ${JSON.stringify({ r, g, b, a })}`);
       return null;
+    },
+    grantNpcAccess(npcKey, regexDef) {
+      (state.npcToAccess[npcKey] ??= new Set()).add(regexDef);
     },
     async handleEvents(e) {
       // debug('useHandleEvents', e);
@@ -482,6 +478,9 @@ export default function useHandleEvents(w) {
       }
       state.npcToDoors[npcKey]?.nearby.clear();
     },
+    revokeNpcAccess(npcKey, regexDef) {
+      (state.npcToAccess[npcKey] ??= new Set()).delete(regexDef);
+    },
     showDefaultContextMenu() {
       const { lastDown } = w.view;
       if (lastDown === undefined) {
@@ -591,8 +590,8 @@ export default function useHandleEvents(w) {
  *
  * @property {(door: Geomorph.DoorState) => boolean} canCloseDoor
  * @property {(npcKey: string, gdKey: Geomorph.GmDoorKey) => boolean} npcCanAccess
- * @property {(npcKey: string, regexDef: string, grant?: true) => void} changeNpcAccess
  * @property {(r: number, g: number, b: number, a: number) => null | NPC.DecodedObjectPick} decodeObjectPick
+ * @property {(npcKey: string, regexDef: string) => void} grantNpcAccess
  * @property {(e: NPC.Event) => void} handleEvents
  * @property {(e: Extract<NPC.Event, { npcKey?: string }>) => void} handleNpcEvents
  * @property {(e: Extract<NPC.Event, { key: 'enter-collider'; type: 'nearby' }>) => void} onEnterDoorCollider
@@ -606,6 +605,7 @@ export default function useHandleEvents(w) {
  * @property {(npcKey: string) => void} removeFromSensors
  * @property {() => void} showDefaultContextMenu
  * Default context menu, unless clicked on an npc
+ * @property {(npcKey: string, regexDef: string) => void} revokeNpcAccess
  * @property {(gdKey: Geomorph.GmDoorKey) => boolean} someNpcNearDoor
  * @property {(gdKey: Geomorph.GmDoorKey, opts: { npcKey?: string; } & Geomorph.ToggleDoorOpts) => boolean} toggleDoor
  * Returns `true` iff successful.
