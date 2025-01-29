@@ -106,17 +106,9 @@ export default function World(props) {
     n: /** @type {*} */ ({}), // w.npc.npc
     d: /** @type {*} */ ({}), // w.door.byKey
 
-    advance: debounce(
-      (postAct) => window.setTimeout(() => (state.r3f.advance(Date.now()), postAct?.())),
-      30,
-      { immediate: true },
-    ),
-    debugTick() {
+    debugTick: debounce(() => {// for disabled multi-spawn
       state.npc.onTick(1000 / 60);
-      state.advance(// update npc speech balloons
-        () => Object.values(state.bubble.lookup).forEach(cm => cm.html3d.onFrame())
-      );
-    },
+    }, 30),
     isReady(connectorKey) {
       const ready = state.crowd !== null && state.decor?.queryStatus === 'success';
       if (ready === true && typeof connectorKey === 'string') {
@@ -423,7 +415,6 @@ export default function World(props) {
  * @property {import('@recast-navigation/core').Crowd} crowd
  * @property {boolean} smallViewport Was viewport small when we mounted World?
  *
- * @property {(postAct?: () => void) => void} advance
  * @property {() => void} debugTick
  * @property {(connectorKey?: string) => boolean} isReady
  * @property {() => void} onTick
