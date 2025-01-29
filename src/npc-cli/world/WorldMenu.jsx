@@ -140,7 +140,7 @@ export default function WorldMenu(props) {
         <PopUp
           label="⋯"
           className={loggerPopUpCss}
-          width={300}
+          width={200}
         >
           <div>
             <label>
@@ -235,11 +235,16 @@ const loggerPopUpCss = css`
     background: black;
     padding: 2px 12px;
     text-decoration: underline;
-    padding: 2px 20px;
+    padding: 0 20px 8px 20px;
   }
   
-  .${popUpBubbleClassName} {
-    transform: scale(.85);
+  @media(min-width: 700px) {
+    .${popUpButtonClassName} {
+      padding: 0 8px 8px 8px;
+    }
+    .${popUpBubbleClassName} {
+      transform: scale(.85);
+    }
   }
 
   .${popUpContentClassName} {
