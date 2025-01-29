@@ -363,7 +363,8 @@ export default function World(props) {
  * @property {{
  *   worker: WW.NavWorker;
  *   offMeshDefs: import("recast-navigation").OffMeshConnectionParams[];
- *   offMeshLookup: NPC.OffMeshLookup;
+ *   offMeshLookup: NPC.SrcToOffMeshLookup;
+ *   doorToOffMesh: NPC.DoorToOffMeshLookup;
  * } & NPC.TiledCacheResult} nav
  * @property {{ worker: WW.PhysicsWorker; rebuilds: number; } & import("../service/rapier").PhysicsBijection} physics
  *

@@ -116,7 +116,11 @@ export default function WorldWorkers() {
       
       Object.assign(w.nav, tiledCacheResult);
       w.nav.offMeshLookup = offMeshLookup;
-      // console.log({ offMeshLookup }) // 🚧
+      w.nav.doorToOffMesh = Object.values(offMeshLookup).reduce((agg, v) => {
+        (agg[v.gdKey] ??= []).push(v);
+        return agg;
+      }, /** @type {NPC.DoorToOffMeshLookup} */ ({}));
+
 
       if (w.crowd) {
         disposeCrowd(w.crowd, w.nav.navMesh);

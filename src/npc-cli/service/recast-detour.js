@@ -186,7 +186,7 @@ export function customThreeToTileCache(meshes, navMeshGeneratorConfig = {}, opti
  * } & TileCacheCustomOptions} config
  * @returns {(
  *   | TileCacheGeneratorFailResult
- *   | (TileCacheGeneratorSuccessResult & { offMeshLookup: NPC.OffMeshLookup })
+ *   | (TileCacheGeneratorSuccessResult & { offMeshLookup: NPC.SrcToOffMeshLookup })
  * )}
  */
 export function customGenerateTileCache({
@@ -672,7 +672,7 @@ export function customGenerateTileCache({
    * offMeshConnection lookup,
    * e.g. `1.5,3.5` -> `{ src, dst, offMeshRef, ... }`
    */
-  const offMeshLookup = /** @type {NPC.OffMeshLookup} */ ({});
+  const offMeshLookup = /** @type {NPC.SrcToOffMeshLookup} */ ({});
   for (let tileIndex = 0; tileIndex < navMesh.getMaxTiles(); tileIndex++) {
     const tile = navMesh.getTile(tileIndex);
     const header = tile?.header();

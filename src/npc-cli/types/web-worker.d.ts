@@ -22,7 +22,7 @@ declare namespace WW {
     type: "nav-mesh-response";
     mapKey: string;
     exportedNavMesh: Uint8Array;
-    offMeshLookup: NPC.OffMeshLookup;
+    offMeshLookup: NPC.SrcToOffMeshLookup;
   }
   
   interface BuildTileResponse {

@@ -201,8 +201,11 @@ declare namespace NPC {
 
   type CrowdAgent = import("@recast-navigation/core").CrowdAgent;
 
-  type OffMeshLookup = {
+  type SrcToOffMeshLookup = {
     [xz2DString: `${number},${number}`]: OffMeshLookupValue;
+  };
+  type DoorToOffMeshLookup = {
+    [gdKey: Geomorph.GmDoorKey]: OffMeshLookupValue[];
   };
 
   type OffMeshLookupValue = Geomorph.GmDoorId & {
@@ -210,9 +213,9 @@ declare namespace NPC {
     src: import('three').Vector3Like;
     dst: import('three').Vector3Like;
     /** Key of connection in lookup. */
-    key: keyof OffMeshLookup;
+    key: keyof SrcToOffMeshLookup;
     /** Key of connection in reverse direction. */
-    reverseKey: keyof OffMeshLookup;
+    reverseKey: keyof SrcToOffMeshLookup;
     /** Room corresponding to `src` */
     srcGrKey: Geomorph.GmRoomKey;
     /** Room corresponding to `dst` */
