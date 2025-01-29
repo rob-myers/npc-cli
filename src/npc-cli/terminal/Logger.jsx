@@ -72,7 +72,7 @@ export const Logger = React.forwardRef(function Logger(props, ref) {
     const xterm = state.xterm = new Terminal({
       allowProposedApi: true, // Needed for WebLinksAddon
       allowTransparency: true,
-      fontSize: 14,
+      fontSize: 15,
       fontFamily: 'Courier new, monospace',
       cursorBlink: false,
       cursorInactiveStyle: 'none',
