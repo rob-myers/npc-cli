@@ -73,6 +73,7 @@ export const Logger = React.forwardRef(function Logger(props, ref) {
       allowProposedApi: true, // Needed for WebLinksAddon
       allowTransparency: true,
       fontSize: 15,
+      lineHeight: 1.1,
       fontFamily: 'Courier new, monospace',
       cursorBlink: false,
       cursorInactiveStyle: 'none',
