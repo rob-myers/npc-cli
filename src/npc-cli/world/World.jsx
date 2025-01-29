@@ -88,19 +88,7 @@ export default function World(props) {
     bubble: /** @type {*} */ (null), // NpcSpeechBubbles
     cm: /** @type {*} */ (null),
 
-    // 🚧 support hmr e.g. via state.hmr
-    lib: {
-      filter,
-      firstValueFrom,
-      isVectJson: Vect.isVectJson,
-      precision: toPrecision,
-      removeFirst,
-      vectFrom: Vect.from,
-      Subject,
-      toXZ,
-      toV3,
-      ...helper,
-    },
+    lib,
 
     e: /** @type {*} */ (null), // useHandleEvents
     n: /** @type {*} */ ({}), // w.npc.npc
@@ -435,3 +423,16 @@ export default function World(props) {
  * @property {typeof toPrecision} precision
  * @property {typeof import('../geom').Vect['from']} vectFrom
  */
+
+const lib = {
+  filter,
+  firstValueFrom,
+  isVectJson: Vect.isVectJson,
+  precision: toPrecision,
+  removeFirst,
+  vectFrom: Vect.from,
+  Subject,
+  toXZ,
+  toV3,
+  ...helper,
+};
