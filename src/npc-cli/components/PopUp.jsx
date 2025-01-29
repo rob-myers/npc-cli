@@ -1,6 +1,5 @@
 import React from 'react';
 import { css, cx } from '@emotion/css';
-import { zIndex } from '../service/const';
 import useStateRef from '../hooks/use-state-ref';
 import useUpdate from '../hooks/use-update';
 
@@ -52,28 +51,30 @@ export const PopUp = React.forwardRef(function PopUp(props, ref) {
     open(width) {
       state.opened = true;
 
-      const root = state.bubble.closest(`[${popUpRootDataAttribute}]`) ?? document.documentElement;
-      const rootRect = root.getBoundingClientRect();
+      const container = state.bubble.closest(`[${popUpRootDataAttribute}]`) ?? document.documentElement;
+      const containerRect = container.getBoundingClientRect();
       const rect = state.icon.getBoundingClientRect();
-      const pixelsOnRight = rootRect.right - rect.right;
-      const pixelsOnLeft = rect.x - rootRect.x;
+      const pixelsOnRight = containerRect.right - rect.right;
+      const pixelsOnLeft = rect.x - containerRect.x;
       state.left = pixelsOnRight < pixelsOnLeft;
-      const pixelsAbove = rect.y - rootRect.y;
-      const pixelsBelow = rootRect.bottom - rect.bottom;
+      const pixelsAbove = rect.y - containerRect.y;
+      const pixelsBelow = containerRect.bottom - rect.bottom;
       state.top = pixelsBelow < pixelsAbove;
 
+      
       // 🚧 infer or parameterize `24`
-      state.bubble.style.setProperty('--info-arrow-delta-x', `${state.left ? 24 : 12}px`);
+      const root = /** @type {HTMLElement} */ (state.bubble.parentElement);
+      root.style.setProperty('--info-arrow-delta-x', `${state.left ? 24 : 12}px`);
 
       const maxWidthAvailable = Math.max(pixelsOnLeft, pixelsOnRight);
       width = maxWidthAvailable < (width ?? defaultInfoWidthPx) ? maxWidthAvailable : width;
-      width && state.bubble.style.setProperty('--info-width', `${width}px`);
+      width && root.style.setProperty('--info-width', `${width}px`);
 
       state.icon.focus();
       props.onChange?.(state.opened);
       update();
     },
-  }), { deps: [props.onChange] });
+  }), { deps: [props.onChange, props.width] });
 
   React.useImperativeHandle(ref, () => state, []);
 
