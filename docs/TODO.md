@@ -99,10 +99,9 @@
   - fix npc speech styling
 
 - 🚧 npc.moveTo "works" on click doorways too
-- 🚧 avoid `w --stdin` i.e. use arg `-` instead?
-  - ℹ️ e.g. `click 1 | w n.rob.moveTo --stdin`
+- ✅ avoid `w --stdin` i.e. use arg `-` instead?
   - ✅ change `changeNpcAccess` to boolean (not - or +)
-  - ...
+  - ℹ️ e.g. `click 1 | map xz | w n.rob.moveTo -`
 
 - 🚧 integrate Viewer into blog
   - 🚧 screenshots in 1st blog

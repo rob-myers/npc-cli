@@ -3,7 +3,7 @@
  */
 export async function* awaitWorld({ api, home: { WORLD_KEY } }) {
   api.info(`awaiting ${api.ansi.White}${WORLD_KEY}`);
-  
+
   while (api.getCached(WORLD_KEY)?.isReady(api.meta.sessionKey) !== true) {
     await api.sleep(0.05);
   }
@@ -228,27 +228,26 @@ export async function* w(ctxt) {
     () => reject("potential ongoing computation")
   ));
 
-  // also support piped inputs via --stdin
-  // e.g. `click 1 | w --stdin gmGraph.findRoomContaining`
-  const { opts, operands } = api.getOpts(args, {
-    boolean: ["stdin"],
-  });
+  // also support piped inputs via hyphen args -
+  // e.g. `click 1 | map xz | w gmGraph.findRoomContaining -`
+  // const { opts, operands } = api.getOpts(args);
 
-  if (opts.stdin !== true) {
+  const stdinInputChar = "-";
+  const stdin = args.slice(1).some(arg => arg === stdinInputChar);
+
+  if (stdin !== true) {
     const func = api.generateSelector(
-      api.parseFnOrStr(operands[0]),
-      operands.slice(1).map(x => api.parseJsArg(x)),
+      api.parseFnOrStr(args[0]),
+      args.slice(1).map(x => api.parseJsArg(x)),
     );
     const v = func(w, ctxt);
     yield v instanceof Promise ? Promise.race([v, getHandleProm()]) : v;
   } else {
     /** @type {*} */ let datum;
-    const stdinInputChar = "_";
-    if (!operands.includes(stdinInputChar)) operands.push(stdinInputChar);
     while ((datum = await api.read()) !== api.eof) {
       const func = api.generateSelector(
-        api.parseFnOrStr(operands[0]),
-        operands.slice(1).map(x => x === stdinInputChar ? datum : api.parseJsArg(x)),
+        api.parseFnOrStr(args[0]),
+        args.slice(1).map(x => x === stdinInputChar ? datum : api.parseJsArg(x)),
       );
       try {
         const v = func(w, ctxt);
