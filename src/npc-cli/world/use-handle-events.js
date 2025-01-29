@@ -34,8 +34,8 @@ export default function useHandleEvents(w) {
       }
       return true;
     },
-    changeNpcAccess(npcKey, regexDef, act = '+') {
-      if (act === '+') {
+    changeNpcAccess(npcKey, regexDef, grant = true) {
+      if (grant === true) {
         (state.npcToAccess[npcKey] ??= new Set()).add(regexDef);
       } else {
         (state.npcToAccess[npcKey] ??= new Set()).delete(regexDef);
@@ -591,7 +591,7 @@ export default function useHandleEvents(w) {
  *
  * @property {(door: Geomorph.DoorState) => boolean} canCloseDoor
  * @property {(npcKey: string, gdKey: Geomorph.GmDoorKey) => boolean} npcCanAccess
- * @property {(npcKey: string, regexDef: string, act?: '+' | '-') => void} changeNpcAccess
+ * @property {(npcKey: string, regexDef: string, grant?: true) => void} changeNpcAccess
  * @property {(r: number, g: number, b: number, a: number) => null | NPC.DecodedObjectPick} decodeObjectPick
  * @property {(e: NPC.Event) => void} handleEvents
  * @property {(e: Extract<NPC.Event, { npcKey?: string }>) => void} handleNpcEvents
