@@ -31,7 +31,8 @@ export default function WorldMenu(props) {
     durationKeys: {},
     logger: /** @type {*} */ (null),
     loggerHeight: tryLocalStorageGetParsed(`logger:height@${w.key}`) ?? defaultLoggerHeightPx / loggerHeightDelta,
-    loggerWidth: tryLocalStorageGetParsed(`logger:width@${w.key}`) ?? defaultLoggerWidthPx / loggerWidthDelta,
+    loggerWidth: tryLocalStorageGetParsed(`logger:width@${w.key}`) ?? defaultLoggerWidthPx / defaultLoggerWidthDelta,
+    loggerWidthDelta: defaultLoggerWidthDelta,
     showDebug: tryLocalStorageGetParsed(`logger:debug@${w.key}`) ?? false,
 
     changeLoggerLog(e) {
@@ -74,8 +75,10 @@ export default function WorldMenu(props) {
       state.draggable.updatePos();
     },
     onResizeLoggerWidth(e) {
-      state.loggerWidth = Number(e.currentTarget.value);
-      state.logger.container.style.width = `${state.loggerWidth * loggerWidthDelta}px`;
+      if (e !== undefined) {
+        state.loggerWidth = Number(e.currentTarget.value);
+      }
+      state.logger.container.style.width = `${state.loggerWidth * state.loggerWidthDelta}px`;
       tryLocalStorageSet(`logger:width@${w.key}`, `${state.loggerWidth}`);
       state.draggable.updatePos();
     },
@@ -98,6 +101,15 @@ export default function WorldMenu(props) {
   }));
 
   w.menu = state;
+
+  React.useLayoutEffect(() => {
+    const obs = new ResizeObserver(([_entry]) => {
+      state.loggerWidthDelta = Math.floor(w.view.rootEl.clientWidth / 10);
+      state.logger && state.onResizeLoggerWidth();
+    });
+    obs.observe(w.view.rootEl);
+    return () => obs.disconnect();
+  }, []);
 
   return <>
     <div
@@ -142,13 +154,13 @@ export default function WorldMenu(props) {
           className={loggerPopUpCss}
           width={200}
         >
-          <div>
+          <div className="ranges">
             <label>
               <input
                 type="range"
                 className="change-logger-width"
                 min={4}
-                max={w.smallViewport ? 7 : 10}
+                max={10}
                 defaultValue={state.loggerWidth}
                 onChange={state.onResizeLoggerWidth}
               />
@@ -179,7 +191,10 @@ export default function WorldMenu(props) {
         <Logger
           ref={state.ref('logger')}
           onClickLink={state.onClickLoggerLink}
-          initDim={[state.loggerWidth * loggerWidthDelta, state.loggerHeight * loggerHeightDelta]}
+          initDim={[
+            state.loggerWidth * state.loggerWidthDelta,
+            state.loggerHeight * loggerHeightDelta,
+          ]}
         />
       </Draggable>,
       w.view.rootEl,
@@ -202,7 +217,7 @@ const defaultLoggerWidthPx = 800;
 /** Must be a factor of default height */
 const loggerHeightDelta = 20;
 /** Must be a factor of default width */
-const loggerWidthDelta = 100;
+const defaultLoggerWidthDelta = 60;
 
 const loggerContainerCss = css`
   position: absolute;
@@ -256,6 +271,13 @@ const loggerPopUpCss = css`
     font-size: smaller;
     color: white;
     
+    .ranges {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      /* padding: 12px 0; */
+    }
+
     label {
       display: flex;
       align-items: center;
@@ -340,6 +362,7 @@ const cssTtyDisconnectedMessage = css`
  * @property {import('../terminal/Logger').State} logger
  * @property {number} loggerHeight
  * @property {number} loggerWidth
+ * @property {number} loggerWidthDelta
  * @property {boolean} showDebug
  *
  * @property {(e: React.ChangeEvent<HTMLInputElement>) => void} changeLoggerLog
@@ -350,7 +373,7 @@ const cssTtyDisconnectedMessage = css`
  * @property {(connectorKey: string) => void} onConnect
  * @property {() => void} onOverlayPointerUp
  * @property {(e: React.ChangeEvent<HTMLInputElement>) => void} onResizeLoggerHeight
- * @property {(e: React.ChangeEvent<HTMLInputElement>) => void} onResizeLoggerWidth
+ * @property {(e?: React.ChangeEvent<HTMLInputElement>) => void} onResizeLoggerWidth
  * @property {(npcKey: string, line: string) => void} say
  * @property {() => void} toggleDebug
  * @property {() => void} toggleXRay
