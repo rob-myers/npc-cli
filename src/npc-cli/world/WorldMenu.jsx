@@ -235,8 +235,9 @@ const loggerPopUpCss = css`
     background: black;
     padding: 2px 12px;
     text-decoration: underline;
+    padding: 2px 20px;
   }
-
+  
   .${popUpBubbleClassName} {
     transform: scale(.85);
   }
