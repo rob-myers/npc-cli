@@ -129,7 +129,7 @@ export default function World(props) {
       mutator?.(state);
       update();
     },
-  }));
+  }), { reset: { lib: true } });
 
   state.disabled = !!props.disabled;
 
