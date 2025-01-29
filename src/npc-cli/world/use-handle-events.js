@@ -481,6 +481,21 @@ export default function useHandleEvents(w) {
     revokeNpcAccess(npcKey, regexDef) {
       (state.npcToAccess[npcKey] ??= new Set()).delete(regexDef);
     },
+    say(npcKey, ...parts) {// ensure/change/delete
+      const cm = w.bubble.get(npcKey) || w.bubble.create(npcKey);
+      const speechWithLinks = parts.join(' ').trim();
+      const speechSansLinks = speechWithLinks.replace(/\[ (\S+) \]/g, '$1');
+
+      if (speechWithLinks === '') {// delete
+        w.bubble.delete(npcKey);
+      } else {// change
+        cm.open = true;
+        cm.speech = speechSansLinks;
+        cm.update();
+      }
+
+      w.events.next({ key: 'speech', npcKey, speech: speechWithLinks });
+    },
     showDefaultContextMenu() {
       const { lastDown } = w.view;
       if (lastDown === undefined) {
@@ -606,6 +621,7 @@ export default function useHandleEvents(w) {
  * @property {() => void} showDefaultContextMenu
  * Default context menu, unless clicked on an npc
  * @property {(npcKey: string, regexDef: string) => void} revokeNpcAccess
+ * @property {(npcKey: string, ...parts: string[]) => void} say
  * @property {(gdKey: Geomorph.GmDoorKey) => boolean} someNpcNearDoor
  * @property {(gdKey: Geomorph.GmDoorKey, opts: { npcKey?: string; } & Geomorph.ToggleDoorOpts) => boolean} toggleDoor
  * Returns `true` iff successful.

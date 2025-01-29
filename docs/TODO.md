@@ -94,8 +94,8 @@
   - ✅ Loggers Opts has X-ray slider
     - x-ray should be default view
   - ✅ Loggers Opts has Brightness slider
-  - move `w.bubble.say` -> `w.e.say`
-  - profile-1 has link listener
+  - ✅ move `w.bubble.say` -> `w.e.say`
+  - 🚧 profile-1 has link listener
   - fix npc speech styling
 
 - ✅ npc.moveTo "works" on click doorways too
