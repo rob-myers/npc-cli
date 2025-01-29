@@ -98,7 +98,7 @@
   - profile-1 has link listener
   - fix npc speech styling
 
-- 🚧 npc.moveTo "works" on click doorways too
+- ✅ npc.moveTo "works" on click doorways too
 - ✅ avoid `w --stdin` i.e. use arg `-` instead?
   - ✅ change `changeNpcAccess` to boolean (not - or +)
   - ℹ️ e.g. `click 1 | map xz | w n.rob.moveTo -`

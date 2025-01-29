@@ -153,6 +153,7 @@ export default function createGmsData() {
       );
     },
     /**
+     * Lookup pixel in "hit canvas"
      * @param {Geomorph.Layout} gm
      * @param {Geom.VectJson} localPoint local geomorph coords (meters)
      */

@@ -59,15 +59,17 @@ export default function Npcs(props) {
     },
     getClosestNavigable(p, maxDelta = 0.5) {
       const { success, point: closest } = w.crowd.navMeshQuery.findClosestPoint(p, {
-        halfExtents: new THREE.Vector3(maxDelta / 2, maxDelta / 2, maxDelta / 2),
+        // 🔔 maxDelta "means" ~ (2 * maxDelta) * (2 * smallHalfExtent) * (2 * maxDelta) search space
+        halfExtents: { x: maxDelta, y: smallHalfExtent, z: maxDelta },
         // filter: w.crowd.getFilter(w.lib.queryFilterType.excludeDoors),
       });
-      if (success === false || p.distanceTo(closest) > maxDelta) {
-        warn(`${'getClosestNavigable'} failed: ${JSON.stringify(p)}`);
-        return null;
-      } else {
+
+      if (success === true && p.distanceTo(closest) <= maxDelta) {
         return toV3(closest);
       }
+      
+      warn(`${'getClosestNavigable'} failed: ${JSON.stringify(p)}`);
+      return null;
     },
     getNpc(npcKey, processApi) {
       const npc = processApi === undefined
@@ -86,8 +88,8 @@ export default function Npcs(props) {
     },
     isPointInNavmesh(input) {
       const v3 = toV3(input);
-      const { success, point } = w.crowd.navMeshQuery.findClosestPoint(v3, { halfExtents: { x: 0.001, y: 0.001, z: 0.001 } });
-      return success === true && Math.abs(point.x - v3.x) < 0.001 && Math.abs(point.z - v3.z) < 0.001;
+      const { success, point } = w.crowd.navMeshQuery.findClosestPoint(v3, { halfExtents: { x: smallHalfExtent, y: smallHalfExtent, z: smallHalfExtent } });
+      return success === true && Math.abs(point.x - v3.x) < smallHalfExtent && Math.abs(point.z - v3.z) < smallHalfExtent;
     },
     onTick(deltaMs) {
       Object.values(state.npc).forEach(npc => npc.onTick(deltaMs, state.physicsPositions));
@@ -307,6 +309,7 @@ export default function Npcs(props) {
  * Format `[npc.bodyUid, npc.position.x, npc.position.y, npc.position.z, ...]`
  * @property {Record<NPC.TextureKey, THREE.Texture>} tex
  * @property {{ free: Set<number>; toKey: Map<number, string> }} uid
+ * 🚧 flatten
  * Correspondence between Recast-Detour CrowdAgent uids and npcKeys.
  * - also used when object-picking npcs
  * - `uid.free` are those npc uids not-yet-used.
@@ -314,7 +317,6 @@ export default function Npcs(props) {
  * @property {() => void} clearLabels
  * @property {(src: THREE.Vector3Like, dst: THREE.Vector3Like) => null | THREE.Vector3Like[]} findPath
  * @property {(npcKey: string, processApi?: any) => NPC.NPC} getNpc
- * Throws if does not exist 🚧 any -> ProcessApi (?)
  * @property {(p: THREE.Vector3, maxDelta?: number) => null | THREE.Vector3} getClosestNavigable
  * @property {(uid: number) => NPC.NPC} getByNpcUid
  * @property {(input: Geom.VectJson | THREE.Vector3Like) => boolean} isPointInNavmesh
@@ -402,3 +404,5 @@ function NPC({ npc }) {
 const MemoizedNPC = React.memo(NPC);
 
 useGLTF.preload(Object.values(npcClassToMeta).map(x => x.url));
+
+const smallHalfExtent = 0.001;
