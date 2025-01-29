@@ -62,11 +62,9 @@ export default function WorldMenu(props) {
       w.view.canvas.style.filter = `brightness(${50 + 10 * state.brightness}%)`
     },
     onChangeXRay(e) {
-      if (e !== undefined) {
-        state.xRayOpacity = Number(e.currentTarget.value);
-      }
+      state.xRayOpacity = Number(e.currentTarget.value);
       w.wall.setOpacity(state.xRayOpacity / 10);
-      update(); // for toggle
+      w.disabled && update(); // Paused menu Toggle
     },
     onClickLoggerLink(e) {
       const [npcKey] = e.fullLine.slice('[ '.length).split(' ] ', 1);
@@ -115,7 +113,12 @@ export default function WorldMenu(props) {
       } else {// already at max opacity
         state.xRayOpacity = 4;
       }
-      state.onChangeXRay();
+      
+      w.wall.setOpacity(state.xRayOpacity / 10);
+      
+      /** @type {HTMLInputElement} */ (// reflect in range
+        state.draggable.el.querySelector('input.change-x-ray')
+      ).value = `${state.xRayOpacity}`;
     },
   }));
 
@@ -419,7 +422,7 @@ const cssTtyDisconnectedMessage = css`
  * @property {(msg: string) => void} measure
  * Measure durations by sending same `msg` twice.
  * @property {(e: React.ChangeEvent<HTMLInputElement>) => void} onChangeBrightness
- * @property {(e?: React.ChangeEvent<HTMLInputElement>) => void} onChangeXRay
+ * @property {(e: React.ChangeEvent<HTMLInputElement>) => void} onChangeXRay
  * @property {(e: NPC.ClickLinkEvent) => void} onClickLoggerLink
  * @property {(connectorKey: string) => void} onConnect
  * @property {() => void} onOverlayPointerUp
