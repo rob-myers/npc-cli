@@ -362,6 +362,7 @@ export default function WorldView(props) {
       });
       renderList.transparent.forEach(x => {
         if (w.wall.opacity < 1 && (
+          // 🔔 ignore walls and ceilings
           x.object.name === 'walls' || x.object.name === 'multi-tex-ceiling'
         )) {
           return;

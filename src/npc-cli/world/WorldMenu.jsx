@@ -24,6 +24,7 @@ export default function WorldMenu(props) {
 
   const state = useStateRef(/** @returns {State} */ () => ({
 
+    brightness: 5, // [1..10] inducing percentage `50 + 10 * b`
     debugWhilePaused: false,
     disconnected: true,
     draggable: /** @type {*} */ (null),
@@ -34,6 +35,8 @@ export default function WorldMenu(props) {
     loggerWidth: tryLocalStorageGetParsed(`logger:width@${w.key}`) ?? defaultLoggerWidthPx / defaultLoggerWidthDelta,
     loggerWidthDelta: defaultLoggerWidthDelta,
     showDebug: tryLocalStorageGetParsed(`logger:debug@${w.key}`) ?? false,
+    xRayOpacity: 4, // [1..10]
+    xRayPrevOpacity: 4, // [1..10]
 
     changeLoggerLog(e) {
       state.showDebug = e.currentTarget.checked;
@@ -53,6 +56,17 @@ export default function WorldMenu(props) {
       } else {
         state.durationKeys[msg] = performance.now();
       }
+    },
+    onChangeBrightness(e) {// 🔔 overrides canvas.style.filter
+      state.brightness = Number(e.currentTarget.value);
+      w.view.canvas.style.filter = `brightness(${50 + 10 * state.brightness}%)`
+    },
+    onChangeXRay(e) {
+      if (e !== undefined) {
+        state.xRayOpacity = Number(e.currentTarget.value);
+      }
+      w.wall.setOpacity(state.xRayOpacity / 10);
+      update(); // for toggle
     },
     onClickLoggerLink(e) {
       const [npcKey] = e.fullLine.slice('[ '.length).split(' ] ', 1);
@@ -95,8 +109,13 @@ export default function WorldMenu(props) {
       update();
     },
     toggleXRay() {
-      w.wall.setOpacity(w.wall.opacity === 0.45 ? 1 : 0.45);
-      update();
+      state.xRayPrevOpacity = state.xRayOpacity;
+      if (state.xRayOpacity < 10) {
+        state.xRayOpacity = 10;
+      } else {// already at max opacity
+        state.xRayOpacity = 4;
+      }
+      state.onChangeXRay();
     },
   }));
 
@@ -134,7 +153,7 @@ export default function WorldMenu(props) {
       </button>
       <button
         onClick={state.toggleXRay}
-        className={w.wall.opacity < 1 ? 'text-green' : undefined}
+        className={state.xRayOpacity < 10 ? 'text-green' : undefined}
       >
         x-ray
       </button>
@@ -158,13 +177,24 @@ export default function WorldMenu(props) {
             <label>
               <input
                 type="range"
+                className="change-x-ray"
+                min={1}
+                max={10}
+                defaultValue={state.xRayOpacity}
+                onChange={state.onChangeXRay}
+              />
+              <div>X</div>
+            </label>
+            <label>
+              <input
+                type="range"
                 className="change-logger-width"
                 min={4}
                 max={10}
                 defaultValue={state.loggerWidth}
                 onChange={state.onResizeLoggerWidth}
               />
-              w
+              <div>w</div>
             </label>
             <label>
               <input
@@ -175,7 +205,18 @@ export default function WorldMenu(props) {
                 defaultValue={state.loggerHeight}
                 onChange={state.onResizeLoggerHeight}
               />
-              h
+              <div>h</div>
+            </label>
+            <label>
+              <input
+                type="range"
+                className="change-brightness"
+                min={1}
+                max={10}
+                defaultValue={state.brightness}
+                onChange={state.onChangeBrightness}
+              />
+              <div>☀️</div>
             </label>
           </div>
           <label>
@@ -216,8 +257,7 @@ const defaultLoggerHeightPx = 100;
 const defaultLoggerWidthPx = 800;
 /** Must be a factor of default height */
 const loggerHeightDelta = 20;
-/** Must be a factor of default width */
-const defaultLoggerWidthDelta = 60;
+const defaultLoggerWidthDelta = 80;
 
 const loggerContainerCss = css`
   position: absolute;
@@ -258,7 +298,7 @@ const loggerPopUpCss = css`
       padding: 0 8px 8px 8px;
     }
     .${popUpBubbleClassName} {
-      transform: scale(.85);
+      transform: scale(.9);
     }
   }
 
@@ -275,7 +315,17 @@ const loggerPopUpCss = css`
       display: flex;
       flex-direction: column;
       gap: 2px;
-      /* padding: 12px 0; */
+      padding: 12px 0;
+
+      label div {
+        display: flex;
+        justify-content: center;
+        /* background-color: red; */
+        width: 16px;
+      }
+      input {
+        width: 60px;
+      }
     }
 
     label {
@@ -314,10 +364,6 @@ const loggerPopUpCss = css`
       height: 8px;
       width: 8px;
     }
-
-    .change-logger-height, .change-logger-width {
-      width: 60px;
-    }
   }
 `;
 
@@ -354,6 +400,7 @@ const cssTtyDisconnectedMessage = css`
 
 /**
  * @typedef State
+ * @property {number} brightness
  * @property {boolean} debugWhilePaused Is the camera usable whilst paused?
  * @property {import('../components/Draggable').State} draggable Draggable containing Logger
  * @property {string} [dragClassName] We can restrict Logger dragging to this className
@@ -364,11 +411,15 @@ const cssTtyDisconnectedMessage = css`
  * @property {number} loggerWidth
  * @property {number} loggerWidthDelta
  * @property {boolean} showDebug
+ * @property {number} xRayOpacity In [1..10]
+ * @property {number} xRayPrevOpacity For toggle
  *
  * @property {(e: React.ChangeEvent<HTMLInputElement>) => void} changeLoggerLog
  * @property {() => void} enableAll
  * @property {(msg: string) => void} measure
  * Measure durations by sending same `msg` twice.
+ * @property {(e: React.ChangeEvent<HTMLInputElement>) => void} onChangeBrightness
+ * @property {(e?: React.ChangeEvent<HTMLInputElement>) => void} onChangeXRay
  * @property {(e: NPC.ClickLinkEvent) => void} onClickLoggerLink
  * @property {(connectorKey: string) => void} onConnect
  * @property {() => void} onOverlayPointerUp
