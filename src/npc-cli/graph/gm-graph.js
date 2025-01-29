@@ -124,18 +124,24 @@ export class GmGraphClass extends BaseGraph {
   }
 
   /**
-   * 🚧 split this into two different functions?
-   * A geomorph can have multiple 'gm' nodes: one per disjoint navmesh.
    * @param {Geom.VectJson} point
-   * @returns {[gmId: number | null, gmNodeId: number | null]} respective 'gm' node is `nodesArray[gmNodeId]`
+   * @returns {number | null} gmId
    */
   findGmIdContaining(point) {
-    const gmId = this.gmIdGrid.get(`${Math.floor(point.x / gmIdGridDim)}-${Math.floor(point.y / gmIdGridDim)}`);
+    return this.gmIdGrid.get(`${Math.floor(point.x / gmIdGridDim)}-${Math.floor(point.y / gmIdGridDim)}`) ?? null;
+  }
+  
+  /**
+   * @param {Geom.VectJson} point
+   * @param {number} [gmId]
+   * @returns {number | null} gmNodeId
+   */
+  findGmNodeIdContaining(point, gmId = this.findGmIdContaining(point) ?? undefined) {
     if (typeof gmId === 'number') {
       const gmNodeId = this.gmNodeByGmId[gmId].find(node => node.rect.contains(point))?.index;
-      return [gmId, gmNodeId ?? null];
+      return gmNodeId ?? null;
     } else {
-      return [null, null];
+      return null;
     }
   }
 
@@ -145,8 +151,8 @@ export class GmGraphClass extends BaseGraph {
    * @param {Geom.VectJson} dst 
    */
   findPath(src, dst) {
-    const [srcGmId, srcGmNodeId] = this.findGmIdContaining(src);
-    const [dstGmId, dstGmNodeId] = this.findGmIdContaining(dst);
+    const srcGmNodeId = this.findGmNodeIdContaining(src);
+    const dstGmNodeId = this.findGmNodeIdContaining(dst);
     if (srcGmNodeId === null || dstGmNodeId === null) {
       return null;
     }
@@ -198,7 +204,7 @@ export class GmGraphClass extends BaseGraph {
    * @returns {null | Geomorph.GmRoomId}
    */
   findRoomContaining(point, includeDoors = false) {
-    const [gmId] = this.findGmIdContaining(point);
+    const gmId = this.findGmIdContaining(point);
     if (typeof gmId === 'number') {
       const gm = this.gms[gmId];
       const localPoint = gm.inverseMatrix.transformPoint(Vect.from(point));
