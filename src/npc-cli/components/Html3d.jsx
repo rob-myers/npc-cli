@@ -104,6 +104,7 @@ export const Html3d = React.forwardRef(({
         <div
           ref={state.ref('innerDiv')}
           children={children}
+          {...docked && { transform: 'scale(1)' }}
         />
       );
 
@@ -118,9 +119,6 @@ export const Html3d = React.forwardRef(({
       if (docked ? state.innerDiv : state.rootDiv) {
         state.rootDiv.style.visibility = open ? 'visible' : 'hidden';
         state.rootDiv.className = cx(className, { docked });
-        if (docked) {
-          state.innerDiv.style.transform = 'scale(1)';
-        }
       }
     }, [state.rootDiv, state.innerDiv, open, docked, className]);
 

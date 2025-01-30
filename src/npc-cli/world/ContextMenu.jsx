@@ -167,10 +167,13 @@ export function ContextMenu() {
       update();
     },
     toggleDocked() {
-      state.docked = !state.docked
+      state.docked = !state.docked;
+
       if (state.docked === true) {// About to dock
         state.popUp.close();
-        setTimeout(() => state.draggable?.updatePos(), 30);
+        // hide until Html3d useLayoutEffect
+        state.html3d.rootDiv.style.visibility = 'hidden';
+        // setTimeout(() => state.draggable?.updatePos(), 30);
       }
     },
     togglePinned() {
@@ -251,7 +254,7 @@ function ContextMenuUi({ state: cm }) {
           onChange={cm.onSelectNpc.bind(cm)}
           value={cm.npcKey ?? ""}
         >
-          <option value="">no npc</option>
+          <option key="" value="">no npc</option>
           {cm.selectNpcKeys.map(npcKey => 
             <option key={npcKey} value={npcKey}>{npcKey}</option>
           )}
