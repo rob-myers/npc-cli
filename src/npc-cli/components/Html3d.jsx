@@ -104,10 +104,11 @@ export const Html3d = React.forwardRef(({
         />
       );
 
-      if (baseScale !== undefined) {// Force update in case paused
+      // Force update in case paused
+      setTimeout(() => {
         state.zoom = 0;
         state.onFrame();
-      }
+      });
     });
 
     /** @type {React.CSSProperties} */
