@@ -324,17 +324,17 @@ export class ttyXtermClass {
       return;
     }
 
-    if (data.length > 1 && data.includes("\r")) {
-      // ℹ️ Handle multi-line paste
-      // - xterm.js normalizes pasted newlines to be '\r'
-      // - previously we greedily executed upon encountering newline,
-      //   but now we just insert into input
+    if (data.length === 1 || !data.includes("\r")) {
+      this.handleXtermKeypresses(data);
+    } else if (data === '\u001b\r') {
+      // "Alt + Enter" -> newline (see Ctrl + J)
+      this.handleXtermKeypresses('\n')
+    } else {// Handle multi-line paste
+      // ℹ️ xterm.js normalizes pasted newlines as '\r'
       const text = data.replace(/\r/g, "\r\n");
       const { input, cursor } = this;
       this.clearInput();
       this.setInput(`${input.slice(0, cursor)}${text}${input.slice(cursor)}`)
-    } else {
-      this.handleXtermKeypresses(data);
     }
   }
 
@@ -342,6 +342,7 @@ export class ttyXtermClass {
    * Handle:
    * - individual characters (including escape sequences)
    * - multiple characters via a paste without newline
+   * - ℹ️ alt means Option on MacOS
    */
   private handleXtermKeypresses(data: string) {
     const ord = data.charCodeAt(0);
