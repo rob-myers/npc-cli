@@ -38,6 +38,10 @@ export const Html3d = React.forwardRef(({
         camera.updateMatrixWorld()
         const vec = state.computePosition();
   
+        if (Number.isNaN(vec[0])) {
+          return console.warn('Html3d: saw vec[0] NaN');
+        }
+
         if (
           Math.abs(state.zoom - camera.zoom) > eps ||
           Math.abs(state.delta[0] - vec[0]) > eps ||
