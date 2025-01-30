@@ -25,6 +25,11 @@ export const PopUp = React.forwardRef(function PopUp(props, ref) {
       props.onChange?.(state.opened);
       update();
     },
+    onKeyDown(e) {
+      if (e.code === 'Space') {
+        state.opened ? state.close() : state.open(props.width);
+      }
+    },
     onPointerDownIcon(e) {
       state.iconDownAt = { x: e.clientX, y: e.clientY };
     },
@@ -83,6 +88,7 @@ export const PopUp = React.forwardRef(function PopUp(props, ref) {
       <button
         ref={state.ref('icon')}
         className={popUpButtonClassName}
+        onKeyDown={state.onKeyDown}
         onPointerDown={state.onPointerDownIcon}
         onPointerUp={state.onPointerUpIcon}
         onPointerLeave={state.onPointerUpIcon}
@@ -127,6 +133,7 @@ export const PopUp = React.forwardRef(function PopUp(props, ref) {
  * @property {boolean} preventToggle
  *
  * @property {() => void} close
+ * @property {(e: React.KeyboardEvent) => void} onKeyDown
  * @property {(e: React.PointerEvent) => void} onPointerDownIcon
  * @property {(e: React.PointerEvent) => void} onPointerUpIcon
  * @property {(width?: number | undefined) => void} open
