@@ -37,28 +37,27 @@ export const Html3d = React.forwardRef(({
   
         camera.updateMatrixWorld()
         const vec = state.computePosition();
-  
-        if (Number.isNaN(vec[0])) {
-          return console.warn('Html3d: saw vec[0] NaN');
-        }
+        console.log(vec); // 🚧 debug mobile
 
         if (
           Math.abs(state.zoom - camera.zoom) > eps ||
           Math.abs(state.delta[0] - vec[0]) > eps ||
           Math.abs(state.delta[1] - vec[1]) > eps
         ) {
-  
-          tracked === null ? v1.copy(position) : v1.setFromMatrixPosition(tracked.matrixWorld)
-          const scale = baseScale === undefined ? 1 : objectScale(v1, camera) * baseScale;
-          
           state.rootDiv.style.transform = `translate3d(${vec[0]}px,${vec[1]}px,0)`;
-  
+          
           if (state.baseScale !== baseScale) {// animate set baseScale undefined
             state.innerDiv.style.transition = baseScale === undefined ? 'transform 300ms' : '';
             state.baseScale = baseScale;
           }
   
-          state.innerDiv.style.transform = `scale(${scale})`;
+          if (baseScale === undefined) {
+            state.innerDiv.style.transform = `scale(${1})`;
+          } else {
+            tracked === null ? v1.copy(position) : v1.setFromMatrixPosition(tracked.matrixWorld);
+            const scale = objectScale(v1, camera) * baseScale;
+            state.innerDiv.style.transform = `scale(${scale})`;
+          }
   
           state.delta = vec;
           state.zoom = camera.zoom;
