@@ -310,6 +310,11 @@ export default function WorldView(props) {
     openSnapshot(type = 'image/webp', quality) {
       window.open(dataUrlToBlobUrl(state.toDataURL(type, quality)), '_blank');
     },
+    pan(dx = 0, dy = 0) {
+      const { object: camera, target } = state.controls;
+      const offset = new THREE.Vector3().setFromMatrixColumn(camera.matrix, 0).multiplyScalar(dx);
+      target.add(offset);
+    },
     pickObject(e) {// https://github.com/bzztbomb/three_js_gpu_picking/blob/main/src/gpupicker.js
       const { gl, camera } = w.r3f;
       // handle fractional device pixel ratio e.g. 2.625 on Pixel
@@ -400,6 +405,7 @@ export default function WorldView(props) {
       onPointerMove={state.onPointerMove}
       onPointerUp={state.onPointerUp}
       onPointerLeave={state.onPointerLeave}
+      onContextMenu={e => isTouchDevice() && e.preventDefault()}
       tabIndex={0}
       {...{ [popUpRootDataAttribute]: true }}
     >
@@ -481,6 +487,7 @@ export default function WorldView(props) {
  * @property {(e: React.PointerEvent<HTMLElement>) => void} onPointerUp
  * @property {(deltaMs: number) => void} onTick
  * @property {(type?: string, quality?: any) => void} openSnapshot
+ * @property {(dx: number, dy: number) => void} pan
  * @property {(e: React.PointerEvent<HTMLElement>) => void} pickObject
  * @property {(gl: THREE.WebGLRenderer, scene: THREE.Scene, camera: THREE.Camera, ri: THREE.RenderItem & { material: THREE.ShaderMaterial }) => void} renderObjectPickItem
  * @property {() => void} renderObjectPickScene

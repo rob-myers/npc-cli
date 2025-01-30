@@ -96,12 +96,15 @@
   - ✅ Loggers Opts has Brightness slider
   - ✅ move `w.bubble.say` -> `w.e.say`
   - 🚧 profile-1 has link listener
+    - on click npcKey change camera
   - fix npc speech styling
 
-- ✅ npc.moveTo "works" on click doorways too
-- ✅ avoid `w --stdin` i.e. use arg `-` instead?
-  - ✅ change `changeNpcAccess` to boolean (not - or +)
-  - ℹ️ e.g. `click 1 | map xz | w n.rob.moveTo -`
+- rewrite Html3d
+  - fix flicker issue when dock
+
+- ✅ can pan camera (via controls)
+  - `w view.pan 1 -1`
+- can smooth pan camera
 
 - 🚧 integrate Viewer into blog
   - 🚧 screenshots in 1st blog
@@ -3620,3 +3623,8 @@ done
   - ✅ fix turning
   - ✅ handle offMeshConnection collisions
     - not seeing any new issues
+
+- ✅ npc.moveTo "works" on click doorways too
+- ✅ avoid `w --stdin` i.e. use arg `-` instead?
+  - ✅ change `changeNpcAccess` to boolean (not - or +)
+  - ℹ️ e.g. `click 1 | map xz | w n.rob.moveTo -`
