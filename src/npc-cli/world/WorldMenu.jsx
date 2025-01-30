@@ -205,7 +205,7 @@ export default function WorldMenu(props) {
                 defaultValue={state.xRayOpacity}
                 onChange={state.onChangeXRay}
               />
-              <div>X</div>
+              <div>🫥</div>
             </label>
             <label>
               <input
@@ -308,7 +308,7 @@ const loggerPopUpCss = css`
     align-items: center;
     gap: 8px;
 
-    font-size: smaller;
+    font-size: small;
     color: white;
     
     .ranges {
