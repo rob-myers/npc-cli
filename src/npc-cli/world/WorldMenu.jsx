@@ -174,20 +174,9 @@ export default function WorldMenu(props) {
         <PopUp
           label="⋯"
           className={loggerPopUpCss}
-          width={200}
+          width={300}
         >
           <div className="ranges">
-            <label>
-              <input
-                type="range"
-                className="change-x-ray"
-                min={1}
-                max={10}
-                defaultValue={state.xRayOpacity}
-                onChange={state.onChangeXRay}
-              />
-              <div>X</div>
-            </label>
             <label>
               <input
                 type="range"
@@ -209,6 +198,19 @@ export default function WorldMenu(props) {
                 onChange={state.onResizeLoggerHeight}
               />
               <div>h</div>
+            </label>
+          </div>
+          <div className="ranges">
+            <label>
+              <input
+                type="range"
+                className="change-x-ray"
+                min={1}
+                max={10}
+                defaultValue={state.xRayOpacity}
+                onChange={state.onChangeXRay}
+              />
+              <div>X</div>
             </label>
             <label>
               <input
@@ -300,9 +302,9 @@ const loggerPopUpCss = css`
     .${popUpButtonClassName} {
       padding: 0 8px 8px 8px;
     }
-    .${popUpBubbleClassName} {
+    /* .${popUpBubbleClassName} {
       transform: scale(.9);
-    }
+    } */
   }
 
   .${popUpContentClassName} {
