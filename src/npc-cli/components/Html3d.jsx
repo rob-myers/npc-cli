@@ -16,9 +16,8 @@ export const Html3d = React.forwardRef(({
   docked,
   open,
   offset,
+  position,
   tracked,
-  zIndex,
-  ...props
 }, ref) => {
     const { gl, camera, scene, size, events } = useThree();
 
@@ -45,13 +44,12 @@ export const Html3d = React.forwardRef(({
           Math.abs(state.delta[1] - vec[1]) > eps
         ) {
   
-          tracked === null ? v1.copy(props.position) : v1.setFromMatrixPosition(tracked.matrixWorld)
+          tracked === null ? v1.copy(position) : v1.setFromMatrixPosition(tracked.matrixWorld)
           const scale = baseScale === undefined ? 1 : objectScale(v1, camera) * baseScale;
           
           state.rootDiv.style.transform = `translate3d(${vec[0]}px,${vec[1]}px,0)`;
-          state.rootDiv.style.zIndex = `${zIndex ?? ''}`;
   
-          if (state.baseScale !== baseScale) {// 🔔 animate resize on unlock
+          if (state.baseScale !== baseScale) {// animate set baseScale undefined
             state.innerDiv.style.transition = baseScale === undefined ? 'transform 300ms' : '';
             state.baseScale = baseScale;
           }
@@ -65,7 +63,7 @@ export const Html3d = React.forwardRef(({
 
       computePosition() {
         if (tracked === null) {
-          v1.copy(props.position);
+          v1.copy(position);
         } else {
           v1.setFromMatrixPosition(tracked.matrixWorld);
         }
@@ -75,7 +73,7 @@ export const Html3d = React.forwardRef(({
         return calculatePosition(v1, camera, size)
       }
 
-    }), { deps: [baseScale, camera, size, docked, offset, tracked, props.position] });
+    }), { deps: [baseScale, camera, size, docked, offset, tracked, position] });
 
     React.useImperativeHandle(ref, () => state, []);
 
@@ -95,7 +93,7 @@ export const Html3d = React.forwardRef(({
         state.domTarget?.removeChild(state.rootDiv);
         currentRoot.unmount(); // 🔔 breaks HMR of children onchange this file
       }
-    }, [state.domTarget, tracked])
+    }, [state.domTarget, tracked]);
 
     React.useLayoutEffect(() => {
       state.reactRoot?.render(
@@ -106,11 +104,10 @@ export const Html3d = React.forwardRef(({
         />
       );
 
-      // 🚧
-      setTimeout(() => {// Force update when paused, or window resize
+      if (baseScale !== undefined) {// Force update in case paused
         state.zoom = 0;
         state.onFrame();
-      });
+      }
     });
 
     /** @type {React.CSSProperties} */
@@ -142,7 +139,6 @@ export const Html3d = React.forwardRef(({
  * @property {boolean} open
  * @property {THREE.Vector3} position
  * @property {THREE.Object3D | null} tracked
- * @property {number} [zIndex]
  */
 
 /**
