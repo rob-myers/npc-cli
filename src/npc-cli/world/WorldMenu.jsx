@@ -36,7 +36,6 @@ export default function WorldMenu(props) {
     loggerWidthDelta: defaultLoggerWidthDelta,
     showDebug: tryLocalStorageGetParsed(`logger:debug@${w.key}`) ?? false,
     xRayOpacity: 4, // [1..10]
-    xRayPrevOpacity: 4, // [1..10]
 
     changeLoggerLog(e) {
       state.showDebug = e.currentTarget.checked;
@@ -107,18 +106,14 @@ export default function WorldMenu(props) {
       update();
     },
     toggleXRay() {
-      state.xRayPrevOpacity = state.xRayOpacity;
-      if (state.xRayOpacity < 10) {
-        state.xRayOpacity = 10;
-      } else {// already at max opacity
-        state.xRayOpacity = 4;
-      }
-      
+      state.xRayOpacity = state.xRayOpacity < 10 ? 10 : 4;
       w.wall.setOpacity(state.xRayOpacity / 10);
       
       /** @type {HTMLInputElement} */ (// reflect in range
         state.draggable.el.querySelector('input.change-x-ray')
       ).value = `${state.xRayOpacity}`;
+      
+      update();
     },
   }));
 
@@ -417,7 +412,6 @@ const cssTtyDisconnectedMessage = css`
  * @property {number} loggerWidthDelta
  * @property {boolean} showDebug
  * @property {number} xRayOpacity In [1..10]
- * @property {number} xRayPrevOpacity For toggle
  *
  * @property {(e: React.ChangeEvent<HTMLInputElement>) => void} changeLoggerLog
  * @property {() => void} enableAll
