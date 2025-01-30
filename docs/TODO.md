@@ -99,7 +99,9 @@
     - on click npcKey change camera
   - fix npc speech styling
 
-- rewrite Html3d
+- 🚧 refactor Html3d
+  - ✅ avoid useless "group"
+  - ℹ️ cannot remove scaling because speech bubbles need it
   - fix flicker issue when dock
 
 - ✅ can pan camera (via controls)
@@ -123,6 +125,7 @@
 
 ### On hold
 
+- While zooming turn off ContextMenu pointer-events
 - ✅ Still seeing flicker on change "embed" -> "docked" on mobile
 - clean z-index e.g. "opts above menu"
 - Docked ContextMenu can focus i.e. panZoom to point

@@ -1,4 +1,5 @@
 import React from "react";
+import * as THREE from "three";
 import { css, cx } from "@emotion/css";
 import { stringify as javascriptStringify } from 'javascript-stringify';
 import debounce from "debounce";
@@ -22,7 +23,7 @@ export function ContextMenu() {
     draggable: null,
     /** For violating React.memo */
     epochMs: 0,
-    position: [0, 0, 0],
+    position: new THREE.Vector3(),
     tracked: undefined,
     offset: undefined,
     open: false,
@@ -148,7 +149,7 @@ export function ContextMenu() {
      */
     setContext({ position, meta }) {
       state.meta = meta;
-      state.position = position.toArray();
+      state.position = position.clone();
       state.computeKvsFromMeta(meta);
       state.computeLinks();
     },
@@ -185,7 +186,8 @@ export function ContextMenu() {
     /** Ensure smooth transition when start scaling */
     toggleScaled() {
       state.scaled = !state.scaled;
-      state.baseScale = state.scaled === true ? 1 / objectScale(state.html3d.objTarget, w.r3f.camera) : undefined;
+      const position = state.tracked?.position ?? state.position;
+      state.baseScale = state.scaled === true ? 1 / objectScale(position, w.r3f.camera) : undefined;
     },
     toggleKvs() {
       state.showKvs = !state.showKvs;
@@ -204,8 +206,8 @@ export function ContextMenu() {
       className={contextMenuCss}
       docked={state.docked}
       open={state.open}
+      tracked={state.tracked ?? null}
       position={state.position}
-      tracked={state.tracked}
     >
       {state.docked === true ? (
         <Draggable
@@ -254,7 +256,9 @@ function ContextMenuUi({ state: cm }) {
           onChange={cm.onSelectNpc.bind(cm)}
           value={cm.npcKey ?? ""}
         >
-          <option key="" value="">no npc</option>
+          <option key="none" value="">
+            no npc
+          </option>
           {cm.selectNpcKeys.map(npcKey => 
             <option key={npcKey} value={npcKey}>{npcKey}</option>
           )}
@@ -411,7 +415,7 @@ const optsPopUpCss = css`
  *   offset: undefined | import("three").Vector3Like;
  *   open: boolean;
  *   popUp: import("../components/PopUp").State;
- *   position: [number, number, number];
+ *   position: import('three').Vector3;
  *   tracked: undefined | import("three").Object3D;
  *   pinned: boolean;
  *   scaled: boolean;

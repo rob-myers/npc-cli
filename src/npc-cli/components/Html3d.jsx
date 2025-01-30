@@ -2,7 +2,7 @@ import * as React from 'react';
 import { cx } from '@emotion/css';
 import * as ReactDOM from 'react-dom/client';
 import * as THREE from 'three';
-import { ReactThreeFiber, useFrame, useThree } from '@react-three/fiber'
+import { useFrame, useThree } from '@react-three/fiber'
 import useStateRef from '../hooks/use-state-ref';
 
 /**
@@ -26,20 +26,17 @@ export const Html3d = React.forwardRef(({
       baseScale: 0,
       delta: [0, 0],
       domTarget: null,
-      group: /** @type {*} */ (null),
       innerDiv: /** @type {*} */ (null),
-      objTarget: /** @type {*} */ (null),
       rootDiv: document.createElement('div'),
       reactRoot: /** @type {*} */ (null),
       zoom: 0,
 
       onFrame(_rootState) {
-        if (state.objTarget === null || docked === true || state.innerDiv === null) {
+        if (docked === true || state.innerDiv === null) {
           return;
         }
   
         camera.updateMatrixWorld()
-        state.group.updateWorldMatrix(true, false)
         const vec = state.computePosition();
   
         if (
@@ -48,7 +45,8 @@ export const Html3d = React.forwardRef(({
           Math.abs(state.delta[1] - vec[1]) > eps
         ) {
   
-          const scale = baseScale === undefined ? 1 : objectScale(state.objTarget, camera) * baseScale
+          tracked === null ? v1.copy(props.position) : v1.setFromMatrixPosition(tracked.matrixWorld)
+          const scale = baseScale === undefined ? 1 : objectScale(v1, camera) * baseScale;
           
           state.rootDiv.style.transform = `translate3d(${vec[0]}px,${vec[1]}px,0)`;
           state.rootDiv.style.zIndex = `${zIndex ?? ''}`;
@@ -66,38 +64,38 @@ export const Html3d = React.forwardRef(({
       },
 
       computePosition() {
-        v1.setFromMatrixPosition(state.objTarget.matrixWorld);
+        if (tracked === null) {
+          v1.copy(props.position);
+        } else {
+          v1.setFromMatrixPosition(tracked.matrixWorld);
+        }
         if (offset !== undefined) {
           v1.add(offset);
         }
         return calculatePosition(v1, camera, size)
       }
 
-    }), { deps: [baseScale, camera, size, docked, offset] });
+    }), { deps: [baseScale, camera, size, docked, offset, tracked, props.position] });
 
     React.useImperativeHandle(ref, () => state, []);
 
     // Append to the connected element, which makes HTML work with views
-    state.domTarget = /** @type {HTMLElement} */ (events.connected || gl.domElement.parentNode);
-    state.objTarget = tracked ?? state.group;
+    // 🔔 this is parent of parent of canvas
+    state.domTarget = /** @type {HTMLElement} */ (
+      (events.connected || gl.domElement.parentNode?.parentNode) ?? null
+    );
 
     React.useLayoutEffect(() => {
-      if (state.objTarget !== null) {
-        const currentRoot = (state.reactRoot = ReactDOM.createRoot(state.rootDiv))
-        scene.updateMatrixWorld()
-
-        const vec = state.computePosition();
-
-        state.rootDiv.style.transform = `translate3d(${vec[0]}px,${vec[1]}px,0)`;
-        if (state.domTarget) {
-          state.domTarget.appendChild(state.rootDiv)
-        }
-        return () => {
-          if (state.domTarget) state.domTarget.removeChild(state.rootDiv)
-          currentRoot.unmount() // 🔔 breaks HMR of children onchange this file
-        }
+      const currentRoot = (state.reactRoot = ReactDOM.createRoot(state.rootDiv));
+      scene.updateMatrixWorld();
+      const vec = state.computePosition();
+      state.rootDiv.style.transform = `translate3d(${vec[0]}px,${vec[1]}px,0)`;
+      state.domTarget?.appendChild(state.rootDiv);
+      return () => {
+        state.domTarget?.removeChild(state.rootDiv);
+        currentRoot.unmount(); // 🔔 breaks HMR of children onchange this file
       }
-    }, [state.domTarget, state.objTarget])
+    }, [state.domTarget, tracked])
 
     React.useLayoutEffect(() => {
       state.reactRoot?.render(
@@ -108,6 +106,7 @@ export const Html3d = React.forwardRef(({
         />
       );
 
+      // 🚧
       setTimeout(() => {// Force update when paused, or window resize
         state.zoom = 0;
         state.onFrame();
@@ -124,19 +123,14 @@ export const Html3d = React.forwardRef(({
 
     useFrame(state.onFrame);
 
-    return (
-      <group
-        {...props}
-        ref={state.ref('group')}
-      />
-    );
+    return null;
   }
 );
 
 /**
  * @typedef {Omit<
  *   React.HTMLAttributes<HTMLDivElement> &
- *   ReactThreeFiber.Object3DNode<THREE.Group, typeof THREE.Group> & BaseProps,
+ *   BaseProps,
  * 'ref'>} Props
 */
 
@@ -146,7 +140,8 @@ export const Html3d = React.forwardRef(({
  * @property {number} [baseScale]
  * @property {THREE.Vector3Like} [offset]
  * @property {boolean} open
- * @property {THREE.Object3D} [tracked]
+ * @property {THREE.Vector3} position
+ * @property {THREE.Object3D | null} tracked
  * @property {number} [zIndex]
  */
 
@@ -155,9 +150,7 @@ export const Html3d = React.forwardRef(({
 * @property {[number, number]} delta 2D translation
 * @property {null | HTMLElement} domTarget
 * @property {number} [baseScale]
-* @property {THREE.Group} group
 * @property {HTMLDivElement} innerDiv
-* @property {THREE.Object3D} objTarget props.tracked or state.group
 * @property {HTMLDivElement} rootDiv
 * @property {ReactDOM.Root} reactRoot
 * @property {number} zoom
@@ -185,14 +178,13 @@ function calculatePosition(objectPos, camera, size) {
 }
 
 /**
- * @param {THREE.Object3D} el 
+ * @param {THREE.Vector3} objectPos
  * @param {THREE.Camera} camera 
  */
-export function objectScale(el, camera) {
+export function objectScale(objectPos, camera) {
   if (camera instanceof THREE.OrthographicCamera) {
     return camera.zoom
   } else if (camera instanceof THREE.PerspectiveCamera) {
-    const objectPos = v1.setFromMatrixPosition(el.matrixWorld)
     const cameraPos = v2.setFromMatrixPosition(camera.matrixWorld)
     const vFOV = (camera.fov * Math.PI) / 180
     const dist = objectPos.distanceTo(cameraPos)

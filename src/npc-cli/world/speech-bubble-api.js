@@ -1,3 +1,5 @@
+import * as THREE from 'three';
+
 /**
  * 🔔 Avoid `foo = (...bar) => baz` because incompatible with our approach to class HMR.
  */
@@ -7,7 +9,7 @@ export class SpeechBubbleApi {
   /** For violating React.memo */
   epochMs = 0;
   
-  position = /** @type {[number, number, number]} */ ([0, 0, 0]);
+  position = new THREE.Vector3();
   tracked = /** @type {undefined | import('three').Object3D} */ (undefined);
   offset = { x: 0, y: 0, z: 0 };
   
