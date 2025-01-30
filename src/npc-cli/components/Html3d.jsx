@@ -93,7 +93,7 @@ export const Html3d = React.forwardRef(({
         state.domTarget?.removeChild(state.rootDiv);
         currentRoot.unmount(); // 🔔 breaks HMR of children onchange this file
       }
-    }, [state.domTarget, tracked]);
+    }, [state.domTarget]);
 
     React.useLayoutEffect(() => {
       state.reactRoot?.render(
