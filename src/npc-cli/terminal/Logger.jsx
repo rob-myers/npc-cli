@@ -183,4 +183,8 @@ const loggerCss = css`
   // 🔔 Hide xterm cursor
   textarea { visibility: hidden; }
 
+  .xterm .xterm-helpers {
+    z-index: 3 !important;
+  }
+
 `;

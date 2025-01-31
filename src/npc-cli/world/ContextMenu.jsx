@@ -385,7 +385,7 @@ export const contextMenuCss = css`
 `;
 
 const optsPopUpCss = css`
-  z-index: 3;
+  z-index: 4;
 
   .${popUpContentClassName} {
     display: flex;

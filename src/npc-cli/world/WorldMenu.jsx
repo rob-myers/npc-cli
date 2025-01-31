@@ -302,6 +302,19 @@ const loggerPopUpCss = css`
     } */
   }
 
+  @media(max-width: 700px) {
+    .${popUpBubbleClassName} .${popUpContentClassName} {
+      flex-direction: column;
+      padding: 12px 0;
+      .ranges {
+        padding: 0;
+      }
+      .ranges input {
+        width: 100%;
+      }
+    }
+  }
+
   .${popUpContentClassName} {
     display: flex;
     justify-content: space-evenly;
