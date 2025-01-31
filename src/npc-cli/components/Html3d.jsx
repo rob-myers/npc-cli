@@ -35,9 +35,8 @@ export const Html3d = React.forwardRef(({
           return;
         }
   
-        camera.updateMatrixWorld()
+        camera.updateMatrixWorld();
         const vec = state.computePosition();
-        console.log(vec); // 🚧 debug mobile
 
         if (
           Math.abs(state.zoom - camera.zoom) > eps ||
@@ -46,14 +45,17 @@ export const Html3d = React.forwardRef(({
         ) {
           state.rootDiv.style.transform = `translate3d(${vec[0]}px,${vec[1]}px,0)`;
           
-          if (state.baseScale !== baseScale) {// animate set baseScale undefined
-            state.innerDiv.style.transition = baseScale === undefined ? 'transform 300ms' : '';
+          if (state.baseScale !== baseScale) {
+            if (baseScale === undefined) {// animate on baseScale:=undefined
+              state.innerDiv.style.transition = 'transform 300ms';
+              state.innerDiv.style.transform = 'scale(1)';
+            } else {
+              state.innerDiv.style.transition = '';
+            }
             state.baseScale = baseScale;
           }
-  
-          if (baseScale === undefined) {
-            state.innerDiv.style.transform = `scale(${1})`;
-          } else {
+          
+          if (baseScale !== undefined) {
             tracked === null ? v1.copy(position) : v1.setFromMatrixPosition(tracked.matrixWorld);
             const scale = objectScale(v1, camera) * baseScale;
             state.innerDiv.style.transform = `scale(${scale})`;
