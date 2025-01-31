@@ -115,7 +115,7 @@ export const Html3d = React.forwardRef(({
       setTimeout(() => {
         state.zoom = 0;
         state.onFrame();
-      });
+      }, 300);
     });
 
     /** @type {React.CSSProperties} */
