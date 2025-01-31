@@ -169,7 +169,8 @@ export function ContextMenu() {
     },
     toggleDocked() {
       state.docked = !state.docked;
-
+      state.html3d.docked = state.docked; // 🚧
+      
       if (state.docked === true) {// About to dock
         // state.popUp.close();
         state.html3d.innerDiv.style.transform = 'scale(1)';
