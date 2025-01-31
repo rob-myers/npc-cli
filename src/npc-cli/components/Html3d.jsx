@@ -82,10 +82,8 @@ export const Html3d = React.forwardRef(({
 
     React.useImperativeHandle(ref, () => state, []);
 
-    // Append to the connected element, which makes HTML work with views
-    // 🔔 this is parent of parent of canvas
-    state.domTarget = /** @type {HTMLElement} */ (
-      (events.connected || gl.domElement.parentNode?.parentNode) ?? null
+    state.domTarget = /** @type {HTMLElement | null} */ (
+      gl.domElement.parentNode?.parentNode ?? null // w.view.rootEl
     );
 
     React.useLayoutEffect(() => {
