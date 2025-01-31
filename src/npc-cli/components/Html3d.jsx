@@ -27,7 +27,6 @@ export const Html3d = React.forwardRef(({
     const state = useStateRef(/** @returns {State} */ () => ({
       baseScale: 0,
       delta: [0, 0],
-      docked: docked ?? false, // 🚧
       domTarget: null,
       innerDiv: /** @type {*} */ (null),
       rootDiv: document.createElement('div'),
@@ -35,7 +34,7 @@ export const Html3d = React.forwardRef(({
       zoom: 0,
 
       onFrame(_rootState) {
-        if (state.docked === true || state.innerDiv === null) {
+        if (docked === true || state.innerDiv === null) {
           return;
         }
   
@@ -82,9 +81,7 @@ export const Html3d = React.forwardRef(({
         return calculatePosition(v1, camera, size)
       },
 
-      update,
-
-    }), { deps: [baseScale, camera, size, offset, tracked, position] });
+    }), { deps: [baseScale, camera, docked, size, offset, tracked, position] });
 
     React.useImperativeHandle(ref, () => state, []);
 
@@ -109,7 +106,7 @@ export const Html3d = React.forwardRef(({
         <div
           ref={state.ref('innerDiv')}
           children={children}
-          {...state.docked && { transform: 'scale(1)' }}
+          {...docked && { transform: 'scale(1)' }}
         />
       );
 
@@ -125,11 +122,11 @@ export const Html3d = React.forwardRef(({
 
     /** @type {React.CSSProperties} */
     React.useLayoutEffect(() => {
-      if (state.docked ? state.innerDiv : state.rootDiv) {
+      if (docked ? state.innerDiv : state.rootDiv) {
         state.rootDiv.style.visibility = open ? 'visible' : 'hidden';
-        state.rootDiv.className = cx(className, { docked: state.docked });
+        state.rootDiv.className = cx(className, { docked });
       }
-    }, [state.rootDiv, state.innerDiv, open, state.docked, className]);
+    }, [state.rootDiv, state.innerDiv, open, docked, className]);
 
     useFrame(state.onFrame);
 
@@ -157,7 +154,6 @@ export const Html3d = React.forwardRef(({
 /**
 * @typedef State
 * @property {[number, number]} delta 2D translation
-* @property {boolean} docked
 * @property {null | HTMLElement} domTarget
 * @property {number} [baseScale]
 * @property {HTMLDivElement} innerDiv
@@ -166,7 +162,6 @@ export const Html3d = React.forwardRef(({
 * @property {number} zoom
 * @property {(rootState?: import('@react-three/fiber').RootState) => void} onFrame
 * @property {() => [number, number]} computePosition
-* @property {() => void} update
 */
 
 const eps = 0.001;

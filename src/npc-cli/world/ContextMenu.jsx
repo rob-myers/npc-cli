@@ -169,12 +169,11 @@ export function ContextMenu() {
     },
     toggleDocked() {
       state.docked = !state.docked;
-      state.html3d.docked = state.docked; // 🚧
       
       if (state.docked === true) {// About to dock
-        // state.popUp.close();
+        state.popUp.close();
         state.html3d.innerDiv.style.transform = 'scale(1)';
-        state.html3d.update();
+        state.draggable.el.style.visibility = 'hidden';
         // state.draggable.updatePos();
 
         // hide until Html3d useLayoutEffect

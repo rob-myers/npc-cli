@@ -131,6 +131,12 @@ export const Draggable = React.forwardRef(function Draggable(props, ref) {
     return () => obs.disconnect();
   }, [props.container, ...props.observeSizes ?? []]);
 
+  React.useLayoutEffect(() => {
+    if (props.disabled !== true) {
+      state.el.style.visibility = 'visible';
+    }
+  }, [props.disabled]);
+
   return (
     <div
       ref={state.ref('el')}
