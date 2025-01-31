@@ -110,7 +110,7 @@ export const Html3d = React.forwardRef(({
       );
 
       // Force update in case paused
-      setTimeout(() => {
+      !docked && setTimeout(() => {
         state.zoom = 0;
         state.onFrame();
       });

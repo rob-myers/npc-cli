@@ -129,7 +129,7 @@ export function ContextMenu() {
         case 'toggle-scaled': state.toggleScaled(); break;
       }
 
-      w.cm.persist();
+      state.persist();
       update();
     },
     onTogglePopup(willOpen) {
