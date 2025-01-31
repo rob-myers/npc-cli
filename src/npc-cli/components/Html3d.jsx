@@ -4,6 +4,7 @@ import * as ReactDOM from 'react-dom/client';
 import * as THREE from 'three';
 import { useFrame, useThree } from '@react-three/fiber'
 import useStateRef from '../hooks/use-state-ref';
+import useUpdate from '../hooks/use-update';
 
 /**
  * Based on https://github.com/pmndrs/drei/blob/master/src/web/Html.tsx
@@ -19,7 +20,9 @@ export const Html3d = React.forwardRef(({
   position,
   tracked,
 }, ref) => {
-    const { gl, camera, scene, size, events } = useThree();
+    const { gl, camera, scene, size } = useThree();
+
+    const update = useUpdate();
 
     const state = useStateRef(/** @returns {State} */ () => ({
       baseScale: 0,
@@ -77,7 +80,9 @@ export const Html3d = React.forwardRef(({
           v1.add(offset);
         }
         return calculatePosition(v1, camera, size)
-      }
+      },
+
+      update,
 
     }), { deps: [baseScale, camera, size, offset, tracked, position] });
 
@@ -161,6 +166,7 @@ export const Html3d = React.forwardRef(({
 * @property {number} zoom
 * @property {(rootState?: import('@react-three/fiber').RootState) => void} onFrame
 * @property {() => [number, number]} computePosition
+* @property {() => void} update
 */
 
 const eps = 0.001;
