@@ -211,19 +211,16 @@ export function ContextMenu() {
       tracked={state.tracked ?? null}
       position={state.position}
     >
-      {state.docked === true ? (
-        <Draggable
-          ref={state.ref('draggable')}
-          container={w.view.rootEl}
-          initPos={{ x: 0, y: 2000 }}
-          localStorageKey={`contextmenu:dragPos@${w.key}`}
-          observeSizes={[state.innerRoot]}
-        >
-          <ContextMenuUi state={state} />
-        </Draggable>
-      ) : (
+      <Draggable
+        ref={state.ref('draggable')}
+        container={w.view.rootEl}
+        disabled={state.docked === false}
+        initPos={{ x: 0, y: 2000 }}
+        localStorageKey={`contextmenu:dragPos@${w.key}`}
+        observeSizes={[state.innerRoot]}
+      >
         <ContextMenuUi state={state} />
-      )}
+      </Draggable>
     </Html3d>
   );
 

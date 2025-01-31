@@ -18,7 +18,7 @@ export const Draggable = React.forwardRef(function Draggable(props, ref) {
     touchId: /** @type {undefined | number} */ (undefined),
 
     canDrag(e) {
-      return (
+      return props.disabled !== true && (
         props.dragClassName === undefined
         || /** @type {HTMLElement} */ (e.target).classList.contains(props.dragClassName)
       );
@@ -102,7 +102,7 @@ export const Draggable = React.forwardRef(function Draggable(props, ref) {
       state.el.style.top = `${state.pos.y}px`;
       state.persist();
     },
-  }), { deps: [props.container, props.dragClassName, props.localStorageKey] });
+  }), { deps: [props.container, props.disabled, props.dragClassName, props.localStorageKey] });
 
   React.useImperativeHandle(ref, () => state, []);
   
@@ -143,7 +143,7 @@ export const Draggable = React.forwardRef(function Draggable(props, ref) {
       onTouchMove={state.onTouchMove}
 
       style={{
-        position: 'absolute',
+        position: props.disabled ? 'unset' : 'absolute',
         left: state.pos.x,
         top: state.pos.y,
       }}
@@ -158,10 +158,13 @@ export const Draggable = React.forwardRef(function Draggable(props, ref) {
  * @property {string} [className]
  * @property {HTMLElement} [container]
  * So can keep draggable within container
+ * @property {boolean} [disabled]
  * @property {string} [dragClassName]
  * If defined, can only drag element matching it
  * @property {Geom.VectJson} [initPos]
+ * Initial position, usually overridden via localStorage
  * @property {string} [localStorageKey]
+ * Where to store the position in local storage
  * @property {HTMLElement[]} [observeSizes]
  * Elements whose size can effect the Draggable's position
  */
