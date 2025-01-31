@@ -20,7 +20,7 @@ export function ContextMenu() {
   const state = useStateRef(/** @returns {State} */ () => ({
     baseScale: undefined,
     docked: false,
-    draggable: null,
+    draggable: /** @type {*} */ (null),
     /** For violating React.memo */
     epochMs: 0,
     position: new THREE.Vector3(),
@@ -173,6 +173,7 @@ export function ContextMenu() {
       if (state.docked === true) {// About to dock
         state.popUp.close();
         state.html3d.innerDiv.style.transform = 'scale(1)';
+        state.draggable.updatePos();
 
         // hide until Html3d useLayoutEffect
         // state.html3d.rootDiv.style.visibility = 'hidden';
@@ -401,7 +402,7 @@ const optsPopUpCss = css`
  * @typedef {{
  *   baseScale: undefined | number;
  *   docked: boolean;
- *   draggable: null | import('../components/Draggable').State;
+ *   draggable: import('../components/Draggable').State;
  *   epochMs: number;
  *   html3d: import("../components/Html3d").State;
  *   innerRoot: HTMLElement;
