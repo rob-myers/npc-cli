@@ -73,12 +73,12 @@ export function computeOffMeshConnectionsParams(w) {
        * 🔔 saw nav fail in 102 (top right) when many offMeshConnections, which
        * we fix via room.meta "small" and "narrow-entrances"
        */
-      const narrowEntrance = meta.hull === true ? false : doorRoomMetas[gmId][doorId].some(x =>
+      const narrowEntrance = meta.hull !== true && doorRoomMetas[gmId][doorId].some(x =>
         x.small === true || x['narrow-entrances'] === true
       );
       const halfLength = wallOutset + (meta.hull === true ? 0.25 : 0.125);
-      // const offsets = meta.hull === true ? [-0.3, 0.01, 0.3] : narrowEntrance === false ? [-0.25, 0.01, 0.25] : [0.01];
-      const offsets = [0.01];
+      const offsets = meta.hull === true ? [-0.3, 0.01, 0.3] : narrowEntrance === false ? [-0.25, 0.01, 0.25] : [0.01];
+      // const offsets = [0.01];
 
       const src = gm.matrix.transformPoint(center.clone().addScaled(normal, halfLength));
       const dst = gm.matrix.transformPoint(center.clone().addScaled(normal, -halfLength));
