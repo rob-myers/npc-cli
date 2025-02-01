@@ -110,14 +110,12 @@ export const Html3d = React.forwardRef(({
         />
       );
 
-      const el = /** @type {undefined | HTMLElement} */ (state.innerDiv?.children[0]);
-      console.log('🔔', el?.style.position, el?.style.left, el?.style.top);
-
       // Force update in case paused
       setTimeout(() => {
         state.zoom = 0;
         state.onFrame();
-      }, 300);
+      });
+      // }, 300);
     });
 
     /** @type {React.CSSProperties} */
