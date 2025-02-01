@@ -108,6 +108,8 @@
     - ✅ using controls stops lookAt
     - ✅ what if we switch between enabled and disabled while target moves?
       - ℹ️ seems to work i.e. debugTick and onTick both handle
+    - ✅ fix zoom issue while looking
+    - 🚧 w.view.lookAt is async
     - on click npcKey change camera
   - fix npc speech styling
 

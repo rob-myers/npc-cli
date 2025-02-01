@@ -65,9 +65,14 @@ export default function WorldView(props) {
     clearTarget() {
       state.target = null;
       state.syncRenderMode();
-      // 🔔 clear damping
-      // https://github.com/pmndrs/maath/blob/626d198fbae28ba82f2f1b184db7fcafd4d23846/packages/maath/src/easing.ts#L93
-      /** @type {{ __damp?: { [velKey: string]: number } }} */ (state.controls.target).__damp = undefined;
+
+      // @ts-ignore see patch
+      state.controls.zoomToConstant = null;
+
+      /**
+       * 🔔 clear damping https://github.com/pmndrs/maath/blob/626d198fbae28ba82f2f1b184db7fcafd4d23846/packages/maath/src/easing.ts#L93
+       * @type {{ __damp?: { [velKey: string]: number } }}
+       */ (state.controls.target).__damp = undefined;
     },
     computeNormal(mesh, intersection) {// 🚧
       const { indices, mat3, tri } = state.normal;
@@ -131,6 +136,8 @@ export default function WorldView(props) {
         smoothTime: targetSmoothTime,
         v3: toV3(toXZ(point)), // (x,y,z) where y:=0
       };
+      // @ts-ignore see patch
+      state.controls.zoomToConstant = state.target.v3.clone();
 
       if (w.disabled === true) {// can lookAt while paused
         state.syncRenderMode();

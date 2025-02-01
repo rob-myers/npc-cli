@@ -314,7 +314,6 @@ export default function World(props) {
     return () => state.stopTick();
   }, [state.disabled]);
 
-
   return (
     <WorldContext.Provider value={state}>
       <WorldView disabled={props.disabled} stats>
