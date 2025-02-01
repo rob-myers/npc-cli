@@ -106,7 +106,8 @@
     - ✅ can lookAt while World disabled but in debug mode
     - ✅ can specify time
     - ✅ using controls stops lookAt
-    - 🚧 what if we switch between enabled and disabled while target moves?
+    - ✅ what if we switch between enabled and disabled while target moves?
+      - ℹ️ seems to work i.e. debugTick and onTick both handle
     - on click npcKey change camera
   - fix npc speech styling
 

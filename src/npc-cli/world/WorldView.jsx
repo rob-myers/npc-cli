@@ -116,7 +116,7 @@ export default function WorldView(props) {
         w.debugTick();
       }
     },
-    lookAt(point, targetSmoothTime = state.targetSmoothTime) {
+    lookAt(point, targetSmoothTime = defaultTargetSmoothTime) {
       point = toXZ(point);
       state.target = new THREE.Vector3(point.x, 0, point.y);
       state.targetSmoothTime = targetSmoothTime;
@@ -561,3 +561,5 @@ const statsCss = css`
 
 const pixelBuffer = new Uint8Array(4);
 const tmpVectThree = new THREE.Vector3();
+
+const defaultTargetSmoothTime = 0.4;
