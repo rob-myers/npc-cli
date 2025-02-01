@@ -96,17 +96,17 @@
   - ✅ Loggers Opts has Brightness slider
   - ✅ move `w.bubble.say` -> `w.e.say`
   - 🚧 profile-1 has link listener
+    - ✅ can pan camera (via controls)
+      - `w view.pan 1 -1`
+    - can smooth pan camera
     - on click npcKey change camera
   - fix npc speech styling
 
 - 🚧 refactor Html3d
   - ✅ avoid useless "group"
   - ℹ️ cannot remove scaling because speech bubbles need it
-  - fix flicker issue when dock
-
-- ✅ can pan camera (via controls)
-  - `w view.pan 1 -1`
-- can smooth pan camera
+  - ✅ fix flicker issue when dock
+  - clean
 
 - 🚧 integrate Viewer into blog
   - 🚧 screenshots in 1st blog
@@ -125,6 +125,9 @@
 
 ### On hold
 
+- avoid turning around after offMeshConnection
+  - ℹ️ happens when moveTo doorway
+- simplify offMeshConnection src intersects line to newDst
 - While zooming turn off ContextMenu pointer-events
 - ✅ Still seeing flicker on change "embed" -> "docked" on mobile
 - clean z-index e.g. "opts above menu"
