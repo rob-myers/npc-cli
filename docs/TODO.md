@@ -98,14 +98,18 @@
   - 🚧 profile-1 has link listener
     - ✅ can pan camera (via controls)
       - `w view.pan 1 -1`
-    - can smooth pan camera
+    - ✅ change w.view.pan args
+      - `w view.pan $( click 1 )`
+      - `click 1 | w view.pan -`
+    - 🚧 can smooth pan camera
+    - using controls stops pan
     - on click npcKey change camera
   - fix npc speech styling
 
 - 🚧 refactor Html3d
   - ✅ avoid useless "group"
   - ℹ️ cannot remove scaling because speech bubbles need it
-  - ✅ fix flicker issue when dock
+  - ✅ fix flicker issue when docked
   - clean
 
 - 🚧 integrate Viewer into blog
@@ -125,6 +129,9 @@
 
 ### On hold
 
+- optional strategy to avoid agent deadlock when have similar target
+  - e.g. stop when little progress
+  - e.g. stop when neighbour has similar target
 - avoid turning around after offMeshConnection
   - ℹ️ happens when moveTo doorway
 - simplify offMeshConnection src intersects line to newDst
