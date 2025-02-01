@@ -103,6 +103,7 @@ export default function World(props) {
         state.view.onTick(deltaMs); // Animate if view targets changed:
         state.reqAnimId = requestAnimationFrame(state.debugTick);
       } else {
+        cancelAnimationFrame(state.reqAnimId);
         state.r3f.advance(Date.now()); // So npcs move
       }
     },
@@ -305,6 +306,7 @@ export default function World(props) {
 
   React.useEffect(() => {// enable/disable
     state.timer.reset();
+    state.view.syncRenderMode();
     if (!state.disabled) {
       state.onTick();
     }

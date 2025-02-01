@@ -52,8 +52,9 @@ export default function WorldView(props) {
     },
     raycaster: new THREE.Raycaster(),
     rootEl: /** @type {*} */ (null),
-    targetFov: /** @type {null | number} */ (null),
     target: /** @type {null | THREE.Vector3} */ (null),
+    targetFov: /** @type {null | number} */ (null),
+    targetSmoothTime: 0.1,
     zoomState: 'near', // 🚧 finer-grained
 
     canvasRef(canvasEl) {
@@ -115,9 +116,11 @@ export default function WorldView(props) {
         w.debugTick();
       }
     },
-    lookAt(point) {
+    lookAt(point, targetSmoothTime = state.targetSmoothTime) {
       point = toXZ(point);
       state.target = new THREE.Vector3(point.x, 0, point.y);
+      state.targetSmoothTime = targetSmoothTime;
+      state.syncRenderMode();
 
       if (w.disabled === true) {
         w.timer.reset();
@@ -233,6 +236,8 @@ export default function WorldView(props) {
       state.lastScreenPoint.copy(sp);
       state.epoch.pointerDown = Date.now();
 
+      state.target = null; // stop ongoing lookAt
+
       window.clearTimeout(state.down?.longTimeoutId); // No MultiTouch Long Press
 
       if (e.target !== state.canvas) {
@@ -310,19 +315,21 @@ export default function WorldView(props) {
     },
     onTick(deltaMs) {
       if (state.targetFov !== null) {
-        if (damp(state, 'fov', state.targetFov, 0.1, deltaMs, undefined, undefined, undefined) === false) {
-          state.targetFov = null;
-        }
         w.r3f.camera.fov = state.fov;
         w.r3f.camera.updateProjectionMatrix();
+        if (damp(state, 'fov', state.targetFov, 0.1, deltaMs, undefined, undefined, undefined) === false) {
+          state.targetFov = null;
+          state.syncRenderMode();
+        }
       }
 
       if (state.target !== null) {
-        if (damp3(state.controls.target, state.target, 0.1, deltaMs, undefined, undefined, 0.0001) === false) {
-          state.controls.saveState();
-          state.target = null;
-        }
         state.controls.update();
+        if (damp3(state.controls.target, state.target, state.targetSmoothTime, deltaMs, undefined, undefined, 0.0001) === false) {
+          state.target = null;
+          state.controls.saveState();
+          state.syncRenderMode();
+        }
       }
     },
     openSnapshot(type = 'image/webp', quality) {
@@ -390,6 +397,11 @@ export default function WorldView(props) {
         }
       });
     },
+    syncRenderMode() {
+      const frameloop = w.disabled === true && state.target === null && state.targetFov === null ? 'demand' : 'always';
+      w.r3f?.set({ frameloop });
+      return frameloop;
+    },
     toDataURL(type, quality) {
       w.r3f.advance(Date.now());
       return state.canvas.toDataURL(type, quality);
@@ -410,7 +422,7 @@ export default function WorldView(props) {
     <Canvas
       ref={state.canvasRef}
       className={rootCss}
-      frameloop={props.disabled ? "demand" : "always"}
+      frameloop={state.syncRenderMode()}
       resize={{ debounce: 0 }}
       gl={state.glOpts}
       onCreated={state.onCreated}
@@ -486,6 +498,7 @@ export default function WorldView(props) {
  * @property {HTMLDivElement} rootEl
  * @property {null | THREE.Vector3} target
  * @property {null | number} targetFov
+ * @property {number} targetSmoothTime
  * @property {'near' | 'far'} zoomState
  *
  * @property {() => number} getDownDistancePx
@@ -493,6 +506,7 @@ export default function WorldView(props) {
  * @property {(e: React.PointerEvent, pixel: THREE.TypedArray) => void} onObjectPickPixel
  * @property {(def: WorldPointerEventDef) => NPC.PointerUpEvent | NPC.PointerDownEvent | NPC.LongPointerDownEvent} getWorldPointerEvent
  * @property {(e: React.PointerEvent) => void} handleClickInDebugMode
+ * @property {() => import("@react-three/fiber").RootState['frameloop']} syncRenderMode
  * @property {import('@react-three/drei').MapControlsProps['onChange']} onChangeControls
  * @property {import('@react-three/fiber').CanvasProps['onCreated']} onCreated
  * @property {(e: React.PointerEvent<HTMLElement>) => void} onPointerDown

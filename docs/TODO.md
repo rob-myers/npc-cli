@@ -104,7 +104,9 @@
     - ✅ can smooth target camera
       - ℹ️ easier to use target than stepwise pan
     - ✅ can lookAt while World disabled but in debug mode
-    - using controls stops pan
+    - ✅ can specify time
+    - ✅ using controls stops lookAt
+    - 🚧 what if we switch between enabled and disabled while target moves?
     - on click npcKey change camera
   - fix npc speech styling
 
