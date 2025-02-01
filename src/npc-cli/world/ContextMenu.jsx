@@ -166,12 +166,8 @@ export function ContextMenu() {
       if (state.docked === true) {// About to dock
         state.optsPopUp.close();
         state.html3d.innerDiv.style.transform = 'scale(1)';
+        // 🔔 crucial to avoid flicker on mobile
         state.draggable.el.style.visibility = 'hidden';
-        // state.draggable.updatePos();
-
-        // hide until Html3d useLayoutEffect
-        // state.html3d.rootDiv.style.visibility = 'hidden';
-        // setTimeout(() => state.draggable?.updatePos(), 30);
       }
     },
     togglePinned() {
