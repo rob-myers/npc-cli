@@ -119,17 +119,18 @@ export const Draggable = React.forwardRef(function Draggable(props, ref) {
     };
   }, [state.onMouseMove]);
 
-  React.useLayoutEffect(() => {// adjust draggable onresize
+  React.useLayoutEffect(() => {// adjust draggable onresize self or container
     const obs = new ResizeObserver(([entry]) => {
+      // 🔔 setTimeout for initial resized viewport (?)
       if (state.el !== null && entry.contentRect.width > 0) {
-        // 🔔 setTimeout for initial resize when viewport changed
         setTimeout(() => state.updatePos());
       }
     });
-    const els = (props.observeSizes?.filter(x => x !== props.container) ?? []).concat(props.container ?? []);
-    els.forEach(el => el instanceof HTMLElement && obs.observe(el))
+    [state.el, props.container].forEach(el =>
+      el instanceof HTMLElement && obs.observe(el)
+    );
     return () => obs.disconnect();
-  }, [props.container, ...props.observeSizes ?? []]);
+  }, [state.el, props.container]);
 
   React.useLayoutEffect(() => {
     if (props.disabled !== true) {
@@ -171,8 +172,6 @@ export const Draggable = React.forwardRef(function Draggable(props, ref) {
  * Initial position, usually overridden via localStorage
  * @property {string} [localStorageKey]
  * Where to store the position in local storage
- * @property {HTMLElement[]} [observeSizes]
- * Elements whose size can effect the Draggable's position
  */
 
 /**

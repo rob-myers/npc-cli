@@ -19,30 +19,26 @@ export function ContextMenu() {
 
   const state = useStateRef(/** @returns {State} */ () => ({
     baseScale: undefined,
-    docked: false,
+    downAt: null,
     draggable: /** @type {*} */ (null),
-    /** For violating React.memo */
-    epochMs: 0,
-    position: new THREE.Vector3(),
-    tracked: undefined,
-    offset: undefined,
-    open: false,
     html3d: /** @type {*} */ (null),
-
+    optsPopUp: /** @type {*} */ (null),
+    position: new THREE.Vector3(),
+    offset: undefined,
+    tracked: undefined,
+    
+    docked: false,
+    open: false,
     pinned: tryLocalStorageGetParsed(`context-menu:pinned@${w.key}`) ?? w.smallViewport,
     scaled: false,
     showKvs: true,
   
     kvs: [],
-    innerRoot: /** @type {*} */ (null),
     links: [],
     match: {},
     meta: {},
     npcKey: undefined,
-    popUp: /** @type {*} */ (null),
     selectNpcKeys: [],
-
-    downAt: null,
 
     computeKvsFromMeta(meta) {
       const skip = /** @type {Record<string, boolean>} */ ({
@@ -171,7 +167,7 @@ export function ContextMenu() {
       state.docked = !state.docked;
       
       if (state.docked === true) {// About to dock
-        state.popUp.close();
+        state.optsPopUp.close();
         state.html3d.innerDiv.style.transform = 'scale(1)';
         state.draggable.el.style.visibility = 'hidden';
         // state.draggable.updatePos();
@@ -219,7 +215,6 @@ export function ContextMenu() {
         disabled={state.docked === false}
         initPos={{ x: 0, y: 2000 }}
         localStorageKey={`contextmenu:dragPos@${w.key}`}
-        observeSizes={[state.innerRoot]}
       >
         <ContextMenuUi state={state} />
       </Draggable>
@@ -232,7 +227,6 @@ export function ContextMenu() {
 function ContextMenuUi({ state: cm }) {
   return <div
     className="inner-root"
-    ref={cm.ref('innerRoot')}
     onPointerUp={cm.onPointerUp}
     onPointerDown={cm.onPointerDown}
   >
@@ -246,7 +240,7 @@ function ContextMenuUi({ state: cm }) {
       </button>
 
       <PopUp
-        ref={cm.ref('popUp')}
+        ref={cm.ref('optsPopUp')}
         className={optsPopUpCss}
         label="opts"
         onChange={cm.onTogglePopup.bind(cm)}
@@ -312,6 +306,8 @@ function ContextMenuUi({ state: cm }) {
   </div>;
 }
 
+const contextMenuWidthPx = 200;
+
 export const contextMenuCss = css`
   position: absolute;
   left: 0;
@@ -325,7 +321,7 @@ export const contextMenuCss = css`
     pointer-events: all;
 
     .inner-root {
-      width: 200px;
+      width: ${contextMenuWidthPx}px;
       background-color: rgba(0, 0, 0, 0.8);
       border-radius: 0 8px 8px 8px;
       border: 1px solid #333;
@@ -404,9 +400,7 @@ const optsPopUpCss = css`
  *   baseScale: undefined | number;
  *   docked: boolean;
  *   draggable: import('../components/Draggable').State;
- *   epochMs: number;
  *   html3d: import("../components/Html3d").State;
- *   innerRoot: HTMLElement;
  *   downAt: null | Geom.VectJson;
  *   kvs: { k: string; v: string; length: number }[];
  *   links: NPC.ContextMenuLink[];
@@ -415,7 +409,7 @@ const optsPopUpCss = css`
  *   npcKey: undefined | string;
  *   offset: undefined | import("three").Vector3Like;
  *   open: boolean;
- *   popUp: import("../components/PopUp").State;
+ *   optsPopUp: import("../components/PopUp").State;
  *   position: import('three').Vector3;
  *   tracked: undefined | import("three").Object3D;
  *   pinned: boolean;
