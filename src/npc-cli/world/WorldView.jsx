@@ -29,9 +29,12 @@ export default function WorldView(props) {
     controlsViewportOpts: {
       minAzimuthAngle: -Infinity,
       maxAzimuthAngle: +Infinity,
-      maxPolarAngle: Math.PI * 0.25,
+      minPolarAngle: Math.PI * 0.2,
+      maxPolarAngle: Math.PI * 0.2,
       minDistance: 16,
       maxDistance: 96,
+      panSpeed: 2,
+      zoomSpeed: 0.5,
     },
     down: null,
     epoch: { pickStart: 0, pickEnd: 0, pointerDown: 0, pointerUp: 0 },
@@ -485,7 +488,6 @@ export default function WorldView(props) {
         zoomToCursor
         onChange={state.onChangeControls}
         domElement={state.canvas}
-        panSpeed={2}
         {...state.controlsViewportOpts}
         //@ts-ignore see three-stdlib patch
         minPanDistance={w.smallViewport ? 0.05 : 0}
