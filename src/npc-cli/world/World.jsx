@@ -110,7 +110,7 @@ export default function World(props) {
       state.timer.update();
       const deltaMs = state.timer.getDelta();
 
-      if (state.npc === null) {
+      if (state.npc === null || state.r3f === null) {
         return; // wait for <NPCs>
       }
 

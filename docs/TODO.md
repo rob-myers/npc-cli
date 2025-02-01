@@ -101,7 +101,9 @@
     - ✅ change w.view.pan args
       - `w view.pan $( click 1 )`
       - `click 1 | w view.pan -`
-    - 🚧 can smooth pan camera
+    - ✅ can smooth target camera
+      - ℹ️ easier to use target than stepwise pan
+    - 🚧 can lookAt while World disabled but in debug mode
     - using controls stops pan
     - on click npcKey change camera
   - fix npc speech styling

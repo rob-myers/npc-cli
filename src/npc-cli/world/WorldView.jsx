@@ -3,7 +3,7 @@ import * as THREE from "three";
 import { css } from "@emotion/css";
 import { Canvas } from "@react-three/fiber";
 import { MapControls, PerspectiveCamera, Stats } from "@react-three/drei";
-import { damp } from "maath/easing";
+import { damp, damp3 } from "maath/easing";
 
 import { testNever, debug } from "../service/generic.js";
 import { Rect, Vect } from "../geom/index.js";
@@ -53,7 +53,8 @@ export default function WorldView(props) {
     raycaster: new THREE.Raycaster(),
     rootEl: /** @type {*} */ (null),
     targetFov: /** @type {null | number} */ (null),
-    zoomState: 'near',
+    target: /** @type {null | THREE.Vector3} */ (null),
+    zoomState: 'near', // 🚧 finer-grained
 
     canvasRef(canvasEl) {
       if (canvasEl !== null) {
@@ -113,6 +114,10 @@ export default function WorldView(props) {
       ) {
         w.debugTick();
       }
+    },
+    lookAt(point) {
+      point = toXZ(point);
+      state.target = new THREE.Vector3(point.x, 0, point.y);
     },
     onChangeControls(e) {
       const zoomState = state.controls.getDistance() > 20 ? 'far' : 'near';
@@ -299,21 +304,23 @@ export default function WorldView(props) {
       state.handleClickInDebugMode(e); // step world in debug mode
     },
     onTick(deltaMs) {
-      if (state.targetFov !== null && w.r3f !== null) {
-        if (damp(state, 'fov', state.targetFov, 0.2, deltaMs, undefined, undefined, undefined) === false) {
+      if (state.targetFov !== null) {
+        if (damp(state, 'fov', state.targetFov, 0.1, deltaMs, undefined, undefined, undefined) === false) {
           state.targetFov = null;
         }
-        /** @type {THREE.PerspectiveCamera} */ (w.r3f.camera).fov = state.fov;
+        w.r3f.camera.fov = state.fov;
         w.r3f.camera.updateProjectionMatrix();
+      }
+
+      if (state.target !== null) {
+        if (damp3(state.controls.target, state.target, 0.2, deltaMs, undefined, undefined, 0.01) === false) {
+          state.target = null;
+        }
+        state.controls.update();
       }
     },
     openSnapshot(type = 'image/webp', quality) {
       window.open(dataUrlToBlobUrl(state.toDataURL(type, quality)), '_blank');
-    },
-    pan(point) {// 🚧 smooth
-      point = toXZ(point);
-      state.controls.target.set(point.x, 0, point.y);
-      state.controls.update();
     },
     pickObject(e) {// https://github.com/bzztbomb/three_js_gpu_picking/blob/main/src/gpupicker.js
       const { gl, camera } = w.r3f;
@@ -471,6 +478,7 @@ export default function WorldView(props) {
  * @property {{ tri: THREE.Triangle; indices: THREE.Vector3; mat3: THREE.Matrix3 }} normal
  * @property {THREE.Raycaster} raycaster
  * @property {HTMLDivElement} rootEl
+ * @property {null | THREE.Vector3} target
  * @property {null | number} targetFov
  * @property {'near' | 'far'} zoomState
  *
@@ -487,7 +495,7 @@ export default function WorldView(props) {
  * @property {(e: React.PointerEvent<HTMLElement>) => void} onPointerUp
  * @property {(deltaMs: number) => void} onTick
  * @property {(type?: string, quality?: any) => void} openSnapshot
- * @property {(input: Geom.VectJson | THREE.Vector3Like) => void} pan
+ * @property {(input: Geom.VectJson | THREE.Vector3Like) => void} lookAt
  * @property {(e: React.PointerEvent<HTMLElement>) => void} pickObject
  * @property {(gl: THREE.WebGLRenderer, scene: THREE.Scene, camera: THREE.Camera, ri: THREE.RenderItem & { material: THREE.ShaderMaterial }) => void} renderObjectPickItem
  * @property {() => void} renderObjectPickScene
