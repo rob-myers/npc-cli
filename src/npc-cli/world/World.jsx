@@ -94,19 +94,6 @@ export default function World(props) {
     n: {}, // w.npc.npc
     d: {}, // w.door.byKey
 
-    debugTick() {
-      state.timer.update();
-      const deltaMs = state.timer.getDelta();
-      state.npc.onTick(deltaMs);
-      
-      if (state.view.targetFov !== null || state.view.target !== null) {
-        state.view.onTick(deltaMs); // Animate if view targets changed:
-        state.reqAnimId = requestAnimationFrame(state.debugTick);
-      } else {
-        cancelAnimationFrame(state.reqAnimId);
-        state.r3f.advance(Date.now()); // So npcs move
-      }
-    },
     isReady(connectorKey) {
       const ready = state.crowd !== null && state.decor?.queryStatus === 'success';
       if (ready === true && typeof connectorKey === 'string') {
@@ -114,6 +101,16 @@ export default function World(props) {
         state.menu.onConnect(connectorKey);
       }
       return ready;
+    },
+    onDebugTick() {
+      state.timer.update();
+      // Animate camera while paused
+      if (state.view.targetFov !== null || state.view.target !== null) {
+        state.view.onTick(state.timer.getDelta());
+        state.reqAnimId = requestAnimationFrame(state.onDebugTick);
+      } else if (state.disabled === true) {
+        state.stopTick();
+      }
     },
     onTick() {
       state.reqAnimId = requestAnimationFrame(state.onTick);
@@ -130,6 +127,10 @@ export default function World(props) {
       // console.info(state.r3f.gl.info.render);
 
       state.view.onTick(deltaMs);
+    },
+    stopTick() {
+      cancelAnimationFrame(state.reqAnimId);
+      state.reqAnimId = 0;
     },
     trackHmr(nextHmr) {
       const output = mapValues(state.hmr, (prev, key) => prev !== nextHmr[key])
@@ -310,7 +311,7 @@ export default function World(props) {
     if (!state.disabled) {
       state.onTick();
     }
-    return () => cancelAnimationFrame(state.reqAnimId);
+    return () => state.stopTick();
   }, [state.disabled]);
 
 
@@ -415,9 +416,10 @@ export default function World(props) {
  * @property {import('@recast-navigation/core').Crowd} crowd
  * @property {boolean} smallViewport Was viewport small when we mounted World?
  *
- * @property {() => void} debugTick
- * @property {(connectorKey?: string) => boolean} isReady
+ * @property {() => void} onDebugTick
  * @property {() => void} onTick
+ * @property {(connectorKey?: string) => boolean} isReady
+ * @property {() => void} stopTick
  * @property {(next: State['hmr']) => Record<keyof State['hmr'], boolean>} trackHmr
  * Has function `createGmsData` changed?
  * @property {(mutator?: (w: State) => void) => void} update

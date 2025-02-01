@@ -38,7 +38,7 @@ export default function TouchIndicator() {
     }
     /** @param {PointerEvent} e */
     function onPointerMove(e) {
-      if (w.view.down === undefined) {
+      if (w.view.down === null) {
         return;
       }
       if (w.view.down.screenPoint.distanceTo(getRelativePointer(e)) > state.touchErrorPx) {

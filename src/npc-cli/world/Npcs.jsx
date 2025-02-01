@@ -1,8 +1,9 @@
 import React from "react";
 import * as THREE from "three";
 import { useGLTF } from "@react-three/drei";
+import debounce from "debounce";
 
-import { defaultClassKey, gmLabelHeightSgu, maxNumberOfNpcs, npcClassKeys, npcClassToMeta, physicsConfig, spriteSheetDecorExtraScale, wallHeight } from "../service/const";
+import { defaultClassKey, gmLabelHeightSgu, maxNumberOfNpcs, npcClassKeys, npcClassToMeta, spriteSheetDecorExtraScale, wallHeight } from "../service/const";
 import { info, pause, range, takeFirst, warn } from "../service/generic";
 import { getCanvas } from "../service/dom";
 import { createLabelSpriteSheet, emptyTexture, textureLoader, toV3, toXZ } from "../service/three";
@@ -230,6 +231,10 @@ export default function Npcs(props) {
 
       return npc;
     },
+    tickOnce: debounce(() => {
+      state.onTick(1000 / 60);
+      w.r3f.advance(Date.now()); // so they move
+    }, 30, { immediate: true }),
     update,
     updateLabels(...incomingLabels) {
       const { lookup } = state.label;
@@ -324,6 +329,7 @@ export default function Npcs(props) {
  * @property {(deltaMs: number) => void} onTick
  * @property {(npcKey: string) => void} remove
  * @property {(e: NPC.SpawnOpts) => Promise<NPC.NPC>} spawn
+ * @property {() => void} tickOnce
  * @property {() => void} update
  * @property {(...incomingLabels: string[]) => boolean} updateLabels
  * - Ensures incomingLabels i.e. does not replace.

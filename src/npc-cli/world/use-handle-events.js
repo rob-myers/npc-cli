@@ -309,7 +309,7 @@ export default function useHandleEvents(w) {
           w.bubble.get(e.npcKey)?.updateOffset(); // update speechBubble height
 
           if (w.disabled === true) {
-            w.debugTick();
+            w.npc.tickOnce();
           }
           break;
         }

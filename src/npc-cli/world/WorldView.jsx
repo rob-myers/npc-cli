@@ -9,7 +9,7 @@ import { testNever, debug } from "../service/generic.js";
 import { Rect, Vect } from "../geom/index.js";
 import { dataUrlToBlobUrl, getModifierKeys, getRelativePointer, isRMB, isTouchDevice } from "../service/dom.js";
 import { longPressMs, pickedTypesInSomeRoom } from "../service/const.js";
-import { emptySceneForPicking, getTempInstanceMesh, hasObjectPickShaderMaterial, pickingRenderTarget, toXZ, unitXVector3, v3Precision } from "../service/three.js";
+import { emptySceneForPicking, getTempInstanceMesh, hasObjectPickShaderMaterial, pickingRenderTarget, toV3, toXZ, unitXVector3, v3Precision } from "../service/three.js";
 import { popUpRootDataAttribute } from "../components/PopUp.jsx";
 import { WorldContext } from "./world-context.js";
 import useStateRef from "../hooks/use-state-ref.js";
@@ -33,7 +33,7 @@ export default function WorldView(props) {
       minDistance: 16,
       maxDistance: 96,
     },
-    down: undefined,
+    down: null,
     epoch: { pickStart: 0, pickEnd: 0, pointerDown: 0, pointerUp: 0 },
     fov: 10,
     glOpts: {
@@ -52,9 +52,8 @@ export default function WorldView(props) {
     },
     raycaster: new THREE.Raycaster(),
     rootEl: /** @type {*} */ (null),
-    target: /** @type {null | THREE.Vector3} */ (null),
-    targetFov: /** @type {null | number} */ (null),
-    targetSmoothTime: 0.1,
+    target: null,
+    targetFov: null,
     zoomState: 'near', // 🚧 finer-grained
 
     canvasRef(canvasEl) {
@@ -62,6 +61,13 @@ export default function WorldView(props) {
         state.canvas = canvasEl;
         state.rootEl = /** @type {HTMLDivElement} */ (canvasEl.parentElement?.parentElement);
       }
+    },
+    clearTarget() {
+      state.target = null;
+      state.syncRenderMode();
+      // 🔔 clear damping
+      // https://github.com/pmndrs/maath/blob/626d198fbae28ba82f2f1b184db7fcafd4d23846/packages/maath/src/easing.ts#L93
+      /** @type {{ __damp?: { [velKey: string]: number } }} */ (state.controls.target).__damp = undefined;
     },
     computeNormal(mesh, intersection) {// 🚧
       const { indices, mat3, tri } = state.normal;
@@ -113,18 +119,23 @@ export default function WorldView(props) {
         && state.lastDown.longDown === false
         && state.lastDown.screenPoint.distanceTo(getRelativePointer(e)) < 1
       ) {
-        w.debugTick();
+        w.npc.tickOnce();
       }
     },
     lookAt(point, targetSmoothTime = defaultTargetSmoothTime) {
-      point = toXZ(point);
-      state.target = new THREE.Vector3(point.x, 0, point.y);
-      state.targetSmoothTime = targetSmoothTime;
-      state.syncRenderMode();
+      if (w.disabled === true && state.target !== null && w.reqAnimId === 0) {
+        state.clearTarget(); // we paused while targeting, so clear damping
+      }
 
-      if (w.disabled === true) {
+      state.target = {
+        smoothTime: targetSmoothTime,
+        v3: toV3(toXZ(point)), // (x,y,z) where y:=0
+      };
+
+      if (w.disabled === true) {// can lookAt while paused
+        state.syncRenderMode();
         w.timer.reset();
-        w.debugTick(); // can lookAt while paused
+        w.onDebugTick();
       }
     },
     onChangeControls(e) {
@@ -236,8 +247,6 @@ export default function WorldView(props) {
       state.lastScreenPoint.copy(sp);
       state.epoch.pointerDown = Date.now();
 
-      state.target = null; // stop ongoing lookAt
-
       window.clearTimeout(state.down?.longTimeoutId); // No MultiTouch Long Press
 
       if (e.target !== state.canvas) {
@@ -281,7 +290,7 @@ export default function WorldView(props) {
 
       state.down.pointerIds = state.down.pointerIds.filter(x => x !== e.pointerId);
       if (state.down.pointerIds.length === 0) {
-        state.down = undefined;
+        state.down = null;
       }
 
       const rect = Rect.fromJson(state.canvas.getBoundingClientRect());
@@ -291,6 +300,10 @@ export default function WorldView(props) {
     },
     onPointerMove(e) {
       state.lastScreenPoint.copy(getRelativePointer(e));
+
+      if (state.target !== null && state.down !== null && state.getDownDistancePx() > 5) {
+        state.clearTarget(); // cancel target if moved a bit
+      }
     },
     onPointerUp(e) {
       state.epoch.pointerUp = Date.now();
@@ -325,10 +338,8 @@ export default function WorldView(props) {
 
       if (state.target !== null) {
         state.controls.update();
-        if (damp3(state.controls.target, state.target, state.targetSmoothTime, deltaMs, undefined, undefined, 0.0001) === false) {
-          state.target = null;
-          state.controls.saveState();
-          state.syncRenderMode();
+        if (damp3(state.controls.target, state.target.v3, state.target.smoothTime, deltaMs) === false) {
+          state.clearTarget();
         }
       }
     },
@@ -480,10 +491,11 @@ export default function WorldView(props) {
  * - Pending click identifiers, provided by shell.
  * - The last click identifier is the "current one".
  * @property {(canvasEl: null | HTMLCanvasElement) => void} canvasRef
+ * @property {() => void} clearTarget
  * @property {(mesh: THREE.Mesh, intersection: THREE.Intersection) => THREE.Vector3} computeNormal
  * @property {import('three-stdlib').MapControls} controls
  * @property {import('@react-three/drei').MapControlsProps} controlsViewportOpts
- * @property {{ screenPoint: Geom.Vect; pointerIds: number[]; longTimeoutId: number; } | undefined} down
+ * @property {{ screenPoint: Geom.Vect; pointerIds: number[]; longTimeoutId: number; } | null} down
  * Defined iff at least one pointer is down.
  * @property {{ pickStart: number; pickEnd: number; pointerDown: number; pointerUp: number; }} epoch
  * Each uses Date.now() i.e. milliseconds since epoch
@@ -496,9 +508,8 @@ export default function WorldView(props) {
  * @property {{ tri: THREE.Triangle; indices: THREE.Vector3; mat3: THREE.Matrix3 }} normal
  * @property {THREE.Raycaster} raycaster
  * @property {HTMLDivElement} rootEl
- * @property {null | THREE.Vector3} target
+ * @property {null | { v3: THREE.Vector3; smoothTime: number; }} target
  * @property {null | number} targetFov
- * @property {number} targetSmoothTime
  * @property {'near' | 'far'} zoomState
  *
  * @property {() => number} getDownDistancePx
