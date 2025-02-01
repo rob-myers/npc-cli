@@ -14,10 +14,10 @@ export const Html3d = React.forwardRef(({
   children,
   className,
   docked,
-  open,
   offset,
   position,
   tracked,
+  visible,
 }, ref) => {
     const { gl, camera, scene, size } = useThree();
 
@@ -115,13 +115,12 @@ export const Html3d = React.forwardRef(({
       // }, 300);
     });
 
-    /** @type {React.CSSProperties} */
     React.useLayoutEffect(() => {
       if (docked ? state.innerDiv : state.rootDiv) {
-        state.rootDiv.style.visibility = open ? 'visible' : 'hidden';
+        state.rootDiv.style.visibility = visible ? 'visible' : 'hidden';
         state.rootDiv.className = cx(className, { docked });
       }
-    }, [state.rootDiv, state.innerDiv, open, docked, className]);
+    }, [state.rootDiv, state.innerDiv, className, docked, visible]);
 
     useFrame(state.onFrame);
 
@@ -141,7 +140,7 @@ export const Html3d = React.forwardRef(({
  * @property {boolean} [docked]
  * @property {number} [baseScale]
  * @property {THREE.Vector3Like} [offset]
- * @property {boolean} open
+ * @property {boolean} visible
  * @property {THREE.Vector3} position
  * @property {THREE.Object3D | null} tracked
  */

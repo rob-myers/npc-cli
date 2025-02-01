@@ -131,7 +131,7 @@ export const Draggable = React.forwardRef(function Draggable(props, ref) {
 
   React.useLayoutEffect(() => {
     if (props.disabled !== true) {
-      state.el.style.visibility = 'visible';
+      state.el.style.visibility = 'inherit';
     }
   }, [props.disabled]);
 

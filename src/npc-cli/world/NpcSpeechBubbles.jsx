@@ -103,7 +103,7 @@ function NpcSpeechBubble({ cm }) {
       baseScale={cm.baseScale}
       position={cm.position}
       offset={cm.offset}
-      open={cm.open}
+      visible={cm.open}
       tracked={cm.tracked ?? null}
       // zIndex={cm.key === 'default' ? 1 : undefined}
     >

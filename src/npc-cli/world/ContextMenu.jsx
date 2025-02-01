@@ -88,6 +88,7 @@ export function ContextMenu() {
     onPointerUp(e) {
       const { downAt } = state;
       state.downAt = null;
+      e.stopPropagation();
 
       if (
         downAt === null
@@ -197,7 +198,7 @@ export function ContextMenu() {
       baseScale={state.baseScale}
       className={contextMenuCss}
       docked={state.docked}
-      open={state.open}
+      visible={state.open}
       tracked={state.tracked ?? null}
       position={state.position}
     >
