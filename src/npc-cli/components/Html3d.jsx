@@ -4,7 +4,6 @@ import * as ReactDOM from 'react-dom/client';
 import * as THREE from 'three';
 import { useFrame, useThree } from '@react-three/fiber'
 import useStateRef from '../hooks/use-state-ref';
-import useUpdate from '../hooks/use-update';
 
 /**
  * Based on https://github.com/pmndrs/drei/blob/master/src/web/Html.tsx
@@ -21,8 +20,6 @@ export const Html3d = React.forwardRef(({
   tracked,
 }, ref) => {
     const { gl, camera, scene, size } = useThree();
-
-    const update = useUpdate();
 
     const state = useStateRef(/** @returns {State} */ () => ({
       baseScale: 0,
@@ -173,8 +170,6 @@ const v2 = new THREE.Vector3()
  * @returns {[number, number]}
  */
 function calculatePosition(objectPos, camera, size) {
-  // 🤔 support tracked offset vector?
-  // const objectPos = v1.setFromMatrixPosition(el.matrixWorld);
   objectPos.project(camera);
   const widthHalf = size.width / 2;
   const heightHalf = size.height / 2;
@@ -225,19 +220,3 @@ function getCSSMatrix(matrix, multipliers, prepend = '') {
   /** @param {THREE.Matrix4} matrix */
   return (matrix) => getCSSMatrix(matrix, multipliers)
 })([1, -1, 1, 1, 1, -1, 1, 1, 1, -1, 1, 1, 1, -1, 1, 1])
-
-/**
- * @typedef {(
- * | 'auto'
- * | 'none'
- * | 'visiblePainted'
- * | 'visibleFill'
- * | 'visibleStroke'
- * | 'visible'
- * | 'painted'
- * | 'fill'
- * | 'stroke'
- * | 'all'
- * | 'inherit'
- * )} PointerEventsProperties
- */

@@ -106,11 +106,11 @@
     - on click npcKey change camera
   - fix npc speech styling
 
-- 🚧 refactor Html3d
+- ✅ refactor Html3d
   - ✅ avoid useless "group"
   - ℹ️ cannot remove scaling because speech bubbles need it
   - ✅ fix flicker issue when docked
-  - clean
+  - ✅ clean
 
 - 🚧 integrate Viewer into blog
   - 🚧 screenshots in 1st blog

@@ -121,14 +121,11 @@ export const Draggable = React.forwardRef(function Draggable(props, ref) {
 
   React.useLayoutEffect(() => {// adjust draggable onresize self or container
     const obs = new ResizeObserver(([entry]) => {
-      // 🔔 setTimeout for initial resized viewport (?)
-      if (state.el !== null && entry.contentRect.width > 0) {
-        setTimeout(() => state.updatePos());
-      }
+      // 1. do not adjust position when hide (width 0)
+      // 2. setTimeout for initial resized viewport (?)
+      entry.contentRect.width > 0 && setTimeout(() => state.el !== null && state.updatePos());
     });
-    [state.el, props.container].forEach(el =>
-      el instanceof HTMLElement && obs.observe(el)
-    );
+    [state.el, props.container].forEach(el => el instanceof HTMLElement && obs.observe(el));
     return () => obs.disconnect();
   }, [state.el, props.container]);
 
