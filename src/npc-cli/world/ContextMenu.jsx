@@ -22,9 +22,9 @@ export function ContextMenu() {
     downAt: null,
     draggable: /** @type {*} */ (null),
     html3d: /** @type {*} */ (null),
+    offset: undefined,
     optsPopUp: /** @type {*} */ (null),
     position: new THREE.Vector3(),
-    offset: undefined,
     tracked: undefined,
     
     docked: false,
@@ -216,45 +216,48 @@ export function ContextMenu() {
         initPos={{ x: 0, y: 2000 }}
         localStorageKey={`contextmenu:dragPos@${w.key}`}
       >
-        <ContextMenuUi state={state} />
+        <div
+          className="inner-root"
+          onPointerUp={state.onPointerUp}
+          onPointerDown={state.onPointerDown}
+        >
+          <ContextMenuLinks state={state} />
+
+          {state.showKvs === true && <ContextMenuMeta state={state} />}
+        </div>
       </Draggable>
     </Html3d>
   );
-
 }
 
-/** @param {{ state: import("../hooks/use-state-ref").UseStateRef<State> }} _ */
-function ContextMenuUi({ state: cm }) {
-  return <div
-    className="inner-root"
-    onPointerUp={cm.onPointerUp}
-    onPointerDown={cm.onPointerDown}
-  >
+/** @param {{ state: import("../hooks/use-state-ref").UseStateRef<State> }} Props */
+function ContextMenuLinks({ state }) {
+  return (
     <div className="links">
 
       <button
         data-key="toggle-docked"
-        onKeyDown={cm.onKeyDownButton}
+        onKeyDown={state.onKeyDownButton}
       >
-        {cm.docked ? 'embed' : 'dock'}
+        {state.docked ? 'embed' : 'dock'}
       </button>
 
       <PopUp
-        ref={cm.ref('optsPopUp')}
+        ref={state.ref('optsPopUp')}
         className={optsPopUpCss}
         label="opts"
-        onChange={cm.onTogglePopup.bind(cm)}
+        onChange={state.onTogglePopup.bind(state)}
         width={200}
       >
         <select
           className="select-npc"
-          onChange={cm.onSelectNpc.bind(cm)}
-          value={cm.npcKey ?? ""}
+          onChange={state.onSelectNpc.bind(state)}
+          value={state.npcKey ?? ""}
         >
           <option key="none" value="">
             no npc
           </option>
-          {cm.selectNpcKeys.map(npcKey => 
+          {state.selectNpcKeys.map(npcKey => 
             <option key={npcKey} value={npcKey}>{npcKey}</option>
           )}
         </select>
@@ -262,7 +265,7 @@ function ContextMenuUi({ state: cm }) {
         <button
           key="toggle-scaled"
           data-key="toggle-scaled"
-          className={!cm.scaled ? 'off' : undefined}
+          className={!state.scaled ? 'off' : undefined}
         >
           scale
         </button>
@@ -271,8 +274,8 @@ function ContextMenuUi({ state: cm }) {
       <button
         key="toggle-kvs"
         data-key="toggle-kvs"
-        className={!cm.showKvs ? 'off' : undefined}
-        onKeyDown={cm.onKeyDownButton}
+        className={!state.showKvs ? 'off' : undefined}
+        onKeyDown={state.onKeyDownButton}
       >
         meta
       </button>
@@ -280,30 +283,35 @@ function ContextMenuUi({ state: cm }) {
       <button
         key="toggle-pinned"
         data-key="toggle-pinned"
-        className={!cm.pinned ? 'off' : undefined}
-        onKeyDown={cm.onKeyDownButton}
+        className={!state.pinned ? 'off' : undefined}
+        onKeyDown={state.onKeyDownButton}
       >
         pin
       </button>
 
-      {cm.links.map(({ key, label, test }) =>
+      {state.links.map(({ key, label, test }) =>
         <button
           key={key}
           data-key={key}
-          className={test !== undefined && !(/** @type {*} */ (cm)[test]) ? 'off' : undefined}
+          className={test !== undefined && !(/** @type {*} */ (state)[test]) ? 'off' : undefined}
         >
           {label}
         </button>
       )}
     </div>
+  );
+}
 
-    {cm.showKvs === true && <div className="kvs">
-      {cm.kvs.map((x, i) => [
+/** @param {{ state: import("../hooks/use-state-ref").UseStateRef<State> }} Props */
+function ContextMenuMeta({ state }) {
+  return (
+    <div className="kvs">
+      {state.kvs.map((x, i) => [
         <span key={i} className="key">{x.k}</span>,
         x.v !== '' ? <span key={i + 'v'} className="value">{x.v}</span> : null,
       ])}
-    </div>}
-  </div>;
+    </div>
+  );
 }
 
 const contextMenuWidthPx = 200;
