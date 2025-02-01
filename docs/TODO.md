@@ -113,6 +113,7 @@
     - 🚧 linear damp3 e.g. via our own implementation
     - on click npcKey change camera
   - fix npc speech styling
+  - Docked ContextMenu has link to lookAt its position
 
 - 🚧 integrate Viewer into blog
   - 🚧 screenshots in 1st blog

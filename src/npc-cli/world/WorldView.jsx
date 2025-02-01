@@ -64,6 +64,9 @@ export default function WorldView(props) {
     },
     clearTarget() {
       state.target?.reject('cancelled target');
+      state.controls.minAzimuthAngle = -Infinity;
+      state.controls.maxAzimuthAngle = +Infinity;
+
       state.target = null;
       state.syncRenderMode();
 
@@ -134,6 +137,10 @@ export default function WorldView(props) {
       }
 
       return new Promise((resolve, reject) => {
+        // Fix azimuth so we pan
+        state.controls.minAzimuthAngle = state.controls.getAzimuthalAngle();
+        state.controls.maxAzimuthAngle = state.controls.getAzimuthalAngle();
+
         state.target = {
           smoothTime: targetSmoothTime,
           resolve,
