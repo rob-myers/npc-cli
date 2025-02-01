@@ -279,7 +279,7 @@ function ContextMenuLinks({ state }) {
         className={!state.pinned ? 'off' : undefined}
         onKeyDown={state.onKeyDownButton}
       >
-        pin
+        {state.pinned ? 'hide' : 'pin'}
       </button>
 
       {state.links.map(({ key, label, test }) =>
