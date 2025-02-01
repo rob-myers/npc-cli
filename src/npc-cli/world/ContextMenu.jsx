@@ -102,7 +102,7 @@ export function ContextMenu() {
     onSelectNpc(e) {
       const { value } = e.currentTarget;
       state.npcKey = value in w.n ? value : undefined;
-      state.refreshPopUp();
+      state.refreshOptsPopUp();
     },
     onToggleLink(e) {
       const el = /** @type {HTMLElement} */ (e.target);
@@ -128,15 +128,15 @@ export function ContextMenu() {
       state.persist();
       update();
     },
-    onTogglePopup(willOpen) {
+    onToggleOptsPopup(willOpen) {
       if (willOpen) {
-        state.refreshPopUp();
+        state.refreshOptsPopUp();
       }
     },
     persist() {
       tryLocalStorageSet(`context-menu:pinned@${w.key}`, JSON.stringify(state.pinned));
     },
-    refreshPopUp: debounce(() => {
+    refreshOptsPopUp: debounce(() => {
       state.selectNpcKeys = Object.keys(w.n);
       update();
     }, 30, { immediate: true }),
@@ -152,9 +152,6 @@ export function ContextMenu() {
     setNpc(npcKey) {
       state.npcKey = npcKey;
       update();
-    },
-    setOpacity(opacity) {
-      state.html3d.rootDiv.style.opacity = `${opacity}`;
     },
     setTracked(input) {
       state.tracked = input;
@@ -183,7 +180,6 @@ export function ContextMenu() {
         state.open = false; // auto-close on un-pin
       }
     },
-    /** Ensure smooth transition when start scaling */
     toggleScaled() {
       state.scaled = !state.scaled;
       const position = state.tracked?.position ?? state.position;
@@ -246,7 +242,7 @@ function ContextMenuLinks({ state }) {
         ref={state.ref('optsPopUp')}
         className={optsPopUpCss}
         label="opts"
-        onChange={state.onTogglePopup.bind(state)}
+        onChange={state.onToggleOptsPopup.bind(state)}
         width={200}
       >
         <select
@@ -432,12 +428,11 @@ const optsPopUpCss = css`
  *   onPointerUp(e: React.PointerEvent): void;
  *   onToggleLink(e: React.MouseEvent | React.KeyboardEvent): void;
  *   onSelectNpc(e: React.ChangeEvent<HTMLSelectElement>): void;
- *   onTogglePopup(willOpen: boolean): void;
+ *   onToggleOptsPopup(willOpen: boolean): void;
  *   persist(): void;
- *   refreshPopUp(): void;
+ *   refreshOptsPopUp(): void;
  *   setContext({ position, meta }: NPC.ContextMenuContextDef): void;
  *   setNpc(npcKey?: string | undefined): void;
- *   setOpacity(opacity: number): void;
  *   setTracked(input?: import('three').Object3D): void;
  *   show(): void;
  *   toggleDocked(): void;
@@ -446,3 +441,6 @@ const optsPopUpCss = css`
  *   toggleKvs(): void;
  * }} State
  **/
+
+
+// Ensure smooth transition when start scaling
