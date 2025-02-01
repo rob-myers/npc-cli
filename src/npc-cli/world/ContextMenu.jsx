@@ -400,47 +400,43 @@ const optsPopUpCss = css`
 ;`
 
 /**
- * @typedef {{
- *   baseScale: undefined | number;
- *   docked: boolean;
- *   draggable: import('../components/Draggable').State;
- *   html3d: import("../components/Html3d").State;
- *   downAt: null | Geom.VectJson;
- *   kvs: { k: string; v: string; length: number }[];
- *   links: NPC.ContextMenuLink[];
- *   match: { [matcherKey: string]: NPC.ContextMenuMatcher };
- *   meta: Geom.Meta;
- *   npcKey: undefined | string;
- *   offset: undefined | import("three").Vector3Like;
- *   open: boolean;
- *   optsPopUp: import("../components/PopUp").State;
- *   position: import('three').Vector3;
- *   tracked: undefined | import("three").Object3D;
- *   pinned: boolean;
- *   scaled: boolean;
- *   selectNpcKeys: string[];
- *   showKvs: boolean;
- *   computeKvsFromMeta(meta: Geom.Meta): void;
- *   computeLinks(): void;
- *   hide(force?: boolean | undefined): void;
- *   onKeyDownButton(e: React.KeyboardEvent<HTMLButtonElement>): void;
- *   onPointerDown(e: React.PointerEvent): void;
- *   onPointerUp(e: React.PointerEvent): void;
- *   onToggleLink(e: React.MouseEvent | React.KeyboardEvent): void;
- *   onSelectNpc(e: React.ChangeEvent<HTMLSelectElement>): void;
- *   onToggleOptsPopup(willOpen: boolean): void;
- *   persist(): void;
- *   refreshOptsPopUp(): void;
- *   setContext({ position, meta }: NPC.ContextMenuContextDef): void;
- *   setNpc(npcKey?: string | undefined): void;
- *   setTracked(input?: import('three').Object3D): void;
- *   show(): void;
- *   toggleDocked(): void;
- *   togglePinned(): void;
- *   toggleScaled(): void;
- *   toggleKvs(): void;
- * }} State
+ * @typedef State
+ * @property {undefined | number} baseScale
+ * @property {boolean} docked
+ * @property {import('../components/Draggable').State} draggable
+ * @property {import("../components/Html3d").State} html3d
+ * @property {null | Geom.VectJson} downAt
+ * @property {{ k: string; v: string; length: number }[]} kvs
+ * @property {NPC.ContextMenuLink[]} links
+ * @property {{ [matcherKey: string]: NPC.ContextMenuMatcher }} match
+ * @property {Geom.Meta} meta
+ * @property {undefined | string} npcKey
+ * @property {undefined | import("three").Vector3Like} offset
+ * @property {boolean} open
+ * @property {import("../components/PopUp").State} optsPopUp
+ * @property {import('three').Vector3} position
+ * @property {undefined | import("three").Object3D} tracked
+ * @property {boolean} pinned
+ * @property {boolean} scaled
+ * @property {string[]} selectNpcKeys
+ * @property {boolean} showKvs
+ * @property {(meta: Geom.Meta) => void} computeKvsFromMeta
+ * @property {() => void} computeLinks
+ * @property {(force?: boolean | undefined) => void} hide
+ * @property {(e: React.KeyboardEvent<HTMLButtonElement>) => void} onKeyDownButton
+ * @property {(e: React.PointerEvent) => void} onPointerDown
+ * @property {(e: React.PointerEvent) => void} onPointerUp
+ * @property {(e: React.MouseEvent | React.KeyboardEvent) => void} onToggleLink
+ * @property {(e: React.ChangeEvent<HTMLSelectElement>) => void} onSelectNpc
+ * @property {(willOpen: boolean) => void} onToggleOptsPopup
+ * @property {() => void} persist
+ * @property {() => void} refreshOptsPopUp
+ * @property {({ position, meta }: NPC.ContextMenuContextDef) => void} setContext
+ * @property {(npcKey?: string | undefined) => void} setNpc
+ * @property {(input?: import('three').Object3D) => void} setTracked
+ * @property {() => void} show
+ * @property {() => void} toggleDocked
+ * @property {() => void} togglePinned
+ * @property {() => void} toggleScaled Ensure smooth transition when start scaling
+ * @property {() => void} toggleKvs
  **/
-
-
-// Ensure smooth transition when start scaling
