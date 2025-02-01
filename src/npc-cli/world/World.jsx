@@ -91,12 +91,21 @@ export default function World(props) {
     lib,
 
     e: /** @type {*} */ (null), // useHandleEvents
-    n: /** @type {*} */ ({}), // w.npc.npc
-    d: /** @type {*} */ ({}), // w.door.byKey
+    n: {}, // w.npc.npc
+    d: {}, // w.door.byKey
 
-    debugTick: debounce(() => {// for disabled multi-spawn
-      state.npc.onTick(1000 / 60);
-    }, 30),
+    debugTick() {
+      state.timer.update();
+      const deltaMs = state.timer.getDelta();
+      state.npc.onTick(deltaMs);
+      
+      if (state.view.targetFov !== null || state.view.target !== null) {
+        state.view.onTick(deltaMs); // Animate if view targets changed:
+        state.reqAnimId = requestAnimationFrame(state.debugTick);
+      } else {
+        state.r3f.advance(Date.now()); // So npcs move
+      }
+    },
     isReady(connectorKey) {
       const ready = state.crowd !== null && state.decor?.queryStatus === 'success';
       if (ready === true && typeof connectorKey === 'string') {

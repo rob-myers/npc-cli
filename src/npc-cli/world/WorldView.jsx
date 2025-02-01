@@ -118,6 +118,11 @@ export default function WorldView(props) {
     lookAt(point) {
       point = toXZ(point);
       state.target = new THREE.Vector3(point.x, 0, point.y);
+
+      if (w.disabled === true) {
+        w.timer.reset();
+        w.debugTick(); // can lookAt while paused
+      }
     },
     onChangeControls(e) {
       const zoomState = state.controls.getDistance() > 20 ? 'far' : 'near';
@@ -313,7 +318,8 @@ export default function WorldView(props) {
       }
 
       if (state.target !== null) {
-        if (damp3(state.controls.target, state.target, 0.2, deltaMs, undefined, undefined, 0.01) === false) {
+        if (damp3(state.controls.target, state.target, 0.1, deltaMs, undefined, undefined, 0.0001) === false) {
+          state.controls.saveState();
           state.target = null;
         }
         state.controls.update();
