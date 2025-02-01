@@ -63,6 +63,7 @@ export default function WorldView(props) {
       }
     },
     clearTarget() {
+      state.target?.reject('cancelled target');
       state.target = null;
       state.syncRenderMode();
 
@@ -127,23 +128,28 @@ export default function WorldView(props) {
         w.npc.tickOnce();
       }
     },
-    lookAt(point, targetSmoothTime = defaultTargetSmoothTime) {
+    async lookAt(point, targetSmoothTime = defaultTargetSmoothTime) {
       if (w.disabled === true && state.target !== null && w.reqAnimId === 0) {
         state.clearTarget(); // we paused while targeting, so clear damping
       }
 
-      state.target = {
-        smoothTime: targetSmoothTime,
-        v3: toV3(toXZ(point)), // (x,y,z) where y:=0
-      };
-      // @ts-ignore see patch
-      state.controls.zoomToConstant = state.target.v3.clone();
+      return new Promise((resolve, reject) => {
+        state.target = {
+          smoothTime: targetSmoothTime,
+          resolve,
+          reject,
+          dst: toV3(toXZ(point)), // (x,y,z) where y:=0
+        };
+        // @ts-ignore see patch
+        state.controls.zoomToConstant = state.target.dst.clone();
+  
+        if (w.disabled === true) {// can lookAt while paused
+          state.syncRenderMode();
+          w.timer.reset();
+          w.onDebugTick();
+        }
+      });
 
-      if (w.disabled === true) {// can lookAt while paused
-        state.syncRenderMode();
-        w.timer.reset();
-        w.onDebugTick();
-      }
     },
     onChangeControls(e) {
       const zoomState = state.controls.getDistance() > 20 ? 'far' : 'near';
@@ -345,7 +351,8 @@ export default function WorldView(props) {
 
       if (state.target !== null) {
         state.controls.update();
-        if (damp3(state.controls.target, state.target.v3, state.target.smoothTime, deltaMs) === false) {
+        if (damp3(state.controls.target, state.target.dst, state.target.smoothTime, deltaMs, undefined, undefined, 0.003) === false) {
+          state.target.resolve();
           state.clearTarget();
         }
       }
@@ -515,7 +522,7 @@ export default function WorldView(props) {
  * @property {{ tri: THREE.Triangle; indices: THREE.Vector3; mat3: THREE.Matrix3 }} normal
  * @property {THREE.Raycaster} raycaster
  * @property {HTMLDivElement} rootEl
- * @property {null | { v3: THREE.Vector3; smoothTime: number; }} target
+ * @property {null | { dst: THREE.Vector3; reject(err?: any): void; resolve(): void; smoothTime: number; }} target
  * @property {null | number} targetFov
  * @property {'near' | 'far'} zoomState
  *
@@ -533,7 +540,7 @@ export default function WorldView(props) {
  * @property {(e: React.PointerEvent<HTMLElement>) => void} onPointerUp
  * @property {(deltaMs: number) => void} onTick
  * @property {(type?: string, quality?: any) => void} openSnapshot
- * @property {(input: Geom.VectJson | THREE.Vector3Like) => void} lookAt
+ * @property {(input: Geom.VectJson | THREE.Vector3Like) => Promise<void>} lookAt
  * @property {(e: React.PointerEvent<HTMLElement>) => void} pickObject
  * @property {(gl: THREE.WebGLRenderer, scene: THREE.Scene, camera: THREE.Camera, ri: THREE.RenderItem & { material: THREE.ShaderMaterial }) => void} renderObjectPickItem
  * @property {() => void} renderObjectPickScene

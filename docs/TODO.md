@@ -109,15 +109,10 @@
     - ✅ what if we switch between enabled and disabled while target moves?
       - ℹ️ seems to work i.e. debugTick and onTick both handle
     - ✅ fix zoom issue while looking
-    - 🚧 w.view.lookAt is async
+    - ✅ w.view.lookAt is async
+    - 🚧 linear damp3 e.g. via our own implementation
     - on click npcKey change camera
   - fix npc speech styling
-
-- ✅ refactor Html3d
-  - ✅ avoid useless "group"
-  - ℹ️ cannot remove scaling because speech bubbles need it
-  - ✅ fix flicker issue when docked
-  - ✅ clean
 
 - 🚧 integrate Viewer into blog
   - 🚧 screenshots in 1st blog
@@ -136,6 +131,7 @@
 
 ### On hold
 
+- 8 possible directions i.e. min/maxAzimuth angle
 - optional strategy to avoid agent deadlock when have similar target
   - e.g. stop when little progress
   - e.g. stop when neighbour has similar target
@@ -3648,3 +3644,9 @@ done
 - ✅ avoid `w --stdin` i.e. use arg `-` instead?
   - ✅ change `changeNpcAccess` to boolean (not - or +)
   - ℹ️ e.g. `click 1 | map xz | w n.rob.moveTo -`
+
+- ✅ refactor Html3d
+  - ✅ avoid useless "group"
+  - ℹ️ cannot remove scaling because speech bubbles need it
+  - ✅ fix flicker issue when docked
+  - ✅ clean
