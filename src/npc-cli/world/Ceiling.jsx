@@ -100,6 +100,7 @@ export default function Ceiling(props) {
       ref={instances => void (instances && (state.inst = instances))}
       args={[w.floor.quad, undefined, w.gms.length]} // 🔔 reuse floor quad
       position={[0, wallHeight, 0]}
+      renderOrder={3}
     >
       {/* <meshBasicMaterial color="red" side={THREE.DoubleSide} /> */}
       <instancedMultiTextureMaterial
@@ -107,7 +108,7 @@ export default function Ceiling(props) {
         side={THREE.DoubleSide}
         transparent
         atlas={tex}
-        alphaTest={0.5} // 0.5 flickered on (301, 101) border
+        // alphaTest={0.5} opacity={0.7} depthWrite={false}
         diffuse={[1, 1, 1]}
         colorSpace
         objectPickRed={3}

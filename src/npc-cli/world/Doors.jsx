@@ -308,7 +308,7 @@ export default function Doors(props) {
       ref={inst => inst && (state.inst = inst)}
       args={[state.quad, undefined, w.gmsData.doorCount]}
       frustumCulled={false}
-      renderOrder={-1}
+      renderOrder={1}
       visible={state.ready}
     >
       {state.ready && <instancedMultiTextureMaterial
