@@ -88,7 +88,6 @@ export const Html3d = React.forwardRef(({
 
     React.useLayoutEffect(() => {
       const currentRoot = (state.reactRoot = ReactDOM.createRoot(state.rootDiv));
-      scene.updateMatrixWorld();
       const vec = state.computePosition();
       state.rootDiv.style.transform = `translate3d(${vec[0]}px,${vec[1]}px,0)`;
       state.domTarget?.appendChild(state.rootDiv);
@@ -112,7 +111,6 @@ export const Html3d = React.forwardRef(({
         state.zoom = 0;
         state.onFrame();
       });
-      // }, 300);
     });
 
     React.useLayoutEffect(() => {
