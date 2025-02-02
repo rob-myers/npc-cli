@@ -9,7 +9,7 @@ import { testNever, debug } from "../service/generic.js";
 import { Rect, Vect } from "../geom/index.js";
 import { dataUrlToBlobUrl, getModifierKeys, getRelativePointer, isRMB, isTouchDevice } from "../service/dom.js";
 import { longPressMs, pickedTypesInSomeRoom } from "../service/const.js";
-import { damp3, emptySceneForPicking, getTempInstanceMesh, hasObjectPickShaderMaterial, pickingRenderTarget, toV3, toXZ, unitXVector3, v3Precision } from "../service/three.js";
+import { dampXZ, emptySceneForPicking, getTempInstanceMesh, hasObjectPickShaderMaterial, pickingRenderTarget, toV3, toXZ, unitXVector3, v3Precision } from "../service/three.js";
 import { popUpRootDataAttribute } from "../components/PopUp.jsx";
 import { WorldContext } from "./world-context.js";
 import useStateRef from "../hooks/use-state-ref.js";
@@ -361,10 +361,7 @@ export default function WorldView(props) {
 
       if (state.target !== null) {
         state.controls.update();
-        // 🚧 clean
-        const max = Math.max(Math.abs(state.target.dst.x - state.controls.target.x), Math.abs(state.target.dst.z - state.controls.target.z));
-        const ratios = new THREE.Vector3(Math.abs(state.target.dst.x - state.controls.target.x) / max, 1, Math.abs(state.target.dst.z - state.controls.target.z) / max);
-        if (damp3(state.controls.target, state.target.dst, 2, deltaMs, state.target.speed * deltaMs, linear, 0.01, ratios) === false) {
+        if (dampXZ(state.controls.target, state.target.dst, 2, deltaMs, state.target.speed * deltaMs, linear, 0.01) === false) {
           state.target.resolve();
           state.clearTarget();
         }
@@ -601,4 +598,4 @@ const pixelBuffer = new Uint8Array(4);
 const tmpVectThree = new THREE.Vector3();
 
 /** meters per second */
-const defaultSpeed = 1;
+const defaultSpeed = 2;

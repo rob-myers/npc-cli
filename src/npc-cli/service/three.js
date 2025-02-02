@@ -462,23 +462,29 @@ export function getTempInstanceMesh(inst, instanceId) {
 }
 
 const v3d = new THREE.Vector3();
-let a3 = false, b3 = false, c3 = false;
+let resX = false, resZ = false, dx = 0, dz = 0, dMax = 0;
 /**
- * https://github.com/pmndrs/maath/blob/626d198fbae28ba82f2f1b184db7fcafd4d23846/packages/maath/src/easing.ts#L229
+ * Based on https://github.com/pmndrs/maath/blob/626d198fbae28ba82f2f1b184db7fcafd4d23846/packages/maath/src/easing.ts#L229
+ * - Restricted to XZ plane
+ * - Syncs ordinates
  * @param {THREE.Vector3} current 
  * @param {THREE.Vector3} target 
  * @param {number} [smoothTime] 
- * @param {number} [delta] 
+ * @param {number} [deltaMs] 
  * @param {number} [maxSpeed] 
  * @param {(t: number) => number} [easing] 
  * @param {number} [eps]
- * @param {THREE.Vector3} [ratios] based on pointwise absolute differences
  * @returns 
  */
-export function damp3(current, target, smoothTime = 0.25, delta, maxSpeed = 1, easing, eps, ratios) {
+export function dampXZ(current, target, smoothTime, deltaMs, maxSpeed = 1, easing, eps = 0.001) {
   v3d.copy(target);
-  a3 = damp(current, "x", v3d.x, smoothTime, delta, maxSpeed * (ratios?.["x"] ?? 1), easing, eps);
-  b3 = damp(current, "y", v3d.y, smoothTime, delta, maxSpeed * (ratios?.["y"] ?? 1), easing, eps);
-  c3 = damp(current, "z", v3d.z, smoothTime, delta, maxSpeed * (ratios?.["z"] ?? 1), easing, eps);
-  return a3 || b3 || c3;
+  dx = Math.abs(current.x - target.x);
+  dz = Math.abs(current.z - target.z);
+  dMax = Math.max(dx, dz);
+  if (dMax < eps) {
+    return false;
+  } 
+  resX = damp(current, "x", v3d.x, smoothTime, deltaMs, maxSpeed * (dx / dMax), easing, eps);
+  resZ = damp(current, "z", v3d.z, smoothTime, deltaMs, maxSpeed * (dz / dMax), easing, eps);
+  return resX || resZ;
 }
