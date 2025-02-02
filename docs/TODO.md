@@ -132,7 +132,10 @@
 
 ### On hold
 
-- 8 possible directions i.e. min/maxAzimuth angle
+- Logger opts for fixing camera angles
+  - e.g. `min/maxPolarAngle` is `Math.PI * 0.15`
+- profile-1: fov 20 when "close" and fov 5 when far
+  - `w update 'w => w.view.fov = 20'`
 - optional strategy to avoid agent deadlock when have similar target
   - e.g. stop when little progress
   - e.g. stop when neighbour has similar target

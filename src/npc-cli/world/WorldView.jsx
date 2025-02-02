@@ -29,8 +29,8 @@ export default function WorldView(props) {
     controlsViewportOpts: {
       minAzimuthAngle: -Infinity,
       maxAzimuthAngle: +Infinity,
-      minPolarAngle: Math.PI * 0.2,
-      maxPolarAngle: Math.PI * 0.2,
+      minPolarAngle: Math.PI * 0,
+      maxPolarAngle: Math.PI/4,
       minDistance: 16,
       maxDistance: 96,
       panSpeed: 2,
