@@ -3,13 +3,13 @@ import * as THREE from "three";
 import { css } from "@emotion/css";
 import { Canvas } from "@react-three/fiber";
 import { MapControls, PerspectiveCamera, Stats } from "@react-three/drei";
-import { damp, damp3 } from "maath/easing";
+import { damp, linear } from "maath/easing";
 
 import { testNever, debug } from "../service/generic.js";
 import { Rect, Vect } from "../geom/index.js";
 import { dataUrlToBlobUrl, getModifierKeys, getRelativePointer, isRMB, isTouchDevice } from "../service/dom.js";
 import { longPressMs, pickedTypesInSomeRoom } from "../service/const.js";
-import { emptySceneForPicking, getTempInstanceMesh, hasObjectPickShaderMaterial, pickingRenderTarget, toV3, toXZ, unitXVector3, v3Precision } from "../service/three.js";
+import { damp3, emptySceneForPicking, getTempInstanceMesh, hasObjectPickShaderMaterial, pickingRenderTarget, toV3, toXZ, unitXVector3, v3Precision } from "../service/three.js";
 import { popUpRootDataAttribute } from "../components/PopUp.jsx";
 import { WorldContext } from "./world-context.js";
 import useStateRef from "../hooks/use-state-ref.js";
@@ -134,7 +134,7 @@ export default function WorldView(props) {
         w.npc.tickOnce();
       }
     },
-    async lookAt(point, targetSmoothTime = defaultTargetSmoothTime) {
+    async lookAt(point, speed = defaultSpeed) {
       if (w.disabled === true && state.target !== null && w.reqAnimId === 0) {
         state.clearTarget(); // we paused while targeting, so clear damping
       }
@@ -145,10 +145,10 @@ export default function WorldView(props) {
         state.controls.maxAzimuthAngle = state.controls.getAzimuthalAngle();
 
         state.target = {
-          smoothTime: targetSmoothTime,
+          dst: toV3(toXZ(point)), // (x,y,z) where y:=0
           resolve,
           reject,
-          dst: toV3(toXZ(point)), // (x,y,z) where y:=0
+          speed,
         };
         // @ts-ignore see patch
         state.controls.zoomToConstant = state.target.dst.clone();
@@ -361,7 +361,10 @@ export default function WorldView(props) {
 
       if (state.target !== null) {
         state.controls.update();
-        if (damp3(state.controls.target, state.target.dst, state.target.smoothTime, deltaMs, undefined, undefined, 0.003) === false) {
+        // 🚧 clean
+        const max = Math.max(Math.abs(state.target.dst.x - state.controls.target.x), Math.abs(state.target.dst.z - state.controls.target.z));
+        const ratios = new THREE.Vector3(Math.abs(state.target.dst.x - state.controls.target.x) / max, 1, Math.abs(state.target.dst.z - state.controls.target.z) / max);
+        if (damp3(state.controls.target, state.target.dst, 2, deltaMs, state.target.speed * deltaMs, linear, 0.01, ratios) === false) {
           state.target.resolve();
           state.clearTarget();
         }
@@ -531,7 +534,8 @@ export default function WorldView(props) {
  * @property {{ tri: THREE.Triangle; indices: THREE.Vector3; mat3: THREE.Matrix3 }} normal
  * @property {THREE.Raycaster} raycaster
  * @property {HTMLDivElement} rootEl
- * @property {null | { dst: THREE.Vector3; reject(err?: any): void; resolve(): void; smoothTime: number; }} target
+ * @property {null | { dst: THREE.Vector3; reject(err?: any): void; resolve(): void; speed: number }} target
+ * Speed is m/s
  * @property {null | number} targetFov
  * @property {'near' | 'far'} zoomState
  *
@@ -596,4 +600,5 @@ const statsCss = css`
 const pixelBuffer = new Uint8Array(4);
 const tmpVectThree = new THREE.Vector3();
 
-const defaultTargetSmoothTime = 0.4;
+/** meters per second */
+const defaultSpeed = 1;
