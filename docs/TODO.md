@@ -110,12 +110,12 @@
       - ℹ️ seems to work i.e. debugTick and onTick both handle
     - ✅ fix zoom issue while looking
     - ✅ w.view.lookAt is async
-    - 🚧 linear damp3 e.g. via our own implementation
+    - ✅ linear damp3 e.g. via our own implementation
       - ✅ avoid "finishing ordinate early" (use maxSpeed)
       - ✅ use linear easing function (maxSpeed small enough)
-      - clean
-    - on click npcKey change camera
-  - fix npc speech styling
+      - ✅ clean
+    - 🚧 on click npcKey change camera
+  - ✅ fix npc speech heights
   - Docked ContextMenu has link to lookAt its position
 
 - 🚧 integrate Viewer into blog

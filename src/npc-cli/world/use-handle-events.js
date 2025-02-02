@@ -484,7 +484,7 @@ export default function useHandleEvents(w) {
     say(npcKey, ...parts) {// ensure/change/delete
       const cm = w.bubble.get(npcKey) || w.bubble.create(npcKey);
       const speechWithLinks = parts.join(' ').trim();
-      const speechSansLinks = speechWithLinks.replace(/\[ (\S+) \]/g, '$1');
+      const speechSansLinks = speechWithLinks.replace(/\[ ([^\]]+) \]/g, '$1');
 
       if (speechWithLinks === '') {// delete
         w.bubble.delete(npcKey);

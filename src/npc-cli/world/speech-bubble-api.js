@@ -61,13 +61,13 @@ export class SpeechBubbleApi {
       case 'Idle':
       case 'Run':
       case 'Walk':
-        this.offset.y = 2;
+        this.offset.y = 2 - 0.1;
         break;
       case 'Lie':
         this.offset.y = 0.9;
         break;
       case 'Sit':
-        this.offset.y = 1.7;
+        this.offset.y = 1.6;
         break;
     }
   }
