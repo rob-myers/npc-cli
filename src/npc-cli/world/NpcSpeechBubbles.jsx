@@ -40,22 +40,6 @@ export default function NpcSpeechBubbles() {
     get(npcKey) {
       return /** @type {SpeechBubbleApi} */ (state.lookup[npcKey]);
     },
-    say(npcKey, ...parts) {// ensure/change/delete
-      const cm = state.get(npcKey) || state.create(npcKey);
-      const speechWithLinks = parts.join(' ').trim();
-      const speechSansLinks = speechWithLinks.replace(/\[ (\S+) \]/g, '$1');
-
-      if (speechWithLinks === '') {// delete
-        state.delete(npcKey);
-      } else {// change
-        cm.open = true;
-        cm.speech = speechSansLinks;
-        cm.update();
-      }
-
-      w.events.next({ key: 'speech', npcKey, speech: speechWithLinks });
-    },
-
   }));
 
   w.bubble = state;
@@ -81,7 +65,6 @@ export default function NpcSpeechBubbles() {
  * @property {(npcKey: string) => SpeechBubbleApi} create Add speech bubble for specific npc
  * @property {(...npcKeys: string[]) => void} delete
  * @property {(npcKey: string) => SpeechBubbleApi} get
- * @property {(npcKey: string, ...parts: string[]) => void} say
  */
 
 /**
