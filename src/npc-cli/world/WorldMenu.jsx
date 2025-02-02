@@ -266,6 +266,7 @@ const loggerContainerCss = css`
   left: 0;
   top: 0;
   max-width: 100%;
+  z-index: 1;
   
   > div:nth-child(2) {
     /* height: ${defaultLoggerHeightPx}px; */
@@ -434,7 +435,7 @@ const cssTtyDisconnectedMessage = css`
  * Measure durations by sending same `msg` twice.
  * @property {(e: React.ChangeEvent<HTMLInputElement>) => void} onChangeBrightness
  * @property {(e: React.ChangeEvent<HTMLInputElement>) => void} onChangeXRay
- * @property {(e: NPC.ClickLinkEvent) => void} onClickLoggerLink
+ * @property {(e: NPC.LoggerLinkEvent) => void} onClickLoggerLink
  * @property {(connectorKey: string) => void} onConnect
  * @property {() => void} onOverlayPointerUp
  * @property {(e: React.ChangeEvent<HTMLInputElement>) => void} onResizeLoggerHeight

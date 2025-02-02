@@ -114,7 +114,9 @@
       - ✅ avoid "finishing ordinate early" (use maxSpeed)
       - ✅ use linear easing function (maxSpeed small enough)
       - ✅ clean
-    - 🚧 on click npcKey change camera
+    - 🚧 profile-1: on click npcKey change camera
+      - ✅ transition happens
+      - 🚧 avoid overlapping Logger
   - ✅ fix npc speech heights
   - Docked ContextMenu has link to lookAt its position
 

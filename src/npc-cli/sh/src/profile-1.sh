@@ -48,3 +48,5 @@ w update 'w => w.decor.showLabels = true'
 
 setupContextMenu
 events | handleContextMenu &
+
+events | handleLoggerLinks &

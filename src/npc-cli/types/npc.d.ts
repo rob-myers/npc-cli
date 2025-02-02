@@ -130,7 +130,7 @@ declare namespace NPC {
     | { key: 'contextmenu-link'; linkKey: string }
     | { key: 'enter-off-mesh'; npcKey: string; offMesh: NPC.OffMeshLookupValue }
     | { key: 'exit-off-mesh'; npcKey: string; offMesh: NPC.OffMeshLookupValue }
-    | { key: 'logger-link'; npcKey: string; } & NPC.ClickLinkEvent
+    | { key: 'logger-link'; npcKey: string; } & NPC.LoggerLinkEvent
     | { key: 'speech'; npcKey: string; speech: string }
     // ...
   );
@@ -322,8 +322,8 @@ declare namespace NPC {
     hideKeys?: string[];
   };
 
-  interface ClickLinkEvent {
-    /** e.g. `[ rob ]` */  
+  interface LoggerLinkEvent {
+    /** e.g. link `[rob]` yields `rob` */  
     linkText: string;
     /** Full possibly-wrapped line */  
     fullLine: string;

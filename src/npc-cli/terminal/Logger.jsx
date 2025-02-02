@@ -118,7 +118,7 @@ export const Logger = React.forwardRef(function Logger(props, ref) {
         return; // should be unreachable
       }
 
-      const linkText = uri;
+      const linkText = uri.slice(1, -1);
       const { fullLine, startRow, endRow } = state.getFullLine(viewportRange.start.y - 1);
 
       // console.log('🔔 click', { linkText, fullLine, startRow, endRow });
@@ -159,7 +159,7 @@ export const Logger = React.forwardRef(function Logger(props, ref) {
 
 /**
  * @typedef Props
- * @property {(e: NPC.ClickLinkEvent) => void} onClickLink
+ * @property {(e: NPC.LoggerLinkEvent) => void} onClickLink
  * @property {[width: number, height: number]} initDim
  */
 

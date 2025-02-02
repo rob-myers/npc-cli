@@ -169,11 +169,10 @@ export const setupContextMenu = ({ w }) => {
 }
 
 /**
- * events | handleContextMenu
+ * e.g. events | handleContextMenu
  * @param {RunArg<NPC.Event>} ctxt
  */
 export async function* handleContextMenu({ api, w, datum: e }) {
-  
   while ((e = await api.read()) !== api.eof) {
     if (e.key !== "contextmenu-link") {
       continue;
@@ -200,10 +199,30 @@ export async function* handleContextMenu({ api, w, datum: e }) {
         // point,
       });
     }
+  }
+}
+
+/**
+ * e.g. events | handleLoggerLinks
+ * @param {RunArg<NPC.Event>} ctxt
+ */
+export async function* handleLoggerLinks({ api, datum: e, w }) {
+  while ((e = await api.read()) !== api.eof) {
+    if (e.key !== "logger-link") {
+      continue;
+    }
+    
+    // 🚧
+    // if (e.viewportRange.start.x - 1 === 0 && e.viewportRange.start.y - 1 === e.startRow) {
+    //   // clicked initial link
+    // }
+    if (e.linkText === e.npcKey) {
+      w.view.lookAt(w.n[e.npcKey].position, 4).catch(() => {});
+    }
 
   }
-
 }
+
 
 /**
  * Usage:
