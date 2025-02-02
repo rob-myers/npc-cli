@@ -3,6 +3,7 @@ import { Vect } from "../geom";
 import { defaultDoorCloseMs, wallHeight } from "../service/const";
 import { pause, warn, debug } from "../service/generic";
 import { geom } from "../service/geom";
+import { globalLoggerLinksRegex } from "../terminal/Logger";
 import { npcToBodyKey } from "../service/rapier";
 import useStateRef from "../hooks/use-state-ref";
 
@@ -484,7 +485,7 @@ export default function useHandleEvents(w) {
     say(npcKey, ...parts) {// ensure/change/delete
       const cm = w.bubble.get(npcKey) || w.bubble.create(npcKey);
       const speechWithLinks = parts.join(' ').trim();
-      const speechSansLinks = speechWithLinks.replace(/\[ ([^\]]+) \]/g, '$1');
+      const speechSansLinks = speechWithLinks.replace(globalLoggerLinksRegex, '$1');
 
       if (speechWithLinks === '') {// delete
         w.bubble.delete(npcKey);

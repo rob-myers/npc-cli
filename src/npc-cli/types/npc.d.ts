@@ -127,10 +127,10 @@ declare namespace NPC {
       }
     | { key: "pre-setup-physics" }
     | { key: "nav-updated" }
-    | { key: 'click-link'; cmKey: string; linkKey: string }
+    | { key: 'contextmenu-link'; linkKey: string }
     | { key: 'enter-off-mesh'; npcKey: string; offMesh: NPC.OffMeshLookupValue }
     | { key: 'exit-off-mesh'; npcKey: string; offMesh: NPC.OffMeshLookupValue }
-    | { key: 'click-npc-link'; npcKey: string; } & NPC.ClickLinkEvent
+    | { key: 'logger-link'; npcKey: string; } & NPC.ClickLinkEvent
     | { key: 'speech'; npcKey: string; speech: string }
     // ...
   );

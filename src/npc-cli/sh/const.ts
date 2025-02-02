@@ -1,5 +1,6 @@
 export const ansi = {
   Black: "\x1b[30m",
+  /** Light but actually bold */
   Blue: "\x1b[1;34m",
   Bold: "\x1b[1m",
   BoldReset: "\x1b[22m",

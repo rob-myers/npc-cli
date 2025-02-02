@@ -10,7 +10,7 @@ import useUpdate from "../hooks/use-update";
 import { faderOverlayCss, pausedControlsCss } from "./overlay-menu-css";
 import { Draggable } from "../components/Draggable";
 import { PopUp, popUpBubbleClassName, popUpButtonClassName, popUpContentClassName } from "../components/PopUp";
-import { Logger } from "../terminal/Logger";
+import { globalLoggerLinksRegex, Logger } from "../terminal/Logger";
 import TouchIndicator from "./TouchIndicator";
 
 /**
@@ -66,9 +66,9 @@ export default function WorldMenu(props) {
       w.disabled && update(); // Paused menu Toggle
     },
     onClickLoggerLink(e) {
-      const [npcKey] = e.fullLine.slice('[ '.length).split(' ] ', 1);
-      if (npcKey in w.n) {// prefix `[ {npcKey} ] ` 
-        w.events.next({ key: 'click-npc-link', npcKey, ...e });
+      const [npcKey] = e.fullLine.slice('['.length).split('] ', 1);
+      if (npcKey in w.n) {// prefix `[{npcKey}] ` 
+        w.events.next({ key: 'logger-link', npcKey, ...e });
       }
     },
     onConnect(connectorKey) {
@@ -96,7 +96,9 @@ export default function WorldMenu(props) {
     say(npcKey, ...parts) {
       const line = parts.join(' ');
       state.logger.xterm.writeln(
-        `${ansi.BrightGreen}[ ${ansi.BrightYellow}${ansi.Bold}${npcKey}${ansi.BrightGreen}${ansi.BoldReset} ]${ansi.Reset} ${line}${ansi.Reset}`
+        `${ansi.BrightGreen}[${ansi.BrightYellow}${ansi.Bold}${npcKey}${ansi.BrightGreen}${ansi.BoldReset}]${ansi.Reset} ${
+          line.replace(globalLoggerLinksRegex, `${ansi.DarkGreen}[${ansi.Blue}$1${ansi.Reset}${ansi.DarkGreen}]${ansi.Reset}`)
+        }${ansi.Reset}`
       );
       state.logger.xterm.scrollToBottom();
     },

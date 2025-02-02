@@ -175,7 +175,7 @@ export const setupContextMenu = ({ w }) => {
 export async function* handleContextMenu({ api, w, datum: e }) {
   
   while ((e = await api.read()) !== api.eof) {
-    if (e.key !== "click-link") {
+    if (e.key !== "contextmenu-link") {
       continue;
     }
 

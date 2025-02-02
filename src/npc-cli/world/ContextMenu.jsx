@@ -114,7 +114,7 @@ export function ContextMenu() {
       }
 
       // w.view.rootEl.focus();
-      w.events.next({ key: 'click-link', cmKey: 'default', linkKey });
+      w.events.next({ key: 'contextmenu-link', linkKey });
 
       switch (linkKey) {
         // case 'delete': w.c.delete(e.cmKey); break;

@@ -73,7 +73,7 @@ export const Logger = React.forwardRef(function Logger(props, ref) {
       allowProposedApi: true, // Needed for WebLinksAddon
       allowTransparency: true,
       fontSize: 15,
-      lineHeight: 1.1,
+      lineHeight: 1.2,
       fontFamily: 'Courier new, monospace',
       cursorBlink: false,
       cursorInactiveStyle: 'none',
@@ -86,7 +86,33 @@ export const Logger = React.forwardRef(function Logger(props, ref) {
       convertEol: false,
       rows: 50,
     });
-    xterm.loadAddon(state.linksAddon = new WebLinksAddon((e, uri) => {
+  
+    xterm.loadAddon(state.fitAddon = new FitAddon());
+    xterm.loadAddon(state.webglAddon = new WebglAddon());
+    state.webglAddon.onContextLoss(() => {
+      state.webglAddon.dispose(); // 🚧 WIP
+    });
+    xterm.loadAddon(state.serializeAddon = new SerializeAddon());
+
+    xterm.write(state.contents);
+    xterm.open(state.container);
+    state.fitAddon.fit();
+    
+    state.container.style.width = `${props.initDim[0]}px`;
+    state.container.style.height = `${props.initDim[1]}px`;
+
+    return () => {
+      state.contents = state.serializeAddon.serialize();
+      state.xterm.dispose();
+    };
+  }, [state.container]);
+
+  React.useLayoutEffect(() => {
+    if (state.container === null) {
+      return;
+    }
+
+    state.xterm.loadAddon(state.linksAddon = new WebLinksAddon((e, uri) => {
       const viewportRange = state.linkViewportRange;
       if (viewportRange === null) {
         return; // should be unreachable
@@ -112,29 +138,13 @@ export const Logger = React.forwardRef(function Logger(props, ref) {
         // console.log('🔔 leave', text);
         state.linkViewportRange = null;
       },
-      urlRegex: /(\[ [^\]]+ \])/,
+      urlRegex: loggerLinksRegex,
     }));
-  
-    xterm.loadAddon(state.fitAddon = new FitAddon());
-    xterm.loadAddon(state.webglAddon = new WebglAddon());
-    state.webglAddon.onContextLoss(() => {
-      state.webglAddon.dispose(); // 🚧 WIP
-    });
-    xterm.loadAddon(state.serializeAddon = new SerializeAddon());
-
-    xterm.write(state.contents);
-    xterm.open(state.container);
-    state.fitAddon.fit();
-    
-    state.container.style.width = `${props.initDim[0]}px`;
-    state.container.style.height = `${props.initDim[1]}px`;
 
     return () => {
-      state.contents = state.serializeAddon.serialize();
       state.linksAddon.dispose();
-      state.xterm.dispose();
     };
-  }, [state.container]);
+  }, [state.container, props.onClickLink]);
 
   const [measureLoggerRef, bounds] = useMeasure(({ debounce: 0 }));
   React.useEffect(() => void state.fitAddon.fit(), [bounds]);
@@ -186,5 +196,7 @@ const loggerCss = css`
   .xterm .xterm-helpers {
     z-index: 3 !important;
   }
-
 `;
+
+const loggerLinksRegex = /(\[[^\]]+\])/;
+export const globalLoggerLinksRegex = /\[([^\]]+)\]/g;
