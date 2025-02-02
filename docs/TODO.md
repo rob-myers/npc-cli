@@ -116,7 +116,9 @@
       - ✅ clean
     - 🚧 profile-1: on click npcKey change camera
       - ✅ transition happens
-      - 🚧 avoid overlapping Logger
+      - 🚧 avoid overlapping Logger e.g. focus 3/4 down
+      - 🚧 non-linear easing?
+      - 🚧 different maxSpeed depending on distance?
   - ✅ fix npc speech heights
   - Docked ContextMenu has link to lookAt its position
 
