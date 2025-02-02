@@ -119,8 +119,12 @@
       - 🚧 avoid overlapping Logger e.g. focus 3/4 down
       - 🚧 non-linear easing?
       - 🚧 different maxSpeed depending on distance?
+      - 🚧 works while disabled
   - ✅ fix npc speech heights
   - Docked ContextMenu has link to lookAt its position
+
+- can decorate process groups
+  - ℹ️ e.g. `no-auto-pause` for `events | handleLoggerLinks &`
 
 - 🚧 integrate Viewer into blog
   - 🚧 screenshots in 1st blog
