@@ -446,7 +446,7 @@ export default function WorldView(props) {
   w.view = state;
 
   React.useEffect(() => {
-    if (state.controls) {
+    if (state.controls && !w.crowd) {// 🔔 initially only
       state.controls.setPolarAngle(w.smallViewport ? Math.PI / 2 : Math.PI / 4);
       state.controls.setAzimuthalAngle(w.smallViewport ? Math.PI / 6 : Math.PI / 4);
     }
