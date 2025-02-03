@@ -116,7 +116,7 @@
       - ✅ clean
     - 🚧 profile-1: on click npcKey change camera
       - ✅ transition happens
-      - 🚧 look at height to avoid overlapping Logger
+      - ✅ look at agent height to avoid overlapping Logger
       - 🚧 play with easing
         - maxSpeed depending on distance?
       - 🚧 works while disabled

@@ -465,8 +465,7 @@ const v3d = new THREE.Vector3();
 let resX = false, resY = false, resZ = false, dx = 0, dz = 0, dMax = 0;
 /**
  * Based on https://github.com/pmndrs/maath/blob/626d198fbae28ba82f2f1b184db7fcafd4d23846/packages/maath/src/easing.ts#L229
- * - Restricted to XZ plane
- * - Syncs ordinates
+ * - Tries to sync x,z arrival time.
  * @param {THREE.Vector3} current 
  * @param {THREE.Vector3} target 
  * @param {number} [smoothTime] 
@@ -481,12 +480,8 @@ export function dampXZ(current, target, smoothTime, deltaMs, maxSpeed = 1, easin
   dx = Math.abs(current.x - target.x);
   dz = Math.abs(current.z - target.z);
   dMax = Math.max(dx, dz);
-  if (dMax < eps) {
-    return false;
-  } 
-  resX = damp(current, "x", v3d.x, smoothTime, deltaMs, maxSpeed * (dx / dMax), easing, eps);
-  // 🚧 abstract
-  resY = damp(current, "y", 2, smoothTime, deltaMs, maxSpeed, easing, eps);
-  resZ = damp(current, "z", v3d.z, smoothTime, deltaMs, maxSpeed * (dz / dMax), easing, eps);
+  resX = dMax < eps ? false : damp(current, "x", v3d.x, smoothTime, deltaMs, maxSpeed * (dx / dMax), easing, eps);
+  resY = damp(current, "y", v3d.y, smoothTime, deltaMs, maxSpeed, easing, eps);
+  resZ = dMax < eps ? false : damp(current, "z", v3d.z, smoothTime, deltaMs, maxSpeed * (dz / dMax), easing, eps);
   return resX || resY || resZ;
 }

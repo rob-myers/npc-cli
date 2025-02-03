@@ -143,13 +143,11 @@ export default function WorldView(props) {
         // Fix azimuth so we pan
         state.controls.minAzimuthAngle = state.controls.getAzimuthalAngle();
         state.controls.maxAzimuthAngle = state.controls.getAzimuthalAngle();
+        
+        const dst = toV3(point);
+        dst.y = 1.5; // ≈ agent height
 
-        state.target = {
-          dst: toV3(toXZ(point)), // (x,y,z) where y:=0
-          resolve,
-          reject,
-          speed,
-        };
+        state.target = { dst, resolve, reject, speed };
         // @ts-ignore see patch
         state.controls.zoomToConstant = state.target.dst.clone();
   
