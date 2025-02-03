@@ -1,7 +1,7 @@
 import { uid } from "uid";
 
 import type * as Sh from "./parse";
-import { jsStringify, last, pause } from "../service/generic";
+import { jsStringify, last, pause, safeJsonParse, tagsToMeta, textToTags } from "../service/generic";
 import { parseJsArg } from "../service/generic";
 import useSession, { ProcessStatus } from "./session.store";
 import {
@@ -255,24 +255,44 @@ class semanticsServiceClass {
     return this.stmts(node, node.Stmts);
   }
 
+  /**
+   * Processes can be tagged e.g.
+   * > `PTAGS='foo bar=baz' echo qux`
+   */
+  private async supportPTags(node: Sh.CallExpr) {
+    const tagAssign = node.Assigns.find(x => x.Name.Value === 'PTAGS');
+    if (tagAssign?.Value != null) {
+      let value = '';
+      for await (const expanded of this.Expand(tagAssign.Value))
+        value += expanded.value;
+      const ptags = tagsToMeta(textToTags(value));
+      useSession.api.getProcess(node.meta).ptags = ptags;
+      console.log({ptags}); // 🚧
+    }
+  }
+
   private async *CallExpr(node: Sh.CallExpr) {
     node.exitCode = 0; // 🚧 justify
     const args = await sem.performShellExpansion(node.Args);
     const [command, ...cmdArgs] = args;
-    node.meta.verbose && console.log("simple command", args);
+    node.meta.verbose === true && console.log("simple command", args);
 
-    if (args.length) {
+    if (node.Assigns.length > 0) {
+      await this.supportPTags(node);
+    }
+
+    if (args.length > 0) {
       let func: Sh.NamedFunction | undefined;
-      if (cmdService.isCmd(command)) {
+      if (cmdService.isCmd(command) === true) {
         yield* cmdService.runCmd(node, command, cmdArgs);
-      } else if ((func = useSession.api.getFunc(node.meta.sessionKey, command))) {
+      } else if ((func = useSession.api.getFunc(node.meta.sessionKey, command)) !== undefined) {
         await cmdService.launchFunc(node, func, cmdArgs);
       } else {
         try {
           // Try to `get` things instead
           for (const arg of args) {
             const result = cmdService.get(node, [arg]);
-            if (result[0] !== undefined || matchFuncFormat(arg)) {
+            if (result[0] !== undefined || matchFuncFormat(arg) !== null) {
               yield* result;
             } else {
               // Throw if get undefined, unless invoked func

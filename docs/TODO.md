@@ -119,12 +119,14 @@
       - ✅ look at agent height to avoid overlapping Logger
       - ✅ look at eases using default easing i.e. exp
       - 🚧 works while disabled
-        - some process group do not auto pause
+        - 🚧 some process group do not auto pause
   - ✅ fix npc speech heights
   - Docked ContextMenu has link to lookAt its position
 
-- can decorate process groups
-  - ℹ️ e.g. `no-auto-pause` for `events | handleLoggerLinks &`
+- 🚧 processes can have ptags
+  - ℹ️ e.g. `no-auto-pause` via `PTAGS=no-auto-pause events | handleLoggerLinks &`
+  - ✅ process has ptags via `PTAGS='foo bar=baz' echo qux`
+  - 🚧 clean
 
 - 🚧 integrate Viewer into blog
   - 🚧 screenshots in 1st blog

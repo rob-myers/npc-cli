@@ -14,7 +14,8 @@ import {
   keys,
   toPrecision,
   hashJson,
-  parseJsWithCt,
+  tagsToMeta,
+  textToTags,
 } from "./generic";
 import { geom, tmpRect1 } from "./geom";
 import { helper } from "./helper";
@@ -976,7 +977,7 @@ class GeomorphService {
         }
 
         // const ownTags = contents.split(" ");
-        const ownTags = [...contents.matchAll(splitTagRegex)].map(x => x[0]);
+        const ownTags = textToTags(contents);
 
         // symbol may have folder "symbols"
         if (folderStack[0] === "symbols") {
@@ -1011,7 +1012,7 @@ class GeomorphService {
 
             symbols.push({
               symbolKey: subSymbolKey,
-              meta: geomorph.tagsToMeta(symbolTags, { key: subSymbolKey }),
+              meta: tagsToMeta(symbolTags, { key: subSymbolKey }, metaVarNames, metaVarValues),
               width,
               height,
               transform: reduced,
@@ -1021,7 +1022,7 @@ class GeomorphService {
           return;
         }
 
-        const meta = geomorph.tagsToMeta(ownTags, {});
+        const meta = tagsToMeta(ownTags, {}, metaVarNames, metaVarValues);
         // 🔔 "switch" points to last doorId seen
         if (meta.switch === true) {
           meta.switch = doors.length - 1;
@@ -1272,22 +1273,6 @@ class GeomorphService {
   }
 
   /**
-   * @param {string[]} tags
-   * @param {Geom.Meta} baseMeta
-   */
-  tagsToMeta(tags, baseMeta) {
-    return tags.reduce((meta, tag) => {
-      const eqIndex = tag.indexOf("=");
-      if (eqIndex > -1) {
-        meta[tag.slice(0, eqIndex)] = parseJsWithCt(tag.slice(eqIndex + 1), metaVarNames, metaVarValues);
-      } else {
-        meta[tag] = true; // Omit tags `foo=bar`
-      }
-      return meta;
-    }, baseMeta);
-  }
-
-  /**
    * For nested symbols i.e. before decor becomes `Geomorph.Decor`
    * @param {Geom.Meta} meta 
    * @param {Geom.Mat} mat
@@ -1507,11 +1492,6 @@ export class Connector {
   }
 }
 
-/**
- * e.g. `foo bar=baz qux='1 2 3'` yields
- * > `foo`, `bar=baz`, `qux='1 2 3'`
- */
-const splitTagRegex = /[^\s=]+(?:=(?:(?:'[^']*')|(?:[^']\S*)))?/gi;
 const tmpVect1 = new Vect();
 const tmpMat1 = new Mat();
 const tmpMat2 = new Mat();

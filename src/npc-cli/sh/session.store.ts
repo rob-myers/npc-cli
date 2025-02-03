@@ -43,7 +43,6 @@ export type State = {
     addFunc: (sessionKey: string, funcName: string, wrappedFile: FileWithMeta) => void;
     /** We assume `lineText` and `ctxts` have already been stripped of ansi codes. */
     addTtyLineCtxts: (sessionKey: string, lineText: string, ctxts: TtyLinkCtxt[]) => void;
-    cleanTtyLink: (sessionKey: string) => void;
     createSession: (sessionKey: string, env: Record<string, any>) => Session;
     createProcess: (def: {
       sessionKey: string;
@@ -179,6 +178,8 @@ export interface ProcessMeta {
   localVar: Record<string, any>;
   /** Inherited local variables. */
   inheritVar: Record<string, any>;
+  /** Can specify via e.g. `PTAGS="no-auto x=foo y=bar" echo baz` */
+  ptags: Record<string, any>;
 }
 
 export interface TtyLinkCtxt {
@@ -216,16 +217,6 @@ const useStore = create<State>()(
           api.getSession(sessionKey).ttyLink[lineText] = ctxts;
         },
 
-        cleanTtyLink(sessionKey) {
-          // 🚧 only run sporadically
-          const session = api.getSession(sessionKey);
-          const lineLookup = session.ttyShell.xterm.getLines();
-          const { ttyLink } = session;
-          Object.keys(ttyLink).forEach(
-            (lineText) => !lineLookup[lineText] && delete ttyLink[lineText]
-          );
-        },
-
         createFifo(key, size) {
           const fifo = new FifoDevice(key, size);
           return (get().device[fifo.key] = fifo);
@@ -247,6 +238,7 @@ const useStore = create<State>()(
             onResumes: [],
             localVar: {},
             inheritVar: {},
+            ptags: emptyPtags,
           };
           return processes[pid];
         },
@@ -560,6 +552,7 @@ const useStore = create<State>()(
   )
 );
 
+const emptyPtags = {} as Record<string, any>;
 const api = useStore.getState().api;
 const useSessionStore = Object.assign(useStore, { api });
 

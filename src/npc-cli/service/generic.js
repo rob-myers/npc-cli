@@ -441,6 +441,42 @@ export function safeJsonParse(input) {
 }
 
 /**
+ * e.g. `foo bar=baz qux='1 2 3'` yields
+ * > `foo`, `bar=baz`, `qux='1 2 3'`
+ */
+const splitTagRegex = /[^\s=]+(?:=(?:(?:'[^']*')|(?:[^']\S*)))?/gi;
+
+/**
+ * e.g. `foo bar=baz qux='1 2 3'` yields
+ * > `['foo', 'bar=baz', 'qux='1 2 3' ]`
+ * @param {string} text 
+ */
+export function textToTags(text) {
+  return [...text.matchAll(splitTagRegex)].map(x => x[0]);
+}
+
+/**
+ * e.g. `['foo', 'bar=baz', 'qux='1 2 3' ]` yields:
+ * > `{ foo: true, bar: 'baz', qux: '1 2 3' }`
+ * @param {string[]} tags
+ * @param {Meta} [baseMeta]
+ * @param {string[]} [names]
+ * @param {any[]} [values]
+ * @returns {Meta}
+ */
+export function tagsToMeta(tags, baseMeta = {}, names, values) {
+  return tags.reduce((meta, tag) => {
+    const eqIndex = tag.indexOf("=");
+    if (eqIndex > -1) {
+      meta[tag.slice(0, eqIndex)] = parseJsWithCt(tag.slice(eqIndex + 1), names, values);
+    } else {
+      meta[tag] = true; // Omit tags `foo=bar`
+    }
+    return meta;
+  }, baseMeta);
+}
+
+/**
  * - Take the first element of the set, removing it in the process.
  * - Throws on empty-set.
  * @template T
