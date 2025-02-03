@@ -108,7 +108,7 @@ export default function Ceiling(props) {
         side={THREE.DoubleSide}
         transparent
         atlas={tex}
-        // alphaTest={0.5} opacity={0.7} depthWrite={false}
+        alphaTest={0.5} opacity={0.7} depthWrite={false}
         diffuse={[1, 1, 1]}
         colorSpace
         objectPickRed={3}
