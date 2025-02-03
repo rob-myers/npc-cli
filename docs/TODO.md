@@ -117,8 +117,7 @@
     - 🚧 profile-1: on click npcKey change camera
       - ✅ transition happens
       - ✅ look at agent height to avoid overlapping Logger
-      - 🚧 play with easing
-        - maxSpeed depending on distance?
+      - ✅ look at eases using default easing i.e. exp
       - 🚧 works while disabled
         - some process group do not auto pause
   - ✅ fix npc speech heights

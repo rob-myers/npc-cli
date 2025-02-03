@@ -3,7 +3,7 @@ import * as THREE from "three";
 import { css } from "@emotion/css";
 import { Canvas } from "@react-three/fiber";
 import { MapControls, PerspectiveCamera, Stats } from "@react-three/drei";
-import { damp, linear } from "maath/easing";
+import { damp } from "maath/easing";
 
 import { testNever, debug } from "../service/generic.js";
 import { Rect, Vect } from "../geom/index.js";
@@ -134,7 +134,8 @@ export default function WorldView(props) {
         w.npc.tickOnce();
       }
     },
-    async lookAt(point, speed = defaultSpeed) {
+    // linear via `{ maxSpeed: 1000 / 60 }`
+    async lookAt(point, opts = { smoothTime: 0.2 }) {
       if (w.disabled === true && state.target !== null && w.reqAnimId === 0) {
         state.clearTarget(); // we paused while targeting, so clear damping
       }
@@ -146,8 +147,7 @@ export default function WorldView(props) {
         
         const dst = toV3(point);
         dst.y = 1.5; // ≈ agent height
-
-        state.target = { dst, resolve, reject, speed };
+        state.target = { dst, resolve, reject, ...opts };
         // @ts-ignore see patch
         state.controls.zoomToConstant = state.target.dst.clone();
   
@@ -328,7 +328,7 @@ export default function WorldView(props) {
     },
     onPointerUp(e) {
       state.epoch.pointerUp = Date.now();
-      if (state.down === undefined || state.lastDown === undefined) {
+      if (state.down === null || state.lastDown === undefined) {
         return;
       }
 
@@ -359,7 +359,7 @@ export default function WorldView(props) {
 
       if (state.target !== null) {
         state.controls.update();
-        if (dampXZ(state.controls.target, state.target.dst, 2, deltaMs, state.target.speed * deltaMs, linear, 0.01) === false) {
+        if (dampXZ(state.controls.target, state.target.dst, state.target.smoothTime, deltaMs, state.target.maxSpeed, undefined, 0.01) === false) {
           state.target.resolve();
           state.clearTarget();
         }
@@ -529,7 +529,7 @@ export default function WorldView(props) {
  * @property {{ tri: THREE.Triangle; indices: THREE.Vector3; mat3: THREE.Matrix3 }} normal
  * @property {THREE.Raycaster} raycaster
  * @property {HTMLDivElement} rootEl
- * @property {null | { dst: THREE.Vector3; reject(err?: any): void; resolve(): void; speed: number }} target
+ * @property {null | { dst: THREE.Vector3; reject(err?: any): void; resolve(): void; } & LookAtOpts} target
  * Speed is m/s
  * @property {null | number} targetFov
  * @property {'near' | 'far'} zoomState
@@ -548,7 +548,7 @@ export default function WorldView(props) {
  * @property {(e: React.PointerEvent<HTMLElement>) => void} onPointerUp
  * @property {(deltaMs: number) => void} onTick
  * @property {(type?: string, quality?: any) => void} openSnapshot
- * @property {(input: Geom.VectJson | THREE.Vector3Like, speed?: number) => Promise<void>} lookAt
+ * @property {(input: Geom.VectJson | THREE.Vector3Like, opts?: LookAtOpts) => Promise<void>} lookAt
  * @property {(e: React.PointerEvent<HTMLElement>) => void} pickObject
  * @property {(gl: THREE.WebGLRenderer, scene: THREE.Scene, camera: THREE.Camera, ri: THREE.RenderItem & { material: THREE.ShaderMaterial }) => void} renderObjectPickItem
  * @property {() => void} renderObjectPickScene
@@ -590,6 +590,12 @@ const statsCss = css`
  * @property {boolean} [justLongDown]
  * @property {Geom.Meta} meta
  * @property {THREE.Vector3Like} position
+*/
+
+/**
+ * @typedef LookAtOpts
+ * @property {number} [maxSpeed]
+ * @property {number} [smoothTime]
 */
 
 const pixelBuffer = new Uint8Array(4);

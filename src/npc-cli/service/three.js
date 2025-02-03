@@ -475,7 +475,7 @@ let resX = false, resY = false, resZ = false, dx = 0, dz = 0, dMax = 0;
  * @param {number} [eps]
  * @returns 
  */
-export function dampXZ(current, target, smoothTime, deltaMs, maxSpeed = 1, easing, eps = 0.001) {
+export function dampXZ(current, target, smoothTime, deltaMs, maxSpeed = Infinity, easing, eps = 0.001) {
   v3d.copy(target);
   dx = Math.abs(current.x - target.x);
   dz = Math.abs(current.z - target.z);

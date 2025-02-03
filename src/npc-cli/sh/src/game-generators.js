@@ -217,7 +217,7 @@ export async function* handleLoggerLinks({ api, datum: e, w }) {
     //   // clicked initial link
     // }
     if (e.linkText === e.npcKey) {
-      w.view.lookAt(w.n[e.npcKey].position, 10).catch(() => {});
+      w.view.lookAt(w.n[e.npcKey].position).catch(() => {});
     }
 
   }
