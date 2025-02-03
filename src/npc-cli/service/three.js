@@ -360,7 +360,7 @@ export const pickingRenderTarget = new THREE.WebGLRenderTarget(1, 1, {
  */
 
 /**
- * - identity on `THREE.Vector3`
+ * - clones `THREE.Vector3`
  * - `{ x, y, z }` -> `new THREE.Vector3(x, y, z)`
  * - `{ x, y }` -> `new THREE.Vector3(x, 0, y)`
  * @param {Geom.VectJson | THREE.Vector3Like} input 
@@ -368,7 +368,7 @@ export const pickingRenderTarget = new THREE.WebGLRenderTarget(1, 1, {
  */
 export function toV3(input) {
   if ('z' in input) {
-    return input instanceof THREE.Vector3 ? input : new THREE.Vector3().copy(input);
+    return input instanceof THREE.Vector3 ? input.clone() : new THREE.Vector3().copy(input);
   } else {
     return new THREE.Vector3(input.x, 0, input.y);
   }
