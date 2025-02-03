@@ -462,7 +462,7 @@ export function getTempInstanceMesh(inst, instanceId) {
 }
 
 const v3d = new THREE.Vector3();
-let resX = false, resZ = false, dx = 0, dz = 0, dMax = 0;
+let resX = false, resY = false, resZ = false, dx = 0, dz = 0, dMax = 0;
 /**
  * Based on https://github.com/pmndrs/maath/blob/626d198fbae28ba82f2f1b184db7fcafd4d23846/packages/maath/src/easing.ts#L229
  * - Restricted to XZ plane
@@ -485,6 +485,8 @@ export function dampXZ(current, target, smoothTime, deltaMs, maxSpeed = 1, easin
     return false;
   } 
   resX = damp(current, "x", v3d.x, smoothTime, deltaMs, maxSpeed * (dx / dMax), easing, eps);
+  // 🚧 abstract
+  resY = damp(current, "y", 2, smoothTime, deltaMs, maxSpeed, easing, eps);
   resZ = damp(current, "z", v3d.z, smoothTime, deltaMs, maxSpeed * (dz / dMax), easing, eps);
-  return resX || resZ;
+  return resX || resY || resZ;
 }
