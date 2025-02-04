@@ -15,12 +15,21 @@ declare namespace WW {
   interface RequestNavMesh {
     type: "request-nav";
     mapKey: string;
+    offMeshDefs: import('recast-navigation').OffMeshConnectionParams[];
   }
 
   interface NavMeshResponse {
     type: "nav-mesh-response";
     mapKey: string;
     exportedNavMesh: Uint8Array;
+    offMeshLookup: NPC.SrcToOffMeshLookup;
+  }
+  
+  interface BuildTileResponse {
+    type: "build-tile-response";
+    tileX: number;
+    tileY: number;
+    navMeshData: Uint8Array;
   }
 
   //#endregion
@@ -123,7 +132,6 @@ declare namespace WW {
 
   type PhysicsBodyKey = (
     | `circle ${string}` // custom cylindrical collider
-    | `inside ${Geomorph.GmDoorKey}` // door cuboid
     | `npc ${string}` // npc {npcKey}
     | `nearby ${Geomorph.GmDoorKey}` // door neighbourhood
     | `rect ${string}` // custom cuboid collider (possibly angled)
@@ -131,7 +139,7 @@ declare namespace WW {
 
   type PhysicsParsedBodyKey = (
     | ['npc' | 'circle' | 'rect', string]
-    | ['nearby' | 'inside', Geomorph.GmDoorKey]
+    | ['nearby', Geomorph.GmDoorKey]
   );
 
   type PhysicsBodyGeom = (

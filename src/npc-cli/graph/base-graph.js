@@ -39,7 +39,7 @@ export class BaseGraph {
   edgesArray;
   /**
    * Node lookup by `node.id`.
-   * @type {Map<string, Node>}
+   * @type {Map<Node['id'], Node>}
    */
   idToNode;
   /**
@@ -190,11 +190,12 @@ export class BaseGraph {
   }
 
   /**
-   * 
+   * https://dreampuf.github.io/GraphvizOnline/?engine=dot
+   * https://dreampuf.github.io/GraphvizOnline/?engine=fdp
    * @param {string} graphName 
    * @param {(edge: Edge) => string | null} [edgeLabel] 
    */
-  getGraphviz(graphName, edgeLabel = () => null) {
+  getGraphviz(graphName = 'graph1', edgeLabel = () => null) {
     return `
 digraph ${graphName} {
   
@@ -207,7 +208,7 @@ ${this.edgesArray.map(x => `  "${x.src.id}" -> "${x.dst.id}" ${edgeLabel(x) || '
 
   /**
    * Get `node` where `node.id === id`, or null.
-   * @param {string} id
+   * @param {Node['id']} id
    */
   getNodeById(id) {
     return this.idToNode.get(id) || null;

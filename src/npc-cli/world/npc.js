@@ -4,9 +4,9 @@ import { damp, dampAngle } from "maath/easing";
 
 import { Vect } from '../geom';
 import { defaultAgentUpdateFlags, defaultNpcInteractRadius, glbFadeIn, glbFadeOut, npcClassToMeta } from '../service/const';
-import { info, warn } from '../service/generic';
+import { error, info, warn } from '../service/generic';
 import { geom } from '../service/geom';
-import { buildObjectLookup, emptyAnimationMixer, emptyGroup, getParentBones, textureLoader, tmpVectThree1, toV3 } from '../service/three';
+import { buildObjectLookup, emptyAnimationMixer, emptyGroup, getParentBones, tmpVectThree1, toV3, toXZ } from '../service/three';
 import { helper } from '../service/helper';
 import { addBodyKeyUidRelation, npcToBodyKey } from '../service/rapier';
 import { cmUvService } from "../service/uv";
@@ -47,6 +47,7 @@ export class Npc {
   /** State */
   s = {
     act: /** @type {NPC.AnimKey} */ ('Idle'),
+    agentState: /** @type {null | number} */ (null),
     cancels: 0,
     doMeta: /** @type {null | Geom.Meta} */ (null),
     faceId: /** @type {null | NPC.UvQuadId} */ (null),
@@ -55,17 +56,17 @@ export class Npc {
     label: /** @type {null | string} */ (null),
     /** Desired look angle (rotation.y) */
     lookAngleDst: /** @type {null | number} */ (null),
-    /** Is this npc moving? */
-    moving: false,
+    lookSecs: 0.3,
+    /** An offMeshConnection traversal */
+    offMesh: /** @type {null | NPC.OffMeshState} */ (null),
     opacity: 1,
     /** Desired opacity */
     opacityDst: /** @type {null | number} */ (null),
-    /** 🚧 unused */
-    paused: false,
     run: false,
     spawns: 0,
     target: /** @type {null | THREE.Vector3} */ (null),
-    lookSecs: 0.3,
+    /** Target gmRoomId */
+    targetGrId: /** @type {null | Geomorph.GmRoomId} */ (null),
     selectorColor: /** @type {[number, number, number]} */ ([0.6, 0.6, 1]),
     showSelector: false,
     wayIndex: 0,
@@ -73,19 +74,15 @@ export class Npc {
   
   /** @type {null | NPC.CrowdAgent} */
   agent = null;
+  /** @type {null | dtCrowdAgentAnimation} */
+  agentAnim = null;
   
   /**
    * - Current target (if moving)
    * - Last set one (if not)
    */
   lastTarget = new THREE.Vector3();
-  /**
-   * - Next corner in nav (if moving).
-   * - Or last future corner (if not).
-   * - We stop slightly before final corner. 
-   */
-  nextCorner = new THREE.Vector3();
-  
+
   resolve = {
     fade: /** @type {undefined | ((value?: any) => void)} */ (undefined),
     move: /** @type {undefined | ((value?: any) => void)} */ (undefined),
@@ -122,15 +119,17 @@ export class Npc {
   }
 
   attachAgent() {
-    return this.agent ??= this.w.crowd.addAgent(this.position, {
+    this.agent ??= this.w.crowd.addAgent(this.position, {
       ...crowdAgentParams,
-      maxSpeed: this.s.run ? helper.defaults.runSpeed : helper.defaults.walkSpeed
+      maxSpeed: this.s.run ? helper.defaults.runSpeed : helper.defaults.walkSpeed,
+      queryFilterType: this.w.lib.queryFilterType.excludeDoors,
     });
+    this.agentAnim = this.w.crowd.raw.getAgentAnimation(this.agent.agentIndex) ?? null;
+    return this.agent;
   }
 
   async cancel() {
     info(`${'cancel'}: cancelling ${this.key}`);
-    this.s.paused = false;
 
     this.reject.fade?.(`${'cancel'}: cancelled fade`);
     this.reject.move?.(`${'cancel'}: cancelled move`);
@@ -139,55 +138,43 @@ export class Npc {
     this.w.events.next({ key: 'npc-internal', npcKey: this.key, event: 'cancelled' });
   }
 
+  dispose() {// 🚧
+
+  }
+
   /**
-   * Assume any of these preconditions:
-   * - `point.meta.door === true` (point on a door)
-   * - `point.meta.do === true` (point is a "do point")
-   * - `point.meta.nav === true && !!npc.doMeta` (point navigable, npc at a "do point")
+   * Either:
+   * - `p.meta.do` i.e. p is a "do point"
+   * - `p.meta.nav` and `npc.doMeta` i.e. point navigable, npc at a "do point"
+   * - `p` is nearly navigable and `npc` is off-mesh
    * 
-   * @param {Geom.MaybeMeta<Geom.VectJson>} point 
+   * @param {Geom.Meta<Geom.VectJson | THREE.Vector3Like>} p 
    * @param {object} opts
    * @param {any[]} [opts.extraParams] // 🚧 clarify
    */
-  async do(point, opts = {}) {
-    if (!Vect.isVectJson(point)) {
+  async do(p, opts = {}) {
+    if (!Vect.isVectJson(p)) {
       throw Error('point expected');
     }
-    if (!point.meta) {
+    if (!p.meta) {
       throw Error('point.meta expected');
     }
 
-    // 🚧 door switch instead of door?
-    const gmDoorId = helper.extractGmDoorId(point.meta);
-    if (point.meta.door === true && gmDoorId !== null) {
-      /** `undefined` -> toggle, `true` -> open, `false` -> close */
-      const extraParam = opts.extraParams?.[0] === undefined ? undefined : !!opts.extraParams[0];
-      const open = extraParam === true;
-      const close = extraParam === false;
-      const wasOpen = this.w.door.byGmId[gmDoorId.gmId][gmDoorId.doorId].open;
-      const isOpen = this.w.e.toggleDoor(gmDoorId.gdKey,{ npcKey: this.key, close, open });
-      if (close) {
-        if (isOpen) throw Error('cannot close door');
-      } else if (open) {
-        if (!isOpen) throw Error('cannot open door');
-      } else {
-        if (wasOpen === isOpen) throw Error('cannot toggle door');
-      }
-      return;
-    }
-
-    // point.meta.do, or (point.meta.nav && npc.doMeta)
-    
+    const point = { ...toXZ(p), meta: p.meta }; // handle v3
     const srcNav = this.w.npc.isPointInNavmesh(this.getPoint());
+    
+    // point.meta.do
     if (point.meta.do === true) {
       if (srcNav === true) {// nav -> do point
-        await this.onMeshDo(point, { ...opts, preferSpawn: !!point.meta.longClick });
+        // await this.onMeshDo(point, { ...opts, preferSpawn: !!point.meta.longClick });
+        await this.onMeshDo(point, { ...opts, preferSpawn: false });
       } else {// off nav -> do point
         await this.offMeshDo(point);
       }
       return;
     }
 
+    // point.meta.nav && npc.doMeta
     if (point.meta.nav === true && this.s.doMeta !== null) {
       if (srcNav === true) {
         this.s.doMeta = null;
@@ -201,7 +188,11 @@ export class Npc {
       return;
     }
 
-    // NOOP
+    // handle offMesh and click near nav
+    if (srcNav === false && point.meta.nav === false) {
+      const closest = this.w.npc.getClosestNavigable(toV3(p));
+      if (closest !== null) await this.offMeshDo({...toXZ(closest), meta: { nav: true }});
+    }
   }
 
   /**
@@ -298,12 +289,76 @@ export class Npc {
     return this.position;
   }
 
+  /**
+   * Radius depends on whether idle, walking or running.
+   */
   getRadius() {
-    return helper.defaults.radius;
+    if (this.s.target === null) {
+      return helper.defaults.radius;
+    } else if (this.s.run === true) {
+      return helper.defaults.radius * 3;
+    } else {
+      return helper.defaults.radius * 2;
+    }
   }
 
   getMaxSpeed() {
+    // return 0.5;
     return this.s.run === true ? this.def.runSpeed : this.def.walkSpeed;
+  }
+
+  /**
+   * 1. Step `offMesh.seg` through `[0, 1, 2]`
+   * 
+   * 1. Handle turns onto/along an offMeshConnection.
+   * 
+   * 1. Handle collisions during initial segment of offMeshConnection.
+   * Recast-Detour doesn't support collisions from `this` agent's perspective,
+   * and we've turned off its handling of the other agent.
+   * 
+   * To get neighbours working during offMeshConnections, we modified `dtCrowd::update`.
+   * 
+   * We also changed `dtCrowd::update` to ignore collisions of
+   * a neighbour on initial part of an offMeshConnection.
+   *
+   * @param {NPC.CrowdAgent} agent
+   * @param {NPC.OffMeshState} offMesh
+   */
+  handleOffMeshConnection(agent, offMesh) {
+    
+    const anim = /** @type {dtCrowdAgentAnimation} */ (this.agentAnim);
+
+    if (offMesh.seg === 0) {// handle collisions
+      const nneis  = agent.raw.nneis;
+      /** @type {dtCrowdNeighbour} */ let nei;
+      for (let i = 0; i < nneis; i++) {
+        nei = agent.raw.get_neis(i);
+        if (nei.dist < helper.defaults.radius * 0.85) {// cancel traversal and other
+          this.stopMoving();
+          this.w.npc.getByNpcUid(nei.idx).stopMoving();
+          break;
+        }
+      }
+    }
+
+    if (offMesh.seg === 0 && anim.t > anim.tmid) {
+      offMesh.seg = 1;
+    } else if (offMesh.seg === 1 && anim.t > 0.5 * (anim.tmid + anim.tmax)) {
+      offMesh.seg = 2;
+    }
+
+    let dirX = 0, dirY = 0;
+    if (offMesh.seg === 0) {
+      // 🤔 should init/main be unit vectors?
+      dirX = offMesh.init.x + (anim.t / anim.tmid)**2 * (offMesh.main.x - offMesh.init.x);
+      dirY = offMesh.init.y + (anim.t / anim.tmid)**2 * (offMesh.main.y - offMesh.init.y);
+    } else {
+      dirX = offMesh.main.x;
+      dirY = offMesh.main.y;
+    }
+    
+    this.s.lookAngleDst = this.getEulerAngle(Math.atan2(-dirY, dirX));
+
   }
 
   /**
@@ -336,7 +391,7 @@ export class Npc {
   }
 
   /**
-   * @param {number | Geom.VectJson} input
+   * @param {number | Geom.VectJson | THREE.Vector3Like} input
    * - radians (ccw from east), or
    * - point
    * @param {number} [ms]
@@ -344,9 +399,10 @@ export class Npc {
   async look(input, ms = 300) {
     if (this.w.lib.isVectJson(input)) {
       const src = this.getPoint();
-      input = src.x === input.x && src.y === input.y
+      const p = toXZ(input); // handle v3
+      input = src.x === p.x && src.y === p.y
         ? this.getAngle()
-        : Math.atan2(-(input.y - src.y), input.x - src.x)
+        : Math.atan2(-(p.y - src.y), p.x - src.x)
       ;
     }
 
@@ -369,7 +425,7 @@ export class Npc {
   }
 
   /**
-   * @param {Geom.VectJson} dst
+   * @param {Geom.MaybeMeta<Geom.VectJson | THREE.Vector3Like>} dst
    * @param {object} [opts]
    * @param {boolean} [opts.debugPath]
    */
@@ -378,27 +434,37 @@ export class Npc {
       throw new Error(`${this.key}: npc lacks agent`);
     }
 
-    const closest = this.w.npc.getClosestNavigable(toV3(dst));
+    // doorway half-depth 0.3 or 0.4, i.e. ≤ 0.5
+    const closest = this.w.npc.getClosestNavigable(toV3(dst), 0.5);
     if (closest === null) {
       throw new Error(`${this.key}: not navigable: ${JSON.stringify(dst)}`);
     }
+
+    // usually have target gmRoomId via dst.meta.grKey in `click`
+    this.s.targetGrId = dst.meta?.grKey !== undefined
+      ? helper.getGmRoomId(dst.meta.grKey)
+      : this.w.gmGraph.findRoomContaining(toXZ(closest))
+    ;
 
     if (opts.debugPath ?? showLastNavPath) {
       const path = this.w.npc.findPath(this.getPosition(), closest);
       this.w.debug.setNavPath(path ?? []);
     }
 
-    this.s.moving = true;
     this.s.wayIndex = 0;
-    this.s.lookSecs = 0.2;
+    this.s.lookSecs = 0.15;
 
     this.agent.updateParameters({
-      maxSpeed: 0, // don't move until 0th way-point
-      radius: helper.defaults.radius, // reset
-      collisionQueryRange: 1.5,
-      separationWeight: 1,
+      maxAcceleration: movingMaxAcceleration,
+      maxSpeed: this.getMaxSpeed(),
+      radius: (this.s.run ? 3 : 2) * helper.defaults.radius, // reset
+      // radius: helper.defaults.radius * 1.5, // reset
+      collisionQueryRange: movingCollisionQueryRange,
+      separationWeight: movingSeparationWeight,
+      queryFilterType: this.w.lib.queryFilterType.excludeDoors,
     });
     this.agent.requestMoveTarget(closest);
+
     this.s.target = this.lastTarget.copy(closest);
     const nextAct = this.s.run ? 'Run' : 'Walk';
     if (this.s.act !== nextAct) {
@@ -407,8 +473,6 @@ export class Npc {
     
     try {
       this.w.events.next({ key: 'started-moving', npcKey: this.key });
-      const position = this.getPosition();
-      this.nextCorner.copy(position); // trigger 0th way-point on next tick
       await this.waitUntilStopped();
     } catch (e) {
       this.stopMoving();
@@ -422,12 +486,12 @@ export class Npc {
     const src = Vect.from(this.getPoint());
     const meta = point.meta ?? {};
 
-    if (meta.do !== true && meta.nav !== true) {
-      throw Error('not doable nor navigable');
-    }
+    // if (meta.do !== true && meta.nav !== true) {
+    //   throw Error('not doable nor navigable');
+    // }
 
     if (
-      src.distanceTo(point) > this.getInteractRadius()
+      !(src.distanceTo(point) <= this.getInteractRadius())
       || !this.w.gmGraph.inSameRoom(src, point)
       // || !this.w.npc.canSee(src, point, this.getInteractRadius())
     ) {
@@ -435,10 +499,7 @@ export class Npc {
     }
 
     await this.fadeSpawn(
-      {// non-navigable uses doPoint:
-        ...point,
-        ...meta.nav !== true && /** @type {Geom.VectJson} */ (meta.doPoint)
-      },
+      {...meta.doPoint ?? point}, // 🚧 do points should have meta.doPoint
       {
         angle: meta.nav === true && meta.do !== true
           // use direction src --> point if entering navmesh
@@ -453,6 +514,40 @@ export class Npc {
         meta,
       },
     );    
+  }
+
+  /**
+   * @param {import('@recast-navigation/core').CrowdAgent} agent
+   * @param {number} next
+   */
+  onChangeAgentState(agent, next) {
+    if (next === 2) {// enter offMeshConnection
+      // find off-mesh-connection via lookup
+      const offMesh = (
+        this.w.nav.offMeshLookup[geom.to2DString(agent.raw.get_cornerVerts(0), agent.raw.get_cornerVerts(2))]
+        ?? this.w.nav.offMeshLookup[geom.to2DString(agent.raw.get_cornerVerts(3), agent.raw.get_cornerVerts(5))]
+        ?? this.w.nav.offMeshLookup[geom.to2DString(agent.raw.get_cornerVerts(6), agent.raw.get_cornerVerts(8))]
+        ?? null
+      );
+
+      if (offMesh === null) {
+        agent.teleport(this.position);
+        return error(`${this.key}: bailed out of unknown offMeshConnection: ${JSON.stringify(this.position)}`);
+      }
+      
+      // 🔔 this.s.offMesh set in useHandleEvents
+      this.w.events.next({ key: 'enter-off-mesh', npcKey: this.key, offMesh });
+      return;
+    }
+    
+    if (this.s.agentState === 2) {// exit offMeshConnection
+      if (this.s.offMesh !== null) {
+        this.w.events.next({ key: 'exit-off-mesh', npcKey: this.key, offMesh: this.s.offMesh.orig  });
+      } else {
+        warn(`${this.key}: exited offMeshConnection but this.s.offMesh already null`);
+      }
+      return;
+    }
   }
 
   /**
@@ -511,13 +606,16 @@ export class Npc {
    * `this.onMount` changes on HMR so we rely on idempotence nonetheless.
    * @param {THREE.Group | null} group 
    */
-  onMount = (group) => {
+  onMount(group) {
     if (group !== null) {
       this.m.group = group;
       // Setup shortcut
       this.position = group.position;
       // Resume `w.npc.spawn`
       this.resolve.spawn?.();
+    } else {
+      this.m.group = emptyGroup;
+      this.position = tmpVectThree1;
     }
   }
 
@@ -529,20 +627,11 @@ export class Npc {
   onTick(deltaMs, positions) {
     this.mixer.update(deltaMs);
 
-    if (this.agent !== null) {
-      this.onTickAgent(deltaMs, this.agent);
-    }
-
     if (this.s.lookAngleDst !== null) {
       if (dampAngle(this.m.group.rotation, 'y', this.s.lookAngleDst, this.s.lookSecs, deltaMs, Infinity, undefined, 0.01) === false) {
         this.s.lookAngleDst = null;
         this.resolve.turn?.();
       }
-    }
-
-    if (this.s.moving === true) {
-      const { x, y, z } = this.position;
-      positions.push(this.bodyUid, x, y, z);
     }
 
     if (this.s.opacityDst !== null) {
@@ -552,6 +641,17 @@ export class Npc {
       }
       this.setUniform('opacity', this.s.opacity);
     }
+
+    if (this.agent === null) {
+      return;
+    }
+
+    this.onTickAgent(deltaMs, this.agent);
+
+    if (this.agent.raw.dvel !== 0 || this.s.offMesh !== null) {
+      const { x, y, z } = this.position;
+      positions.push(this.bodyUid, x, y, z);
+    }
   }
 
   /**
@@ -560,45 +660,56 @@ export class Npc {
    */
   onTickAgent(deltaMs, agent) {
     const pos = agent.position();
-    const vel = agent.velocity();
-    const speed = Math.sqrt(vel.x ** 2 + vel.z ** 2);
+    const state = agent.state();
     
     this.position.copy(pos);
 
-    if (speed > 0.2) {
-      this.s.lookAngleDst = Math.PI/2 - Math.atan2(vel.z, vel.x);
-    } 
+    if (state !== this.s.agentState) {
+      this.onChangeAgentState(agent, state);
+      this.s.agentState = state;
+    }
+
+    if (this.s.offMesh !== null) {
+      this.handleOffMeshConnection(agent, this.s.offMesh);
+      return; // Avoid stopMoving whilst offMesh
+    }
 
     if (this.s.target === null) {
       return;
     }
 
+    this.onTickAgentTurn(agent);
+
     const distance = this.s.target.distanceTo(pos);
 
     if (distance < 0.15) {// Reached target
       this.stopMoving();
-      this.w.events.next({ key: 'way-point', npcKey: this.key, index: this.s.wayIndex, ...this.getPoint(), next: null });
       return;
     }
+  }
 
-    const nextCorner = agent.nextTargetInPath();
-    if (this.nextCorner.equals(nextCorner) === false) {
-      this.w.events.next({
-        key: 'way-point',
-        npcKey: this.key,
-        index: this.s.wayIndex++,
-        x: this.nextCorner.x, y: this.nextCorner.z,
-        next: { x: nextCorner.x, y: nextCorner.z },
-      });
-      this.nextCorner.copy(nextCorner);
+  /**
+   * @param {import('@recast-navigation/core').CrowdAgent} agent
+   */
+  onTickAgentTurn(agent) {
+    const vel = agent.velocity();
+    const speedSqr = vel.x ** 2 + vel.z ** 2;
+
+    if (speedSqr > 0.2 ** 2) {
+      this.s.lookAngleDst = this.getEulerAngle(Math.atan2(-vel.z, vel.x));
     }
   }
 
   removeAgent() {
-    if (this.agent !== null) {
-      this.w.crowd.removeAgent(this.agent.agentIndex);
-      this.agent = null;
+    if (this.agent === null) {
+      return;
     }
+
+    this.w.crowd.removeAgent(this.agent.agentIndex);
+    
+    this.agent = null;
+    this.agentAnim = null;
+    this.s.offMesh = null;
   }
 
   setupMixer() {
@@ -643,15 +754,21 @@ export class Npc {
   setLabel(label) {
     this.s.label = label;
 
-    if (label === null) {
-      cmUvService.updateLabelQuad(this);
-    } else if (this.w.npc.updateLabels(label) === false) {
-      // if updateLabels noop, need to apply update
-      cmUvService.updateLabelQuad(this);
-    }
+    const changedLabelsSheet = label !== null && this.w.npc.updateLabels(label) === true;
 
-    // may touch every npc via sprite-sheet change
-    this.forceUpdate();
+    if (changedLabelsSheet === true) {
+      // 🔔 might need to update every npc
+      // avoidable by previously ensuring labels
+      Object.values(this.w.n).forEach((npc) => {
+        cmUvService.updateLabelQuad(npc);
+        npc.epochMs = Date.now();
+      });
+    } else {
+      cmUvService.updateLabelQuad(this);
+      this.epochMs = Date.now();
+    }
+    
+    this.w.npc.update();
   }
 
   /** @param {THREE.Vector3Like} dst  */
@@ -728,39 +845,38 @@ export class Npc {
   }
 
   stopMoving() {
-    if (this.agent == null) {
+    if (this.agent === null) {
       return;
     }
 
-    const position = this.agent.position();
     this.s.target = null;
+    this.s.targetGrId = null;
     this.s.lookAngleDst = null;
-    this.s.moving = false;
     this.agent.updateParameters({
-      maxSpeed: this.getMaxSpeed(),
+      maxSpeed: this.getMaxSpeed() * 0.75,
+      maxAcceleration: staticMaxAcceleration,
       updateFlags: defaultAgentUpdateFlags,
-      radius: helper.defaults.radius / 1.5,
-      collisionQueryRange: 1,
-      separationWeight: 2,
+      radius: helper.defaults.radius,
+      collisionQueryRange: staticCollisionQueryRange,
+      separationWeight: staticSeparationWeight,
+      // queryFilterType: this.w.lib.queryFilterType.excludeDoors,
+      // updateFlags: 1,
     });
     
     this.startAnimation('Idle');
-    // suppress final movement
-    this.agent.teleport(position);
-    // 🔔 keep target, so moves out of the way of other npcs
-    this.agent.requestMoveTarget(position);
+
+    if (this.s.offMesh === null || (this.s.offMesh.seg === 0)) {
+      const position = this.agent.position();
+      this.agent.teleport(position);
+      this.agent.requestMoveTarget(position);
+      // case offMesh.seg === 0:
+      /** @type {dtCrowdAgentAnimation} */ (this.agentAnim).set_active(false);
+    } else {// midway through traversal, so stop when finish
+      this.agent.requestMoveTarget(toV3(this.s.offMesh.dst));
+    }
 
     this.resolve.move?.();
     this.w.events.next({ key: 'stopped-moving', npcKey: this.key });
-  }
-
-  toJSON() {
-    return {
-      key: this.key,
-      def: this.def,
-      epochMs: this.epochMs,
-      s: this.s,
-    };
   }
 
   updateUniforms() {
@@ -768,36 +884,40 @@ export class Npc {
   }
 
   async waitUntilStopped() {
-    this.s.moving === true && await new Promise((resolve, reject) => {
+    this.s.target !== null && await new Promise((resolve, reject) => {
       this.resolve.move = resolve; // see "stopped-moving"
       this.reject.move = reject; // see w.npc.remove
     });
   }
 }
 
-/**
- * Creates a new NPC loaded with previous one's data.
- * ℹ️ We simply overwrite non-methods
- * @param {NPC.NPC} npc 
- * @returns {NPC.NPC}
- */
-export function hotModuleReloadNpc(npc) {
-  const nextNpc = new Npc(npc.def, npc.w);
-  return Object.assign(nextNpc, {...npc});
-}
+const staticMaxAcceleration = 4;
+const movingMaxAcceleration = 8;
+const staticSeparationWeight = 2;
+const movingSeparationWeight = 0.5;
+const staticCollisionQueryRange = 1;
+const movingCollisionQueryRange = 1.5;
 
 /** @type {Partial<import("@recast-navigation/core").CrowdAgentParams>} */
 export const crowdAgentParams = {
   radius: helper.defaults.radius, // 🔔 too large causes jerky collisions
   height: 1.5,
-  maxAcceleration: 10,
-  pathOptimizationRange: 5, // 🚧 clarify
-  // collisionQueryRange: 0.7,
-  collisionQueryRange: 2,
-  separationWeight: 1,
+  maxAcceleration: staticMaxAcceleration,
+  pathOptimizationRange: helper.defaults.radius * 30,
+  collisionQueryRange: staticCollisionQueryRange,
+  separationWeight: staticSeparationWeight,
   queryFilterType: 0,
-  // obstacleAvoidanceType
   updateFlags: defaultAgentUpdateFlags,
 };
 
 const showLastNavPath = false;
+
+/**
+ * @typedef {ReturnType<
+ *  import('@recast-navigation/core').Crowd['raw']['getAgentAnimation']
+ * >} dtCrowdAgentAnimation
+ */
+
+/**
+ * @typedef {import('@recast-navigation/wasm').default.dtCrowdNeighbour} dtCrowdNeighbour
+ */

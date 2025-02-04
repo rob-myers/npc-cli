@@ -4,8 +4,8 @@ import {
   Actions,
   Layout as FlexLayout,
   Model,
-  TabNode,
-  TabSetNode,
+  type TabNode,
+  type TabSetNode,
 } from "flexlayout-react";
 import debounce from "debounce";
 import { useBeforeunload } from "react-beforeunload";
@@ -23,18 +23,18 @@ import {
 } from "./tab-factory";
 import useStateRef from "../hooks/use-state-ref";
 import useUpdate from "../hooks/use-update";
-import Spinner from "./Spinner";
+import Spinner from "../components/Spinner";
 
 export const Tabs = React.forwardRef<State, Props>(function Tabs(props, ref) {
   const state = useStateRef((): State => ({
     enabled: false,
     everEnabled: false,
     hash: "",
+    model: {} as Model,
     prevFocused: null,
     resetCount: 0,
     rootEl: null as any,
     tabsState: {},
-    model: {} as Model,
 
     focusRoot() {
       state.rootEl.focus();
@@ -69,7 +69,7 @@ export const Tabs = React.forwardRef<State, Props>(function Tabs(props, ref) {
           });
         }
       }
-      if (act.type === Actions.ADJUST_SPLIT) {
+      if (act.type === Actions.ADJUST_BORDER_SPLIT) {
         state.focusRoot();
       }
       if (act.type === Actions.SELECT_TAB) {
@@ -139,12 +139,14 @@ export const Tabs = React.forwardRef<State, Props>(function Tabs(props, ref) {
         tabsState[key].disabled = !next 
       }
     },
+    updateHash(nextHash) {
+      const tabsDefChanged = state.hash !== nextHash;
+      state.hash = nextHash;
+      return tabsDefChanged;
+    },
   }));
-
-  // 🚧 move to state.updateHash
-  const hash = JSON.stringify(props.tabs);
-  const tabsDefChanged = state.hash !== hash;
-  state.hash = hash;
+  
+  const tabsDefChanged = state.updateHash(JSON.stringify(props.tabs));
 
   state.model = React.useMemo(() => {
     const output = createOrRestoreJsonModel(props);
@@ -187,7 +189,7 @@ export const Tabs = React.forwardRef<State, Props>(function Tabs(props, ref) {
 
   useBeforeunload(() => storeModelAsJson(props.id, state.model));
 
-  React.useMemo(() => void (ref as React.RefCallback<State>)?.(state), [ref]);
+  React.useImperativeHandle(ref, () => state);
 
   const update = useUpdate();
 
@@ -196,7 +198,7 @@ export const Tabs = React.forwardRef<State, Props>(function Tabs(props, ref) {
       <figure
         key={state.resetCount}
         className={cx("tabs", tabsCss)}
-        ref={(x) => x && (state.rootEl = x)}
+        ref={state.ref('rootEl')}
         tabIndex={0}
         onKeyDown={state.onKeyDown}
       >
@@ -252,6 +254,8 @@ export interface State {
   reset(): void;
   toggleEnabled(next?: boolean): void;
   toggleTabsDisabled(next: boolean): void;
+  /** Returns true iff hash changed */
+  updateHash(nextHash: string): boolean;
 }
 
 export interface TabState {

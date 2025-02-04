@@ -1,7 +1,7 @@
 import * as htmlparser2 from "htmlparser2";
 import * as THREE from "three";
 
-import { sguToWorldScale, precision, wallOutset, obstacleOutset, hullDoorDepth, doorDepth, decorIconRadius, sguSymbolScaleDown, doorSwitchHeight, doorSwitchDecorImgKey, specialWallMetaKeys, wallHeight } from "./const";
+import { sguToWorldScale, precision, wallOutset, obstacleOutset, hullDoorDepth, doorDepth, decorIconRadius, sguSymbolScaleDown, doorSwitchHeight, doorSwitchDecorImgKey, specialWallMetaKeys, wallHeight, offMeshConnectionHalfDepth } from "./const";
 import { Mat, Poly, Rect, Vect } from "../geom";
 import {
   info,
@@ -14,7 +14,8 @@ import {
   keys,
   toPrecision,
   hashJson,
-  parseJsWithCt,
+  tagsToMeta,
+  textToTags,
 } from "./generic";
 import { geom, tmpRect1 } from "./geom";
 import { helper } from "./helper";
@@ -36,7 +37,6 @@ class GeomorphService {
    * @param {Geomorph.GeomorphKey} gmKey 
    * @param {Geomorph.FlatSymbol} symbol Flat hull symbol
    * @param {Geomorph.Assets} assets
-   * //@param {Pick<Geomorph.Symbol, 'hullWalls' | 'pngRect'>} context
    * @returns {Geomorph.Layout}
    */
   createLayout(gmKey, symbol, assets) {
@@ -46,7 +46,11 @@ class GeomorphService {
     const hullPoly = Poly.union(hullWalls).map(x => x.precision(precision));
     const hullOutline = hullPoly.map((x) => new Poly(x.outline).clone()); // sans holes
 
-    const uncutWalls = symbol.walls;
+    // const uncutWalls = symbol.walls;
+    // Avoid non-hull walls inside hull walls (for x-ray)
+    const uncutWalls = symbol.walls.flatMap(x =>
+      Poly.cutOut(hullWalls, [x]).map(y => (y.meta = x.meta, y))
+    ).concat(hullWalls);
     const plainWallMeta = { wall: true };
     const hullWallMeta = { wall: true, hull: true };
 
@@ -55,7 +59,8 @@ class GeomorphService {
      * - avoids errors (e.g. for 301).
      * - permits meta propagation e.g. `h` (height), 'hull' (hull wall)
      */
-    const cutWalls = uncutWalls.flatMap((x) => Poly.cutOut(symbol.doors, [x]).map((y) =>
+    const connectors = symbol.doors.concat(symbol.windows);
+    const cutWalls = uncutWalls.flatMap((x) => Poly.cutOut(connectors, [x]).map((y) =>
       Object.assign(y, {
         meta: specialWallMetaKeys.some(key => key in x.meta)
           ? x.meta
@@ -63,14 +68,24 @@ class GeomorphService {
         }
       )
     ));
-    const rooms = Poly.union(uncutWalls).flatMap((x) =>
+
+    const rooms = Poly.union(uncutWalls.concat(symbol.windows)).flatMap((x) =>
       x.holes.map((ring) => new Poly(ring).fixOrientation())
     );
-    // room meta comes from decor.meta tagged meta
-    const metaDecor = symbol.decor.filter(x => x.meta.meta);
-    rooms.forEach((room) => Object.assign(
-      room.meta = {}, metaDecor.find((x) => room.contains(x.outline[0]))?.meta, { meta: undefined }
+    // Room meta is specified by "decor meta ..." or "decor label=text ..." 
+    // 🤔 can compute faster client-side via pixel-look-up
+    const metaDecor = new Set(symbol.decor.filter(x =>
+      typeof x.meta.label === 'string'
+      || x.meta.meta === true
     ));
+    rooms.forEach((room) => {
+      for (const d of metaDecor) {
+        if (room.contains(d.outline[0])) {
+          metaDecor.delete(d); // at most 1 room
+          Object.assign(room.meta, d.meta, { decor: undefined, meta: undefined, y: undefined });
+        }
+      }
+    });
 
     const decor = /** @type {Geomorph.Decor[]} */ ([]);
     const labels = /** @type {Geomorph.DecorPoint[]} */ ([]);
@@ -88,18 +103,19 @@ class GeomorphService {
 
     const navPolyWithDoors = Poly.cutOut([
       ...cutWalls.flatMap((x) => geom.createOutset(x, wallOutset)),
+      ...symbol.windows,
       ...symbolObstacles.flatMap((x) => geom.createOutset(x,
         typeof x.meta['nav-outset'] === 'number' ? x.meta['nav-outset'] * sguToWorldScale : obstacleOutset
       )),
-      ...decor.flatMap(d => // 🔔 decor cuboid can effect nav-mesh
-        d.type === 'cuboid' && d.meta.nav === true
-          ? geom.applyUnitQuadTransformWithOutset(tmpMat1.feedFromArray(d.transform), obstacleOutset)
-          : []
+      ...decor.filter(this.isDecorCuboid).filter(d => d.meta.nav === true).map(d =>
+        geom.applyUnitQuadTransformWithOutset(tmpMat1.feedFromArray(d.transform), obstacleOutset)
       ),
-    ], hullOutline).filter((poly) => 
-      // Ignore nav-mesh if AABB ≤ 1m², or poly intersects `ignoreNavPoints`
-      poly.rect.area > 1 && !ignoreNavPoints.some(p => poly.contains(p))
-    ).map((x) => x.cleanFinalReps().precision(precision));
+    ], hullOutline).filter(
+      poly => poly.rect.area > 1 && !ignoreNavPoints.some(p => poly.contains(p))
+    ).map(
+      poly => poly.cleanFinalReps().precision(precision)
+    );
+
 
     // 🔔 connector.roomIds will be computed in browser
     const doors = symbol.doors.map(x => new Connector(x));
@@ -247,6 +263,7 @@ class GeomorphService {
       gridRect: sguGridRect.scale(sguToWorldScale).applyMatrix(matrix),
       inverseMatrix: matrix.getInverseMatrix(),
       mat4: geomorph.embedXZMat4(transform),
+      determinant: transform[0] * transform[3] - transform[1] * transform[2],
 
       getOtherRoomId(doorId, roomId) {
         // We support case where roomIds are equal e.g. 303
@@ -262,44 +279,21 @@ class GeomorphService {
   /**
    * @param {Geom.Poly[]} navPolyWithDoors 
    * @param {Connector[]} doors 
-   * @returns {Pick<Geomorph.Layout, 'navDecomp' | 'navDoorwaysOffset' | 'navRects'>}
+   * @returns {Pick<Geomorph.Layout, 'navDecomp' | 'navRects'>}
    */
   decomposeLayoutNav(navPolyWithDoors, doors) {
-    const navDoorways = doors.map((connector) => connector.computeDoorway());
-    /**
-     * Remove doorways from `navPolyWithDoors`, so we can add them back below (normalization).
-     * For hull doors, the connector doorway only contains half the doorway (to avoid overlap),
-     * so we must additionally remove the rest.
-     */
-    const navPolySansDoorways = Poly.cutOut([
-      ...navDoorways.map(x => x.precision(6)),
-      ...doors.flatMap(x => x.meta.hull ? x.poly : []),
-    ], navPolyWithDoors).map(x => x.cleanFinalReps());
-
-    const navDecomp = geom.joinTriangulations(navPolySansDoorways.map(poly => poly.qualityTriangulate()));
-    // 🔔 earlier precision can break qualityTriangulate
-    navDecomp.vs.forEach(v => v.precision(precision));
-    navDoorways.forEach(poly => poly.precision(precision));
-
-    // add two triangles for each doorway (we dup some verts)
-    const navDoorwaysOffset = navDecomp.tris.length;
-    navDoorways.forEach(doorway => {
-      const vId = navDecomp.vs.length;
-      navDecomp.vs.push(...doorway.outline);
-      navDecomp.tris.push([vId, vId + 1, vId + 2], [vId + 2, vId + 3, vId]);
-    });
-
+    // 🚧 remove all doorways... we'll use offMeshConnections instead
+    const navDoorways = doors.map(x => x.computeDoorway().precision(precision).cleanFinalReps());
+    const navPolySansDoors = Poly.cutOut(navDoorways, navPolyWithDoors).map(x => x.cleanFinalReps());
+    const navDecomp = geom.joinTriangulations(navPolySansDoors.map(poly => poly.qualityTriangulate()));
+    
+    // include doors to infer "connected components"
     const navRects = navPolyWithDoors.map(x => x.rect.precision(precision));
-    navRects.sort(// Smaller rects 1st, else larger overrides (e.g. 102)
-      (a, b) => a.area < b.area ? -1 : 1
-    );
+    // Smaller rects 1st, else larger overrides (e.g. 102)
+    navRects.sort((a, b) => a.area < b.area ? -1 : 1);
+    // Mutate doors
     doors.forEach(door => door.navRectId = navRects.findIndex(r => r.contains(door.center)));
-
-    return {
-      navDecomp,
-      navDoorwaysOffset,
-      navRects,
-    };
+    return { navDecomp, navRects };
   }
 
   /**
@@ -429,7 +423,6 @@ class GeomorphService {
       unsorted: json.unsorted.map(Poly.from),
 
       navDecomp: { vs: json.navDecomp.vs.map(Vect.from), tris: json.navDecomp.tris },
-      navDoorwaysOffset: json.navDoorwaysOffset,
       navRects: json.navRects.map(Rect.fromJson),
     };
   }
@@ -772,10 +765,6 @@ class GeomorphService {
       sym.addableWalls.filter(({ meta }) => !wallTags || wallTags.some((x) => meta[x] === true))
     );
 
-    let extraWallMeta = /** @type {undefined | Geom.Meta} */ (undefined)
-    typeof meta.wallsY === 'number' && Object.assign(extraWallMeta ??= {}, { y: meta.wallsY });
-    typeof meta.wallsH === 'number' && Object.assign(extraWallMeta ??= {}, { h: meta.wallsH });
-
     return {
       key: sym.key,
       isHull: sym.isHull,
@@ -785,12 +774,13 @@ class GeomorphService {
       doors: doors.map((x) => x.cleanClone(tmpMat1)),
       obstacles: sym.obstacles.map((x) => x.cleanClone(tmpMat1, {
         // aggregate height
-        ...typeof meta.y === 'number' && { y: meta.y + (Number(x.meta.y) || 0) },
+        ...typeof meta.y === 'number' && { y: toPrecision(meta.y + (Number(x.meta.y) || 0)) },
         // aggregate transform
         ...{ transform: tmpMat2.feedFromArray(transform).preMultiply(x.meta.transform ?? [1, 0, 0, 1, 0, 0]).toArray() },
       })),
-      walls: sym.walls.concat(wallsToAdd).map((x) => x.cleanClone(tmpMat1, extraWallMeta)),
-      windows: sym.windows.map((x) => x.cleanClone(tmpMat1)),
+      walls: sym.walls.concat(wallsToAdd).map((x) => x.cleanClone(tmpMat1)),
+      // meta.{y,h} define window dimension
+      windows: sym.windows.map((x) => x.cleanClone(tmpMat1, meta)),
       unsorted: sym.unsorted.map((x) => x.cleanClone(tmpMat1)),
     };
   }
@@ -987,7 +977,7 @@ class GeomorphService {
         }
 
         // const ownTags = contents.split(" ");
-        const ownTags = [...contents.matchAll(splitTagRegex)].map(x => x[0]);
+        const ownTags = textToTags(contents);
 
         // symbol may have folder "symbols"
         if (folderStack[0] === "symbols") {
@@ -1022,7 +1012,7 @@ class GeomorphService {
 
             symbols.push({
               symbolKey: subSymbolKey,
-              meta: geomorph.tagsToMeta(symbolTags, { key: subSymbolKey }),
+              meta: tagsToMeta(symbolTags, { key: subSymbolKey }, metaVarNames, metaVarValues),
               width,
               height,
               transform: reduced,
@@ -1032,7 +1022,7 @@ class GeomorphService {
           return;
         }
 
-        const meta = geomorph.tagsToMeta(ownTags, {});
+        const meta = tagsToMeta(ownTags, {}, metaVarNames, metaVarValues);
         // 🔔 "switch" points to last doorId seen
         if (meta.switch === true) {
           meta.switch = doors.length - 1;
@@ -1248,7 +1238,6 @@ class GeomorphService {
       unsorted: layout.unsorted.map((x) => x.geoJson),
 
       navDecomp: { vs: layout.navDecomp.vs, tris: layout.navDecomp.tris },
-      navDoorwaysOffset: layout.navDoorwaysOffset,
       navRects: layout.navRects,
     };
   }
@@ -1281,22 +1270,6 @@ class GeomorphService {
   /** @param {Pick<Geomorph.ObstacleSheetRectCtxt, 'symbolKey' | 'obstacleId'>} arg0 */
   symbolObstacleToKey({ symbolKey, obstacleId }) {
     return /** @type {const} */ (`${symbolKey} ${obstacleId}`);
-  }
-
-  /**
-   * @param {string[]} tags
-   * @param {Geom.Meta} baseMeta
-   */
-  tagsToMeta(tags, baseMeta) {
-    return tags.reduce((meta, tag) => {
-      const eqIndex = tag.indexOf("=");
-      if (eqIndex > -1) {
-        meta[tag.slice(0, eqIndex)] = parseJsWithCt(tag.slice(eqIndex + 1), metaVarNames, metaVarValues);
-      } else {
-        meta[tag] = true; // Omit tags `foo=bar`
-      }
-      return meta;
-    }, baseMeta);
   }
 
   /**
@@ -1368,6 +1341,7 @@ export class Connector {
         || edge === 'w' && this.normal.x > 0
       ) {
         this.normal.scale(-1);
+        this.seg = [v, u];
       }
     }
 
@@ -1397,7 +1371,7 @@ export class Connector {
     /**
      * `[id of room infront, id of room behind]`
      * - a room is *infront* if `normal` is pointing towards it.
-     * - hull doors have exactly one non-null entry.
+     * - hull doors have form `[null, roomId]` because their normal points outwards
      * @type {[null | number, null | number]}
      */
     this.roomIds = [null, null];
@@ -1429,22 +1403,25 @@ export class Connector {
    * - They are deeper then the door by
    *   (a) `wallOutset` for hull doors.
    *   (b) `2 * wallOutset` for non-hull doors.
-   * @param {boolean} [thin]
+   * @param {number} [extrudeDoorDepth]
+   * @param {number} [halfWidth]
    * @returns {Geom.Poly}
    */
-  computeDoorway(thin = false) {
+  computeDoorway(extrudeDoorDepth = wallOutset, halfWidth) {
     const doorHalfDepth = 0.5 * (this.meta.hull ? hullDoorDepth : doorDepth);
-    const inwardsExtrude = thin === true ? 0 : wallOutset;
+    const inwardsExtrude = extrudeDoorDepth;
     /**
      * For hull doors, normals point outwards from geomorphs,
      * and we exclude "outer part" of doorway to fix doorway normalization.
      */
-    const outwardsExtrude = thin === true || this.meta.hull === true ? 0 : wallOutset;
+    const outwardsExtrude = this.meta.hull === true ? 0 : extrudeDoorDepth;
 
     const normal = this.normal;
     const delta = tmpVect1.copy(this.seg[1]).sub(this.seg[0]);
     const length = delta.length;
-    const offset = (length/2 - wallOutset) / length;
+    
+    halfWidth ??= length / 2 - wallOutset;
+    const offset = halfWidth / length;
 
     return new Poly([
       new Vect(
@@ -1467,6 +1444,39 @@ export class Connector {
   }
 
   /**
+   * Cannot re-use `computeDoorway` because it accounts for "outer hull door".
+   * The first segment is pointed to by `normal`.
+   * @returns {[Geom.Vect, Geom.Vect, Geom.Vect, Geom.Vect]} `[srcSeg0, srcSeg1, dstSeg0, dstSeg0]`
+   */
+  computeEntrances() {
+    const entranceHalfDepth = this.meta.hull === true ? offMeshConnectionHalfDepth.hull : offMeshConnectionHalfDepth.nonHull;
+    const normal = this.normal;
+    const delta = tmpVect1.copy(this.seg[1]).sub(this.seg[0]);
+    const length = delta.length;
+    const halfWidth = length / 2 - wallOutset;
+    const offset = halfWidth / length;
+
+    return [
+      new Vect(
+        this.center.x + delta.x * offset + normal.x * entranceHalfDepth,
+        this.center.y + delta.y * offset + normal.y * entranceHalfDepth,
+      ),
+      new Vect(
+        this.center.x - delta.x * offset + normal.x * entranceHalfDepth,
+        this.center.y - delta.y * offset + normal.y * entranceHalfDepth,
+      ),
+      new Vect(
+        this.center.x - delta.x * offset - normal.x * entranceHalfDepth,
+        this.center.y - delta.y * offset - normal.y * entranceHalfDepth,
+      ),
+      new Vect(
+        this.center.x + delta.x * offset - normal.x * entranceHalfDepth,
+        this.center.y + delta.y * offset - normal.y * entranceHalfDepth,
+      ),
+    ];
+  }
+
+  /**
    * The thin polygon is the connector polygon with its depth restricted,
    * so it doesn't jut out from its surrounding walls.
    * @returns {Geom.Poly}
@@ -1482,11 +1492,6 @@ export class Connector {
   }
 }
 
-/**
- * e.g. `foo bar=baz qux='1 2 3'` yields
- * > `foo`, `bar=baz`, `qux='1 2 3'`
- */
-const splitTagRegex = /[^\s=]+(?:=(?:(?:'[^']*')|(?:[^']\S*)))?/gi;
 const tmpVect1 = new Vect();
 const tmpMat1 = new Mat();
 const tmpMat2 = new Mat();

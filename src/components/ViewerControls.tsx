@@ -21,6 +21,8 @@ import {
 import useLongPress from "src/npc-cli/hooks/use-long-press";
 import useUpdate from "src/npc-cli/hooks/use-update";
 import useStateRef from "src/npc-cli/hooks/use-state-ref";
+import { tryLocalStorageSet } from "src/npc-cli/service/generic";
+import { localStorageKey } from "src/npc-cli/service/const";
 
 export default function ViewerControls({ api }: Props) {
   const site = useSite(({ browserLoaded, viewOpen }) => ({ browserLoaded, viewOpen }), shallow);
@@ -39,10 +41,9 @@ export default function ViewerControls({ api }: Props) {
       update();
     },
     onMaximize() {
-      api.rootEl.style.setProperty("--viewer-min", "100%");
+      state.setViewerBase(100);
       useSite.api.toggleView(true);
     },
-
     dragOffset: null as null | number,
     onDragStart(e: React.PointerEvent) {
       // console.log("drag start");
@@ -71,7 +72,7 @@ export default function ViewerControls({ api }: Props) {
       api.rootEl.style.transition = `min-width 0s, min-height 0s`;
 
       if (useSite.api.isViewClosed()) {
-        api.rootEl.style.setProperty("--viewer-min", `${0}%`);
+        api.rootEl.style.setProperty("--viewer-base", `${0}%`);
         useSite.api.toggleView(true);
       }
     },
@@ -79,11 +80,9 @@ export default function ViewerControls({ api }: Props) {
       if (state.dragOffset !== null) {
         let percent = isSmallView()
           ? (100 * (window.innerHeight - (e.clientY + state.dragOffset))) / window.innerHeight
-          : (100 * (window.innerWidth - (e.clientX + state.dragOffset))) / (window.innerWidth - getNavWidth());
-        percent = Math.max(0, Math.min(100, percent));
-        // percent = Math.ceil(10 * percent) / 10;
-        api.rootEl.style.setProperty("--viewer-min", `${percent}%`);
-        // console.log(percent);
+          : (100 * (window.innerWidth - (e.clientX + state.dragOffset))) / (window.innerWidth - getNavWidth())
+        ;
+        state.setViewerBase(percent);
       }
     },
     onDragEnd(_e: PointerEvent) {
@@ -98,23 +97,37 @@ export default function ViewerControls({ api }: Props) {
         document.body.removeEventListener("pointerleave", state.onDragEnd);
         api.rootEl.style.transition = "";
 
-        const percent = parseFloat(api.rootEl.style.getPropertyValue("--viewer-min"));
-        if (percent < 5) {
-          api.rootEl.style.setProperty("--viewer-min", `${50}%`);
-          state.toggleCollapsed(false);
+        const percent = parseFloat(api.rootEl.style.getPropertyValue("--viewer-base"));
+        if (percent < 10) {
+          api.rootEl.style.setProperty("--viewer-base", `${50}%`);
+          state.toggleCollapsed();
         }
       }
     },
+    getViewerBase() {
+      const percentage = api.rootEl.style.getPropertyValue("--viewer-base");
+      return percentage === null ? null : parseFloat(percentage);
+    },
+    setViewerBase(percentage: number) {
+      percentage = Math.max(0, Math.min(100, percentage));
+      api.rootEl.style.setProperty("--viewer-base", `${percentage}%`);
+      tryLocalStorageSet(localStorageKey.viewerBasePercentage, `${percentage}%`);
+    },
+    toggleCollapsed() {
+      const percentage = state.getViewerBase();
+      if (percentage !== null && percentage > 50) {// collapse half way
+        state.setViewerBase(50);
+      } else {// collapse or expand
+        state.dragOffset = null;
+        const willExpand = useSite.api.toggleView();
+        if (!willExpand) {// will collapse
+          api.tabs.toggleEnabled(false);
+        }
+        if (willExpand) {// will expand to last percentage (≤50)
+          isSmallView() && useSite.api.toggleNav(false);
+        }
+      }
 
-    toggleCollapsed(next?: boolean) {
-      state.dragOffset = null;
-      const willOpen = useSite.api.toggleView(next);
-      if (!willOpen) {
-        api.tabs.toggleEnabled(false);
-      }
-      if (willOpen && isSmallView()) {
-        useSite.api.toggleNav(false);
-      }
     },
   }));
 

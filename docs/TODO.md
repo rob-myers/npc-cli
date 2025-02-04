@@ -8,44 +8,238 @@
 
 ## WIP
 
-- 🚧 support `await api.sleep(1)` inside `map`
-  - ℹ️ e.g. `{ echo foo; echo bar; echo baz; } | map 'async (input, {api}) => { await api.sleep(1); return input }'`
-  - ✅ simplify `choice` so it does not use `sleep`
-  - ✅ refactor underlying `choice` as AsyncFunction 
-  - refactor `sleep` as AsyncFunction
-- 🚧 avoid initial instanced mesh render
-  - still seeing issue on mobile
-- 🚧 understand ~~duplicated~~ coinciding npcs e.g. on edit recast-detour.js
-  - ℹ️ seems npc `will` is coinciding with npc `rob`
-  - ℹ️ saw happen when changed symbol chairs
-  - might have fixed `w.npc.restore()`
-- 🚧 Tabs: support keyboard shortcut to switch tabs: `ctrl+[`, `ctrl+]`
-  - ✅ shortcut works in active tabset
-  - clicking tab sets active tabset
-- 🚧 clarify connected nav issues:
-  - ℹ️ inaccessible door should not prevent nav through open door
-    - `maxSimplificationError: 0.85` helped, but causes nav kinks
-  - ℹ️ npc should not be able to get too close to inaccessible door
-- can select npc while paused e.g. click npc causes single frame update?
-- hmr sometimes breaks npc opacity/selector
+- ✅ Logger also records speech and provides link options
+  - ✅ Logger is always pinned
+  - ✅ Implement demo link
+    - ℹ️ https://github.com/xtermjs/xterm.js/issues/5222
+    - ℹ️ https://github.com/xtermjs/xterm.js/tree/master/addons/addon-web-links
+    - ℹ️ https://github.com/xtermjs/xterm.js/discussions/5223#discussioncomment-11762329
+  - ✅ infer link meta on click link
+    - ✅ linkText is "uri" e.g. `[ test link ]` (with brackets, sans escape-codes)
+    - ✅ lineText follows from "hover location"
+    - ✅ linkStartIndex follows from "hover location"
+    - ✅ lineNumber follows from "hover location"
+    - ✅ construct lineText, startRow, endRow from IViewportRange
+      - ℹ️ this means finding the whole "wrapped line" that the link is part of
+  - ✅ setup matching system (lineText, linkText)
+    - ✅ can `w.menu.say(npcKey, line)`
+      - `w menu.say rob foo bar baz`
+    - ✅ speech always has initial link `[ {npcKey} ]`
+    - ✅ send event `click-npc-link` with `{ npcKey, line, link }`
+  - ✅ can clear Logger
+  - ✅ link NpcSpeechBubble "say" to Logger
+  - ✅ Draggable component
+  - ✅ Split ContextMenus into DefaultContextMenu, NpcSpeechBubbles
+    - ✅ DefaultContextMenu.jsx
+    - ✅ NpcSpeechBubbles.jsx
+    - ℹ️ `w bubble.say rob Hello everyone!{1..5}`
+    - ❌ Only send DefaultContextMenu thru portal
+      - we are sending Logger thru portal
+  - ✅ Logger fixed at bottom
+  - ✅ DefaultContextMenu bottom right
+  - ℹ️ https://stackoverflow.com/questions/20926551/recommended-way-of-making-react-component-div-draggable
+  - ✅ can move DefaultContextMenu whilst docked via Draggable
+    - ✅ can drag around while docked
+    - ✅ test Draggable on mobile
+    - ✅ drag continues when off element
+    - ✅ set initial position at bottom
+      - cm.dock.point
+    - ✅ prevent link click whilst dragging
+      - must drag "draggable bar"
+    - ✅ try remove draggable bar, whilst preventing links
+    - ✅ prevent popup toggle while drag
+    - ✅ can toggle top links via tab-space
+    - ✅ while docked ensure whole menu visible
+      - ✅ while dragging
+      - ✅ on viewport resize
+    - ✅ remember position
+    - reposition PopUp when too high
+  - ✅ rename DefaultContextMenu -> ContextMenu
+  - ✅ another BaseContextMenu refactor
+    - ✅ ContextMenu does not have corresponding class
+    - ✅ ContextMenuUi state merged into parent
+    - ✅ NpcSpeechBubbleApi is self-contained class (remove BaseContextMenu)
+    - ℹ️ `w bubble.say rob 'the quick brown [ fox ] jumped over the lazy [ dog ]'`
+  - ✅ on open meta in ContextMenu, ensure whole menu visible
+    - ✅ remove resizeSubject prop from Draggable
+    - ✅ expose Draggable api, and updatePos when appropriate
+  - ✅ could move ResizeObserver inside ContextMenu and track both container and cm
+  - ✅ remove `refresh` link from PopUp opts
+    - ✅ auto-refresh npc select e.g. with debounce
+  - ✅ can move Logger
+  - ✅ move Logger on mobile via toggle between move/scroll
+  - ✅ can resize Logger
+    - ❌ try extend Draggable
+    - ✅ PopUp with "opts" label
+    - ✅ mobile drag disabled by default
+    - ✅ PopUp has resize ui
+    - ✅ can resize width and height
+    - ✅ can remember width and height
+    - ✅ can move Logger on mobile via "move" link
+    - ✅ avoid xterm scroll while drag e.g. only allow PopUp
+  - ✅ ContextMenu: prevent link action when drag (again)
+  - ❌ can add keyed callback to be persisted onbeforeunload
+  - ✅ Draggable remembers last position stored as props.storageKey
+    - remembered position overrides initPos (e.g. ContextMenu initPos aligned bottom-left)
+  - ✅ Logger should remember docked position
+  - ✅ ContextMenu should remember docked position
+  - ✅ ContextMenu can be initially docked
+  - ❌ Logger/ContextMenu z-index changes onclick
+    - instead, ContextMenu always in front of Logger
+  - ❌ Draggables are sticky e.g. to bottom, to right
+  - ❌ Logger logs disconnected message
+    - ❌ remove hard-coded message
+  - ✅ Logger logs connected message
+  - ❌ Paused "Opts" with PopUp and Logger measure option
+  - ✅ Loggers Opts has X-ray slider
+    - x-ray should be default view
+  - ✅ Loggers Opts has Brightness slider
+  - ✅ move `w.bubble.say` -> `w.e.say`
+  - 🚧 profile-1 has link listener
+    - ✅ can pan camera (via controls)
+      - `w view.pan 1 -1`
+    - ✅ change w.view.pan args
+      - `w view.pan $( click 1 )`
+      - `click 1 | w view.pan -`
+    - ✅ can smooth target camera
+      - ℹ️ easier to use target than stepwise pan
+    - ✅ can lookAt while World disabled but in debug mode
+    - ✅ can specify time
+    - ✅ using controls stops lookAt
+    - ✅ what if we switch between enabled and disabled while target moves?
+      - ℹ️ seems to work i.e. debugTick and onTick both handle
+    - ✅ fix zoom issue while looking
+    - ✅ w.view.lookAt is async
+    - ✅ linear damp3 e.g. via our own implementation
+      - ✅ avoid "finishing ordinate early" (use maxSpeed)
+      - ✅ use linear easing function (maxSpeed small enough)
+      - ✅ clean
+    - ✅ profile-1: on click npcKey change camera
+      - ✅ transition happens
+      - ✅ look at agent height to avoid overlapping Logger
+      - ✅ look at eases using default easing i.e. exp
+      - ✅ works while disabled
+        - ✅ some process group do not auto pause
+  - ✅ fix npc speech heights
+  - ✅ ContextMenu has "look" link which works when paused
+
+- 🚧 integrate Viewer into blog
+  - 🚧 screenshots in 1st blog
+    - ✅ screenshot data-url i.e. `w view.toDataURL`
+    - ✅ open in browser i.e. `w view.openSnapshot`
+    - ℹ️ our api only captures the canvas e.g. no ContextMenu, logger, Tabs, tty etc.
+    - ℹ️ chrome devtool supports select node then >capture node screenshot
+    - 🚧 1st image goes after explanation of "underlying problem"
+  - blog has ui to mutate Viewer
+    - can totally overwrite
+    - can change World mapKey
+    - can change tty env (e.g. PROFILE) and reboot
+  - 🚧 clean up profile-1
+    - e.g. `spawn rob $( click 1 ) --degrees=90`
+    - e.g. `npc rob --showSelector=true --setLabel=Robbo`
+
+### On hold
+
+- Logger opts for fixing camera angles
+  - e.g. `min/maxPolarAngle` is `Math.PI * 0.15`
+- profile-1: fov 20 when "close" and fov 5 when far
+  - `w update 'w => w.view.fov = 20'`
+- optional strategy to avoid agent deadlock when have similar target
+  - e.g. stop when little progress
+  - e.g. stop when neighbour has similar target
+- avoid turning around after offMeshConnection
+  - ℹ️ happens when moveTo doorway
+- simplify offMeshConnection src intersects line to newDst
+- While zooming turn off ContextMenu pointer-events
+- ✅ Still seeing flicker on change "embed" -> "docked" on mobile
+- clean z-index e.g. "opts above menu"
+- Docked ContextMenu can focus i.e. panZoom to point
+- thinner fuel/machine symbols, or add dark poly border
+- avoid npc stepping forward small amounts when e.g. cannot traverse offMeshConnection
+  - could store start point and revert
+- auto-dock ContextMenu in profile-1?
+- isolated hull doors should be locked
+- strategy for dealing with "stuck at 0 velocity"
+  - ℹ️ arises from conflicting separationWeights
+  - e.g. relax target distance when neighbour detected
+- gridMin, gridMax should align with geomorph grid
+- npc diffuse does not apply to selector or label
 - can only spawn onto navigable floor or do point
-  - spawn onto do point uses orient
-- try animate ceiling diffuse i.e. more/less white
-- locked accessible doors auto-open earlier
-  - e.g. check up to two corners in this case
-- try avoid recreate decor/obstacles CanvasTexture by fixing texture size
+- spawn onto do point uses orient
+- redo cuboid-man: lower-spine-bone (for sit), independent face quad, clean skin
+- redo cuboid-pet
+- represent skins as single TexArray
+- improve alternate character faces
+- improve alternate character icons
+- clean overwritten attributes using patched three.js:
+  > `w.r3f.gl.getAttributes().remove(attribute)`
+- ❌ clean away off-mesh-connection if we don't use them
+- reconsider npc speech bubble style
+  - ℹ️ keep npc label, even though speech bubble performance good for 100 npcs
+- support different themes (floor colors, ceiling colors, obstacles diffuse, ...)
+  - mobile vs desktop
+  - default theme
+  - dark theme
+- ✅ tty should restore variables on full-page-refresh
+  - currently only working on refresh Tabs
+- npc label (e.g. `kate`) sometimes not updated in prod after reload
+  - fixed by manually changing `npc.epochMs` then `w.npc.update()`
+- ❌ avoid line rendering issues of Ceiling at large distances
+- ✅ avoid creating gmGraph in nav.worker
+  - create offMeshDefs in main thread and send
+- change npc label height onchange animation
+- smaller npc label
+- ✅ allow multiple npcs through hull doors via different offMeshConnections
+- ❌ npc stops on try nav to inaccessible-via-off-mesh-connection room
+  - eventually?
+- ✅ try align tiles with geomorph grid by extending navMesh slightly
+- clarify/clean/simplify service/uv
+- put into example-commands
+  ```sh
+  c=0
+  while true; do
+    w npc.spawn "{ npcKey: \"rob_${c}\", point: $( click 1 ) }" >/dev/null
+    call 'x => x.home.c++'
+  done
+  ```
+- sh: multi-line edit using Option+Enter not working
+- remove stale examples from example-commands.md
+- easier way to reboot control scripts
+  - ℹ️ currently if edit `click` need to manually kill processes then run PROFILE
+  - sh: can tag process e.g. as part of controls
+  - sh: can kill processes based on tags
+  - sub-script CONTROLS of PROFILE, which kills existing process and tags new ones
+- better texture for cuboid
+- prevent two different npcs from fading to same do point
+- BUG saw e.npcToDoor missing key
+  - ℹ️ maybe physics.worker broke on hmr
+- Game Master option for partially transparent walls, where object-pick ignores walls
+- useStateRef provides `state.ref(key)` which deletes sub-refs on null
+  - maybe `useStateRef(() => state, { refs: ... })` to avoid re-creation
+- ✅ profile-1.sh edit should not hmr Viewer
+  - Viewer tabs def should not hmr Tabs
+  - downgraded flexlayout-react
+- ceiling shader lit according to camera angle
+- can select npc while paused e.g. click npc causes single frame update?
+  - ✅ via manually resumed process which controls selection
+  - better way?
+- npc should look ahead 2 segs and don't re-test
+- Example of `state.crowd.raw.setObstacleAvoidanceParams(1, new Recast.dtObstacleAvoidanceParams())`?
+  - recast-navigation-js discussion?
+- hmr sometimes breaks npc opacity/selector
+- skins: can remap "cuboid" head/body too
+- ❌ try animate ceiling diffuse i.e. more/less white
+- ✅ try avoid recreate decor/obstacles CanvasTexture by fixing texture size
 - consider using rapier for raycasting, rather than adding three-mesh-bvh
   - try adding static non-colliding "walls and doors" and raycast against them
   - could filter out doors which are open
+- decor hmr while paused broke decor quads instanceId?
 - auto reduce fov when World canvas wide with short height?
   > `w update 'w => w.view.targetFov = 5'`
 - ℹ️ to use `await ...` inside `map` we must write `async` in def (unlike `run`)
   - e.g. `echo foo | map 'async x => { await new Promise(r => r()); return x }'`
 - ❌ Tabs: can specify initially awake background tabs e.g. tty for mobile
   - background tab never was rendered
-- desktop/mobile tty helper UI e.g. directs user to tty-1 and back to World
-- improve cuboid-pet animations
-- bug: sh: paste multiline command and start Cmd-Deleting midway
 - useGLTFsAsync hook
   - replaces synchronous useGLTF
   - supports multiple and provides each when ready
@@ -56,11 +250,12 @@
   - ℹ️ `cat '/Users/robmyers/Library/Application Support/Google/Chrome/chrome_debug.log'`
   - create a branch and repro without workers/crowd
 - bug: tty: ctrl + w while multiple input: goes back a line
-  - need repro
-- improve alternate character faces
-- improve alternate character icons
+- bug: sh: paste multiline command and start Cmd-Deleting midway
+- tty pause/resume should remember cursor position
+- ✅ tty resize while multiline input still bit broken
+  - resize small, then resize big and see broken line, resize bigger seems fixed
+  - ℹ️ but native terminal has same issue
 - ❌ change fov with camera distance? e.g. 15 far, 30 close
-- support multiple skins for single test character
 - decor labels should be instancedmesh with custom shader
 - support click switch to open door, instead of click door
   - mobile has difficulty pressing switches, so
@@ -69,7 +264,10 @@
   - to avoid being pushed through doors by other npcs
 - ❌ hmr issue with Connector class
   - we don't support it
-- hull door enter-room triggers late?
+- ❌ hull door enter-room triggers late?
+  - stale
+- ContextMenu for door has button redirecting "lastDown" to nearby switch
+  - easier for mobile users
 - towards faster raycast against instancedmesh
   - https://github.com/gkjohnson/three-mesh-bvh
   - https://github.com/pmndrs/drei/blob/master/src/core/Bvh.tsx
@@ -97,8 +295,6 @@
 - running `source PROFILE` twice breaks e.g. toggle door
   - maybe detect/warn "duplicate process def"
 - duplicate walls in a symbol seemed to cancel each other out
-- tty resize while multiline input is broken again
-- tty pause/resume should remember cursor position
 - careful that world query doesn't "run twice at once"
   - e.g. by focusing window whilst ongoing?
 - `Tabs` css should not reference src/const
@@ -121,7 +317,19 @@ WorldMenu log extras
   - permit resize (mobile too)
   - resize observer fits
   - checkboxes: pin ✅ show debug logs 🚧
+- 🚧 Tabs: support keyboard shortcut to switch tabs: `ctrl+[`, `ctrl+]`
+  - ✅ shortcut works in active tabset
+  - ✅ clicking tab header sets active tabset
+    - ℹ️ started working after npm upgrade
+  - had to downgrade because profile edit remounts all tabs
+    - https://github.com/caplin/FlexLayout/issues/456#issuecomment-2499190906
 
+- could clean navMesh by
+  - ℹ️ ongoing problem; we are "composing" recast-detour
+  - adjusting geometry e.g. table in briefing room
+  - adding custom areas
+    - like existing door polys
+    - tried "all room" already
 - BUG obstacles.png slightly different onchange
   - no visible difference, probably due to "quick approach"
 - verify HMR which propagates from assets -> geomorphs.json -> gmsData
@@ -142,7 +350,7 @@ WorldMenu log extras
   - they have large white borders
   - try instance color
 
-- prevent NPCs going through closed doors
+- ✅ prevent NPCs going through closed doors
   - i.e. color nav query
 - ✅ use rapier physics 3d in web worker
   - i.e. static triggers
@@ -274,6 +482,66 @@ WorldMenu log extras
 - install cypress to test terminal
 - netlify site `npc-cli` at https://lastredoubt.co
 
+
+## Scratch Pad
+
+### Terminology
+
+The system involves three parties:
+- the _Player_.
+- the _Game Master_ (GM).
+- the _Environment_ (Env).
+
+The Player is human.
+The GM is either human or a computer program.
+The Env is the underlying computer program where games are played/created by the Player/GM.
+
+### Recast Detour Analysis
+
+- https://recastnav.com/
+- https://github.com/isaac-mason/recast-navigation-js/tree/main
+- https://github.com/recastnavigation/recastnavigation/issues/641#issuecomment-1622583548
+
+### Shell and JavaScript
+
+```sh
+# represent selected npc
+click | map meta.npcKey >selectedNpcKey &
+
+# selected npc does on long click
+click --long | run '({ api, home, w, datum }) {
+  while ((datum = await api.read()) !== api.eof) {
+    const npc = w.npc.npc[home.selectedNpcKey];
+    await npc.do(datum).catch(() => {});
+  }
+}' &
+
+# selected npc does/look on long click
+click --long | while take 1 >lastClick; do
+  selectedNpc=$( w npc.npc.${selectedNpcKey} )
+  if get lastClick/meta/floor && ! test $( get selectedNpc/s/doMeta ); then
+    selectedNpc | map '(npc, {home}) => npc.look(home.lastClick)'
+  else
+    selectedNpc | map '(npc, {home}) => npc.do(home.lastClick)'
+  fi
+done &
+```
+
+```js
+/**
+ * 🔔 non-generators are interpreted as `map '{myFunction}'`
+ * @param {NPC.ClickMeta} input
+ * @param {RunArg} ctxt
+ */
+export async function walkTest(input, { w, home })  {
+  const npc = w.n[home.selectedNpcKey];
+  if (npc) {
+    npc.s.run = input.keys?.includes("shift") ?? false;
+    // do not await so can override
+    npc.moveTo(input).catch(() => {});
+  }
+}
+```
 
 ## Done
 
@@ -2156,7 +2424,7 @@ run '({ w, api }) {
           agent: true,
         });
       } catch {}
-      yield* api.sleep(0.05);
+      await api.sleep(0.05);
     }
   }
 }'
@@ -2920,3 +3188,486 @@ done
   - ✅ careful about alpha=0 in object-pick encoding
     - ℹ️ e.g. 768 ~ 0 mod 256
     - ✅ fix instancedMonochromeShader
+
+- ✅ support `await api.sleep(1)` inside `map`
+  - ℹ️ e.g. `{ echo foo; echo bar; echo baz; } | map 'async (input, {api}) => { await api.sleep(1); return input }'`
+  - ✅ simplify `choice` so it does not use `sleep`
+  - ✅ refactor underlying `choice` as AsyncFunction 
+  - ✅ refactor `sleep` as AsyncFunction
+- ✅ avoid initial instanced mesh render
+  - ✅ avoid overwriting attributes
+  - still seeing issue on mobile, but only on reset
+- ✅ understand ~~duplicated~~ coinciding npcs e.g. on edit recast-detour.js
+  - ℹ️ seems npc `will` is coinciding with npc `rob`
+  - ℹ️ saw happen when changed symbol chairs
+  - seems fixed via improved `w.npc.restore()`
+- ✅ fix initial shader errors
+  - [.WebGL-0x11809663f00] GL_INVALID_OPERATION: Vertex shader input type does not match the type of the bound vertex attribute.
+  - ℹ️ useLayoutEffect related
+  - ✅ try fix Floor, Walls, Doors, Obstacles, Ceiling (might break initial flicker fix)
+  - ✅ replace useLayoutEffect with "mount-shader-when-ready"
+- ✅ clarify connected nav issues:
+  - ℹ️ inaccessible door should not prevent nav through open door
+  - ℹ️ `maxSimplificationError: 0.85` helped, but causes nav kinks, so removed
+  - ℹ️ npc should not be able to get too close to inaccessible door
+
+- ✅ pause/resume should not progress motion along navMesh
+- ✅ can spawn whilst in debug mode
+  - pointerup triggers since update/render
+
+- ✅ Decor/Doors, Floor/Ceil: hmr issue i.e. disappears
+  - ℹ️ not dispose
+  - ✅ related to TexArray
+  - maybe fixed for Decor/Doors (0 width canvas check)
+  - maybe fixed for Floor/Ceil (0 width canvas check)
+
+- ❌ try navMesh sans doorways using off-mesh connections instead
+  - ✅ add off-mesh connections per non-hull doorway
+  - ✅ detect when enter off-mesh connection
+    - prevState !== agent.state() and one equals `2`
+  - ❌ try using requestMoveVelocity (did not work)
+  - ℹ️ unnatural navigation + non-trivial to change on-connection speed
+
+- ✅ `click` is v3 and has `clicked.xz`?
+  - ✅ profile-1 click consumers could be 2d/3d agnostic
+  - `click 1 | w view.zoomTo --stdin`
+  - ℹ️ example where 2d project needed: `click 1 | w gmGraph.findRoomContaining`,
+    - could `click 1 | map xz | w gmGraph.findRoomContaining`
+    - could `click 1 | map meta`
+  - ℹ️ can use `w.lib.toXZ` and `w.lib.toV3`
+
+- ✅ `w --stdin` e.g. `echo image/webp | w --stdin view.openSnapshot - 0` should be low quality
+  - ℹ️ should be same as `w view.openSnapshot image/webp 0`
+  - ℹ️ getopts is reordering hyphen `-` i.e. need another dummy symbol to represent stdin
+  - use underscore `echo image/webp | w --stdin view.openSnapshot _ 0`
+
+- ✅ change const.js hmr issue i.e. floor/ceiling disappears
+  - ℹ️ floor comes back if remount material...
+  - ℹ️ seems floor data texture `source.data` is all black
+  - ✅ `w.texVs.{floor,ceiling}++` in world query
+  - ✅ `w.tex{Floor,Ceil}`
+  - ℹ️ should try to replace `w.update()`
+- ✅ jerky npc movement when pause then unpause while moving
+  - ℹ️ Floor/Ceiling were needlessly recomputed
+
+- ❌ try scaling geometry up, using cs=0.15, then scaling down
+
+- ✅ BUG saw npc stuck with: agent, s.act (Walk), s.target (non-null)
+  - ℹ️ by running quickly many times
+  - ℹ️ `w n.rob.agent.velocity` is `{x:0,y:0,z:0}`
+  - ✅ seems to be issue with nav mesh (cs too small)
+
+- ❌ try creating nav tiles to see if it avoids "steiner points"
+  - ✅ migrate https://github.com/isaac-mason/sketches/blob/main/sketches/recast-navigation/dynamic-tiled-navmesh/src/navigation/dynamic-tiled-navmesh.ts
+    - ✅ dynamic-nav-mesh ts -> js
+    - ✅ build-tile ts -> js
+    - ✅ move worker code into nav.worker
+    - ✅ get demo build working
+    - ✅ show demo navmesh
+  - ❌ decided against it
+- ✅ try improve nav by changing tile size
+  - small tile size `0.1` has many Steiner points, yet is pretty good
+- ❌ try avoid nav steiner points via large tile size and using areas
+  - too "non-canonical"
+
+- ✅ fix npc.setLabel
+  - ✅ onchange label sprite-sheet, update *all* effected npc
+  - ℹ️ could share uniforms via DataTexture
+  - ℹ️ could avoid excessive computation by pre-building `rob_{1..200}`
+
+- ✅ try "off-mesh-connections" again
+  - ℹ️ fix push-other-npc-thru-door via separation weight
+  - ℹ️ fix lockers in bridge, fix diagonal doors
+  - ✅ add off-mesh connections and visualise them
+  - ✅ check separation weight cannot push agent into connection
+  - ✅ nav.worker iterates through all off-mesh connections
+  - ✅ nav.worker provides lookup from `{tile.minX},{tile.minZ}` to `{ offMeshPolysIds }`
+  - ✅ detect off-mesh connection enter/exit
+    - ✅ `enter-off-mesh`
+    - ✅ detect when over (`agent.state() === 2`)
+    - ✅ get off-mesh-connection
+    - ✅ can detect src --> dst
+    - ✅ `exit-off-mesh`
+  - ✅ can pause agent by temp setting maxSpeed 0 on exit offMeshConnection,
+    - `w n.rob.agent.updateParameters '{ maxSpeed: 0 }'`
+    - `w n.rob.agent.updateParameters '{ maxSpeed: 2 }'`
+  - ❌ can cancel just before traverse offMeshConnection?
+    - ℹ️ once agent has changed state we can't stop it
+    - ℹ️ https://github.com/isaac-mason/recast-navigation-js/discussions/458
+    - ℹ️ taking new approach i.e. forking recastnavigation
+    ```json
+    "@recast-navigation/core": "npm:@rob-myers/recast-navigation__core@0.38.0",
+    "@recast-navigation/generators": "npm:@rob-myers/recast-navigation__generators@0.38.0",
+    "@recast-navigation/three": "npm:@rob-myers/recast-navigation__three@0.38.0",
+    "@recast-navigation/wasm": "npm:@rob-myers/recast-navigation__wasm@0.38.0",
+    ```
+  - ✅ can see recastnavigation change on prod
+  - ✅ use tsconfig.json to alias @recast-navigation/*
+    ```js
+    // 🔔 might need to `rm -rf .cache` and `yarn build` to see changes,
+    //   at least when first switching to this approach
+    "paths": {
+        "@recast-navigation/core": ["../recast-navigation-js/packages/recast-navigation-core"],
+        "@recast-navigation/generators": ["../recast-navigation-js/packages/recast-navigation-generators"],
+        "@recast-navigation/three": ["../recast-navigation-js/packages/recast-navigation-three"],
+        "@recast-navigation/wasm": ["../recast-navigation-js/packages/recast-navigation-wasm"]
+    },
+    ```
+  - ✅ alter recastnavigation, so offMeshConnection are traversed more slowly
+    - ℹ️ faster to directly alter recast-navigation-js/packages/recast-navigation-wasm/recastnavigation then move the changes to recastnavigation repo before commit
+    - ✅ rebuild via `cd packages/recast-navigation-wasm && yarn build`
+    - ✅ improve both segments of path
+    - ✅ publish `@rob-myers/recast-navigation__wasm@0.38.1`:
+      - at recast-navigation-js repo, manually change version/dep-versions (core,generators,three,wasm) in package.json to 0.38.1
+      - then in repo root `yarn publish`
+      - then in this repo `rm -rf .cache` `npm i` and `yarn dev`
+  - ✅ bump versions in this repo and verify local build
+  - ✅ can stop agent smoothly on enter-off-mesh
+    - thanks to smoothening of off-mesh traversal and `crowd.raw.getAgentAnimation(agent.agentId)`
+  - ✅ fix slight jerk when exit offMeshConnection
+    - ✅ try specifying max velocity on leave
+    - ✅ publish new version `0.38.2`
+  - ✅ fix npc turn target for offMeshConnection
+    - ✅ works smoothly
+    - ✅ even smoother
+      - ℹ️ agent.raw.get_cornerVerts(0..2) is "src" even after entered
+      - ℹ️ "calcSmoothSteerDirection approach" does not seem to work
+        - uses next two corners relative to current position
+        - maybe it's making assumptions about how we steer
+      - ✅ linear incoming bezier
+    - ❌ could change final desired velocity in C++
+    - ℹ️ straightness of offMeshConnection lacks smoothness of original approach, but has many advantages
+    - ✅ clean
+      - npc.s.offMesh.seg is `initial` or `main`
+  - ✅ fix auto hull doors
+    - ✅ not opening when traversing offMeshConnection
+    - ✅ some npcs get stopped
+  - ✅ door opens before going through offMeshConnection
+  - ✅ agent stops if door inaccessible on `enter-off-mesh` event
+    - ✅ can temp set edge unwalkable
+      - `w nav.navMesh.setPolyFlags 4341761 1`
+      - `w nav.navMesh.setPolyFlags 4317185 1`
+    - ✅ track when offMeshConnection in use
+      - locally `npc.s.offMesh`
+      - globally in `w.nav.offMeshLookup`
+    - ✅ w.e.npcToOffMesh[npcKey]
+    - ✅ set edge unwalkable while in use
+    - ❌ stop any `enter-off-mesh` while in use
+  - ❌ do not navigate on `WARN getClosestNavigable failed:`
+    - irrelevant i.e. if click room inaccessible via queryFiltered offMeshConnection,
+      `findClosestPoint` will still successfully "find" this point
+  - ✅ try stop agent on `enter-off-mesh` rather than setting flags on poly offMeshRef
+    - ℹ️ setting flag has issues e.g. moveTo midway
+    - ✅ w.e.npcToOffMesh -> w.e.doorToOffMesh
+    - ✅ offMesh.reverse is offMesh lookup value in "reverse direction"
+    - ✅ `enter-off-mesh` stops agent if offMeshConnection in use
+  - ✅ fix events: must avoid "circular" offMesh values
+  - ✅ `enter-off-mesh` permits "one agent after another"
+    - ℹ️ cannot overwrite `offMesh.state` with 2 npcs traversing e.g. because used by `onTickAgentTurn`
+    - ✅ `offMesh.state` -> `npc.s.offMesh`
+    - ✅ permit traverse in same direction if most recent npc on main segment and doesn't currently collide
+  - ✅ in use off-mesh connection with door open cannot be closed
+    - ✅ offMeshConnection has srcGrKey and dstGrKey for exit/enter-room
+    - ✅ migrate exit/enter-room
+    - ✅ remove "inside" sensor
+  - ✅ clean
+    - ✅ enter/exit-room event
+    - ✅ careful about hull door duplicate offMeshConnection
+  - ❌ could lerp whilst agent on off-mesh-connection
+  - ❌ could remove agent from crowd and move linearly
+  - ❌ navRectId --> connectedComponentId in gmGraph
+    - fixed by computing navRectId using navPolyWithDoors
+  - ❌ to avoid offMeshConnection backtracking could set `anim->startPoint` to be
+    closest point on edge `startPoint -> endPoint`
+
+
+- ✅ ContextMenu rethink
+  - ✅ move object-pick-circle into Debug
+  - ✅ lastDown.{normal,quaternion} always defined
+  - ✅ `ContextMenus`
+    - ✅ fix HMR by avoiding function-as-property
+    - ✅ default i.e. via rmb/long-press
+      - ℹ️ no popup
+      - ✅ shows object-pick meta
+      - ✅ positioned at click
+      - ✅ object-pick meta collapsible (remembered)
+      - ✅ scaled
+    - ✅ can customise from CLI
+      - ✅ links not icons
+      - ✅ links trigger world events
+    - ✅ can add static menu from default context menu
+    - ✅ "save" creates static menu with left label `cm.key`
+      - "save" and "pin" disappear
+      - "exit" deletes
+    - ✅ no need to refresh all i.e. use cm.epochMs
+    - ✅ show-context-menu event
+    - ❌ show-context-menu event
+    - ✅ example of static panel
+    - ✅ remove `ContextMenu`
+    - ✅ default context menu can be "docked"
+    - ✅ remove static panels
+      - decided only default and speech bubbles
+    - ✅ default context menu dock moves to lower left
+    - ❌ default context menu can drag
+    - ✅ extend default via script
+      - ✅ can add/remove named "matchers"
+        - ℹ️ w.cm.match.foo = bar
+      - ✅ extra links on click switch
+      - ✅ extra links on click door
+        - do not support unauth npc inside room i.e. this action corresponds to having a remote key
+      - ✅ links take effect e.g. open door
+      - ✅ speech bubbles
+        - ✅ can add for npc `w c.trackNpc rob`
+          - cm.tracked as `w.n[npcKey]?.m.group`
+        - ✅ can remove for npc `w c.delete @rob`
+        - ✅ always scaled
+          - seems hard-coded cm.baseScale better than "agent-to-camera-distance" when `w c.trackNpc rob`
+        - ✅ improve styling
+        - ❌ offset upwards
+        - ✅ `w c.create rob`
+        - ✅ can set speech
+          - `w c.lookup.@rob.setSpeech 'foo bar baz'`
+        - ✅ `w c.lookup.rob.say 'foo bar baz'`
+        - ✅ `w c.say rob 'foo bar baz'`
+        - ✅ can show links too
+          ```sh
+          w c.lookup.rob.setLinks "{ key: 'foo', label: 'foo' }" "{ key: 'bar', label: 'bar' }"
+          ```
+        - ✅ object pick npc shows bubble, not default context menu
+        - ✅ can close bubble
+    - ✅ default context menu on npc tracks npc
+    - ✅ simplify speech bubbles
+      - ✅ no links
+      - ✅ `w.c.say {npcKey} {words}` ensures
+      - ✅ `w.c.say {npcKey}` deletes
+    - ❌ links can be npc-sensitive
+      - ✅ `cm.setNpc()` `cm.setNpc('rob')` and show
+      - ✅ can remove by clicking it
+      - ✅ temp: profile-1: triggered on select npc
+      - ✅ triggered via long click npc
+      - ✅ handleContextMenu accounts for `cm.npcKey`
+      - will use custom select instead
+    - ✅ separate classes for DefaultContextMenu and SpeechBubble
+    - ✅ use custom select instead
+      - choose none or npcKey
+      - can refresh via button "refresh"
+      - profile-1 `handleContextMenu` takes npcKey into account
+    - ✅ clean
+  - ✅ remove icon generation code from asset.js
+  - ✅ Fix npc speech height
+    - ✅ change height offset onchange animation
+    - ✅ walk/run/idle , ✅ sit, ✅ lie
+
+
+- ✅ pre next.js migration
+  - ✅ finish/close wip todos
+  - ✅ avoid stationary npc push through door
+    - ✅ create a queryFilter with a doorway excluded and prevent a single agent from moving through it
+    - ℹ️ `ch: 0.05` broke "door triangles"
+    - ℹ️ `cs: 0.9` fixed bridge symbol disconnected component
+    - ✅ npc.s.moving -> npc.s.target !== null
+    - ✅ moved "stationary agents" should trigger sensor
+    - ✅ on trigger nearby door, ensure excludeDoor queryFilter includes doors
+    - ✅ maintain excludeDoors query filter where seen doorways are excluded
+    - ✅ in case agent stops inside a door, prevent them from "moving aside" instead
+  - ✅ avoid spinning targetless NPCs
+    - collision could cause other to look but only at a "higher level of behaviour"
+  - ✅ support windows
+    - ✅ still need wall, implicit via window
+    - ✅ exclude complex outer window: `window` -> `external-window`
+    - ✅ fix object-pick
+    - ✅ can specify window structure via `y` and `h`
+    - ✅ Obstacles hmr not working i.e. onchange obstacle y=0 or y=0.5
+    - ✅ need top of low wall e.g. via obstacle in symbol `window--007--0x2.4`
+    - ✅ finish lab windows
+    - finish other windows
+  - ✅ touch indicator for mobile
+    - ℹ️ https://codepen.io/mike_hendriks/pen/JjoxrON
+    - ✅ cancel on move a bit
+    - ✅ clean into own component
+    - ✅ test on phone
+  - ✅ refactor ContextMenu as own component
+  - ✅ restyle ContextMenu
+  - ✅ ContextMenu has "select" with nearby npc keys
+  - ✅ ContextMenu moves in 3D
+    - fix click on ContextMenu
+    - fix right click on ContextMenu
+    - fix unfocus tab then click
+  - ✅ ContextMenu
+    - ✅ has close button
+    - ✅ has options panel
+    - ✅ start options panel
+      - ✅ has persist checkbox
+      - ✅ auto-close if persist checkbox not ticked
+        - ℹ️ see old `state.hide()`
+      - ✅ can toggle mini view
+      - ✅ SideNote "data root" should be World
+      - ❌ can choose left/right/top/bottom to not block door?
+        - ℹ️ too complex? e.g. doesn't
+    - ✅ has small sphere indicating contact point
+    - ✅ can track moving NPC?
+      - ✅ `w n.rob.m.group | w --stdin cm.track`
+      - ✅ `w cm.track`
+      - auto track npcs
+    - ❌ transparent for doors/walls when "behind contact normal"
+  - ✅ ContextMenu: resize -> lock
+  - ✅ ContextMenu: customize @react-three/drei Html
+    - ✅ create JavaScript projection
+    - ✅ expose object3d
+    - ✅ can force update
+    - ✅ can CSS animate scale
+  - ❌ ContextMenu: preserve open SideNote during HMR of Html3d
+    - ℹ️ happens because we root.unmount() in useLayoutEffect
+    - ℹ️ don't want to start caching roots per instance
+  - ❌ ContextMenu simplify "key values"
+    - ✅ switch decor have gdKey
+    - ❌ picked value, grKey, gdKey, symbolKey
+    - ❌ complex values optionally showable
+  - ✅ object-pick provides normal
+    - ✅ Walls material should be one-sided i.e. walls + lintels + windows
+    - ✅ compute lastDown.normal
+    - ✅ Decor quads
+      - ❌ material should be one-sided (subtle e.g. need to flip document icons)
+      - ✅ fix normal direction (flip) using camera direction
+    - ✅ Decor cuboids
+    - ✅ Doors should be two quads so get correct normal
+  - ✅ ContextMenu use circle instead of sphere
+  - ✅ fix 301 room 11 i.e. bridge room should be split in two
+  - ✅ ContextMenu has select with possible actions
+    - ✅ switches: can open doors
+    - ✅ switches: can close doors
+    - ✅ switches: can lock/unlock doors
+    - ✅ switch `inner` but not `secure` can be opened by anyone
+      - on leave room refresh ContextMenu
+    - ✅ npc in room with locked door can still leave
+    - ✅ BUG unlocked auto door
+      - ℹ️ trigger auto doors in case they've been manually closed
+    - ✅ BUG closed auto door
+      - ℹ️ trigger auto doors in case they've been manually closed
+    - ✅ ContextMenu strategy
+      - ✅ hide when camera normal has +ve dot product with normal
+      - ✅ list all npcs ever seen i.e. keep adding
+      - ✅ show actions independently of npc distance
+      - ✅ acts fail if npc too far
+      - ✅ acts fail if npc in another room
+      - ✅ if acts fail/succeed then coloured red/green
+      - ❌ can open/close directly from door
+        - cannot infer `meta.inner` unlike switches
+      - ℹ️ for Player would probably hide ContextMenu on exit room/area (via sensor)
+    - ✅ updateFromLastDown -> useHandleEvents
+  - ✅ long press do point: actual nav mesh may be strictly smaller
+    - ✅ from off-mesh closest point on nav mesh
+    - ✅ still seeing long-press issues on mobile e.g. to bed from floor
+  - ✅ meta.doPoint should be defined on all do points
+  - ✅ World shows closable message until `awaitWorld` resolves
+    - ℹ️ "connect a tty e.g. by clicking its tab then coming back"
+  - ❌ fix stationary npc without access trapped next to closed door
+    - no repro
+  - ✅ can turn transparent walls on/off
+  - ✅ ContextMenu: move "pin" inside pop-up
+  - ✅ assets.js also converts icon--* directly to PNGs and WEBPs
+  - ✅ ContextMenu: icons for open/close/lock/unlock
+  - fire event onchange agent neighbours
+    - ℹ️ could use it to reposition stationary npc (via process)
+  - stationary npcs should rotate a bit when they move out of the way
+    - ℹ️ use desiredVelocity to move ±5deg base direction
+  - ✅ auto-open accessible door earlier
+    - e.g. check up to two corners in this case
+
+- ✅ hull doors -> two doors
+  - ℹ️ to solve navigation issues relating to offMeshConnections
+  - ✅ 301, 302, 303
+  - ✅ 101, 102, 103
+  - ✅ try small separation between doors
+  - ✅ adjust door switches
+  - ✅ fix z-fighting above hull doors
+
+- ✅ avoid jerk when static npc on offMeshConnection and moving npc goes through it
+  - ℹ️ particularly bad in "corner" of hull doors
+  - ℹ️ made worse by replan, but happens regardless
+  - ❌ could have only one "small" door
+    - the problem also arises for other double doors and single doors e.g. 101 
+  - ❌ could detect when other npc nearby door is directly over and cancel traversal
+  - ✅ detect if penetrate nearby npcs and cancel traversal
+  - ✅ avoid jerk when pass nearby npc at corner by temp reducing radius
+    - ℹ️ this permits slight penetration on other side of offMeshConnection
+
+- ✅ remove event `way-point`
+  - ℹ️ changing target does not correspond to reaching waypoint e.g. due to re-planning
+
+- ✅ inconsistent symbol ids e.g. 301--hull.svg vs 302--hull.svg, decor-unit-quad
+- ✅ store npc.s.targetGrId on moveTo
+- ✅ can `npc.stopMoving()` whilst traversing offMeshConnection without jerk
+- ✅ review room meta `gms[gmId].rooms[roomId].meta`
+  - ✅ exclude `decor`, `meta` and `y` from meta
+  - ✅ "label" replaces "meta" 
+  - ✅ add "small" to relevant metas
+
+- ✅ prevent npc from going thru offMeshConnection initially when have to come straight back
+  - ℹ️ can trigger via far-off target in direction of very nearby offMeshConnection
+  - ℹ️ can fix via `this.agent.raw.set_targetReplan(true)` just after `requestMoveTarget`
+  - ✅ always replan immediately after request (fixes issue)
+  - ✅ only initially replan when needed
+    - ✅ only initially replan when nearby some door
+    - ❌ gmRoomGraph search
+- ✅ smoother turn when finish after exiting offMeshConnection
+- ✅ more offMeshConnections without breaking 102
+
+- ✅ offMeshConnection multiple agent follow up
+  - ✅ seg 'init' or 'main' --> state? {0, 1, 2} i.e. init, offMeshConnection 1st half, offMeshConnection 2nd half
+  - ✅ remove "midpoint offMeshConnection radius change"
+  - ℹ️ jerky when run from other side
+  - ℹ️ https://github.com/recastnavigation/recastnavigation/blob/77f7e54bc8cf5a816f9f087a3e0ac391d2043be3/DetourCrowd/Source/DetourCrowd.cpp#L1211
+  - ℹ️ can turn off agent separation flag
+  - ℹ️ seems `yarn build` in recast-navigation-wasm is hot-reloading ?!
+  - ❌ C++: separation ignores other agents on offMeshConnection whose velocity heads away?
+    - nei velocity dot product with this vector?
+    - https://github.com/recastnavigation/recastnavigation/blob/77f7e54bc8cf5a816f9f087a3e0ac391d2043be3/DetourCrowd/Source/DetourCrowd.cpp#L1226
+  - ✅ C++ collisions: ignore offMesh neighbour who hasn't reached "main segment"
+    - ✅ this avoids the jerk, but means we need to handle such collisions ourselves
+  - ✅ avoid coinciding agents at offMeshConnection dst in small rooms e.g. small toilet
+    - ❌ forbid multiple npcs in small rooms
+    - ✅ some rooms have meta.small
+    - ✅ forbid traversal to "small room" if other npc is over dst
+  - ✅ avoid runner catching up inside offMeshConnection
+    - ℹ️ repro: `w n.rob.moveTo ${p} & w n.will.moveTo ${p} &`
+    - ✅ ✅
+  - ❌ only block npc if "door has nearby corners"
+    - e.g. hull doors, various doors in 101
+
+- ✅ variable angle offMeshConnections
+  - ✅ on enter offMeshConnection can see corner after dst
+    - `[6, 7, 8].map(i => npc.agent.raw.get_cornerVerts(i))`
+  - ✅ get `agent.corners()` working for offMeshConnections by changing DetourCrowd.cpp (local only)
+  - ✅ try recompute agentAnim on enter offMeshConnection
+    - e.g. shift it to right
+  - ✅ try compute better src via leeway
+    - ℹ️ closest point on "entrance segment" to seg "npc.position -> npc.agent.corners[2]"
+    - ✅ precompute door.entrances
+    - ✅ fix door.entrances i.e. cannot use `door.seg` because it includes non-navigable part
+    - ✅ compute entranceSeg using entrances and offMesh.aligned
+    - ✅ compute targetSeg
+  - ✅ try compute better dst via leeway
+  - ✅ fix turning
+  - ✅ handle offMeshConnection collisions
+    - not seeing any new issues
+
+- ✅ npc.moveTo "works" on click doorways too
+- ✅ avoid `w --stdin` i.e. use arg `-` instead?
+  - ✅ change `changeNpcAccess` to boolean (not - or +)
+  - ℹ️ e.g. `click 1 | map xz | w n.rob.moveTo -`
+
+- ✅ refactor Html3d
+  - ✅ avoid useless "group"
+  - ℹ️ cannot remove scaling because speech bubbles need it
+  - ✅ fix flicker issue when docked
+  - ✅ clean
+
+- ✅ processes can have ptags
+  - ℹ️ e.g. `no-auto-pause` via `ptags=no-auto-pause; events | handleLoggerLinks &`
+    - need semicolon `;`, otherwise vars bind to `events`
+  - ✅ process has ptags via `ptags='foo bar=baz' echo qux`
+  - ✅ clean
+- ✅ `ps` shows yellow star when `ptags=...`
+- ✅ process ptags are inherited
+- ✅ `Tty` does not auto-pause processed with ptag `no-pause=true`

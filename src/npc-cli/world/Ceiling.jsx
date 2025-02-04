@@ -1,11 +1,11 @@
 import React from "react";
 import * as THREE from "three";
 
-import { Mat } from "../geom";
+import { Mat, Poly } from "../geom";
 import { wallHeight, gmFloorExtraScale, worldToSguScale, sguToWorldScale } from "../service/const";
 import { pause } from "../service/generic";
 import { drawPolygons } from "../service/dom";
-import { emptyDataArrayTexture, getQuadGeometryXZ } from "../service/three";
+import { getQuadGeometryXZ } from "../service/three";
 import { InstancedMultiTextureMaterial } from "../service/glsl";
 import { geomorph } from "../service/geomorph";
 import { WorldContext } from "./world-context";
@@ -24,15 +24,15 @@ export default function Ceiling(props) {
     async draw() {
       w.menu.measure('ceil.draw');
       for (const [texId, gmKey] of w.gmsData.seenGmKeys.entries()) {
-        state.drawGmKey(gmKey);
-        w.gmsData.texCeil.updateIndex(texId);
+        state.drawGm(gmKey);
+        w.texCeil.updateIndex(texId);
         await pause();
       }
-      w.gmsData.texCeil.update();
+      w.texCeil.update();
       w.menu.measure('ceil.draw');
     },
-    drawGmKey(gmKey) {
-      const { ct } = w.gmsData.texCeil;
+    drawGm(gmKey) {
+      const { ct } = w.texCeil;
       const layout = w.geomorphs.layout[gmKey];
       const { pngRect } = layout;
 
@@ -45,22 +45,26 @@ export default function Ceiling(props) {
       const { tops, polyDecals } = w.gmsData[gmKey];
       
       // wall/door tops
-      const black = 'rgb(0, 0, 0)';
+      const black = 'black';
       const grey90 = 'rgb(90, 90, 90)';
-      const wallsColor = '#888';
-      const hullDoorsColor = '#777';
-      const grey100 = 'rgb(100, 100, 100)';
-      const thinLineWidth = 0.02;
-      const thickLineWidth = 0.08;
+      const wallsColor = '#333';
+      const thinLineWidth = 0.04;
+      const thickLineWidth = 0.06;
 
-      drawPolygons(ct, tops.nonHull, [wallsColor, null, thinLineWidth]);
-      drawPolygons(ct, tops.door.filter(x => !x.meta.hull), [grey100, null]);
-      drawPolygons(ct, tops.door.filter(x => x.meta.hull), [hullDoorsColor, null, thinLineWidth]);
-      drawPolygons(ct, tops.broad, [black, grey90, thickLineWidth]);
-      const hullWalls = layout.walls.filter(x => x.meta.hull);
-      drawPolygons(ct, hullWalls, [wallsColor, wallsColor]);
-      // drawPolygons(ct, hullWalls, ['#ddd', '#ddd']);
+      drawPolygons(ct, tops.nonHull, ['#000', '#222', thickLineWidth]);
+      drawPolygons(ct, tops.window, [black, wallsColor, thinLineWidth]);
+      drawPolygons(ct, tops.broad, [black, grey90, thinLineWidth]);
+      drawPolygons(ct, tops.hull, [black, wallsColor, thickLineWidth]); // hull walls and doors
       
+      // Stroke a square at each corner to avoid z-fighting
+      const hullRect = layout.hullPoly[0].rect;
+      const cornerDim = 8 * sguToWorldScale;
+      ct.lineWidth = 0.02;
+      ct.strokeRect(hullRect.x, hullRect.y, cornerDim, cornerDim);
+      ct.strokeRect(hullRect.right - cornerDim, hullRect.y, cornerDim, cornerDim);
+      ct.strokeRect(hullRect.x, hullRect.bottom - cornerDim, cornerDim, cornerDim);
+      ct.strokeRect(hullRect.right - cornerDim, hullRect.bottom - cornerDim, cornerDim, cornerDim);
+
       // decals
       polyDecals.filter(x => x.meta.ceil === true).forEach(x => {
         const strokeWidth = typeof x.meta.strokeWidth === 'number'
@@ -82,11 +86,13 @@ export default function Ceiling(props) {
   }));
 
   w.ceil = state;
+  const { tex } = w.texCeil;
 
   React.useEffect(() => {
-    state.draw();
     state.positionInstances();
-  }, [w.mapKey, w.hash.full, w.hmr.createGmsData]);
+    // 🚧 prefer three.js api (tried w.texCeil.tex.needsUpdate = true)
+    state.draw().then(() => w.update());
+  }, [w.mapKey, w.hash.full, w.texVs.ceiling]);
 
   return (
     <instancedMesh
@@ -94,14 +100,15 @@ export default function Ceiling(props) {
       ref={instances => void (instances && (state.inst = instances))}
       args={[w.floor.quad, undefined, w.gms.length]} // 🔔 reuse floor quad
       position={[0, wallHeight, 0]}
+      renderOrder={3}
     >
       {/* <meshBasicMaterial color="red" side={THREE.DoubleSide} /> */}
       <instancedMultiTextureMaterial
         key={InstancedMultiTextureMaterial.key}
         side={THREE.DoubleSide}
         transparent
-        atlas={w.gmsData.texCeil.tex ?? emptyDataArrayTexture}
-        alphaTest={0.5} // 0.5 flickered on (301, 101) border
+        atlas={tex}
+        alphaTest={0.5} opacity={0.7} depthWrite={false}
         diffuse={[1, 1, 1]}
         colorSpace
         objectPickRed={3}
@@ -121,6 +128,6 @@ export default function Ceiling(props) {
  * @property {THREE.BufferGeometry} quad
  *
  * @property {() => Promise<void>} draw
- * @property {(gmKey: Geomorph.GeomorphKey) => void} drawGmKey
+ * @property {(gmKey: Geomorph.GeomorphKey) => void} drawGm
  * @property {() => void} positionInstances
  */

@@ -5,47 +5,97 @@ import { Canvas } from "@react-three/fiber";
 import { MapControls, PerspectiveCamera, Stats } from "@react-three/drei";
 import { damp } from "maath/easing";
 
-import { testNever } from "../service/generic.js";
+import { testNever, debug } from "../service/generic.js";
 import { Rect, Vect } from "../geom/index.js";
-import { getModifierKeys, isRMB, isSmallViewport, isTouchDevice } from "../service/dom.js";
+import { dataUrlToBlobUrl, getModifierKeys, getRelativePointer, isRMB, isTouchDevice } from "../service/dom.js";
 import { longPressMs, pickedTypesInSomeRoom } from "../service/const.js";
-import { emptySceneForPicking, getTempInstanceMesh, hasObjectPickShaderMaterial, pickingRenderTarget, toXZ, v3Precision } from "../service/three.js";
+import { dampXZ, emptySceneForPicking, getTempInstanceMesh, hasObjectPickShaderMaterial, pickingRenderTarget, toV3, toXZ, unitXVector3, v3Precision } from "../service/three.js";
+import { popUpRootDataAttribute } from "../components/PopUp.jsx";
 import { WorldContext } from "./world-context.js";
 import useStateRef from "../hooks/use-state-ref.js";
-import useOnResize from "../hooks/use-on-resize.js";
+import NpcSpeechBubbles from "./NpcSpeechBubbles.jsx";
+import { ContextMenu } from "./ContextMenu.jsx";
 
 /**
  * @param {Props} props
  */
-export default function WorldCanvas(props) {
-  const smallViewport = isSmallViewport();
+export default function WorldView(props) {
+  const w = React.useContext(WorldContext);
 
   const state = useStateRef(/** @returns {State} */ () => ({
     canvas: /** @type {*} */ (null),
     clickIds: [],
     controls: /** @type {*} */ (null),
-    down: undefined,
+    controlsViewportOpts: {
+      minAzimuthAngle: -Infinity,
+      maxAzimuthAngle: +Infinity,
+      minPolarAngle: Math.PI * 0,
+      maxPolarAngle: Math.PI/4,
+      minDistance: 16,
+      maxDistance: 96,
+      panSpeed: 2,
+      zoomSpeed: 0.5,
+    },
+    down: null,
     epoch: { pickStart: 0, pickEnd: 0, pointerDown: 0, pointerUp: 0 },
-    fov: smallViewport ? 20 : 10,
+    fov: 10,
+    glOpts: {
+      toneMapping: 3,
+      toneMappingExposure: 1,
+      logarithmicDepthBuffer: true,
+      pixelRatio: window.devicePixelRatio,
+    },
     justLongDown: false,
     lastDown: undefined,
     lastScreenPoint: new Vect(),
+    normal: {
+      tri: new THREE.Triangle(),
+      indices: new THREE.Vector3(),
+      mat3: new THREE.Matrix3(),
+    },
     raycaster: new THREE.Raycaster(),
     rootEl: /** @type {*} */ (null),
-    targetFov: /** @type {null | number} */ (null),
-    zoomState: 'near',
+    target: null,
+    targetFov: null,
+    zoomState: 'near', // 🚧 finer-grained
 
     canvasRef(canvasEl) {
       if (canvasEl !== null) {
         state.canvas = canvasEl;
-        state.rootEl = /** @type {*} */ (canvasEl.parentElement?.parentElement);
+        state.rootEl = /** @type {HTMLDivElement} */ (canvasEl.parentElement?.parentElement);
       }
+    },
+    clearTarget() {
+      state.target?.reject('cancelled target');
+      state.controls.minAzimuthAngle = -Infinity;
+      state.controls.maxAzimuthAngle = +Infinity;
+
+      state.target = null;
+      state.syncRenderMode();
+
+      // @ts-ignore see patch
+      state.controls.zoomToConstant = null;
+
+      /**
+       * 🔔 clear damping https://github.com/pmndrs/maath/blob/626d198fbae28ba82f2f1b184db7fcafd4d23846/packages/maath/src/easing.ts#L93
+       * @type {{ __damp?: { [velKey: string]: number } }}
+       */ (state.controls.target).__damp = undefined;
+    },
+    computeNormal(mesh, intersection) {// 🚧
+      const { indices, mat3, tri } = state.normal;
+      const output = new THREE.Vector3();
+      indices.fromArray(
+        /** @type {THREE.BufferAttribute} */ (mesh.geometry.index).array,
+        /** @type {number} */ (intersection.faceIndex) * 3,
+      );
+      tri.setFromAttributeAndIndices(mesh.geometry.attributes.position, indices.x, indices.y, indices.z);
+      tri.getNormal(output);
+      const normalMatrix = mat3.getNormalMatrix(mesh.matrixWorld);
+      output.applyNormalMatrix(normalMatrix);
+      return output;
     },
     getDownDistancePx() {
       return state.down?.screenPoint.distanceTo(state.lastScreenPoint) ?? 0;
-    },
-    getLastDownMeta() {
-      return state.lastDown?.threeD?.meta ?? null;
     },
     getNumPointers() {
       return state.down?.pointerIds.length ?? 0;
@@ -58,41 +108,56 @@ export default function WorldCanvas(props) {
       meta,
       position,
     }) {
-      if (key === 'pointerup' || key === 'pointerdown') {
-        return {
-          key,
-          // is3d means we have a specific 3d point
-          ...position
-            ? { is3d: true, position, point: { x: position.x, y: position.z } }
-            : { is3d: false },
-          distancePx,
-          justLongDown,
-          keys: getModifierKeys(event.nativeEvent),
-          pointers: state.getNumPointers(),
-          rmb: isRMB(event.nativeEvent),
-          screenPoint: { x: event.nativeEvent.offsetX, y: event.nativeEvent.offsetY },
-          touch: isTouchDevice(),
-          meta,
-          ...key === 'pointerup' && { clickId: state.clickIds.pop() },
-        };
+      return {
+        key,
+        position: new THREE.Vector3().copy(position),
+        point: toXZ(position),
+        distancePx,
+        justLongDown,
+        keys: getModifierKeys(event.nativeEvent),
+        pointers: state.getNumPointers(),
+        rmb: isRMB(event.nativeEvent),
+        screenPoint: getRelativePointer(event),
+        touch: isTouchDevice(),
+        meta,
+        ...key === 'pointerup' && { clickId: state.clickIds.pop() },
+      };
+    },
+    handleClickInDebugMode(e) {
+      if (
+        w.disabled === true
+        && w.menu.debugWhilePaused === true
+        && state.lastDown !== undefined
+        && state.lastDown.longDown === false
+        && state.lastDown.screenPoint.distanceTo(getRelativePointer(e)) < 1
+      ) {
+        w.npc.tickOnce();
       }
-      if (key === 'long-pointerdown' || key === 'pointerup-outside') {
-        return {
-          key,
-          is3d: false, // 🚧 could be true?
-          distancePx,
-          justLongDown,
-          keys: getModifierKeys(event.nativeEvent),
-          pointers: state.getNumPointers(),
-          rmb: isRMB(event.nativeEvent),
-          screenPoint: { x: event.nativeEvent.offsetX, y: event.nativeEvent.offsetY },
-          touch: isTouchDevice(),
-          meta,
-        };
+    },
+    // linear via `{ maxSpeed: 1000 / 60 }`
+    async lookAt(point, opts = { smoothTime: 0.2 }) {
+      if (w.disabled === true && state.target !== null && w.reqAnimId === 0) {
+        state.clearTarget(); // we paused while targeting, so clear damping
       }
-      throw Error(`${'getWorldPointerEvent'}: key "${key}" should be in ${
-        JSON.stringify(['pointerup', 'pointerdown', 'long-pointerdown', 'pointerup-outside'])
-      }`);
+
+      return new Promise((resolve, reject) => {
+        // Fix azimuth so we pan
+        state.controls.minAzimuthAngle = state.controls.getAzimuthalAngle();
+        state.controls.maxAzimuthAngle = state.controls.getAzimuthalAngle();
+        
+        const dst = toV3(point);
+        dst.y = 1.5; // ≈ agent height
+        state.target = { dst, resolve, reject, ...opts };
+        // @ts-ignore see patch
+        state.controls.zoomToConstant = state.target.dst.clone();
+  
+        if (w.disabled === true) {// can lookAt while paused
+          state.syncRenderMode();
+          w.timer.reset();
+          w.onDebugTick();
+        }
+      });
+
     },
     onChangeControls(e) {
       const zoomState = state.controls.getDistance() > 20 ? 'far' : 'near';
@@ -107,22 +172,25 @@ export default function WorldCanvas(props) {
     onObjectPickPixel(e, pixel) {
       const [r, g, b, a] = Array.from(pixel);
       const decoded = w.e.decodeObjectPick(r, g, b, a);
-      console.log('🔔', { r, g, b, a }, '\n', decoded);
+      debug('picked:', { r, g, b, a }, '\n', decoded);
+
+      // overwritten below on successful raycast
+      state.lastDown = undefined;
 
       if (decoded === null) {
         return;
       }
 
-      /** @type {undefined | THREE.Intersection} */
-      let intersection = undefined;
       /** @type {THREE.Mesh} */
       let mesh;
 
       // handle fractional device pixel ratio e.g. 2.625 on Pixel
-      const devicePixelRatio = Math.floor(window.devicePixelRatio);
+      const glPixelRatio = w.r3f.gl.getPixelRatio();
+      const { left, top } = (/** @type {HTMLElement} */ (e.target)).getBoundingClientRect();
+
       const normalizedDeviceCoords = new THREE.Vector2(
-        -1 + 2 * ((e.nativeEvent.offsetX * devicePixelRatio) / state.canvas.width),
-        +1 - 2 * ((e.nativeEvent.offsetY * devicePixelRatio) / state.canvas.height),
+        -1 + 2 * (((e.clientX - left) * glPixelRatio) / state.canvas.width),
+        +1 - 2 * (((e.clientY - top) * glPixelRatio) / state.canvas.height),
       );
       state.raycaster.setFromCamera(normalizedDeviceCoords, w.r3f.camera);
 
@@ -139,16 +207,40 @@ export default function WorldCanvas(props) {
         default: throw testNever(decoded.picked);
       }
 
-      intersection = state.raycaster.intersectObject(mesh)[0];
+      const [intersection] = state.raycaster.intersectObject(mesh);
 
       if (intersection === undefined) {
         return;
       }
-    
-      const position = v3Precision(intersection.point);  
+
+      const position = v3Precision(decoded.picked === 'npc'
+        ? w.n[decoded.npcKey].position.clone()
+        : intersection.point.clone()
+      );
+      
+      const normal = decoded.picked === 'npc'
+        ? new THREE.Vector3(0, 1, 0)
+        : state.computeNormal(mesh, intersection)
+      ;
+
+      // 🔔 fix flipped normals e.g. double-sided decor quad
+      w.r3f.camera.getWorldDirection(tmpVectThree);
+      if (normal.dot(tmpVectThree) > 0) {
+        normal.multiplyScalar(-1);
+      }
+
       const meta = {
         ...decoded,
         ...pickedTypesInSomeRoom[decoded.picked] === true && w.gmGraph.findRoomContaining(toXZ(position), true),
+      };
+
+      state.lastDown = {
+        longDown: false,
+        screenPoint: Vect.from(getRelativePointer(e)),
+        position: position.clone(),
+        normal,
+        quaternion: new THREE.Quaternion().setFromUnitVectors(unitXVector3, normal),
+        meta,
       };
 
       w.events.next(state.getWorldPointerEvent({
@@ -161,7 +253,7 @@ export default function WorldCanvas(props) {
       }));
 
       if (state.epoch.pointerUp > state.epoch.pickStart) {
-        // "pointerup" occurred before we finished this object-pick.
+        // Native "pointerup" occurred before we finished this object-pick.
         // We can now trigger the world event:
         w.events.next(state.getWorldPointerEvent({
           key: "pointerup",
@@ -172,23 +264,32 @@ export default function WorldCanvas(props) {
       }
     },
     onPointerDown(e) {
-      const sp = { x: e.nativeEvent.offsetX, y: e.nativeEvent.offsetY };
+      const sp = getRelativePointer(e);
       state.lastScreenPoint.copy(sp);
       state.epoch.pointerDown = Date.now();
 
       window.clearTimeout(state.down?.longTimeoutId); // No MultiTouch Long Press
-      
+
+      if (e.target !== state.canvas) {
+        return; // ignore ContextMenu clicks
+      }
+
       const cameraKey = e.metaKey || e.ctrlKey || e.shiftKey;
 
       state.down = {
         screenPoint: state.lastScreenPoint.clone(),
         longTimeoutId: state.down || cameraKey ? 0 : window.setTimeout(() => {
           state.justLongDown = true;
+          if (state.lastDown === undefined) {
+            return;
+          }
+          state.lastDown.longDown = true;
           w.events.next(state.getWorldPointerEvent({
             key: "long-pointerdown",
             event: e,
             justLongDown: false,
             meta: {},
+            position: state.lastDown.position,
           }));
         }, longPressMs),
         pointerIds: (state.down?.pointerIds ?? []).concat(e.pointerId),
@@ -199,7 +300,7 @@ export default function WorldCanvas(props) {
       }
       
       // includes async render-and-read-pixel
-      state.pickObject(e)
+      state.pickObject(e);
     },
     onPointerLeave(e) {
       if (!state.down) {
@@ -210,7 +311,7 @@ export default function WorldCanvas(props) {
 
       state.down.pointerIds = state.down.pointerIds.filter(x => x !== e.pointerId);
       if (state.down.pointerIds.length === 0) {
-        state.down = undefined;
+        state.down = null;
       }
 
       const rect = Rect.fromJson(state.canvas.getBoundingClientRect());
@@ -219,11 +320,15 @@ export default function WorldCanvas(props) {
       }
     },
     onPointerMove(e) {
-      state.lastScreenPoint.set(e.nativeEvent.offsetX, e.nativeEvent.offsetY);
+      state.lastScreenPoint.copy(getRelativePointer(e));
+
+      if (state.target !== null && state.down !== null && state.getDownDistancePx() > 5) {
+        state.clearTarget(); // cancel target if moved a bit
+      }
     },
     onPointerUp(e) {
       state.epoch.pointerUp = Date.now();
-      if (state.down === undefined) {
+      if (state.down === null || state.lastDown === undefined) {
         return;
       }
 
@@ -232,39 +337,49 @@ export default function WorldCanvas(props) {
         w.events.next(state.getWorldPointerEvent({
           key: "pointerup",
           event: e,
-          meta: state.getLastDownMeta() ?? {},
-          position: state.lastDown?.threeD?.point,
+          meta: state.lastDown.meta ?? {},
+          position: state.lastDown.position,
         }));
       }
 
       state.onPointerLeave(e);
       state.justLongDown = false;
+
+      state.handleClickInDebugMode(e); // step world in debug mode
     },
     onTick(deltaMs) {
-      if (state.targetFov !== null && w.r3f !== null) {
-        if (damp(state, 'fov', state.targetFov, 0.2, deltaMs, undefined, undefined, undefined) === false) {
-          state.targetFov = null;
-        }
-        /** @type {THREE.PerspectiveCamera} */ (w.r3f.camera).fov = state.fov;
+      if (state.targetFov !== null) {
+        w.r3f.camera.fov = state.fov;
         w.r3f.camera.updateProjectionMatrix();
+        if (damp(state, 'fov', state.targetFov, 0.1, deltaMs, undefined, undefined, undefined) === false) {
+          state.targetFov = null;
+          state.syncRenderMode();
+        }
+      }
+
+      if (state.target !== null) {
+        state.controls.update();
+        if (dampXZ(state.controls.target, state.target.dst, state.target.smoothTime, deltaMs, state.target.maxSpeed, undefined, 0.01) === false) {
+          state.target.resolve();
+          state.clearTarget();
+        }
       }
     },
-    onWheel(e) {
-      if (w.menu.ctOpen === true) {
-        w.menu.hide();
-        w.menu.justOpen = false;
-      }
+    openSnapshot(type = 'image/webp', quality) {
+      window.open(dataUrlToBlobUrl(state.toDataURL(type, quality)), '_blank');
     },
     pickObject(e) {// https://github.com/bzztbomb/three_js_gpu_picking/blob/main/src/gpupicker.js
       const { gl, camera } = w.r3f;
       // handle fractional device pixel ratio e.g. 2.625 on Pixel
-      const devicePixelRatio = Math.floor(window.devicePixelRatio);
+      const glPixelRatio = gl.getPixelRatio();
+      const targetRect = (/** @type {HTMLElement} */ (e.target)).getBoundingClientRect();
+
       // Set the projection matrix to only look at the pixel we are interested in.
       camera.setViewOffset(
         state.canvas.width,
         state.canvas.height,
-        e.nativeEvent.offsetX * devicePixelRatio,
-        e.nativeEvent.offsetY * devicePixelRatio,
+        (e.clientX - targetRect.left) * glPixelRatio,
+        (e.clientY - targetRect.top) * glPixelRatio,
         1,
         1,
       );
@@ -291,7 +406,7 @@ export default function WorldCanvas(props) {
       x.material.uniforms.objectPick.value = false;
       x.material.uniformsNeedUpdate = true;
     },
-    renderObjectPickScene() {
+    renderObjectPickScene() {// 🚧 more efficient approach to render list
       const { gl, scene, camera } = w.r3f;
       // https://github.com/bzztbomb/three_js_gpu_picking/blob/main/src/gpupicker.js
       // This is the magic, these render lists are still filled with valid data.  So we can
@@ -303,58 +418,54 @@ export default function WorldCanvas(props) {
           state.renderObjectPickItem(gl, scene, camera, x);
         }
       });
-      // renderList.transmissive.forEach(processItem);
       renderList.transparent.forEach(x => {
+        if (w.wall.opacity < 1 && (
+          // 🔔 ignore walls and ceilings
+          x.object.name === 'walls' || x.object.name === 'multi-tex-ceiling'
+        )) {
+          return;
+        }
         if (hasObjectPickShaderMaterial(x)) {
           state.renderObjectPickItem(gl, scene, camera, x);
         }
       });
     },
-    setLastDown(e) {
-      if (e.is3d === true || !state.lastDown) {
-        state.lastDown = {
-          screenPoint: Vect.from(e.screenPoint),
-          threeD: e.is3d === true ? { point: new THREE.Vector3().copy(e.position), meta: e.meta } : null,
-        };
-      } else {
-        if (!state.lastDown.screenPoint.equals(e.screenPoint)) {
-          state.lastDown.screenPoint.copy(e.screenPoint);
-          state.lastDown.threeD = null; // 3d pointerdown happens before 2d pointerdown
-        }
-      }
+    syncRenderMode() {
+      const frameloop = w.disabled === true && state.target === null && state.targetFov === null ? 'demand' : 'always';
+      w.r3f?.set({ frameloop });
+      return frameloop;
     },
-  }));
+    toDataURL(type, quality) {
+      w.r3f.advance(Date.now());
+      return state.canvas.toDataURL(type, quality);
+    },
+  }), { reset: { controlsViewportOpts: true } });
 
-  const w = React.useContext(WorldContext);
   w.view = state;
 
   React.useEffect(() => {
-    if (state.controls) {
-      state.controls.setPolarAngle(Math.PI / 4);
-      state.controls.setAzimuthalAngle(initAzimuth);
+    if (state.controls && !w.crowd) {// 🔔 initially only
+      state.controls.setPolarAngle(w.smallViewport ? Math.PI / 2 : Math.PI / 4);
+      state.controls.setAzimuthalAngle(w.smallViewport ? Math.PI / 6 : Math.PI / 4);
     }
     emptySceneForPicking.onAfterRender = state.renderObjectPickScene;
   }, [state.controls]);
 
-  useOnResize();
-
   return (
     <Canvas
       ref={state.canvasRef}
-      className={canvasCss}
-      frameloop={props.disabled ? "demand" : "always"}
-      resize={{ debounce: 300 }}
-      gl={{
-        toneMapping: 3,
-        toneMappingExposure: 1,
-        logarithmicDepthBuffer: true,
-      }}
+      className={rootCss}
+      frameloop={state.syncRenderMode()}
+      resize={{ debounce: 0 }}
+      gl={state.glOpts}
       onCreated={state.onCreated}
       onPointerDown={state.onPointerDown}
       onPointerMove={state.onPointerMove}
       onPointerUp={state.onPointerUp}
       onPointerLeave={state.onPointerLeave}
-      onWheel={state.onWheel}
+      onContextMenu={e => isTouchDevice() && e.preventDefault()}
+      tabIndex={0}
+      {...{ [popUpRootDataAttribute]: true }}
     >
       {props.children}
 
@@ -363,34 +474,26 @@ export default function WorldCanvas(props) {
       }
 
       <PerspectiveCamera
-        position={[0, 16, 0]}
+        position={[0, 64, 0]}
         makeDefault
         fov={state.fov}
-        zoom={0.5}
+        zoom={1}
       />
 
       <MapControls
-        ref={x => state.controls = x ?? state.controls}
-        key={`${smallViewport}`}
+        ref={state.ref('controls')}
         makeDefault
         zoomToCursor
         onChange={state.onChangeControls}
-
-        {...smallViewport ? {
-          minPolarAngle: fixedPolarAngle,
-          maxPolarAngle: fixedPolarAngle,
-        } : {
-          maxPolarAngle: Math.PI / 4,
-        }}
-        minDistance={smallViewport ? 10 : 5}
-        maxDistance={smallViewport ? 20 : 50}
-        panSpeed={2}
+        domElement={state.canvas}
+        {...state.controlsViewportOpts}
+        //@ts-ignore see three-stdlib patch
+        minPanDistance={w.smallViewport ? 0.05 : 0}
       />
 
-      <ambientLight intensity={1} />
+      <ContextMenu/>
 
-      <Origin />
-
+      <NpcSpeechBubbles/>
     </Canvas>
   );
 }
@@ -409,27 +512,34 @@ export default function WorldCanvas(props) {
  * - Pending click identifiers, provided by shell.
  * - The last click identifier is the "current one".
  * @property {(canvasEl: null | HTMLCanvasElement) => void} canvasRef
+ * @property {() => void} clearTarget
+ * @property {(mesh: THREE.Mesh, intersection: THREE.Intersection) => THREE.Vector3} computeNormal
  * @property {import('three-stdlib').MapControls} controls
- * @property {{ screenPoint: Geom.Vect; pointerIds: number[]; longTimeoutId: number; } | undefined} down
+ * @property {import('@react-three/drei').MapControlsProps} controlsViewportOpts
+ * @property {{ screenPoint: Geom.Vect; pointerIds: number[]; longTimeoutId: number; } | null} down
  * Defined iff at least one pointer is down.
  * @property {{ pickStart: number; pickEnd: number; pointerDown: number; pointerUp: number; }} epoch
  * Each uses Date.now() i.e. milliseconds since epoch
  * @property {number} fov
- * @property {{ screenPoint: Geom.Vect; threeD: null | { point: import("three").Vector3; meta: Geom.Meta }} | undefined} lastDown
- * Defined iff pointer has ever been down.
+ * @property {import('@react-three/fiber').RenderProps<HTMLCanvasElement>['gl']} glOpts
+ * @property {NPC.DownData} [lastDown]
+ * Defined iff last pointer was down over the World.
  * @property {boolean} justLongDown
- * @property {Geom.Vect} lastScreenPoint
- * This is `PointerEvent.offset{X,Y}` and is updated `onPointerMove`.
+ * @property {Geom.Vect} lastScreenPoint Updated `onPointerMove` and `onPointerDown`.
+ * @property {{ tri: THREE.Triangle; indices: THREE.Vector3; mat3: THREE.Matrix3 }} normal
  * @property {THREE.Raycaster} raycaster
  * @property {HTMLDivElement} rootEl
+ * @property {null | { dst: THREE.Vector3; reject(err?: any): void; resolve(): void; } & LookAtOpts} target
+ * Speed is m/s
  * @property {null | number} targetFov
  * @property {'near' | 'far'} zoomState
  *
  * @property {() => number} getDownDistancePx
  * @property {() => number} getNumPointers
  * @property {(e: React.PointerEvent, pixel: THREE.TypedArray) => void} onObjectPickPixel
- * @property {() => null | Geom.Meta} getLastDownMeta
  * @property {(def: WorldPointerEventDef) => NPC.PointerUpEvent | NPC.PointerDownEvent | NPC.LongPointerDownEvent} getWorldPointerEvent
+ * @property {(e: React.PointerEvent) => void} handleClickInDebugMode
+ * @property {() => import("@react-three/fiber").RootState['frameloop']} syncRenderMode
  * @property {import('@react-three/drei').MapControlsProps['onChange']} onChangeControls
  * @property {import('@react-three/fiber').CanvasProps['onCreated']} onCreated
  * @property {(e: React.PointerEvent<HTMLElement>) => void} onPointerDown
@@ -437,35 +547,37 @@ export default function WorldCanvas(props) {
  * @property {(e: React.PointerEvent) => void} onPointerMove
  * @property {(e: React.PointerEvent<HTMLElement>) => void} onPointerUp
  * @property {(deltaMs: number) => void} onTick
- * @property {(e: React.WheelEvent<HTMLElement>) => void} onWheel
+ * @property {(type?: string, quality?: any) => void} openSnapshot
+ * @property {(input: Geom.VectJson | THREE.Vector3Like, opts?: LookAtOpts) => Promise<void>} lookAt
  * @property {(e: React.PointerEvent<HTMLElement>) => void} pickObject
  * @property {(gl: THREE.WebGLRenderer, scene: THREE.Scene, camera: THREE.Camera, ri: THREE.RenderItem & { material: THREE.ShaderMaterial }) => void} renderObjectPickItem
  * @property {() => void} renderObjectPickScene
- * @property {(e: NPC.PointerDownEvent) => void} setLastDown
+ * @property {HTMLCanvasElement['toDataURL']} toDataURL
+ * Canvas only e.g. no ContextMenu
  */
 
-const canvasCss = css`
+const rootCss = css`
   user-select: none;
 
-  > div {
-    background-color: black;
+  > div:first-child {
     display: flex;
     align-items: center;
     justify-content: center;
+
+    canvas {
+      background-color: rgba(20, 20, 20, 1);
+      width: 100%;
+      height: 100%;
+      /* background-color: rgba(60, 60, 60, 1); */
+      /* background-color: rgba(255, 255, 255, 1); */
+    }
   }
-  canvas {
-    /* background-color: rgba(255, 255, 255, 1); */
-    background-color: rgba(20, 20, 20, 1);
-    /* background-color: rgba(60, 60, 60, 1); */
-    width: 100%;
-    height: 100%;
-    /* filter: sepia(1) invert(1); */
-  }
+
 `;
 
 const statsCss = css`
   position: absolute !important;
-  z-index: 4 !important;
+  z-index: 0 !important;
   left: unset !important;
   right: 0px;
 `;
@@ -477,18 +589,17 @@ const statsCss = css`
  * @property {React.PointerEvent | React.MouseEvent} event
  * @property {boolean} [justLongDown]
  * @property {Geom.Meta} meta
- * @property {THREE.Vector3Like} [position]
- */
+ * @property {THREE.Vector3Like} position
+*/
 
-const initAzimuth = Math.PI / 6;
-const fixedPolarAngle = Math.PI / 7;
+/**
+ * @typedef LookAtOpts
+ * @property {number} [maxSpeed]
+ * @property {number} [smoothTime]
+*/
+
 const pixelBuffer = new Uint8Array(4);
+const tmpVectThree = new THREE.Vector3();
 
-function Origin() {
-  return (
-    <mesh scale={[0.025, 1, 0.025]} position={[0, 0.5 - 0.001, 0]}>
-      <boxGeometry args={[1, 1, 1]} />
-      <meshBasicMaterial color="red" />
-    </mesh>
-  );
-}
+/** meters per second */
+const defaultSpeed = 2;

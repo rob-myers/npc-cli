@@ -8,6 +8,7 @@ import { InstancedMonochromeShader } from "../service/glsl";
 import { geomorph } from "../service/geomorph";
 import { WorldContext } from "./world-context";
 import useStateRef from "../hooks/use-state-ref";
+import useUpdate from "../hooks/use-update";
 
 /**
  * @param {Props} props
@@ -15,9 +16,12 @@ import useStateRef from "../hooks/use-state-ref";
 export default function Walls(props) {
   const w = React.useContext(WorldContext);
 
+  const update = useUpdate();
+
   const state = useStateRef(/** @returns {State} */ () => ({
     inst: /** @type {*} */ (null),
     quad: getQuadGeometryXY(`${w.key}-walls-xy`),
+    opacity: 0.45,
 
     decodeInstanceId(instanceId) {
       // compute gmId, gmData.wallSegs[wallSegsId]
@@ -28,12 +32,21 @@ export default function Walls(props) {
 
       const gm = w.gms[gmId];
       const gmData = w.gmsData[gm.key];
-      // 🔔 could provide roomId from shader
       const wallSeg = gmData.wallSegs[wallSegsId];
       const center = wallSeg.seg[0].clone().add(wallSeg.seg[1]).scale(0.5);
       const roomId = w.gmsData.findRoomIdContaining(gm, center, true);
       
-      // compute gm.walls[wallId][wallSegId]
+      /**
+       * Find `gm.walls[wallId][wallSegId]` _or_ lintel (above door) _or_ window,
+       * 
+       * ```js
+       * gmData.wallPolySegCounts ~ [
+       *   ...wallSegCounts,
+       *   lintelSegCounts,
+       *   ...windowSegCounts
+       * ]
+       * ```
+       */
       let wallSegId = wallSegsId;
       const wallId = gmData.wallPolySegCounts.findIndex(
         segCount => wallSegId < segCount ? true : (wallSegId -= segCount, false)
@@ -42,14 +55,25 @@ export default function Walls(props) {
 
       if (wall !== undefined) {
         return { gmId, ...wall.meta, roomId, instanceId };
-      } else {
+      }
+      
+      if (wallId === gm.walls.length) {
         const doorId = Math.floor(wallSegId / 2); // 2 lintels per door
         return { gmId, wall: true, lintel: true, roomId, doorId, instanceId };
       }
+      
+      let windowSegId = wallId - gm.walls.length;
+      const windowId = gm.windows.findIndex(({ poly: { outline } }) => windowSegId < outline.length ? true : (windowSegId -= outline.length, false));
+
+      return { gmId, wall: true, window: true, roomId, windowId, instanceId };
     },
-    getWallMat([u, v], transform, height, baseHeight) {
+    getWallMat([u, v], transform, determinant, height, baseHeight) {
       tmpMat1.feedFromArray(transform);
-      [tmpVec1.copy(u), tmpVec2.copy(v)].forEach(x => tmpMat1.transformPoint(x));
+      if (determinant > 0) {// (v, u) so outer walls are shown
+        [tmpVec1.copy(v), tmpVec2.copy(u)].forEach(x => tmpMat1.transformPoint(x));
+      } else {// (u, v) because transform flips
+        [tmpVec1.copy(u), tmpVec2.copy(v)].forEach(x => tmpMat1.transformPoint(x));
+      }
       const rad = Math.atan2(tmpVec2.y - tmpVec1.y, tmpVec2.x - tmpVec1.x);
       const len = u.distanceTo(v);
       return geomorph.embedXZMat4(
@@ -59,33 +83,35 @@ export default function Walls(props) {
     },
     positionInstances() {
       const { inst: ws } = state;
-      let wId = 0;
       let instanceId = 0;
-      const attributeGmIds = /** @type {number[]} */ ([]);
-      /** `[0, 1, 2, ... , instanceCount - 1]` */
-      const attributeInstanceIds = /** @type {number[]} */ ([]);
+      const instanceIds = /** @type {number[]} */ ([]);
 
-      w.gms.forEach(({ key: gmKey, transform }, gmId) =>
+      w.gms.forEach(({ key: gmKey, transform, determinant }, gmId) =>
         w.gmsData[gmKey].wallSegs.forEach(({ seg, meta }) => {
-          attributeGmIds.push(gmId);
-          attributeInstanceIds.push(instanceId++);
-          ws.setMatrixAt(wId++, state.getWallMat(
+          ws.setMatrixAt(instanceId, state.getWallMat(
             seg,
             transform,
+            determinant,
             typeof meta.h === 'number' ? meta.h : undefined,
             typeof meta.y === 'number' ? meta.y : undefined,
           ));
+          instanceIds.push(instanceId++);
       }),
       );
-      ws.instanceMatrix.needsUpdate = true;
+      
+      state.quad.setAttribute('instanceIds', new THREE.InstancedBufferAttribute(new Uint32Array(instanceIds), 1));
       ws.computeBoundingSphere();
-
-      ws.geometry.setAttribute('gmId', new THREE.InstancedBufferAttribute(new Int32Array(attributeGmIds), 1));
-      ws.geometry.setAttribute('instanceId', new THREE.InstancedBufferAttribute(new Int32Array(attributeInstanceIds), 1));
+      ws.instanceMatrix.needsUpdate = true;
+    },
+    setOpacity(opacity) {
+      state.opacity = Math.min(Math.max(0, opacity), 1);
+      update();
     },
   }));
 
   w.wall = state;
+
+  const transparent = state.opacity !== 1;
 
   React.useEffect(() => {
     state.positionInstances();
@@ -98,13 +124,17 @@ export default function Walls(props) {
       ref={instances => instances && (state.inst = instances)}
       args={[state.quad, undefined, w.gmsData.wallCount]}
       frustumCulled={false}
+      // ℹ️ for transparency
+      renderOrder={transparent ? 2 : undefined}
     >
       {/* <meshBasicMaterial side={THREE.DoubleSide} color="#866" wireframe /> */}
       <instancedMonochromeShader
         key={InstancedMonochromeShader.key}
-        side={THREE.DoubleSide}
         diffuse={[0, 0, 0]}
-        objectPick={false}
+        // ℹ️ for transparency
+        depthWrite={!transparent}
+        transparent={transparent}
+        opacity={state.opacity}
       />
     </instancedMesh>
   );
@@ -119,15 +149,18 @@ export default function Walls(props) {
  * @typedef State
  * @property {THREE.InstancedMesh} inst
  * @property {THREE.BufferGeometry} quad
+ * @property {number} opacity
  *
  * @property {(instanceId: number) => Geom.Meta} decodeInstanceId
  * @property {(
  *  seg: [Geom.Vect, Geom.Vect],
  *  transform: Geom.SixTuple,
+ *  determinant: number,
  *  height?: number,
  *  baseHeight?: number,
  * ) => THREE.Matrix4} getWallMat
  * @property {() => void} positionInstances
+ * @property {(opacity: number) => void} setOpacity
  */
 
 const tmpVec1 = new Vect();

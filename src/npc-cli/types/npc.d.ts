@@ -88,12 +88,11 @@ declare namespace NPC {
     // | PointerMoveEvent
     | { key: "disabled" }
     | { key: "enabled" }
-    | { key: 'npc-internal'; npcKey: string; event: 'cancelled' | 'paused' | 'resumed' }
+    | { key: "npc-internal"; npcKey: string; event: "cancelled" | "paused" | "resumed" }
     | { key: "spawned"; npcKey: string; gmRoomId: Geomorph.GmRoomId }
-    | { key: 'started-moving'; npcKey: string }
-    | { key: 'stopped-moving'; npcKey: string }
+    | { key: "started-moving"; npcKey: string }
+    | { key: "stopped-moving"; npcKey: string }
     | { key: "removed-npc"; npcKey: string }
-    | { key: "way-point"; npcKey: string; index: number; next: Geom.VectJson | null } & Geom.VectJson
     | { key: "enter-doorway"; npcKey: string } & Geomorph.GmDoorId
     | { key: "exit-doorway"; npcKey: string } & Geomorph.GmDoorId
     | { key: "enter-room"; npcKey: string } & Geomorph.GmRoomId
@@ -127,6 +126,12 @@ declare namespace NPC {
         changedGmIds: boolean[];
       }
     | { key: "pre-setup-physics" }
+    | { key: "nav-updated" }
+    | { key: 'contextmenu-link'; linkKey: string }
+    | { key: 'enter-off-mesh'; npcKey: string; offMesh: NPC.OffMeshLookupValue }
+    | { key: 'exit-off-mesh'; npcKey: string; offMesh: NPC.OffMeshLookupValue }
+    | { key: 'logger-link'; npcKey: string; } & NPC.LoggerLinkEvent
+    | { key: 'speech'; npcKey: string; speech: string }
     // ...
   );
 
@@ -137,14 +142,12 @@ declare namespace NPC {
 
   type BaseColliderEvent = (
     | { type: 'circle' | 'rect'; decorKey: string }
-    | { type: 'nearby' | 'inside' } & Geomorph.GmDoorId
+    | { type: 'nearby' } & Geomorph.GmDoorId
   );
 
   type PointerUpEvent = Pretty<BasePointerEvent & {
     key: "pointerup";
   }>;
-
-  type PointerUp3DEvent = PointerUpEvent & { is3d: true };
 
   type PointerDownEvent = Pretty<BasePointerEvent & {
     key: "pointerdown";
@@ -152,7 +155,6 @@ declare namespace NPC {
   
   type LongPointerDownEvent = BasePointerEvent & {
     key: "long-pointerdown";
-    is3d: false; // could extend to 3d
   }
 
   type BasePointerEvent = {
@@ -172,30 +174,20 @@ declare namespace NPC {
     screenPoint: Geom.VectJson;
     /** Touch device? */
     touch: boolean;
-  } &  (
-    | {
-        is3d: false;
-      }
-    | {
-        is3d: true;
-        position: import("three").Vector3Like;
-        /** `{ x: position.x, y: position.z }` */
-        point: Geom.VectJson;
-        /** Properties of the thing we clicked. */
-        meta: Geom.Meta;
-      }
-  );
-
-  type ClickMeta = Geom.VectJson & Pick<BasePointerEvent, 'keys'> & {
+    position: import("three").Vector3Like;
+    /** `{ x: position.x, y: position.z }` */
+    point: Geom.VectJson;
+    /** Properties of the thing we clicked. */
     meta: Geom.Meta;
-    /** Original 3D point */
-    v3: import('three').Vector3Like;
   };
 
-  type TiledCacheResult = Extract<
-    import("@recast-navigation/core").NavMeshImporterResult,
-    { tileCache?: any }
-  >;
+  type ClickOutput = import('three').Vector3Like & {
+    keys?: BasePointerEvent['keys'];
+    meta: Geom.Meta;
+    xz: Geom.VectJson;
+  };
+
+  type TiledCacheResult = import('@recast-navigation/core').ImportTileCacheResult;
 
   interface TileCacheConvexAreaDef {
     areaId: number;
@@ -208,6 +200,53 @@ declare namespace NPC {
   }
 
   type CrowdAgent = import("@recast-navigation/core").CrowdAgent;
+
+  type SrcToOffMeshLookup = {
+    [xz2DString: `${number},${number}`]: OffMeshLookupValue;
+  };
+  type DoorToOffMeshLookup = {
+    [gdKey: Geomorph.GmDoorKey]: OffMeshLookupValue[];
+  };
+
+  type OffMeshLookupValue = Geomorph.GmDoorId & {
+    offMeshRef: number;
+    src: import('three').Vector3Like;
+    dst: import('three').Vector3Like;
+    /** Key of connection in lookup. */
+    key: keyof SrcToOffMeshLookup;
+    /** Key of connection in reverse direction. */
+    reverseKey: keyof SrcToOffMeshLookup;
+    /** Room corresponding to `src` */
+    srcGrKey: Geomorph.GmRoomKey;
+    /** Room corresponding to `dst` */
+    dstGrKey: Geomorph.GmRoomKey;
+    /** Whether respective door's normal points towards `src` */
+    aligned: boolean;
+    /** Meta of dst room e.g. for small rooms */
+    dstRoomMeta: Geom.Meta;
+  };
+
+  type OffMeshState = {
+    /** The npc using this offMeshConnection. */
+    npcKey: string;
+    /** Original connection */
+    orig: OffMeshLookupValue;
+    /**
+     * Current progress along the two segments.
+     * - `0` is initial seg, from npc position to start of offMeshConnection
+     * - `1` is 1st half of offMeshConnection
+     * - `2` is 2nd half of offMeshConnection
+     */
+    seg: 0 | 1 | 2;
+    /** Adjusted src */
+    src: Geom.VectJson;
+    /** Adjusted dst */
+    dst: Geom.VectJson;
+    /** Vector from "initial npc position" to "adjusted src" */
+    init: Geom.VectJson;
+    /** Vector from "adjusted src" to "adjusted dst" */
+    main: Geom.VectJson;
+  };
 
   type Obstacle = {
     id: number;
@@ -233,5 +272,62 @@ declare namespace NPC {
     | 'npc'
     | 'lock-light'
   );
+
+  type MetaActDef = (
+    | { key: 'open' | 'close' | 'lock' | 'unlock'; gdKey: Geomorph.GmDoorKey; }
+    // ...
+  );
+
+  /** Action triggered from ContextMenu */
+  interface MetaAct<T = {}> {
+    def: MetaActDef;
+    /** Label of button */
+    label: string;
+    /** `icon--*` key */
+    icon: Geomorph.DecorImgKey;
+    /** The meta of ContextMenu (from prior click) when button was clicked */
+    meta: Geom.Meta<T>;
+  }
+
+  interface DownData {
+    longDown: boolean;
+    screenPoint: Geom.Vect;
+    position: import('three').Vector3;
+    normal: import('three').Vector3;
+    meta: Geom.Meta;
+    /** Derived from `normal` */
+    quaternion: import('three').Quaternion;
+  }
+
+  interface ContextMenuLink {
+    key: string;
+    label: string;
+  }
+
+  interface ContextMenuContextDef {
+    position: THREE.Vector3;
+    meta: Geom.Meta;
+  }
+
+  /**
+   * Assume `parent.meta` has already been updated.
+   */
+  type ContextMenuMatcher = (parent: import('../world/ContextMenu').State) => {
+    showLinks?: ContextMenuLink[];
+    hideKeys?: string[];
+  };
+
+  interface LoggerLinkEvent {
+    /** e.g. link `[rob]` yields `rob` */  
+    linkText: string;
+    /** Full possibly-wrapped line */  
+    fullLine: string;
+    /** 0-based */  
+    startRow: number;
+    /** 0-based */  
+    endRow: number;
+    /** 1-based (x,y) positions, originally from hover event */
+    viewportRange: import("@xterm/xterm").IViewportRange;
+  }
 
 }

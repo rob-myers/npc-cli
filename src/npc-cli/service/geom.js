@@ -24,13 +24,16 @@ class geomServiceClass {
    * @returns {Geom.Poly}
    */
   applyUnitQuadTransformWithOutset(mat, outset) {
-    const width = tempVect1.set(mat.a, mat.b).length;
-    const height = tempVect1.set(mat.c, mat.d).length;
-    const sx = (width + 2 * outset) / width;
-    const sy = (height + 2 * outset) / height;
-    const ox = (2 * outset) / (width + 2 * outset);
-    const oy = (2 * outset) / (height + 2 * outset);
-    return Poly.fromRect({ x: -ox, y: -oy, width: sx, height: sy }).applyMatrix(mat);
+    const poly = new Poly([new Vect(0, 0), new Vect(0, 1), new Vect(1, 1), new Vect(1, 0)]);
+    poly.applyMatrix(mat).fixOrientationConvex();
+    return geom.createOutset(poly, outset)[0];
+    // const width = tempVect1.set(mat.a, mat.b).length;
+    // const height = tempVect1.set(mat.c, mat.d).length;
+    // const sx = (width + 2 * outset) / width;
+    // const sy = (height + 2 * outset) / height;
+    // const ox = (2 * outset) / (width + 2 * outset);
+    // const oy = (2 * outset) / (height + 2 * outset);
+    // return Poly.fromRect({ x: -ox, y: -oy, width: sx, height: sy }).applyMatrix(mat);
   }
 
   /**
@@ -415,7 +418,7 @@ class geomServiceClass {
    * @param {Geom.VectJson} b
    * @returns {Geom.VectJson & { dst: number }}
    */
-  getClosestOnLineSeg(p, a, b) {
+  getClosestOnSeg(p, a, b) {
     const x = p.x;
     const y = p.y;
     const x1 = a.x;
@@ -456,6 +459,25 @@ class geomServiceClass {
   }
 
   /**
+   * Find closest point on segment `[p0, p1]` to segment `[q0, q1]`
+   * @param {Geom.VectJson} p0 
+   * @param {Geom.VectJson} p1 
+   * @param {Geom.VectJson} q0 
+   * @param {Geom.VectJson} q1 
+   */
+  getClosestOnSegToSeg(p0, p1, q0, q1) {
+    const lambda = this.getLineSegsIntersection(p0, p1, q0, q1);
+    if (lambda === null) {
+      const normal = tmpVec1.set(-(q1.y - q0.y), q1.x - q0.x).normalize();
+      const dist0 = Math.abs(normal.dot(tmpVec2.copy(p0).sub(q0)));
+      const dist1 = Math.abs(normal.dot(tmpVec2.copy(p1).sub(q0)));
+      return dist0 < dist1 ? p0 : p1;
+    } else {// p0 + (p1 - p0) * lambda
+      return Vect.from(p0).addScaled(Vect.from(p1).sub(p0), lambda);
+    }
+  }
+
+  /**
    * Source: https://github.com/martywallace/polyk/blob/90757dbd3d358f68c3a1a54e50710548a435ee7a/index.js#L390
    * @param {Geom.VectJson} point
    * @param {Geom.VectJson[]} outline
@@ -476,7 +498,7 @@ class geomServiceClass {
     for (var i = 0; i < p.length; i++) {
       b1.copy(p[i]);
       b2.copy(p[(i + 1) % p.length]);
-      const result = this.getClosestOnLineSeg(a1, b1, b2);
+      const result = this.getClosestOnSeg(a1, b1, b2);
       if (result.dst < isc.dist) {
         isc.dist = result.dst;
         isc.edgeId = i;
@@ -680,26 +702,21 @@ class geomServiceClass {
   /**
    * Join disjoint triangulations
    * @param {Geom.Triangulation[]} triangulations
-   * @returns {Geom.Triangulation}
+   * @returns {Geom.Triangulation & { tOffsets: number[] }}
    */
   joinTriangulations(triangulations) {
-    if (triangulations.length === 1) return triangulations[0];
-    /** @type {Vect[]} */
-    const vs = [];
-    /** @type {[number, number, number][]} */
-    const tris = [];
-    let offset = 0;
+    const vs = /** @type {Vect[]} */ ([]);
+    const tris = /** @type {[number, number, number][]} */ ([]);
+    const tOffsets = /** @type {number[]} */ ([]);
+    let vOffset = 0;
+
     for (const decomp of triangulations) {
       vs.push(...decomp.vs);
-      tris.push(
-        ...decomp.tris.map(
-          // eslint-disable-next-line no-loop-func
-          (tri) => /** @type {[number, number, number]} */ (tri.map((x) => (x += offset)))
-        )
-      );
-      offset += decomp.vs.length;
+      tOffsets.push(tris.length);
+      tris.push(...decomp.tris.map((tri) => /** @type {[number, number, number]} */ (tri.map((x) => (x += vOffset)))));
+      vOffset += decomp.vs.length;
     }
-    return { vs, tris };
+    return { vs, tris, tOffsets };
   }
 
   /**
@@ -1050,6 +1067,14 @@ class geomServiceClass {
     input.y = toPrecision(input.y, dp);
     input.z = toPrecision(input.z, dp);
     return input;
+  }
+
+  /**
+   * @param {number} x 
+   * @param {number} y 
+   */
+  to2DString(x, y, dp = 2) {
+    return /** @type {`${number},${number}`} */ (`${x.toFixed(dp)},${y.toFixed(dp)}`);
   }
 
   /**

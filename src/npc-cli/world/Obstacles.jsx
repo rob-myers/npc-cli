@@ -50,10 +50,10 @@ export default function Obstacles(props) {
         new THREE.InstancedBufferAttribute( new Float32Array( uvDimensions ), 2 ),
       );
       state.quad.setAttribute('uvTextureIds',
-        new THREE.InstancedBufferAttribute(new Int32Array(uvTextureIds), 1),
+        new THREE.InstancedBufferAttribute(new Uint32Array(uvTextureIds), 1),
       );
       state.quad.setAttribute('instanceIds',
-        new THREE.InstancedBufferAttribute(new Int32Array(instanceIds), 1),
+        new THREE.InstancedBufferAttribute(new Uint32Array(instanceIds), 1),
       );
     },
     createObstacleMatrix4(gmTransform, { origPoly: { rect }, transform, height }) {
@@ -63,14 +63,13 @@ export default function Obstacles(props) {
       mat.postMultiply(transform).postMultiply(gmTransform);
       return geomorph.embedXZMat4(mat.toArray(), { mat4, yHeight: height });
     },
-    decodeObstacleId(instanceId) {
+    decodeInstanceId(instanceId) {
       let id = instanceId;
       const gmId = w.gms.findIndex(gm => id < gm.obstacles.length || (id -= gm.obstacles.length, false));
       const gm = w.gms[gmId];
       const obstacle = gm.obstacles[id];
       return {
         gmId,
-        obstacleId: id,
         ...obstacle.meta,
         height: obstacle.height,
       };
@@ -111,6 +110,7 @@ export default function Obstacles(props) {
       args={[state.quad, undefined, w.gmsData.obstaclesCount]}
       frustumCulled={false}
       position={[0, 0.001, 0]} // 🚧
+      renderOrder={-1}
     >
       <instancedMultiTextureMaterial
         key={glsl.InstancedMultiTextureMaterial.key}
@@ -137,7 +137,7 @@ export default function Obstacles(props) {
  * @property {THREE.BufferGeometry} quad
  * @property {() => void} addObstacleUvs
  * @property {(gmTransform: Geom.SixTuple, obstacle: Geomorph.LayoutObstacle) => THREE.Matrix4} createObstacleMatrix4
- * @property {(instanceId: number) => { gmId: number; obstacleId: number; }} decodeObstacleId
+ * @property {(instanceId: number) => Geom.Meta<{ gmId: number}>} decodeInstanceId
  * Points to `w.gms[gmId].obstacles[obstacleId]`.
  * @property {() => void} positionObstacles
  */

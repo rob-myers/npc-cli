@@ -3,7 +3,7 @@ import * as THREE from "three";
 import { damp } from "maath/easing"
 
 import { Mat, Vect } from "../geom";
-import { doorDepth, doorHeight, doorLockedColor, doorUnlockedColor, hullDoorDepth, precision, wallOutset } from "../service/const";
+import { doorDepth, doorHeight, doorLockedColor, doorUnlockedColor, hullDoorDepth, offMeshConnectionHalfDepth, precision, wallOutset } from "../service/const";
 import * as glsl from "../service/glsl";
 import { getBoxGeometry, getColor, getQuadGeometryXY } from "../service/three";
 import { geomorph } from "../service/geomorph";
@@ -25,11 +25,12 @@ export default function Doors(props) {
     lockSigGeom: getBoxGeometry(`${w.key}-lock-lights`),
     lockSigInst: /** @type {*} */ (null),
     movingDoors: new Map(),
+    ready: false,
 
     addCuboidAttributes() {
       const instanceIds = Object.values(state.byKey).map((_, instanceId) => instanceId);
       state.lockSigGeom.setAttribute('instanceIds',
-        new THREE.InstancedBufferAttribute(new Int32Array(instanceIds), 1),
+        new THREE.InstancedBufferAttribute(new Uint32Array(instanceIds), 1),
       );
     },
     addUvs() {
@@ -56,10 +57,10 @@ export default function Doors(props) {
         new THREE.InstancedBufferAttribute(new Float32Array(uvDimensions), 2),
       );
       state.inst.geometry.setAttribute('uvTextureIds',
-        new THREE.InstancedBufferAttribute(new Int32Array(uvTextureIds), 1),
+        new THREE.InstancedBufferAttribute(new Uint32Array(uvTextureIds), 1),
       );
       state.inst.geometry.setAttribute('instanceIds',
-        new THREE.InstancedBufferAttribute(new Int32Array(instanceIds), 1),
+        new THREE.InstancedBufferAttribute(new Uint32Array(instanceIds), 1),
       );
     },
     buildLookups() {
@@ -67,15 +68,16 @@ export default function Doors(props) {
       const prevDoorByPos = state.byPos;
       state.byKey = {};
       state.byPos = {};
+
       w.gms.forEach((gm, gmId) => {
         const byGmId = state.byGmId[gmId] = /** @type {Geomorph.DoorState[]} */ ([]);
         gm.doors.forEach((door, doorId) => {
           const [u, v] = door.seg;
           tmpMat1.feedFromArray(gm.transform);
-          tmpMat1.transformPoint(tmpVec1.copy(u));
-          tmpMat1.transformPoint(tmpVec2.copy(v));
-          const center = new Vect((tmpVec1.x + tmpVec2.x) / 2, (tmpVec1.y + tmpVec2.y) / 2);
-          const radians = Math.atan2(tmpVec2.y - tmpVec1.y, tmpVec2.x - tmpVec1.x);
+          const ut = tmpMat1.transformPoint(tmpVec1.copy(u));
+          const vt = tmpMat1.transformPoint(tmpVec2.copy(v));
+          const center = new Vect((ut.x + vt.x) / 2, (ut.y + vt.y) / 2);
+          const radians = Math.atan2(vt.y - ut.y, vt.x - ut.x);
           // 🔔 wider and less depth than "computeDoorway()" for better navSeg intersections
           const collidePoly = door.computeThinPoly(2 * wallOutset - 0.05).applyMatrix(tmpMat1).precision(precision);
 
@@ -85,6 +87,10 @@ export default function Doors(props) {
           const prev = prevDoorByPos[posKey];
           const hull = gm.isHullDoor(doorId);
 
+          // Compute navigable doorway
+          // 🔔 align to offMeshConnection depths
+          const entrances = door.computeEntrances().map(x => tmpMat1.transformPoint(x).precision(precision).json);
+          
           state.byKey[gdKey] = state.byPos[posKey] = byGmId[doorId] = {
             gdKey, gmId, doorId,
             instanceId: instId,
@@ -101,12 +107,16 @@ export default function Doors(props) {
             hull,
 
             ratio: prev?.ratio ?? 1, // 1 means closed
-            src: tmpVec1.json,
-            dst: tmpVec2.json,
+            src: ut.json,
+            dst: vt.json,
             center,
             dir: { x : Math.cos(radians), y: Math.sin(radians) },
             normal: tmpMat1.transformSansTranslate(door.normal.clone()),
             segLength: u.distanceTo(v),
+            entrances: [
+              { src: entrances[0], dst: entrances[1] },
+              { src: entrances[2], dst: entrances[3] },
+            ],
 
             collidePoly,
             collideRect: collidePoly.rect.precision(precision),
@@ -131,6 +141,10 @@ export default function Doors(props) {
       ));
       const { meta } = w.gms[gmId].doors[doorId];
       return { ...w.lib.getGmDoorId(gmId, doorId), ...meta, instanceId };
+    },
+    getAdjRoomByDir(gdKey, direction) {// 🚧 unused
+      const { door } = state.byKey[gdKey];
+      return door.normal.dot(direction) > 0 ? door.roomIds[0] : door.roomIds[1];
     },
     getDoorMat(meta) {
       const { src, dir, ratio, segLength, door, normal } = meta;
@@ -207,24 +221,23 @@ export default function Doors(props) {
       
       state.cancelClose(door); // Cancel any pending close
 
+      if (opts.access === false) {
+        return false; // No access
+      }
+
       if (door.open === true) {// was open
         if (opts.open === true) {
           door.auto === true && w.events.next({
-            key: 'try-close-door', gmId: door.gmId, doorId: door.doorId, meta: opts.eventMeta,
+            key: 'try-close-door', gmId: door.gmId, doorId: door.doorId,
           });
           return true;
         }
         if (opts.clear !== true) {
-          // if every npc exits nearby sensor of auto door, we trigger close elsewhere
-          return true;
+          return false; // cannot close or toggle
         }
       } else {// was closed
         if (opts.close === true) {
-          return false;
-        }
-        // Ignore locks if `opts.access` unspecified
-        if (door.locked === true && opts.access === false) {
-          return false; // Cannot open door if locked
+          return true;
         }
       }
 
@@ -232,18 +245,18 @@ export default function Doors(props) {
       door.open = !door.open;
       state.movingDoors.set(door.instanceId, door);
       w.events.next(door.open ? {
-        key: 'opened-door', gmId: door.gmId, doorId: door.doorId, meta: opts.eventMeta,
+        key: 'opened-door', gmId: door.gmId, doorId: door.doorId,
       } : {
-        key: 'closed-door', gmId: door.gmId, doorId: door.doorId, meta: opts.eventMeta,
+        key: 'closed-door', gmId: door.gmId, doorId: door.doorId,
       });
 
       if (door.auto === true && door.open === true) { 
         w.events.next({
-          key: 'try-close-door', gmId: door.gmId, doorId: door.doorId, meta: opts.eventMeta,
+          key: 'try-close-door', gmId: door.gmId, doorId: door.doorId,
         });
       }
 
-      return door.open;
+      return true;
     },
     toggleLockRaw(door, opts = {}) {
       if (door.sealed === true) {
@@ -251,13 +264,13 @@ export default function Doors(props) {
       }
 
       if (opts.access === false) {
-        return door.locked; // No access
+        return false; // No access
       }
 
       if (door.locked === true) {
         if (opts.lock === true) return true; // Already locked
       } else {
-        if (opts.unlock === true) return false; // Already unlocked
+        if (opts.unlock === true) return true; // Already unlocked
       }
 
       // Actually lock/unlock door
@@ -266,56 +279,63 @@ export default function Doors(props) {
       /** @type {THREE.InstancedBufferAttribute} */ (state.lockSigInst.instanceColor).needsUpdate = true;
 
       w.events.next(door.locked ? {
-        key: 'locked-door', gmId: door.gmId, doorId: door.doorId, meta: opts.eventMeta,
+        key: 'locked-door', gmId: door.gmId, doorId: door.doorId,
       } : {
-        key: 'unlocked-door', gmId: door.gmId, doorId: door.doorId, meta: opts.eventMeta,
+        key: 'unlocked-door', gmId: door.gmId, doorId: door.doorId,
       });
 
-      return door.locked;
+      return true;
     },
   }));
 
   w.door = state;
 
   React.useEffect(() => {
+    w.menu.measure('door[useEffect]');
     state.buildLookups();
     state.positionInstances();
     state.addCuboidAttributes();
     state.addUvs();
+    w.d = state.byKey;
+    state.ready = true
+    w.menu.measure('door[useEffect]');
   }, [w.mapKey, w.hash.full, w.gmsData.doorCount]);
 
   return <>
     <instancedMesh
       name="doors"
       key={`${w.hash} doors`}
-      ref={instances => instances && (state.inst = instances)}
+      ref={inst => inst && (state.inst = inst)}
       args={[state.quad, undefined, w.gmsData.doorCount]}
       frustumCulled={false}
-      renderOrder={-1}
+      renderOrder={1}
+      visible={state.ready}
     >
-      <instancedMultiTextureMaterial
+      {state.ready && <instancedMultiTextureMaterial
         key={glsl.InstancedMultiTextureMaterial.key}
         side={THREE.DoubleSide}
         transparent
         atlas={w.texDecor.tex}
-        diffuse={[.6, .6, .6]}
+        diffuse={[.5, .5, .5]}
         objectPickRed={4}
-      />
+        // alphaTest={0} opacity={0.7} depthWrite={true}
+      />}
     </instancedMesh>
 
     <instancedMesh
       name="lock-lights"
       key={`${w.hash} lock-lights`}
-      ref={instances => instances && (state.lockSigInst = instances)}
+      ref={inst => inst && (state.lockSigInst = inst)}
       args={[state.lockSigGeom, undefined, w.gmsData.doorCount]}
       frustumCulled={false}
+      visible={state.ready}
     >
-      <cameraLightMaterial
+      {state.ready && <cameraLightMaterial
         key={glsl.CameraLightMaterial.key}
-        side={THREE.DoubleSide} // fix flipped gm
         diffuse={[1, 1, 1]}
         objectPickRed={9}
-      />
+        side={THREE.DoubleSide} // fix flipped gm
+      />}
     </instancedMesh>
   </>;
 }
@@ -336,6 +356,7 @@ export default function Doors(props) {
  * @property {THREE.BoxGeometry} lockSigGeom
  * @property {THREE.InstancedMesh} lockSigInst
  * @property {Map<number, Geomorph.DoorState>} movingDoors To be animated until they open/close.
+ * @property {boolean} ready avoid initial flicker
  *
  * @property {() => void} addCuboidAttributes
  * @property {() => void} addUvs
@@ -345,9 +366,12 @@ export default function Doors(props) {
  * @property {(meta: Geomorph.DoorState) => THREE.Matrix4} getDoorMat
  * @property {(meta: Geomorph.DoorState) => THREE.Matrix4} getLockSigMat
  * @property {(gmId: number) => number[]} getOpenIds Get gmDoorKeys of open doors
+ * @property {(gdKey: Geomorph.GmDoorKey, direction: Geom.VectJson) => number | null} getAdjRoomByDir
  * @property {(gmId: number, doorId: number) => boolean} isOpen
  * @property {(door: Geomorph.DoorState, opts?: Geomorph.ToggleDoorOpts) => boolean} toggleDoorRaw
+ * Returns `true` iff successful.
  * @property {(door: Geomorph.DoorState, opts?: Geomorph.ToggleLockOpts) => boolean} toggleLockRaw
+ * Returns `true` iff successful.
  * @property {(deltaMs: number) => void} onTick
  * @property {() => void} positionInstances
  */

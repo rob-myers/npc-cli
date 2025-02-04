@@ -1,6 +1,6 @@
 import React from "react";
 import * as THREE from "three";
-import { NavMeshHelper } from "@recast-navigation/three";
+import { NavMeshHelper, OffMeshConnectionsHelper } from "@recast-navigation/three";
 import { Line2, LineGeometry } from "three-stdlib";
 
 import { colliderHeight } from "../service/const";
@@ -8,7 +8,6 @@ import { navMeta, decompToXZGeometry, cylinderGeometry, boxGeometry } from "../s
 import { WorldContext } from "./world-context";
 import useStateRef from "../hooks/use-state-ref";
 import useUpdate from "../hooks/use-update";
-import TestNpcs from "./TestNpcs";
 
 /**
  * @param {Props} props 
@@ -18,11 +17,12 @@ export default function Debug(props) {
 
   const state = useStateRef(/** @returns {State} */ () => ({
     navMesh: /** @type {*} */ (null),
+    offMeshConnections: /** @type {*} */ (null),
     navPath: /** @type {*} */ (null),
-    npc: /** @type {*} */ (null),
-    selectedNavPolys: new THREE.BufferGeometry(),
-    staticColliders: [],
+    pick: null,
     physicsLines: new THREE.BufferGeometry(),
+    selectedNavPolys: null,
+    staticColliders: [],
 
     ensureNavPoly(gmKey) {
       if (!w.gmsData[gmKey].navPoly) {
@@ -66,7 +66,11 @@ export default function Debug(props) {
 
       group.visible = true;
     },
-    selectNavPolys(polyRefs) {
+    selectNavPolys(...polyRefs) {
+      if (polyRefs.length === 0) {
+        state.selectedNavPolys = null;
+        return update();
+      }
       const { navMesh } = w.nav;
       const geom = new THREE.BufferGeometry();
       const positions = /** @type {number[]} */ ([]);
@@ -96,6 +100,18 @@ export default function Debug(props) {
                 tile.verts(tileVertsBaseId + 1) + 0.1,
                 tile.verts(tileVertsBaseId + 2)
               );
+            } else {// 🚧 explain this case
+              const tileVertsBaseIndex =
+                (polyDetail.vertBase() +
+                  tile.detailTris(detailTrisBaseId + i) -
+                  poly.vertCount()) *
+                3;
+  
+              positions.push(
+                tile.detailVerts(tileVertsBaseIndex),
+                tile.detailVerts(tileVertsBaseIndex + 1),
+                tile.detailVerts(tileVertsBaseIndex + 2)
+              );
             }
             indices.push(tri++);
           }
@@ -107,14 +123,32 @@ export default function Debug(props) {
       state.selectedNavPolys = geom;
       update();
     },
+    setPickIndicator(downData) {
+      state.pick = downData || null;
+      update();
+    },
   }));
 
   w.debug = state;
 
   React.useMemo(() => {
-    state.navMesh = new NavMeshHelper({
-      navMesh: w.nav.navMesh,
+    state.navMesh = new NavMeshHelper(w.nav.navMesh, {
       navMeshMaterial: navPolyMaterial,
+    });
+
+    /** Use offMeshLookup to exclude non-existent ones through isolated hull doors  */
+    const offMeshParams = Object.values(w.nav.offMeshLookup).map(x => ({
+        startPosition: x.src,
+        endPosition: x.dst,
+        radius: 0.04,
+        bidirectional: true,
+    }));
+    // const offMeshParams = computeOffMeshConnectionsParams(w.gms);
+
+    state.offMeshConnections = new OffMeshConnectionsHelper(offMeshParams, {
+      lineMaterial: offMeshLineMaterial,
+      entryCircleMaterial: navPolyMaterial,
+      exitCircleMaterial: navPolyMaterial,
     });
   }, [w.nav.navMesh]);
 
@@ -130,36 +164,67 @@ export default function Debug(props) {
     }
   }, [props.showStaticColliders, w.physics.rebuilds]);
 
+
   const update = useUpdate();
 
-  return <>
-
-    <primitive
-      name="NavMeshHelper"
-      position={[0, 0.01, 0]}
-      object={state.navMesh}
-      visible={!!props.showNavMesh}
-    />
+  return <> 
+    
+    <mesh
+      name="origin"
+      scale={[0.025, 1, 0.025]}
+      position={[0, 0.5 - 0.001, 0]}
+    >
+      <boxGeometry args={[1, 1, 1]} />
+      <meshBasicMaterial color="red" />
+    </mesh>
 
     <group
-      name="NavPathHelper"
-      ref={x => x && (state.navPath = x)}
+      name="nav-path-helper"
+      ref={state.ref('navPath')}
     />
 
-    <mesh
-      name="SelectedNavPolys"
+    {state.pick !== null && <group
+      name="object-pick-indicator"
+      position={state.pick.position}
+      quaternion={state.pick.quaternion}
+    >
+      <mesh
+        position={[0.01, 0, 0]}
+        rotation={[0, Math.PI/2, 0]}
+        renderOrder={1}
+      >
+        <circleGeometry args={[0.08, 24]} />
+        <meshBasicMaterial color="#0f9" opacity={0.5} transparent wireframe={false} />
+      </mesh>
+    </group>}
+
+    {props.showNavMesh === true && <>
+      <primitive
+        name="nav-mesh-helper"
+        position={[0, 0.01, 0]}
+        object={state.navMesh}
+      />
+      <primitive
+        name="off-mesh-connection-helper"
+        position={[0, 0.02, 0]}
+        object={state.offMeshConnections}
+      />
+    </>}
+
+    {state.selectedNavPolys !== null && <mesh
+      name="selected-nav-polys"
       args={[state.selectedNavPolys, selectedNavPolysMaterial]}
       renderOrder={0}
-    />
+    />}
 
-    {props.showOrigNavPoly && w.gms.map((gm, gmId) => (
+    {props.showOrigNavPoly === true && w.gms.map((gm, gmId) => (
       <group
         key={`${gm.key} ${gmId} ${gm.transform}`}
         onUpdate={(group) => group.applyMatrix4(gm.mat4)}
         ref={(group) => group && state.ensureNavPoly(gm.key)}
       >
         <mesh
-          name="origNavPoly"
+          name="orig-nav-poly"
           args={[w.gmsData[gm.key].navPoly, origNavPolyMaterial]}
           position={[0, 0.0001, 0]}
           visible={props.showOrigNavPoly}
@@ -167,8 +232,8 @@ export default function Debug(props) {
       </group>
     ))}
     
-    <group
-      name="StaticColliders"
+    {state.staticColliders.length > 0 && <group
+      name="static-colliders"
       visible={state.staticColliders.length > 0}
     >
       <lineSegments geometry={state.physicsLines}>
@@ -178,9 +243,7 @@ export default function Debug(props) {
         staticColliders={state.staticColliders}
         w={w}
       />
-    </group>
-
-    {props.showTestNpcs && <TestNpcs />}
+    </group>}
   </>;
 }
 
@@ -190,48 +253,55 @@ export default function Debug(props) {
  * @property {boolean} [showNavMesh]
  * @property {boolean} [showOrigNavPoly]
  * @property {boolean} [showStaticColliders]
- * @property {boolean} [showTestNpcs]
  */
 
 /**
  * @typedef State
  * @property {NavMeshHelper} navMesh
+ * @property {OffMeshConnectionsHelper} offMeshConnections
  * @property {THREE.Group} navPath
- * @property {import('./TestNpcs').State} npc
- * @property {THREE.BufferGeometry} selectedNavPolys
+ * @property {null | THREE.BufferGeometry} selectedNavPolys
  * @property {(WW.PhysicDebugItem & { parsedKey: WW.PhysicsParsedBodyKey })[]} staticColliders
+ * @property {null | NPC.DownData} pick
  * @property {THREE.BufferGeometry} physicsLines
  * @property {(gmKey: Geomorph.GeomorphKey) => void} ensureNavPoly
  * @property {(e: MessageEvent<WW.MsgFromPhysicsWorker>) => void} onPhysicsDebugData
  * @property {(path: THREE.Vector3Like[]) => void} setNavPath
- * @property {(polyIds: number[]) => void} selectNavPolys
+ * @property {(...polyIds: number[]) => void} selectNavPolys
+ * https://github.com/isaac-mason/recast-navigation-js/blob/bb3e49af3f4ff274afe84341d4c51a9f5fac609c/apps/navmesh-website/src/features/recast/export/nav-mesh-to-gltf.ts#L31
+ * @property {(downData?: NPC.DownData) => void} setPickIndicator
  */
 
 const origNavPolyMaterial = new THREE.MeshBasicMaterial({
   side: THREE.FrontSide,
-  color: "green",
-  // wireframe: true,
+  color: "yellow",
+  wireframe: true,
   transparent: true,
   opacity: 0.8,
 });
 
-const navPolyMaterial = new THREE.MeshStandardMaterial({
+const navPolyMaterial = new THREE.MeshBasicMaterial({
   wireframe: true,
   color: "#7f7",
   transparent: true,
   opacity: 1,
 });
 
+const offMeshLineMaterial = new THREE.LineBasicMaterial({
+  color: "#ff7",
+});
 
 const selectedNavPolysMaterial = new THREE.MeshBasicMaterial({
   side: THREE.FrontSide,
-  color: "blue",
+  color: "red",
   wireframe: false,
   transparent: true,
-  opacity: 0.2,
+  opacity: 0.5,
 });
 
 const showNavNodes = true;
+
+const MemoizedStaticColliders = React.memo(StaticColliders);
 
 /**
  * 🔔 debug only (inefficient)
@@ -278,8 +348,6 @@ function StaticColliders({ staticColliders, w }) {
     return null;
   });
 }
-
-const MemoizedStaticColliders = React.memo(StaticColliders);
 
 const toColliderMeta = /** @type {Record<string, { color: string; renderOrder: Number; }>} */ ({
   inside: { color: 'green', renderOrder: 1 },

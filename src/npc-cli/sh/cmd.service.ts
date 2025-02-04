@@ -356,12 +356,15 @@ class cmdServiceClass {
         });
 
         const allProcesses = useSession.api.getSession(meta.sessionKey).process;
+
         /** Either all processes, or all group leaders */
-        const processes = { ...allProcesses };
-        !opts.a &&
-          Object.values(allProcesses).forEach(
-            ({ key: pid, pgid }) => pid !== pgid && delete processes[pid]
-          );
+        const processes = opts.a
+          ? allProcesses
+          : Object.values(allProcesses).reduce(
+              (agg, proc) => (proc.key === proc.pgid && (agg[proc.key] = proc), agg),
+              {} as typeof allProcesses,
+            )
+        ;
 
         const statusColour: Record<ProcessStatus, string> = {
           0: ansi.DarkGrey,
@@ -374,34 +377,30 @@ class cmdServiceClass {
           2: "",
         };
 
-        // 🚧 better way?
-        function getDescLeaders(leader: ProcessMeta) {
+        function getProcessDescendants(leader: ProcessMeta) {// 🚧 better way?
           const lookup = { [leader.key]: true };
           Object.values(useSession.api.getSession(meta.sessionKey).process).forEach((other) => {
             if (other.ppid in lookup) lookup[other.key] = true;
           });
-          return Object.keys(lookup)
-            .slice(1)
-            .filter((pid) => processes[pid]);
+          return Object.keys(lookup).slice(1).filter((pid) => processes[pid]);
         }
 
-        function suppressLinks(process: ProcessMeta) {
+        function shouldSuppressLinks(process: ProcessMeta) {
           return (
             process.status === ProcessStatus.Killed ||
             process.key === 0 || // suppress links when leader has descendant leader
-            (!opts.a && !opts.s && getDescLeaders(process).length)
+            (!opts.a && !opts.s && getProcessDescendants(process).length > 0)
           );
         }
 
-        function getProcessLineWithLinks(process: ProcessMeta) {
-          const info = [process.key, process.ppid, process.pgid]
-            .map((x) => `${x}`.padEnd(5))
-            .join(" ");
-          const hasLinks = !suppressLinks(process);
-          const line = `${statusColour[process.status]}${info}${ansi.Reset}${
-            hasLinks ? statusLinks[process.status] + "  " : ""
-          }${!opts.s ? truncateOneLine(process.src.trimStart(), 30) : ""}`;
-          hasLinks && registerStatusLinks(process, line);
+        function getProcessLineWithLinks(p: ProcessMeta) {
+          const info = [p.key, p.ppid, p.pgid].map(x => `${x}`.padEnd(5)).join(' ');
+          const hasLinks = !shouldSuppressLinks(p);
+          const linksOrEmpty = hasLinks ? `${statusLinks[p.status]} ` : '';
+          const tagsOrEmpty = p.ptags !== undefined ? `${ansi.BrightYellow}${opts.s ? jsStringify(p.ptags) : '* '}${ansi.Reset}` : '';
+          const oneLineSrcOrEmpty = !opts.s ? truncateOneLine(p.src.trimStart(), 30) : '';
+          const line = `${statusColour[p.status]}${info}${ansi.Reset}${linksOrEmpty}${tagsOrEmpty}${oneLineSrcOrEmpty}`;
+          if (hasLinks === true) registerStatusLinks(p, line);
           return line;
         }
 
@@ -451,8 +450,7 @@ class cmdServiceClass {
 
         for (const process of Object.values(processes)) {
           yield getProcessLineWithLinks(process);
-          if (opts.s) {
-            // Avoid multiline white in tty
+          if (opts.s) {// Avoid multiline white in tty
             yield* process.src.split("\n").map((x) => `${ansi.Reset}${x}`);
           }
         }
@@ -575,7 +573,7 @@ class cmdServiceClass {
       }
       case "sleep": {
         const seconds = args.length ? parseFloat(parseJsonArg(args[0])) || 0 : 1;
-        yield* sleep(meta, seconds);
+        await sleep(meta, seconds);
         break;
       }
       case "source": {
@@ -880,8 +878,8 @@ class cmdServiceClass {
       }
     },
 
-    async *sleep(seconds: number) {
-      yield* sleep(this.meta, seconds);
+    async sleep(seconds: number) {
+      await sleep(this.meta, seconds);
     },
 
     verbose(e: any) {
@@ -1034,39 +1032,38 @@ export function parseFnOrStr(input: string) {
  */
 async function read(meta: Sh.BaseMeta, chunks = false) {
   const result = await cmdService.readOnce(meta, chunks);
-  return result?.eof ? EOF : result.data;
+  return result?.eof === true ? EOF : result.data;
 }
 
-export async function* sleep(
-  meta: Sh.BaseMeta,
-  seconds: number,
-) {
+export async function sleep(meta: Sh.BaseMeta, seconds: number) {
   const process = getProcess(meta);
-  let duration = 1000 * seconds,
-    startedAt = -1,
-    reject = (_: any) => {};
-  const cleanup = () => reject(killError(meta));
-  process.cleanups.push(cleanup);
-  do {
-    await new Promise<void>((resolve, currReject) => {
-      const resolveSleep = () => {
-        resolve();
-      };
-      process.onSuspends.push(() => {
-        duration -= Date.now() - startedAt;
-        resolveSleep();
-      });
-      process.onResumes.push(() => {
-        startedAt = Date.now();
-      });
-      reject = currReject; // We update cleanup here
-      (startedAt = Date.now()) && setTimeout(resolveSleep, duration);
-    });
+  
+  await new Promise<void>((resolveSleep, rejectSleep) => {
+    let durationMs = 1000 * seconds;
+    let startedAt = 0;
+    let timeoutId = 0;
 
-    yield; // This yield pauses execution if process suspended
-  } while (Date.now() - startedAt < duration - 1);
-  // If process continually re-sleeps, avoid many cleanups
-  removeFirst(process.cleanups, cleanup);
+    function onResume() {
+      startedAt = Date.now();
+      timeoutId = window.setTimeout(onResolve, durationMs);
+    }
+    function onSuspend() {
+      window.clearTimeout(timeoutId);
+      durationMs -= (Date.now() - startedAt);
+    }
+    function onResolve() {
+      removeFirst(process.cleanups, onCleanup);
+      resolveSleep();
+    }
+    function onCleanup() {
+      rejectSleep(killError(meta));
+    }
+
+    process.onSuspends.push(onSuspend);
+    process.onResumes.push(onResume);
+    process.cleanups.push(onCleanup);
+    onResume();
+  });
 }
 
 //#endregion

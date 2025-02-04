@@ -1,7 +1,7 @@
 import { uid } from "uid";
 
 import type * as Sh from "./parse";
-import { jsStringify, last, pause } from "../service/generic";
+import { jsStringify, last, pause, safeJsonParse, tagsToMeta, textToTags } from "../service/generic";
 import { parseJsArg } from "../service/generic";
 import useSession, { ProcessStatus } from "./session.store";
 import {
@@ -126,6 +126,9 @@ class semanticsServiceClass {
     if (Naked || !Value) {
       useSession.api.setVar(meta, Name.Value, '');
       return;
+    }
+    if (Name.Value === 'ptags') {
+      return; // used to tag process instead
     }
 
     const expanded = await this.lastExpanded(sem.Expand(Value));
@@ -255,24 +258,44 @@ class semanticsServiceClass {
     return this.stmts(node, node.Stmts);
   }
 
+  /**
+   * We support process tagging like:
+   * - `ptags='foo bar=baz' sleep 10 &`
+   * - `{ ptags=no-pause; sleep 10; } &`
+   * - `ptags=no-pause; foo | bar &` (via inheritance)
+   */
+  private async supportPTags(node: Sh.CallExpr) {
+    const assign = node.Assigns.find(x => x.Name.Value === 'ptags');
+    if (assign?.Value != null) {
+      const expanded = await this.lastExpanded(sem.Expand(assign.Value));
+      const ptags = tagsToMeta(textToTags(expanded.value));
+      useSession.api.getProcess(node.meta).ptags = ptags;
+      // console.log({ptags});
+    }
+  }
+
   private async *CallExpr(node: Sh.CallExpr) {
     node.exitCode = 0; // 🚧 justify
     const args = await sem.performShellExpansion(node.Args);
     const [command, ...cmdArgs] = args;
-    node.meta.verbose && console.log("simple command", args);
+    node.meta.verbose === true && console.log("simple command", args);
 
-    if (args.length) {
+    if (node.Assigns.length > 0) {
+      await this.supportPTags(node);
+    }
+
+    if (args.length > 0) {
       let func: Sh.NamedFunction | undefined;
-      if (cmdService.isCmd(command)) {
+      if (cmdService.isCmd(command) === true) {
         yield* cmdService.runCmd(node, command, cmdArgs);
-      } else if ((func = useSession.api.getFunc(node.meta.sessionKey, command))) {
+      } else if ((func = useSession.api.getFunc(node.meta.sessionKey, command)) !== undefined) {
         await cmdService.launchFunc(node, func, cmdArgs);
       } else {
         try {
           // Try to `get` things instead
           for (const arg of args) {
             const result = cmdService.get(node, [arg]);
-            if (result[0] !== undefined || matchFuncFormat(arg)) {
+            if (result[0] !== undefined || matchFuncFormat(arg) !== null) {
               yield* result;
             } else {
               // Throw if get undefined, unless invoked func
@@ -668,7 +691,7 @@ class semanticsServiceClass {
       }
       // Force iteration to take at least 1 second
       if ((itLengthMs = Date.now() - itStartMs) < 1000) {
-        yield* sleep(node.meta, 1 - itLengthMs / 1000);
+        await sleep(node.meta, 1 - itLengthMs / 1000);
       }
       itStartMs = Date.now();
 

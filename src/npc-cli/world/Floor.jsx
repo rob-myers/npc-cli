@@ -7,7 +7,7 @@ import { pause } from "../service/generic";
 import { getGridPattern, drawCircle, drawPolygons, drawSimplePoly } from "../service/dom";
 import { geomorph } from "../service/geomorph";
 import { InstancedMultiTextureMaterial } from "../service/glsl";
-import { emptyDataArrayTexture, getQuadGeometryXZ } from "../service/three";
+import { getQuadGeometryXZ } from "../service/three";
 import { WorldContext } from "./world-context";
 import useStateRef from "../hooks/use-state-ref";
 
@@ -18,7 +18,8 @@ export default function Floor(props) {
   const w = React.useContext(WorldContext);
 
   const state = useStateRef(/** @returns {State} */ () => ({
-    grid: getGridPattern(geomorphGridMeters * worldToCanvas, 'rgba(100, 100, 100, 0.25)'),
+    grid: getGridPattern(1/5 * geomorphGridMeters * worldToCanvas, 'rgba(100, 100, 100, 0.1)'),
+    largeGrid: getGridPattern(geomorphGridMeters * worldToCanvas, 'rgba(120, 120, 120, 0.1)'),
     inst: /** @type {*} */ (null),
     quad: getQuadGeometryXZ(`${w.key}-multi-tex-floor-xz`),
 
@@ -44,54 +45,53 @@ export default function Floor(props) {
         new THREE.InstancedBufferAttribute(new Float32Array(uvDimensions), 2),
       );
       state.inst.geometry.setAttribute('uvTextureIds',
-        new THREE.InstancedBufferAttribute(new Int32Array(uvTextureIds), 1),
+        new THREE.InstancedBufferAttribute(new Uint32Array(uvTextureIds), 1),
       );
       state.inst.geometry.setAttribute('instanceIds',
-        new THREE.InstancedBufferAttribute(new Int32Array(instanceIds), 1),
+        new THREE.InstancedBufferAttribute(new Uint32Array(instanceIds), 1),
       );
     },
     async draw() {
       w.menu.measure('floor.draw');
       for (const [texId, gmKey] of w.gmsData.seenGmKeys.entries()) {
-        state.drawGmKey(gmKey);
-        w.gmsData.texFloor.updateIndex(texId);
+        state.drawGm(gmKey);
+        w.texFloor.updateIndex(texId);
         await pause();
       }
-      w.gmsData.texFloor.update();
+      w.texFloor.update();
       w.menu.measure('floor.draw');
     },
-    drawGmKey(gmKey) {
-      const { ct } = w.gmsData.texFloor;
+    drawGm(gmKey) {
+      const { ct } = w.texFloor;
       const gm = w.geomorphs.layout[gmKey];
-      const { pngRect, hullPoly, navDecomp, walls } = gm;
 
       ct.clearRect(0, 0, ct.canvas.width, ct.canvas.height);
-      ct.fillStyle = 'red';
-      ct.strokeStyle = 'green';
-
-      ct.setTransform(worldToCanvas, 0, 0, worldToCanvas, -pngRect.x * worldToCanvas, -pngRect.y * worldToCanvas);
+      ct.setTransform(worldToCanvas, 0, 0, worldToCanvas, -gm.pngRect.x * worldToCanvas, -gm.pngRect.y * worldToCanvas);
 
       // Floor
-      drawPolygons(ct, hullPoly.map(x => x.clone().removeHoles()), ['#333', null]);
-      // drawPolygons(ct, hullPoly.map(x => x.clone().removeHoles()), ['#fff', null]);
-
-      // Nav-mesh
-      const triangles = navDecomp.tris.map(tri => new Poly(tri.map(i => navDecomp.vs[i])));
-      const navPoly = Poly.union(triangles);
-      drawPolygons(ct, navPoly, ['rgba(40, 40, 40, 1)', '#777', 0.025]);
-      // drawPolygons(ct, navPoly, ['#aaaaaa55', '#999999bb', 0.03]);
+      const floorFill = '#222';
+      drawPolygons(ct, gm.hullPoly.map(x => x.clone().removeHoles()), [floorFill, null]);
       
+      // NavMesh 🚧 compute navPoly in create-gms-data
+      const navMeshFill = '#111';
+      const navMeshStroke = w.smallViewport ? '#9999cc77' : '#9999cc55';
+      const triangles = gm.navDecomp.tris.map(tri => new Poly(tri.map(i => gm.navDecomp.vs[i])));
+      const navPoly = Poly.union(triangles.concat(gm.doors.map(x => x.computeDoorway())));
+      drawPolygons(ct, navPoly, [navMeshFill, navMeshStroke, 0.05]);
       // drawPolygons(ct, triangles, [null, 'rgba(200, 200, 200, 0.3)', 0.01]); // outlines
 
-      // draw grid
-      ct.setTransform(1, 0, 0, 1, -pngRect.x * worldToCanvas, -pngRect.y * worldToCanvas);
+      ct.setTransform(1, 0, 0, 1, -gm.pngRect.x * worldToCanvas, -gm.pngRect.y * worldToCanvas);
+      // Small grid
       ct.fillStyle = state.grid;
       ct.fillRect(0, 0, ct.canvas.width, ct.canvas.height);
-      ct.setTransform(worldToCanvas, 0, 0, worldToCanvas, -pngRect.x * worldToCanvas, -pngRect.y * worldToCanvas);
+      // Large grid
+      ct.fillStyle = state.largeGrid;
+      ct.fillRect(0, 0, ct.canvas.width, ct.canvas.height);
+      ct.setTransform(worldToCanvas, 0, 0, worldToCanvas, -gm.pngRect.x * worldToCanvas, -gm.pngRect.y * worldToCanvas);
 
       // cover hull doorway z-fighting (visible from certain angles)
       gm.hullDoors.forEach(hullDoor => {
-        const poly = hullDoor.computeDoorway(true);
+        const poly = hullDoor.computeDoorway(0);
         const [p, q, r, s] = poly.outline;
         drawPolygons(ct, poly, ['#000', '#333', 0.025]);
         ct.strokeStyle = '#777';
@@ -99,17 +99,13 @@ export default function Floor(props) {
         ct.beginPath(); ct.moveTo(s.x, s.y); ct.lineTo(p.x, p.y); ct.stroke();
       });
 
-      // Walls
-      drawPolygons(ct, walls, ['black', null]);
-      // // Doors
-      // drawPolygons(ct, doors.map((x) => x.poly), ["rgba(0, 0, 0, 0)", "black", 0.02]);
+      drawPolygons(ct, gm.walls, ['black', null]);
 
       // drop shadows (avoid doubling e.g. bunk bed, overlapping tables)
-      const shadowColor = 'rgba(0, 0, 0, 0.25)'
       const shadowPolys = Poly.union(gm.obstacles.flatMap(x =>
         x.origPoly.meta['no-shadow'] ? [] : x.origPoly.clone().applyMatrix(tmpMat1.setMatrixValue(x.transform))
       ));
-      drawPolygons(ct, shadowPolys, [shadowColor, null]);
+      drawPolygons(ct, shadowPolys, [navMeshFill, '#99999977']);
 
       // debug decor: moved to <Debug/>
       // // ct.setTransform(worldToSgu, 0, 0, worldToSgu, -pngRect.x * worldToSgu, -pngRect.y * worldToSgu);
@@ -142,15 +138,19 @@ export default function Floor(props) {
       state.inst.instanceMatrix.needsUpdate = true;
       state.inst.computeBoundingSphere();
     },
-  }), { reset: { grid: true } });
+  }), { reset: { grid: true, largeGrid: true } });
 
   w.floor = state;
+  const { tex } = w.texFloor;
 
   React.useEffect(() => {
-    state.draw();
     state.positionInstances();
     state.addUvs();
   }, [w.mapKey, w.hash.full]);
+  
+  React.useEffect(() => {
+    state.draw().then(() => w.update());
+  }, [w.texVs.floor]);
 
   return (
     <instancedMesh
@@ -164,7 +164,7 @@ export default function Floor(props) {
         key={InstancedMultiTextureMaterial.key}
         side={THREE.DoubleSide}
         transparent
-        atlas={w.gmsData.texFloor.tex ?? emptyDataArrayTexture}
+        atlas={tex}
         depthWrite={false} // fix z-fighting
         // diffuse={[1, 1, 0.8]}
         diffuse={[1, 1, 1]}
@@ -185,11 +185,12 @@ export default function Floor(props) {
  * @typedef State
  * @property {THREE.InstancedMesh} inst
  * @property {CanvasPattern} grid
+ * @property {CanvasPattern} largeGrid
  * @property {THREE.BufferGeometry} quad
  *
  * @property {() => void} addUvs
  * @property {() => Promise<void>} draw
- * @property {(gmKey: Geomorph.GeomorphKey) => void} drawGmKey
+ * @property {(gmKey: Geomorph.GeomorphKey) => void} drawGm
  * @property {() => void} positionInstances
  */
 

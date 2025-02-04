@@ -41,8 +41,8 @@ declare namespace Geomorph {
     map: number;
 
     /**
-     * 🔔 `gmHashes[gmId]` is hash of `map.gms[gmId]`
-     * i.e. hashing { gmKey, transform } 
+     * 🔔 `mapGmHashes[gmId]` is hash of `map.gms[gmId]`
+     * i.e. hashes { gmKey, transform } 
      */
     mapGmHashes: number[];
   }
@@ -102,6 +102,8 @@ declare namespace Geomorph {
     normal: Geom.VectJson;
     /** Length of `door.seg` */
     segLength: number;
+    /** 1st entrance pointed to by `normal` */
+    entrances: [Geom.Seg, Geom.Seg];
     /** As wide as door, slightly less deep than doorway. */
     collidePoly: Geom.Poly;
     /** Bounds of `doorway`. */
@@ -132,8 +134,6 @@ declare namespace Geomorph {
      * See also `w.e.canAccess(npcKey, gdKey)`.
      */
     access?: boolean;
-    /** Extra meta for door events */
-    eventMeta?: Geom.Meta;
   }
 
   interface GeomorphsGeneric<
@@ -160,7 +160,6 @@ declare namespace Geomorph {
     gdKey: GmDoorKey;
     gmId: number;
     doorId: number;
-    // other?: { gmId: number; doorId: number };
   }
 
   interface GmRoomId {
@@ -288,8 +287,6 @@ declare namespace Geomorph {
     unsorted: P[];
 
     navDecomp: Geom.TriangulationGeneric<V>;
-    /** Index of triangle in `navDecomp.tris` where doorway triangles will begin */
-    navDoorwaysOffset: number;
     /** AABBs of `navPolyWithDoors` i.e. original nav-poly */
     navRects: R[];
   }
@@ -307,6 +304,7 @@ declare namespace Geomorph {
     gridRect: Geom.Rect;
     inverseMatrix: Geom.Mat;
     mat4: import("three").Matrix4;
+    determinant: number;
 
     getOtherRoomId(doorId: number, roomId: number): number;
     isHullDoor(doorId: number): boolean;

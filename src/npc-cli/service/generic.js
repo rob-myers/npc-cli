@@ -13,14 +13,6 @@ export function addToLookup(newItem, lookup) {
 }
 
 /**
- * @param {number} n
- * @returns {null[]} Usage `alloc(10).forEach((_, i) => { ... })`
- */
-export function alloc(n) {
-  return Array(n).fill(null);
-}
-
-/**
  * JSDoc types lack a non-null assertion.
  * https://github.com/Microsoft/TypeScript/issues/23405#issuecomment-873331031
  *
@@ -216,7 +208,7 @@ export function deepClone(input) {
 
 /**
  * Convert a function, regexp or string into a 'selector'.
- * - for functions we merely prefix args extraArgs
+ * - for functions we merely prefix args `extraArgs`
  * - for strings we support e.g.
  *   - `foo.bar.baz` -> function (x) { return x.foo.bar.baz }
  *   - `foo.bar.baz` -> function (x) { return x.foo.bar.baz() }
@@ -224,6 +216,8 @@ export function deepClone(input) {
  *
  * Technically the latter selectors are dependent on the particular value of `x`.
  * But in practice we can often expect them to act uniformly like the examples above.
+ * 
+ * 
  * @param {((x: any) => any) | string | RegExp} selector
  * @param {any[]} [extraArgs]
  * @returns {(x: any, ...xs: any[]) => any}
@@ -444,6 +438,42 @@ export function safeJsonParse(input) {
     warn(`failed to JSON.parse: "${input}"`);
     return undefined;
   }
+}
+
+/**
+ * e.g. `foo bar=baz qux='1 2 3'` yields
+ * > `foo`, `bar=baz`, `qux='1 2 3'`
+ */
+const splitTagRegex = /[^\s=]+(?:=(?:(?:'[^']*')|(?:[^']\S*)))?/gi;
+
+/**
+ * e.g. `foo bar=baz qux='1 2 3'` yields
+ * > `['foo', 'bar=baz', 'qux='1 2 3' ]`
+ * @param {string} text 
+ */
+export function textToTags(text) {
+  return [...text.matchAll(splitTagRegex)].map(x => x[0]);
+}
+
+/**
+ * e.g. `['foo', 'bar=baz', 'qux='1 2 3' ]` yields:
+ * > `{ foo: true, bar: 'baz', qux: '1 2 3' }`
+ * @param {string[]} tags
+ * @param {Meta} [baseMeta]
+ * @param {string[]} [names]
+ * @param {any[]} [values]
+ * @returns {Meta}
+ */
+export function tagsToMeta(tags, baseMeta = {}, names, values) {
+  return tags.reduce((meta, tag) => {
+    const eqIndex = tag.indexOf("=");
+    if (eqIndex > -1) {
+      meta[tag.slice(0, eqIndex)] = parseJsWithCt(tag.slice(eqIndex + 1), names, values);
+    } else {
+      meta[tag] = true; // Omit tags `foo=bar`
+    }
+    return meta;
+  }, baseMeta);
 }
 
 /**

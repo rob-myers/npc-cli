@@ -10,6 +10,13 @@ export function Head() {
           name="viewport"
           content="width=device-width, initial-scale=1.0, interactive-widget=resizes-content"
         />
+      <link
+        // 🔔 avoid HMR issues (flash + small clientHeight) when import 'flexlayout-react/style/light.css'
+        rel="stylesheet"
+        type="text/css"
+        href="/assets/css/flexlayout-react__style__light.css"
+        as="style"
+      />
     </>
   );
 }

@@ -1,12 +1,16 @@
 export const localStorageKey = {
   touchTtyCanType: "touch-tty-can-type",
   touchTtyOpen: "touch-tty-open",
+  viewerBasePercentage: "viewer-base-percentage",
 };
 
 export const longPressMs = 500;
 
 export const zIndex = /** @type {const} */ ({
+  faderOverlay: 4,
+  speechBubble: 3,
   ttyTouchHelper: 5,
+  ttyTouchCircle: 3,
 });
 
 /** @type {import('@xterm/xterm').ITheme} */
@@ -107,9 +111,9 @@ export const defaultClassKey = 'cuboid-man';
 export const glbFadeOut = {
     Idle: { Idle: 0, Run: 0.2, Walk: 0.2, Sit: 0.2, Lie: 0 },
     Lie: { Idle: 0, Run: 0, Walk: 0, Sit: 0, Lie: 0 },
-    Run: { Idle: 0.3, Run: 0, Walk: 0.2, Sit: 0.2, Lie: 0 },
+    Run: { Idle: 0.15, Run: 0, Walk: 0.2, Sit: 0.2, Lie: 0 },
     Sit: { Idle: 0, Run: 0.2, Walk: 0.2, Sit: 0, Lie: 0 },
-    Walk: { Idle: 0.25, Run: 0.2, Walk: 0, Sit: 0.25, Lie: 0 },
+    Walk: { Idle: 0.15, Run: 0.2, Walk: 0, Sit: 0.25, Lie: 0 },
 };
 
 /**
@@ -119,9 +123,9 @@ export const glbFadeOut = {
  export const glbFadeIn = {
     Idle: { Idle: 0, Run: 0.1, Walk: 0.1, Sit: 0.1, Lie: 0 },
     Lie: { Idle: 0, Run: 0, Walk: 0, Sit: 0, Lie: 0 },
-    Walk: { Idle: 0.25, Run: 0.1, Walk: 0, Sit: 0.2, Lie: 0 },
-    Run: { Idle: 0.3, Run: 0, Walk: 0.1, Sit: 0.2, Lie: 0 },
+    Run: { Idle: 0.15, Run: 0, Walk: 0.1, Sit: 0.2, Lie: 0 },
     Sit: { Idle: 0.1, Run: 0.1, Walk: 0.1, Sit: 0, Lie: 0 },
+    Walk: { Idle: 0.15, Run: 0.1, Walk: 0, Sit: 0.2, Lie: 0 },
 };
 
 export const defaultNpcInteractRadius = geomorphGridMeters;
@@ -134,7 +138,11 @@ export const defaultNpcInteractRadius = geomorphGridMeters;
  * - `DT_CROWD_OPTIMIZE_VIS` ~ `8`
  * - `DT_CROWD_OPTIMIZE_TOPO` ~ `16`
  */
-export const defaultAgentUpdateFlags = 1 + 2 + 4;
+// export const defaultAgentUpdateFlags = 1 + 2 + 4;
+// export const defaultAgentUpdateFlags = 1 + 2 + 4 + 8 + 16;
+// export const defaultAgentUpdateFlags = 1 + 8 + 16;
+// 🔔 remove 2 to avoid wobbles due to offMeshConnection
+export const defaultAgentUpdateFlags = 1 + 4 + 8 + 16;
 
 export const colliderHeight = 1.8;
 
@@ -180,6 +188,10 @@ export const fromDecorImgKey = {// 🔔 must extend when adding new decor
   'door--hull': true,
   'icon--info': true,
   'icon--doc': true,
+  'icon--door-closed': true,
+  'icon--door-locked': true,
+  'icon--door-open': true,
+  'icon--door-unlocked': true,
   'icon--warn': true,
   'icon--key-card': true,
   'icon--square': true,
@@ -283,6 +295,9 @@ export const fromSymbolKey = {// 🔔 must extend when adding new symbols
   "table--004--1.2x2.4": true,
   "table--009--0.8x0.8": true,
   "table--012--0.8x0.8": true,
+  "window--001--0x1": true,
+  "window--005--0x2": true,
+  "window--007--0x2.4": true,
 
   "extra--001--fresher--0.5x0.5": true,
   "extra--002--fresher--0.5x0.5": true,
@@ -310,7 +325,7 @@ export const fromSymbolKey = {// 🔔 must extend when adding new symbols
 export const npcClassToMeta = {
   'cuboid-man': {
     url: '/assets/3d/cuboid-man.glb',
-    scale: 0.7,
+    scale: 0.65,
     materialName: 'cuboid-man-material',
     meshName: 'cuboid-man-mesh',
     groupName: 'Scene',
@@ -318,7 +333,7 @@ export const npcClassToMeta = {
     timeScale: { 'Idle': 0.2, 'Walk': 0.5 },
     // 🚧
     radius: 0.5,
-    walkSpeed: 2,
+    walkSpeed: 2.5,
     runSpeed: 4,
   },
   'cuboid-pet': {
@@ -347,6 +362,8 @@ export const npcClassKeys = /** @type {NPC.ClassKey[]} */ (
  */
 export const maxNumberOfNpcs = 256;
 
+export const npcNearUiDist = 1.2;
+
 export const physicsConfig = {
   fps: 60,
   agentHeight: 1.5,
@@ -366,4 +383,9 @@ export const pickedTypesInSomeRoom = {
     cuboid: true,
     npc: true, // technically not
     'lock-light': false,
+};
+
+export const offMeshConnectionHalfDepth = {
+  hull: wallOutset + 0.25,
+  nonHull: wallOutset + 0.125,
 };

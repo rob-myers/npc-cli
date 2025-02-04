@@ -1,6 +1,8 @@
 # Examples of commands
 
-🚧 update/remove commands from prev npc-cli
+🚧 needs a clean!
+🚧 e.g. separate abstract tty vs npc
+
 
 ```sh
 # directly invoking native functions
@@ -16,6 +18,11 @@ bar/toUpperCase'()'
 
 # wc -l is `reduce '(sum, x) => sum + 1' 0` e.g.
 w gms | split | flatMap 'x => x.rooms' | reduce '(sum, x) => sum + 1' 0
+
+# join together some strings
+{ echo foo; echo bar; echo baz; } | reduce '(agg, item) => agg + "\n" + item'
+# split a file into lines and count each length
+PROFILE | split '/\n/' | map length
 
 # can use `take` like `read`
 seq 5 | while take 1 >foo; do foo; done
@@ -66,6 +73,8 @@ while true; do
   call '({ home }) => home.numPets++'
   w debug.npc.add $( click 1 ) pet-${numPets} cuboid-pet
 done
+
+ w n.rob.position | map '(input, { w }) => w.r3f.camera.position.distanceTo(input)'
 ```
 
 ```sh
@@ -79,6 +88,15 @@ w decor.byKey | map Object.values | map length
 
 w decor.rmInstantiatedDecor 1
 w decor.updateInstanceLists
+
+d=0
+test $( call 'x => x.home.d === 0' )
+# exit code 0
+
+# example of bounded loop
+seq 29 | map '(x, {w}) => w.c.say(`rob_${x}`, "yoyoyoy")'
+
+w npc.remove rob_{0..10}
 ```
 
 ```sh
@@ -117,6 +135,27 @@ w npc.npc.rob.look -Math.PI/2 # ❌
 
 w n.rob.agent.parameters
 w n.rob.agent.parameters | map updateFlags
+
+# also supported whilst paused
+w npc.spawn '{ npcKey: "rob", point: '$( click 1 )' }' >/dev/null
+```
+
+```sh
+# two agents "rob" and "will" in untransformed 301
+# assume npc.s.run is false for both
+
+p=$( expr '{"x":1.703,"y":0,"z":3.672,"meta":{"picked":"floor","gmId":0,"floor":true,"instanceId":0,"roomId":1,"grKey":"g0r1","nav":true},"xz":{"x":1.703,"y":3.672}}' )
+q=$( expr '{x:2.298,y:0,z:3.315,meta:{picked:"floor",gmId:0,floor:true,instanceId:0,roomId:1,grKey:"g0r1",nav:true},xz:{x:2.298,y:3.315}}' )
+r=$( expr '{x:1.666,y:0,z:6.581,meta:{picked:"floor",gmId:0,floor:true,instanceId:0,roomId:2,grKey:"g0r2",nav:true},xz:{x:1.666,y:6.581}}' )
+s=$( expr '{x:3.36,y:0,z:7.882,meta:{picked:"floor",gmId:0,floor:true,instanceId:0,roomId:2,grKey:"g0r2",nav:true},xz:{x:3.36,y:7.882}}' )
+
+# one
+w n.rob.moveTo ${p} & w n.will.moveTo ${q} &
+# two
+w n.rob.moveTo ${r} & w n.will.moveTo ${s} &
+
+# sometimes 2nd agent gets blocked, but usually not because
+# pushed out of the way before starts offMeshConnection
 ```
 
 ## Local variables
@@ -304,7 +343,6 @@ npc rob do "$( click 1 )" '{ extraParams: [1] }'
   map 'async (input, {api}) => { await new Promise(r => setTimeout(r, 1000)); return input }'
 ```
 
-🚧 test from here
 
 ```sh
 spawn rob $( click 1 ) --zhodani
@@ -329,10 +367,6 @@ multiSpawn
 ```sh
 npc events | filter 'x => x.key === "stopped-moving"'
 npc events | filter /stopped-moving/
-
-npc events | filter 'x => x.key === "way-point" && x.meta.key === "exit-room"'
-
-npc events | filter 'x => x.key === "way-point" && x.meta.key === "decor-collide"' | map 'x => x.meta.type'
 ```
 
 ```sh
@@ -397,7 +431,7 @@ range 10 | split | map 'x => x + 1'
 range 10 | split | map 'x => x + 1' |
   run '({ api, datum }) {
     while ((datum = await api.read()) !== api.eof) {
-      yield* api.sleep(1);
+      await api.sleep(1);
       yield datum;
     } }'
 # Ctrl-C
@@ -408,7 +442,7 @@ range 5 |
   split |
   run '({ api, datum }) {
     while ((datum = await api.read()) !== api.eof) {
-      yield* api.sleep(1);
+      await api.sleep(1);
       yield datum;
     } }' |
   map 'x => `Hello ${x}`'

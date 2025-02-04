@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<svg viewBox="0 0 900 60" xmlns="http://www.w3.org/2000/svg" xmlns:bx="https://boxy-svg.com">
+  <defs>
+    <symbol id="symbol-9" viewBox="0 0 1 1">
+      <title>decor-unit-quad</title>
+      <rect x="-0.000001" y="-0.000003" width="1" height="1" style="fill-opacity: 0.5; fill: rgb(255, 255, 0);">
+        <title>fill</title>
+      </rect>
+      <rect width="1" height="1" style="fill: url('#pattern-3');">
+        <title>pattern</title>
+      </rect>
+    </symbol>
+    <pattern x="0" y="0" width="0.5" height="0.5" patternUnits="userSpaceOnUse" viewBox="0 0 300 300" id="pattern-3">
+      <title>decor-quad-pattern</title>
+      <g transform="matrix(1.056613922119, 0, 0, 1.056620836258, 8.044093132019, -25.138132095337)">
+        <rect width="141.961975" height="18.928265" style="stroke: rgb(0, 0, 0); fill: rgb(0, 255, 0);" y="14.196193" x="-7.586937"/>
+        <path d="M 134.37503 0 L 181.695688 23.660329 L 134.37503 47.320661 L 134.37503 0 Z" style="stroke: rgb(0, 0, 0);"/>
+        <rect width="141.961975" height="18.928265" style="stroke: rgb(0, 0, 0); fill: rgb(0, 255, 0);" y="298.120113" x="-7.586937"/>
+        <path d="M 134.37503 283.923959 L 181.695688 307.584288 L 134.37503 331.244617 L 134.37503 283.923959 Z" style="stroke: rgb(0, 0, 0);"/>
+        <rect width="141.961975" height="18.928265" style="stroke: rgb(0, 0, 0); fill: rgb(0, 255, 0); transform-origin: 73.3469px -6.3e-05px;" y="-9.464131" x="2.366032" transform="matrix(0, -1, -1, 0, -80.933799975588, 236.603372341917)"/>
+        <path d="M -31.247306 165.62343 L 16.073355 141.9631 L -31.247306 118.302771 L -31.247306 165.62343 Z" style="stroke: rgb(0, 0, 0); fill: rgb(0, 255, 0); transform-origin: -7.58879px 141.961px;" transform="matrix(0, -1, 1, 0, -0.000009560453, 0.000005180922)"/>
+        <rect width="141.961975" height="18.928265" style="stroke: rgb(0, 0, 0); fill: rgb(0, 255, 0); transform-origin: 73.3474px 0.000253px;" y="-9.464131" x="2.366032" transform="matrix(0, -1, -1, 0, 202.989607986441, 236.602919754019)"/>
+        <path d="M 252.676102 165.622793 L 299.99676 141.962464 L 252.676102 118.302135 L 252.676102 165.622793 Z" style="stroke: rgb(0, 0, 0); fill: rgb(0, 255, 0); transform-origin: 276.337px 141.96px;" transform="matrix(0, -1, 1, 0, -0.000008448851, 0.000005559184)"/>
+      </g>
+      <defs>
+        <bx:grid x="0" y="0" width="300" height="300"/>
+      </defs>
+    </pattern>
+    <bx:grid x="0" y="0" width="300" height="300"/>
+  </defs>
+  <image href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAA4sAAABDCAQAAACfSVisAAAAIGNIUk0AAHomAACAhAAA+gAAAIDoAAB1MAAA6mAAADqYAAAXcJy6UTwAAAACYktHRAD/h4/MvwAAAAd0SU1FB+gFBQgyNuUk3F0AAAAQY2FOdgAABdwAAAJYAAABKAAAAQrqk74wAAABJklEQVR42u3aMQoCQRBFwW7x/lceE33oCXbBqmTY7GePht05AwDMzNnH1RMA4D7WtQgAH65FAIgsAkBkEQAiiwCQ5+/nXf6/Wausssoqq6y6YJVrEQAiiwAQWQSAyCIARBYBILIIAJFFAIgsAkBkEQAiiwAQWQSAyCIARBYBILIIAJFFAIgsAkBkEQAiiwAQWQSAyCIARBYBILIIAJFFAIgsAkBkEQAiiwAQWQSAyCIARBYBILIIAJFFAIgsAkBkEQAiiwAQWQSAyCIARBYBILIIAJFFAIgsAkBkEQAiiwAQWQSAyCIARBYBILIIAJFFAIgsAkBkEQAiiwAQWQSAyCIAZOdcPQEA7sK1CACRRQCILAJAZBEA3s7KIgBkz/cDAH/q7MzMCyyOFIGlmoPiAAAAJXRFWHRkYXRlOmNyZWF0ZQAyMDI0LTA1LTA1VDA4OjUwOjU0KzAwOjAwgxXwBgAAACV0RVh0ZGF0ZTptb2RpZnkAMjAyNC0wNS0wNVQwODo1MDo1NCswMDowMPJISLoAAAAodEVYdGRhdGU6dGltZXN0YW1wADIwMjQtMDUtMDVUMDg6NTA6NTQrMDA6MDClXWllAAAAAElFTkSuQmCC" width="907" height="67" x="-3.5" y="-3.5" style="pointer-events: none;">
+    <title>window--007--0x2.4</title>
+  </image>
+  <rect x="0.000016" y="0.000001" width="899.999984" height="60.000002" style="fill-opacity: 0.5; stroke: rgb(0, 0, 0);">
+    <title>window frosted</title>
+  </rect>
+  <rect width="907" height="66.999992" style="fill-opacity: 0.5; fill: rgb(0, 0, 255);" y="-3.5" x="-3.5">
+    <title>obstacle</title>
+  </rect>
+</svg>

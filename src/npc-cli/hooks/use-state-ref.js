@@ -14,7 +14,7 @@ import React from "react";
  * @param {Options<State>} [opts]
  */
 export default function useStateRef(initializer, opts = {}) {
-  const [state] = /** @type {[State & { _prevFn?: string }, any]} */ (
+  const [state] = /** @type {[UseStateRef<State>, any]} */ (
     React.useState(initializer)
   );
 
@@ -27,6 +27,9 @@ export default function useStateRef(initializer, opts = {}) {
        * 🚧 avoid invocation in production
        */
       state._prevFn = initializer.toString();
+      state.ref = (key) => (value) => void (
+        state[key] = value === null ? /** @type {*} */ (null) : value
+      );
     } else {
       /**
        * Either HMR or `opts.deps` has changed.
@@ -45,9 +48,7 @@ export default function useStateRef(initializer, opts = {}) {
         // console.log({ key: k })
         const key = /** @type {keyof State} */ (k);
 
-        if (typeof v === "function" && !(
-          opts.preserve?.[key] === true && v.toString() === state[key]?.toString()
-        )) {
+        if (typeof v === "function") {
           state[key] = v;
         } else if (!(k in state)) {
           // console.log({ setting: [k, v] })
@@ -58,7 +59,7 @@ export default function useStateRef(initializer, opts = {}) {
       }
 
       for (const k of Object.keys(state)) {
-        if (!(k in newInit) && k !== "_prevFn") {
+        if (!(k in newInit) && k !== "_prevFn" && k !== "ref") {
           // console.log({ deleting: k })
           delete state[/** @type {keyof State} */ (k)];
         }
@@ -71,7 +72,7 @@ export default function useStateRef(initializer, opts = {}) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, opts.deps ?? []);
 
-  return /** @type {State} */ (state);
+  return state;
 }
 
 module.hot?.decline();
@@ -81,7 +82,14 @@ module.hot?.decline();
  * @typedef Options
  * @property {Partial<Record<keyof State, boolean>>} [reset]
  * Reset field on HMR?
- * @property {Partial<Record<keyof State, boolean>>} [preserve]
- * Preserve equality of function when toString() does not change? 
  * @property {any[]} [deps]
+ */
+
+/**
+ * @template {Record<string, any>} State
+ * @typedef {State & {
+ *   _prevFn?: string;
+ *   ref<Key extends keyof State, T extends State[Key]>(key: Key): ((value: T | null) => void);
+ * }} UseStateRef
+ * The state returned by `useStateRef`, which includes a special function `ref`.
  */

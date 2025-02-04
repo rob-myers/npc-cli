@@ -1,8 +1,9 @@
 import { css } from "@emotion/css";
+import { zIndex } from "../service/const";
 
 export const faderOverlayCss = css`
   position: absolute;
-  z-index: 4;
+  z-index: ${zIndex.faderOverlay};
 
   left: 0;
   top: 0;
@@ -12,7 +13,7 @@ export const faderOverlayCss = css`
   background: rgba(1, 1, 1, 1);
   opacity: 1;
   transition: opacity 1s ease-in;
-  &.clear {
+  &:not(.faded) {
     pointer-events: none;
     opacity: 0;
     transition: opacity 0.5s ease-in;
@@ -45,6 +46,7 @@ export const pausedControlsCss = css`
     user-select: none;
 
     width: 80px;
+    opacity: 0.75;
 
     &.text-white {
       color: #fff;

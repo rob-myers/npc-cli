@@ -43,7 +43,6 @@ export type State = {
     addFunc: (sessionKey: string, funcName: string, wrappedFile: FileWithMeta) => void;
     /** We assume `lineText` and `ctxts` have already been stripped of ansi codes. */
     addTtyLineCtxts: (sessionKey: string, lineText: string, ctxts: TtyLinkCtxt[]) => void;
-    cleanTtyLink: (sessionKey: string) => void;
     createSession: (sessionKey: string, env: Record<string, any>) => Session;
     createProcess: (def: {
       sessionKey: string;
@@ -51,6 +50,7 @@ export type State = {
       pgid: number;
       src: string;
       posPositionals?: string[];
+      ptags?: Meta;
     }) => ProcessMeta;
     createFifo: (fifoKey: string, size?: number) => FifoDevice;
     createVarDevice: (meta: BaseMeta, varPath: string, mode: VarDeviceMode) => VarDevice;
@@ -179,6 +179,8 @@ export interface ProcessMeta {
   localVar: Record<string, any>;
   /** Inherited local variables. */
   inheritVar: Record<string, any>;
+  /** Can specify via e.g. `ptags="no-auto x=foo y=bar" echo baz` */
+  ptags?: Record<string, any>;
 }
 
 export interface TtyLinkCtxt {
@@ -216,22 +218,12 @@ const useStore = create<State>()(
           api.getSession(sessionKey).ttyLink[lineText] = ctxts;
         },
 
-        cleanTtyLink(sessionKey) {
-          // 🚧 only run sporadically
-          const session = api.getSession(sessionKey);
-          const lineLookup = session.ttyShell.xterm.getLines();
-          const { ttyLink } = session;
-          Object.keys(ttyLink).forEach(
-            (lineText) => !lineLookup[lineText] && delete ttyLink[lineText]
-          );
-        },
-
         createFifo(key, size) {
           const fifo = new FifoDevice(key, size);
           return (get().device[fifo.key] = fifo);
         },
 
-        createProcess({ sessionKey, ppid, pgid, src, posPositionals }) {
+        createProcess({ sessionKey, ppid, pgid, src, posPositionals, ptags }) {
           const pid = get().api.getNextPid(sessionKey);
           const processes = get().api.getSession(sessionKey).process;
           processes[pid] = {
@@ -247,6 +239,7 @@ const useStore = create<State>()(
             onResumes: [],
             localVar: {},
             inheritVar: {},
+            ptags,
           };
           return processes[pid];
         },

@@ -1,7 +1,102 @@
 import * as THREE from "three";
-import { NavMesh, RecastBuildContext, TileCache, TileCacheMeshProcess, freeCompactHeightfield, freeHeightfield, TileCacheData, freeHeightfieldLayerSet, VerticesArray, TrianglesArray, ChunkIdsArray, TriangleAreasArray, createRcConfig, calcGridSize, DetourTileCacheParams, Raw, vec3, NavMeshParams, RecastChunkyTriMesh, cloneRcConfig, allocHeightfield, createHeightfield, markWalkableTriangles, rasterizeTriangles, filterLowHangingWalkableObstacles, filterLedgeSpans, filterWalkableLowHeightSpans, allocCompactHeightfield, buildCompactHeightfield, erodeWalkableArea, allocHeightfieldLayerSet, buildHeightfieldLayers, getHeightfieldLayerHeights, getHeightfieldLayerAreas, getHeightfieldLayerCons, buildTileCacheLayer,  markConvexPolyArea } from "@recast-navigation/core";
+import { NavMesh, RecastBuildContext, TileCache, TileCacheMeshProcess, freeCompactHeightfield, freeHeightfield, TileCacheData, freeHeightfieldLayerSet, VerticesArray, TrianglesArray, ChunkIdsArray, TriangleAreasArray, createRcConfig, calcGridSize, DetourTileCacheParams, Raw, vec3, NavMeshParams, RecastChunkyTriMesh, cloneRcConfig, allocHeightfield, createHeightfield, markWalkableTriangles, rasterizeTriangles, filterLowHangingWalkableObstacles, filterLedgeSpans, filterWalkableLowHeightSpans, allocCompactHeightfield, buildCompactHeightfield, erodeWalkableArea, allocHeightfieldLayerSet, buildHeightfieldLayers, getHeightfieldLayerHeights, getHeightfieldLayerAreas, getHeightfieldLayerCons, buildTileCacheLayer,  markConvexPolyArea, Crowd } from "@recast-navigation/core";
 import { getPositionsAndIndices } from "@recast-navigation/three";
-import { createDefaultTileCacheMeshProcess, dtIlog2, dtNextPow2, generateTileCache, getBoundingBox, tileCacheGeneratorConfigDefaults } from "@recast-navigation/generators";
+import { createDefaultTileCacheMeshProcess, dtIlog2, dtNextPow2, getBoundingBox, tileCacheGeneratorConfigDefaults } from "@recast-navigation/generators";
+import { wallOutset } from "./const";
+import { range, toPrecision } from "./generic";
+import { geom } from "./geom";
+import { decompToXZGeometry, toV3 } from "./three";
+import { helper } from "./helper";
+
+/**
+ * @param {Geomorph.LayoutInstance} gm
+ * @returns {{ mesh: THREE.Mesh; customAreaDefs: NPC.TileCacheConvexAreaDef[] }}
+ */
+export function computeGmInstanceMesh(gm) {
+  const mesh = new THREE.Mesh(decompToXZGeometry(gm.navDecomp, { reverse: gm.determinant === 1 }));
+  mesh.applyMatrix4(gm.mat4);
+  mesh.updateMatrixWorld();
+  
+  const customAreaDefs = /** @type {NPC.TileCacheConvexAreaDef[]} */ ([]);
+  // gm.doors.forEach(door => {
+  //   const poly = door.computeDoorway().applyMatrix(gm.matrix);
+  //   customAreaDefs.push({
+  //     areaId: 1,
+  //     areas: [ { hmin: 0, hmax: 0.02, verts: poly.outline.map(toV3) }],
+  //   });
+  // });
+
+  // const navFixPolys = gm.unsorted.filter(x => 'nav-fix' in x.meta).map(x => x.clone());
+  // navFixPolys.forEach(poly => {
+  //   poly.applyMatrix(gm.matrix)
+  //   customAreaDefs.push({
+  //     areaId: 2,
+  //     areas: [ { hmin: 0, hmax: 0.02, verts: poly.outline.map(toV3) }],
+  //   })
+  // });
+
+  return { mesh, customAreaDefs };
+}
+
+/**
+ * @param {import('../world/World').State} w
+ */
+export function computeOffMeshConnectionsParams(w) {
+  
+  /**
+   * - ignore isolated hull doors
+   * - ignore 2nd identified hull door
+   */
+  const ignoreGdKeys = /** @type {Set<Geomorph.GmDoorKey>} */ (new Set());
+
+  /** `gms[gmId].doors[doorId]` are the metas of the adj rooms */
+  const doorRoomMetas = w.gms.map(gm => {
+    const roomMetas = gm.rooms.map(x => x.meta);
+    return gm.doors.map(({ roomIds }) => 
+      roomIds.flatMap(roomId => roomId !== null ? roomMetas[roomId] : [])
+    );
+  });
+
+  return w.gms.flatMap((gm, gmId) => gm.doors.flatMap(/** @returns {import("recast-navigation").OffMeshConnectionParams[]} */
+    ({ center, normal, meta, roomIds }, doorId) => {
+
+      if (meta.hull === true) {
+        const adj = w.gmGraph.getAdjacentRoomCtxt(gmId, doorId);
+        if (ignoreGdKeys.has(`g${gmId}d${doorId}`) === true || adj === null) {
+          return [];
+        } else {
+          ignoreGdKeys.add(`g${adj.adjGmId}d${adj.adjDoorId}`);
+        }
+      }
+
+      /**
+       * 🔔 saw nav fail in 102 (top right) when many offMeshConnections, which
+       * we fix via room.meta "small" and "narrow-entrances"
+       */
+      const narrowEntrance = meta.hull !== true && doorRoomMetas[gmId][doorId].some(x =>
+        x.small === true || x['narrow-entrances'] === true
+      );
+      const halfLength = wallOutset + (meta.hull === true ? 0.25 : 0.125);
+      const offsets = meta.hull === true ? [-0.3, 0.01, 0.3] : narrowEntrance === false ? [-0.25, 0.01, 0.25] : [0.01];
+      // const offsets = [0.01];
+
+      const src = gm.matrix.transformPoint(center.clone().addScaled(normal, halfLength));
+      const dst = gm.matrix.transformPoint(center.clone().addScaled(normal, -halfLength));
+      const tangent = { x: -normal.y, y: normal.x };
+      
+      return offsets.map(offset => ({
+        startPosition: { x: toPrecision(src.x + offset * tangent.x), y: 0.001, z: toPrecision(src.y + offset * tangent.y) },
+        endPosition: { x: toPrecision(dst.x + offset * tangent.x), y: 0.001, z: toPrecision(dst.y + offset * tangent.y) },
+        radius: 0.04,
+        bidirectional: true,
+        // 🔔 Encode (gmId, doorId) assuming 0 ≤ gmId, doorId ≤ 255
+        userId: gmId + (doorId << 8),
+        flags: helper.navPolyFlag.walkable,
+      }));
+
+    })
+  );
+}
 
 /**
  * @param {import("@recast-navigation/core").Crowd} crowd
@@ -12,47 +107,40 @@ export function disposeCrowd(crowd, navMesh) {
   crowd.destroy();
 }
 
-/** @param {import("@recast-navigation/core").CrowdAgent} agent  */
-export function getAgentTarget(agent) {
-  return agent.corners().length > 0 ? agent.nextTargetInPath() : null;
-}
-
 /**
  * https://github.com/isaac-mason/recast-navigation-js/blob/d64fa867361a316b53c2da1251820a0bd6567f82/packages/recast-navigation-generators/src/generators/generate-tile-cache.ts#L108
+ * @param {import("recast-navigation").OffMeshConnectionParams[]} offMeshDefs
+ * The offMeshConnection definitions are created in main thread and sent to nav.worker.
  */
-export function getTileCacheMeshProcess() {
+export function getTileCacheMeshProcess(offMeshDefs) {
+
   return new TileCacheMeshProcess((navMeshCreateParams, polyAreas, polyFlags) => {
-    // info({
-    //   polyCount: navMeshCreateParams.polyCount(),
-    //   vertCount: navMeshCreateParams.vertCount(),
-    // });
+
     for (let i = 0; i < navMeshCreateParams.polyCount(); ++i) {
       polyAreas.set(i, 0);
-      // polyFlags.set(i, 1);
-      polyFlags.set(i, 2 ** 1); // walkable ~ 2nd lsb bit high
+      // polyFlags.set(i, helper.navPolyFlag.unWalkable); // 2^0
+      polyFlags.set(i, helper.navPolyFlag.walkable); // 2^1
     }
+
+    navMeshCreateParams.setOffMeshConnections(offMeshDefs);
   });
 }
 
-/** @returns {Partial<TileCacheGeneratorConfig>} */
-export function getTileCacheGeneratorConfig() {
-  // const cs = 0.11;
-  const cs = 0.1;
+/**
+ * @param {TileCacheMeshProcess} tileCacheMeshProcess
+ * @returns {Partial<TileCacheGeneratorConfig>}
+ */
+export function getTileCacheGeneratorConfig(tileCacheMeshProcess) {
   return {
-    // tileSize: 8 / cs,
-    // tileSize: 7.2 / cs,
-    // tileSize: 7 / cs,
-    cs, // Small `cs` means more tileCache updates when e.g. add obstacles
-    ch: 0.05, // EPSILON breaks obstacles
+    /** `cs * tileSize` should be 1.5 i.e. Geomorph grid size (meters) */
+    cs: 0.1,
+    tileSize: 15,
+    ch: 0.001,
     borderSize: 0,
     expectedLayersPerTile: 1,
-    detailSampleDist: 0,
     walkableClimb: 0,
-    tileCacheMeshProcess: getTileCacheMeshProcess(),
-    // maxSimplificationError: 0.85, // 🔔 try avoid "nav edge too close to doorway"
-    walkableRadius: 0,
-    detailSampleMaxError: 0,
-    // maxVertsPerPoly: 3,
+    tileCacheMeshProcess,
+    maxSimplificationError: 0.85,
   };
 }
 
@@ -64,23 +152,51 @@ export function getTileCacheGeneratorConfig() {
  */
 export function customThreeToTileCache(meshes, navMeshGeneratorConfig = {}, options) {
   const [positions, indices] = getPositionsAndIndices(meshes);
-  return customGenerateTileCache(positions, indices, navMeshGeneratorConfig, options);
+
+  /**
+   * Compute TileCache origin to align with Geomorph grid.
+   *
+   * We assume `tileSize * cs = 1.5` i.e. Geomorph grid size,
+   * e.g. `cs === 0.1` and `tileSize === 15`.
+   */
+  const boxAll = new THREE.Box3();
+  const box = new THREE.Box3();
+  meshes.forEach(mesh => boxAll.union(box.setFromObject(mesh)));
+  const dx = boxAll.min.x < 0 ? (boxAll.min.x % 1.5 + 1.5) : (boxAll.min.x % 1.5);
+  const dz = boxAll.min.z < 0 ? (boxAll.min.z % 1.5 + 1.5) : (boxAll.min.z % 1.5);
+  /** @type {THREE.Vector3Tuple} */
+  const origin = [boxAll.min.x - dx - 1.5, 0, boxAll.min.z - dz - 1.5];
+
+  return customGenerateTileCache({
+    positions,
+    indices,
+    navMeshGeneratorConfig,
+    origin,
+    ...options
+  });
 }
 
 /**
  * 
- * @param {ArrayLike<number>} positions 
- * @param {ArrayLike<number>} indices 
- * @param {Partial<TileCacheGeneratorConfig>} [navMeshGeneratorConfig ]
- * @param {TileCacheCustomOptions} [options]
- * @returns {TileCacheGeneratorResult}
+ * @param {{
+ *   positions: ArrayLike<number>;
+ *   indices: ArrayLike<number>;
+ *   navMeshGeneratorConfig?: Partial<TileCacheGeneratorConfig>;
+ *   origin: THREE.Vector3Tuple;
+ * } & TileCacheCustomOptions} config
+ * @returns {(
+ *   | TileCacheGeneratorFailResult
+ *   | (TileCacheGeneratorSuccessResult & { offMeshLookup: NPC.SrcToOffMeshLookup })
+ * )}
  */
-export function customGenerateTileCache(
+export function customGenerateTileCache({
   positions,
   indices,
   navMeshGeneratorConfig = {},
-  options = {}
-) {
+  origin,
+  areas,
+  keepIntermediates,
+}) {
 
   const buildContext = new RecastBuildContext();
 
@@ -96,7 +212,7 @@ export function customGenerateTileCache(
   const navMesh = new NavMesh();
 
   function cleanup() {
-    if (!options.keepIntermediates) {
+    if (!keepIntermediates) {
       for (let i = 0; i < intermediates.tileIntermediates.length; i++) {
         const tileIntermediate = intermediates.tileIntermediates[i];
 
@@ -147,7 +263,12 @@ export function customGenerateTileCache(
   const trisArray = new TrianglesArray();
   trisArray.copy(tris);
 
-  const { bbMin, bbMax } = getBoundingBox(positions, indices);
+  // Can override bounding box minimum with specific origin,
+  // in order to align the TileCache.
+  let { bbMin, bbMax } = getBoundingBox(positions, indices);
+  if (origin) {
+    bbMin = origin;
+  }
 
   const { expectedLayersPerTile, maxObstacles, ...recastConfig } = {
     ...tileCacheGeneratorConfigDefaults,
@@ -165,8 +286,7 @@ export function customGenerateTileCache(
 
   config.minRegionArea = config.minRegionArea * config.minRegionArea; // Note: area = size*size
   config.mergeRegionArea = config.mergeRegionArea * config.mergeRegionArea; // Note: area = size*size
-  config.detailSampleDist =
-    config.detailSampleDist < 0.9 ? 0 : config.cs * config.detailSampleDist;
+  config.detailSampleDist = config.detailSampleDist < 0.9 ? 0 : config.cs * config.detailSampleDist;
   config.detailSampleMaxError = config.ch * config.detailSampleMaxError;
 
   const tileSize = Math.floor(config.tileSize);
@@ -371,6 +491,7 @@ export function customGenerateTileCache(
       config.walkableClimb,
       heightfield
     );
+    // 🔔 removing this improve edge accuracy, although "outset too far"
     filterLedgeSpans(
       buildContext,
       config.walkableHeight,
@@ -396,7 +517,7 @@ export function customGenerateTileCache(
       return { n: 0 };
     }
 
-    if (!options.keepIntermediates) {
+    if (!keepIntermediates) {
       freeHeightfield(tileIntermediates.heightfield);
       tileIntermediates.heightfield = undefined;
     }
@@ -412,9 +533,8 @@ export function customGenerateTileCache(
       return { n: 0 };
     }
 
-    // 🚧 Create Detour data from Recast poly mesh
-    for (const { areaId, areas } of options.areas ?? []) {
-      for (const { hmin, hmax, verts } of areas) {
+    for (const { areaId, areas: convexAreas } of areas ?? []) {
+      for (const { hmin, hmax, verts } of convexAreas) {
         const vertsArray = new VerticesArray();
         const numVerts = verts.length;
         vertsArray.copy(verts.flatMap(v => [v.x, v.y, v.z]));
@@ -443,7 +563,7 @@ export function customGenerateTileCache(
       return { n: 0 };
     }
 
-    if (!options.keepIntermediates) {
+    if (!keepIntermediates) {
       freeCompactHeightfield(compactHeightfield);
       tileIntermediates.compactHeightfield = undefined;
     }
@@ -504,7 +624,7 @@ export function customGenerateTileCache(
       tiles.push(tile);
     }
 
-    if (!options.keepIntermediates) {
+    if (!keepIntermediates) {
       freeHeightfieldLayerSet(heightfieldLayerSet);
       tileIntermediates.heightfieldLayerSet = undefined;
     }
@@ -548,6 +668,42 @@ export function customGenerateTileCache(
     }
   }
 
+  /**
+   * offMeshConnection lookup,
+   * e.g. `1.5,3.5` -> `{ src, dst, offMeshRef, ... }`
+   */
+  const offMeshLookup = /** @type {NPC.SrcToOffMeshLookup} */ ({});
+  for (let tileIndex = 0; tileIndex < navMesh.getMaxTiles(); tileIndex++) {
+    const tile = navMesh.getTile(tileIndex);
+    const header = tile?.header();
+    if (!header) continue;
+
+    const offMeshCons = range(header.offMeshConCount()).map(i => tile.raw.get_offMeshCons(i));
+    const salt = tile.salt();
+    
+    offMeshCons.forEach(c => {
+      const offMeshRef = navMesh.encodePolyId(salt, tileIndex, c.poly);
+      // decode (gmId, doorId) from userId
+      const gmId = c.userId & 255;
+      const doorId = (c.userId >> 8) & 255;
+      const gdId = helper.getGmDoorId(gmId, doorId);
+      const src = { x: c.get_pos(0), y: 0, z: c.get_pos(2) };
+      const dst = { x: c.get_pos(3), y: 0, z: c.get_pos(5) };
+      
+      const srcKey = geom.to2DString(src.x, src.z);
+      const dstKey = geom.to2DString(dst.x, dst.z);
+
+      // 🔔 computed later in main thread
+      const srcGrKey = /** @type {Geomorph.GmRoomKey} */ ('');
+      const dstGrKey = /** @type {Geomorph.GmRoomKey} */ ('');
+      const emptyRoomMeta = {};
+      const aligned = true;
+
+      offMeshLookup[srcKey] = { src, dst, offMeshRef, key: srcKey, reverseKey: dstKey, ...gdId, srcGrKey, dstGrKey, dstRoomMeta: emptyRoomMeta, aligned };
+      offMeshLookup[dstKey] = { src: dst, dst: src, offMeshRef, key: dstKey, reverseKey: srcKey, ...gdId, srcGrKey, dstGrKey, dstRoomMeta: emptyRoomMeta, aligned };
+    });
+  }
+
   cleanup();
 
   return {
@@ -555,14 +711,19 @@ export function customGenerateTileCache(
     tileCache,
     navMesh,
     intermediates,
+    offMeshLookup,
   };
 
 }
 
-const emptyUserData = {};
-
 /**
  * @typedef {import("@recast-navigation/generators").TileCacheGeneratorConfig} TileCacheGeneratorConfig
+ */
+/**
+ * @typedef {Extract<import("@recast-navigation/generators").TileCacheGeneratorResult, { success: false }>} TileCacheGeneratorFailResult
+ */
+/**
+ * @typedef {Extract<import("@recast-navigation/generators").TileCacheGeneratorResult, { success: true }>} TileCacheGeneratorSuccessResult
  */
 /**
  * @typedef {import("@recast-navigation/generators").TileCacheGeneratorResult} TileCacheGeneratorResult
@@ -576,19 +737,8 @@ const emptyUserData = {};
 /**
  * @typedef {import("@recast-navigation/wasm").default.UnsignedCharArray} UnsignedCharArray
  */
-
-/**
- * @typedef TileCacheGeneratorFailResult
- * @property {undefined} tileCache
- * @property {undefined} navMesh
- * @property {false} success
- * @property {string} error
- * @property {TileCacheGeneratorIntermediates} intermediates
- */
-
 /**
  * @typedef TileCacheCustomOptions
  * @property {boolean} [keepIntermediates]
  * @property {NPC.TileCacheConvexAreaDef[]} [areas]
  */
-

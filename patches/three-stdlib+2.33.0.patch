@@ -1,0 +1,53 @@
+diff --git a/node_modules/three-stdlib/controls/OrbitControls.js b/node_modules/three-stdlib/controls/OrbitControls.js
+index 23e5b19..b7f66bc 100644
+--- a/node_modules/three-stdlib/controls/OrbitControls.js
++++ b/node_modules/three-stdlib/controls/OrbitControls.js
+@@ -79,6 +79,8 @@ class OrbitControls extends EventDispatcher {
+     __publicField(this, "target0");
+     __publicField(this, "position0");
+     __publicField(this, "zoom0");
++    __publicField(this, "minPanDistance");
++    __publicField(this, "zoomToConstant");
+     // the target DOM element for key events
+     __publicField(this, "_domElementKeyEvents", null);
+     __publicField(this, "getPolarAngle");
+@@ -98,6 +100,9 @@ class OrbitControls extends EventDispatcher {
+     this.target0 = this.target.clone();
+     this.position0 = this.object.position.clone();
+     this.zoom0 = this.object.zoom;
++    this.minPanDistance = 0;
++    /** @type {null | import('three').Vector3} */
++    this.zoomToConstant = null;
+     this.getPolarAngle = () => spherical.phi;
+     this.getAzimuthalAngle = () => spherical.theta;
+     this.setPolarAngle = (value) => {
+@@ -234,6 +239,9 @@ class OrbitControls extends EventDispatcher {
+             const prevRadius = offset.length();
+             newRadius = clampDistance(prevRadius * scale);
+             const radiusDelta = prevRadius - newRadius;
++            if (scope.zoomToConstant !== null) {
++              dollyDirection.copy(scope.zoomToConstant).sub(scope.object.position).normalize();
++            }
+             scope.object.position.addScaledVector(dollyDirection, radiusDelta);
+             scope.object.updateMatrixWorld();
+           } else if (scope.object.isOrthographicCamera) {
+@@ -366,6 +374,9 @@ class OrbitControls extends EventDispatcher {
+       return function panLeft2(distance, objectMatrix) {
+         v.setFromMatrixColumn(objectMatrix, 0);
+         v.multiplyScalar(-distance);
++        if (Math.abs(distance) < scope.minPanDistance) {
++          return;
++        }
+         panOffset.add(v);
+       };
+     })();
+@@ -379,6 +390,9 @@ class OrbitControls extends EventDispatcher {
+           v.crossVectors(scope.object.up, v);
+         }
+         v.multiplyScalar(distance);
++        if (Math.abs(distance) < scope.minPanDistance) {
++          return;
++        }
+         panOffset.add(v);
+       };
+     })();

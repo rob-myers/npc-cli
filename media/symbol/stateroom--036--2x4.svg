@@ -124,10 +124,10 @@
     <title>decor rect shower</title>
   </rect>
   <rect width="10" height="10" style="fill-opacity: 0.5; stroke: rgb(0, 0, 0); fill: rgb(0, 255, 0);" x="340" y="900">
-    <title>decor meta label=stateroom</title>
+    <title>decor label=stateroom</title>
   </rect>
   <rect width="10" height="10" style="fill-opacity: 0.5; stroke: rgb(0, 0, 0); fill: rgb(0, 255, 0);" x="142.8" y="144.8">
-    <title>decor meta label=fresher</title>
+    <title>decor label=fresher</title>
   </rect>
   <rect width="10" height="10" style="fill-opacity: 0.5; stroke: rgb(0, 0, 0); fill: rgb(0, 255, 0);" x="84.815" y="45">
     <title>decor button shower y=1</title>

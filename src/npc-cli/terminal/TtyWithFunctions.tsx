@@ -24,29 +24,40 @@ const functionFiles = {
   'util-functions.sh': utilFunctionsSh,
   'game-functions.sh': gameFunctionsSh,
   'util-generators.sh': Object.entries(utilGeneratorsJs).map(
-    ([key, fn]) => `${key}() ${
-      generatorConstructorNames.includes(fn.constructor.name)
-        ? wrapWithRun(fn as AsyncGeneratorFunction)
-        : wrapWithMap(fn) // assume 'AsyncFunction' or 'Function'
-    }`
+    ([key, fn]) => jsFunctionToShellFunction(key, fn)
   ).join('\n\n'),
   'game-generators.sh': Object.entries(gameGeneratorsJs).map(
-    ([key, fn]) => `${key}() ${
-      generatorConstructorNames.includes(fn.constructor.name)
-        ? wrapWithRun(fn as AsyncGeneratorFunction)
-        : wrapWithMap(fn) // assume 'AsyncFunction' or 'Function'
-    }`
+    ([key, fn]) => jsFunctionToShellFunction(key, fn)
   ).join('\n\n'),
 };
 
+function jsFunctionToShellFunction(
+  functionName: string,
+  fn: (
+    | ((arg: gameGeneratorsJs.RunArg) => any)
+    | ((input: any, arg: gameGeneratorsJs.RunArg) => any)
+  ),
+) {
+  return `${functionName}() ${
+    generatorConstructorNames.includes(fn.constructor.name)
+      ? wrapWithRun(fn as AsyncGeneratorFunction)
+      : fn.constructor.name === 'Function' && fn.toString().startsWith('(')
+        // const foo = (..args) => bar
+        ? wrapWithCall(fn as ((arg: gameGeneratorsJs.RunArg) => any))
+        // assume 'AsyncFunction' or 'Function'
+        : wrapWithMap(fn as ((input: any, arg: gameGeneratorsJs.RunArg) => any))
+  }`;
+}
+
 function wrapWithRun(fn: (arg: gameGeneratorsJs.RunArg) => any) {
   const fnText = `${fn}`;
-  return `{\n  run '${
-    fnText.slice(fnText.indexOf('('))
-  }\n' "$@"\n}`;
+  return `{\n  run '${fnText.slice(fnText.indexOf('('))}\n' "$@"\n}`;
+}
+
+function wrapWithCall(fn: (arg: gameGeneratorsJs.RunArg) => any) {
+  return `{\n  call '${fn}'\n}`;
 }
 
 function wrapWithMap(fn: (input: any, arg: gameGeneratorsJs.RunArg) => any) {
-  const fnText = `${fn}`;
-  return `{\n  map '${fnText}'\n}`;
+  return `{\n  map '${fn}'\n}`;
 }

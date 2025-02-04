@@ -20,6 +20,21 @@ export const helper = {
     "cuboid-pet": true,
   },
 
+  /** Global over all `queryFilter`s */
+  navPolyFlag: /** @type {const} */ ({
+    /** `2^0` */
+    unWalkable: 1,
+    /** `2^1` */
+    walkable: 2,
+  }),
+
+  /** Recast-Detour */
+  queryFilterType: /** @type {const} */ ({
+    default: 0,
+    /** Constructed lazily */
+    excludeDoors: 1,
+  }),
+
   /** @type {Record<Geomorph.GeomorphNumber, Geomorph.GeomorphKey>} */
   toGmKey: {
     101: "g-101--multipurpose",
@@ -153,7 +168,7 @@ export const helper = {
    */
   isAnimKey(input) {
     return input in helper.fromAnimKey;
-  }
+  },
 
 };
 

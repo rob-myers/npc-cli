@@ -7,21 +7,14 @@ import { defaultQuadUvs, emptyDataArrayTexture } from "./three";
 const instancedMonochromeShader = {
   Vert: /*glsl*/`
 
-  attribute int gmId;
-  attribute int instanceId;
-  flat varying int vGmId;
-  /**
-   * index into wallSegs[gmId]_gmId,
-   * equivalently InstancedMesh instanceId
-   */
-  flat varying int vInstanceId;
+  attribute uint instanceIds;
+  flat varying uint vInstanceId;
 
   #include <common>
   #include <logdepthbuf_pars_vertex>
 
   void main() {
-    vGmId = gmId;
-    vInstanceId = instanceId;
+    vInstanceId = instanceIds;
 
     vec4 modelViewPosition = vec4(position, 1.0);
     modelViewPosition = instanceMatrix * modelViewPosition;
@@ -37,8 +30,9 @@ const instancedMonochromeShader = {
 
   uniform vec3 diffuse;
   uniform bool objectPick;
-  flat varying int vGmId;
-  flat varying int vInstanceId;
+  uniform float opacity;
+
+  flat varying uint vInstanceId;
 
   #include <common>
   #include <logdepthbuf_pars_fragment>
@@ -50,8 +44,8 @@ const instancedMonochromeShader = {
   vec4 encodeWallObjectPick() {
     return vec4(
       1.0,
-      float((vInstanceId >> 8) & 255),
-      float(vInstanceId & 255),
+      float((int(vInstanceId) >> 8) & 255),
+      float(int(vInstanceId) & 255),
       255.0
     ) / 255.0;
   }
@@ -64,7 +58,7 @@ const instancedMonochromeShader = {
       return;
     }
     
-    gl_FragColor = vec4(diffuse, 1);
+    gl_FragColor = vec4(diffuse, opacity);
     #include <logdepthbuf_fragment>
   }
   `,
@@ -76,10 +70,10 @@ const instancedMonochromeShader = {
 const instancedLabelsShader = {
   Vert: /*glsl*/`
 
-  varying vec3 vColor;
-  varying vec2 vUv;
   attribute vec2 uvDimensions;
   attribute vec2 uvOffsets;
+  varying vec3 vColor;
+  varying vec2 vUv;
 
   #include <common>
   #include <logdepthbuf_pars_vertex>
@@ -109,19 +103,16 @@ const instancedLabelsShader = {
   varying vec2 vUv;
   uniform sampler2D map;
   uniform vec3 diffuse;
+  uniform float opacity;
 
   #include <common>
   #include <logdepthbuf_pars_fragment>
 
   void main() {
-    gl_FragColor = texture2D(map, vUv) * vec4(vColor * diffuse, 1);
-    // gl_FragColor = vec4(1.0, 0.0, 0.0, 1);
-
-    // 🔔 fix depth-buffer issue i.e. stop transparent pixels taking precedence
-    if(gl_FragColor.a < 0.5) {
+    gl_FragColor = texture2D(map, vUv) * vec4(vColor * diffuse, opacity);
+    if (gl_FragColor.a < 0.1) {
       discard;
     }
-
     #include <logdepthbuf_fragment>
   }
   `,
@@ -140,9 +131,9 @@ export const cameraLightShader = {
 
   flat varying float dotProduct;
   varying vec3 vColor;
-  flat varying int vInstanceId;
+  flat varying uint vInstanceId;
 
-  attribute int instanceIds;
+  attribute uint instanceIds;
 
   #include <common>
   #include <uv_pars_vertex>
@@ -187,13 +178,15 @@ export const cameraLightShader = {
 
   Frag: /*glsl*/`
 
-  flat varying int vInstanceId;
-	flat varying float dotProduct;
-  varying vec3 vColor;
-
   uniform vec3 diffuse;
   uniform bool objectPick;
   uniform int objectPickRed;
+  uniform float opacity;
+
+  flat varying uint vInstanceId;
+	flat varying float dotProduct;
+  varying vec3 vColor;
+
 
   #include <common>
   #include <uv_pars_fragment>
@@ -206,13 +199,13 @@ export const cameraLightShader = {
     #include <map_fragment>
 
     // gl_FragColor = vec4(vColor * diffuse * (0.1 + 0.7 * dotProduct), 1);
-    gl_FragColor = vec4(vColor * vec3(diffuseColor) * (0.1 + 0.7 * dotProduct), diffuseColor.a);
+    gl_FragColor = vec4(vColor * vec3(diffuseColor) * (0.1 + 0.7 * dotProduct), diffuseColor.a * opacity);
 
     if (objectPick == true) {
       gl_FragColor = vec4(
         float(objectPickRed) / 255.0,
-        float((vInstanceId >> 8) & 255) / 255.0,
-        float(vInstanceId & 255) / 255.0,
+        float((int(vInstanceId) >> 8) & 255) / 255.0,
+        float(int(vInstanceId) & 255) / 255.0,
         gl_FragColor.a
       );
     }
@@ -237,11 +230,8 @@ export const cuboidManShader = {
   uniform float labelHeight;
   uniform vec3 selectorColor;
 
-  uniform int uFaceTexId;
   uniform vec2 uFaceUv[4];
-  uniform int uIconTexId;
   uniform vec2 uIconUv[4];
-  uniform int uLabelTexId;
   uniform vec2 uLabelUv[4];
   // label width/height changes
   uniform vec2 uLabelDim;
@@ -448,16 +438,16 @@ export const cuboidManShader = {
 export const instancedMultiTextureShader = {
   Vert: /* glsl */`
 
-    varying vec3 vColor;
-    varying vec2 vUv;
-    flat varying int vTextureId;
-    flat varying int vInstanceId;
-    
     attribute vec2 uvDimensions;
     attribute vec2 uvOffsets;
-    attribute int uvTextureIds;
+    attribute uint uvTextureIds;
     // e.g. can be used to infer gmId
-    attribute int instanceIds;
+    attribute uint instanceIds;
+  
+    varying vec3 vColor;
+    varying vec2 vUv;
+    flat varying uint vTextureId;
+    flat varying uint vInstanceId;
 
     #include <common>
     #include <logdepthbuf_pars_vertex>
@@ -490,30 +480,29 @@ export const instancedMultiTextureShader = {
     uniform int objectPickRed;
     uniform sampler2DArray atlas;
     uniform vec3 diffuse;
+    uniform float opacity;
 
     varying vec3 vColor;
     varying vec2 vUv;
-    flat varying int vTextureId;
-    flat varying int vInstanceId;
+    flat varying uint vTextureId;
+    flat varying uint vInstanceId;
 
     #include <common>
     #include <logdepthbuf_pars_fragment>
   
     void main() {
-      gl_FragColor = texture(atlas, vec3(vUv, vTextureId)) * vec4(vColor * diffuse, 1);
-      // gl_FragColor = vec4(1.0, 0.0, 0.0, gl_FragColor.a);
+      gl_FragColor = texture(atlas, vec3(vUv, vTextureId)) * vec4(vColor * diffuse, opacity);
 
-      if (gl_FragColor.a < 0.5) {
-      // if (gl_FragColor.a < alphaTest) {
+      if (gl_FragColor.a < alphaTest) {
         discard; // stop transparent pixels taking precedence
       }
 
       if (objectPick == true) {
         gl_FragColor = vec4(
           float(objectPickRed) / 255.0,
-          float((vInstanceId >> 8) & 255) / 255.0,
-          float(vInstanceId & 255) / 255.0,
-          gl_FragColor.a
+          float((int(vInstanceId) >> 8) & 255) / 255.0,
+          float(int(vInstanceId) & 255) / 255.0,
+          1
         );
       }
       
@@ -531,6 +520,7 @@ export const InstancedMonochromeShader = shaderMaterial(
   {
     diffuse: new THREE.Vector3(1, 0.5, 0.5),
     objectPick: false,
+    opacity: 1,
   },
   instancedMonochromeShader.Vert,
   instancedMonochromeShader.Frag,
@@ -549,7 +539,7 @@ export const InstancedLabelsMaterial = shaderMaterial(
 
 export const InstancedMultiTextureMaterial = shaderMaterial(
   {
-    alphaTest: 0,
+    alphaTest: 0.5,
     atlas: emptyDataArrayTexture,
     diffuse: new THREE.Vector3(1, 0.9, 0.6),
     // 🔔 map, mapTransform required else can get weird texture
@@ -558,6 +548,7 @@ export const InstancedMultiTextureMaterial = shaderMaterial(
     colorSpace: false,
     objectPick: false,
     objectPickRed: 0,
+    opacity: 1,
   },
   instancedMultiTextureShader.Vert,
   instancedMultiTextureShader.Frag,
@@ -571,6 +562,7 @@ export const CameraLightMaterial = shaderMaterial(
     mapTransform: new THREE.Matrix3(),
     objectPick: false,
     objectPickRed: 0,
+    opacity: 1,
   },
   cameraLightShader.Vert,
   cameraLightShader.Frag,

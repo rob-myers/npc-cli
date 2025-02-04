@@ -18,25 +18,39 @@ import ScrollTo from 'src/components/ScrollTo';
 
 ## Intent
 
-This website focuses on a fun yet difficult problem. 
+This website focuses on a fun but difficult problem.
 
 <Card id="underlying-problem"> 
 **Underlying Problem**
 
-Create a video game with a sufficiently rich environment,
-such that the Player cannot distinguish any Non-Player Character <SideNote>A "Non-Player Character" (NPC) is a video game character not controlled by the Player.</SideNote>
-from human-controlled characters.
+Create a video game where every Non-Player Character <SideNote>A "Non-Player Character" (NPC) is a video game character not controlled by the Player.</SideNote>
+behaves like a human-controlled character. The Player cannot distinguish the NPCs from human-controlled characters.
+{/* where the Player cannot distinguish any Non-Player Character <SideNote>A "Non-Player Character" (NPC) is a video game character not controlled by the Player.</SideNote>
+from human-controlled characters. */}
 </Card>
 
-Video games are entertaining simulations of _sensation_ (sight, sounds) and _action_ (character controls, collision detection).
-We'll work in 3D, moving many characters around many rooms.
-What about the other terminology?
-Well, the _Player_ is both (a) the human experiencing the simulation, (b) their respective simulated character.
-Then a Non-Player character (_NPC_) is a simulated character not controlled by the Player.
-The Player observes and interacts with the NPCs,
+Video games avoid this problem in various ways.
+For example, they restrict the possible actions within an apparently rich setting.
+(**Examples needed**)
+For example, they work in abstract environment where human expression is limited.
+(**Examples needed**)
+{/* We could even simply use humans to control every NPC. */}
+{/* On the other hand, if possible actions included unrestricted textual chat yields [Turing's Test](https://en.wikipedia.org/wiki/Turing_test),
+which remains unsolved despite recent improvements in Chat Bots. */}
+
+🚧
+
+Let's clarify our terminology.
+_Video games_ are entertaining simulations of sensation (sight, sounds) and action (character controls).
+The _Player_ is both the human experiencing the simulation, and their respective simulated character.
+A _Non-Player character_ (a.k.a. _NPC_) is a simulated character not controlled by the Player.
+During the course of the video game, the Player observes and interacts with the NPCs,
 and we're interested in improving the quality of these observations and interactions.
 
-Then the underlying problem requires each NPC to behave as if controlled by a human playing a particular role.
+🚧 screenshot with caption
+{/* We'll work in 3D, moving many characters around many rooms. */}
+
+The underlying problem requires each NPC to behave as if controlled by a human playing a particular role.
 Individuals needn't be sophisticated (e.g. multiple choice dialogue), but they must collectively interact just like humans would.
 
 Ok, but why this particular problem?
@@ -74,8 +88,8 @@ Then we have two objectives:
 
 The first objective amounts to building a system,
 whereas the second is a property this system must satisfy.
-Collectively they would solve the underlying problem from the Player's perspective (assuming the experience is entertaining).
-The next problem would be to somehow automate the Game Master, but that's out of scope.
+Collectively they would solve the underlying problem from the Player's perspective (assuming it's entertaining).
+The next problem might be to automate the Game Master, but that's out of scope.
 This website is entirely focused on the two objectives listed above.
 Importantly we've already created the system's foundations,
 as we shall explain in our next blog entry.

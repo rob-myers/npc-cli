@@ -4,19 +4,19 @@ import { Subject, firstValueFrom } from "rxjs";
 import { filter } from "rxjs/operators";
 import * as THREE from "three";
 import { Timer } from "three-stdlib";
-import { importNavMesh, Crowd } from "@recast-navigation/core";
+import debounce from "debounce";
 
 import { Vect } from "../geom";
 import { GmGraphClass } from "../graph/gm-graph";
 import { GmRoomGraphClass } from "../graph/gm-room-graph";
+import { floorTextureDimension } from "../service/const";
 import { debug, isDevelopment, keys, warn, removeFirst, toPrecision, pause, mapValues } from "../service/generic";
-import { getContext2d, invertCanvas } from "../service/dom";
+import { getContext2d, invertCanvas, isSmallViewport } from "../service/dom";
 import { removeCached, setCached } from "../service/query-client";
 import { fetchGeomorphsJson, getDecorSheetUrl, getObstaclesSheetUrl, WORLD_QUERY_FIRST_KEY } from "../service/fetch-assets";
 import { geomorph } from "../service/geomorph";
 import createGmsData from "../service/create-gms-data";
-import { imageLoader } from "../service/three";
-import { disposeCrowd, getTileCacheMeshProcess } from "../service/recast-detour";
+import { imageLoader, toV3, toXZ } from "../service/three";
 import { helper } from "../service/helper";
 import { TexArray } from "../service/tex-array";
 import { WorldContext } from "./world-context";
@@ -63,9 +63,13 @@ export default function World(props) {
     gmGraph: new GmGraphClass([]),
     gmRoomGraph: new GmRoomGraphClass(),
     hmr: /** @type {*} */ ({}),
+    smallViewport: isSmallViewport(),
 
+    texFloor: new TexArray({ ctKey: 'floor-tex-array', numTextures: 1, width: 0, height: 0 }),
+    texCeil: new TexArray({ ctKey: 'ceil-tex-array', numTextures: 1, width: 0, height: 0 }),
     texDecor: new TexArray({ ctKey: 'decor-tex-array', numTextures: 1, width: 0, height: 0 }),
     texObs: new TexArray({ ctKey: 'obstacle-tex-array', numTextures: 1, width: 0, height: 0 }),
+    texVs: { floor: 0, ceiling: 0 },
 
     crowd: /** @type {*} */ (null),
 
@@ -74,53 +78,46 @@ export default function World(props) {
     ceil: /** @type {*} */ ({}),
     decor: /** @type {*} */ (null),
     obs: /** @type {*} */ (null),
-    wall: /** @type {*} */ (null),
+    wall: /** @type {*} */ ({}),
     door: /** @type {State['door']} */ ({
       onTick(_) {},
     }),
     npc: /** @type {*} */ (null), // Npcs
-    menu: /** @type {State['menu']} */ ({ measure(_) {} }), // ContextMenu
+    menu: /** @type {State['menu']} */ ({ measure(_) {} }), // WorldMenu
     debug: /** @type {*} */ (null), // Debug
-    // 🚧 support hmr e.g. via state.hmr
-    lib: {
-      filter,
-      firstValueFrom,
-      isVectJson: Vect.isVectJson,
-      precision: toPrecision,
-      removeFirst,
-      vectFrom: Vect.from,
-      Subject,
-      ...helper,
-    },
+    bubble: /** @type {*} */ (null), // NpcSpeechBubbles
+    cm: /** @type {*} */ (null),
+
+    lib,
 
     e: /** @type {*} */ (null), // useHandleEvents
-    n: /** @type {*} */ {}, // w.npc.npc
-    oneTimeTicks: [],
+    n: {}, // w.npc.npc
+    d: {}, // w.door.byKey
 
-    isReady() {
-      return state.crowd !== null && state.decor?.queryStatus === 'success';
-    },
-    loadTiledMesh(exportedNavMesh) {
-      const tiledCacheResult = /** @type {NPC.TiledCacheResult} */ (
-        importNavMesh(exportedNavMesh, getTileCacheMeshProcess())
-      );
-      if (state.crowd) {
-        disposeCrowd(state.crowd, state.nav.navMesh);
+    isReady(connectorKey) {
+      const ready = state.crowd !== null && state.decor?.queryStatus === 'success';
+      if (ready === true && typeof connectorKey === 'string') {
+        // "connected" if connectorKey provided
+        state.menu.onConnect(connectorKey);
       }
-      Object.assign(state.nav, tiledCacheResult);
-      state.crowd = new Crowd(state.nav.navMesh, {
-        maxAgents: 10,
-        // maxAgents: 200,
-        maxAgentRadius: helper.defaults.radius,
-      });
-      state.npc?.restore();
+      return ready;
+    },
+    onDebugTick() {
+      state.timer.update();
+      // Animate camera while paused
+      if (state.view.targetFov !== null || state.view.target !== null) {
+        state.view.onTick(state.timer.getDelta());
+        state.reqAnimId = requestAnimationFrame(state.onDebugTick);
+      } else if (state.disabled === true) {
+        state.stopTick();
+      }
     },
     onTick() {
       state.reqAnimId = requestAnimationFrame(state.onTick);
       state.timer.update();
       const deltaMs = state.timer.getDelta();
 
-      if (state.npc === null) {
+      if (state.npc === null || state.r3f === null) {
         return; // wait for <NPCs>
       }
 
@@ -129,13 +126,11 @@ export default function World(props) {
       state.door.onTick(deltaMs);
       // console.info(state.r3f.gl.info.render);
 
-      if (state.debug.npc !== null) {
-        state.debug.npc.onTick(deltaMs);
-      }
-
       state.view.onTick(deltaMs);
-
-      while (state.oneTimeTicks.shift()?.());
+    },
+    stopTick() {
+      cancelAnimationFrame(state.reqAnimId);
+      state.reqAnimId = 0;
     },
     trackHmr(nextHmr) {
       const output = mapValues(state.hmr, (prev, key) => prev !== nextHmr[key])
@@ -145,19 +140,20 @@ export default function World(props) {
       mutator?.(state);
       update();
     },
-  }));
+  }), { reset: { lib: true } });
 
   state.disabled = !!props.disabled;
 
   useHandleEvents(state);
 
   const query = useQuery({
-    queryKey: [WORLD_QUERY_FIRST_KEY, props.worldKey, props.mapKey],
+    queryKey: [WORLD_QUERY_FIRST_KEY, state.key, props.mapKey],
     queryFn: async () => {
       if (module.hot?.active === false) {
         return false; // Avoid query from disposed module
       }
 
+      const justHmr = query.data === false;
       const prevGeomorphs = state.geomorphs;
       const geomorphsJson = await fetchGeomorphsJson();
 
@@ -207,8 +203,15 @@ export default function World(props) {
           }
         };
         next.gmsData.computeRoot(next.gms);
-        next.gmsData.computeTextureArrays(state.gmsData);
         state.menu.measure('gmsData');
+      }
+
+      if (mapChanged || justHmr) {
+        const dimension = floorTextureDimension;
+        state.texFloor.resize({ width: dimension, height: dimension, numTextures: next.gmsData.seenGmKeys.length });
+        state.texCeil.resize({ width: dimension, height: dimension, numTextures: next.gmsData.seenGmKeys.length });
+        state.texVs.floor++; // e.g. fix edit const.js
+        state.texVs.ceiling++;
       }
       
       if (mapChanged || gmsDataChanged || gmGraphChanged) {
@@ -283,7 +286,11 @@ export default function World(props) {
     // refetchOnWindowFocus: false,
     enabled: state.threeReady, // 🔔 fixes horrible reset issue on mobile
     gcTime: 0, // concurrent queries with different mapKey can break HMR
-    // throwOnError: true, // breaks on restart dev env
+    /**
+     * 🔔 Very useful for debugging
+     * 🔔 Breaks on restart dev env
+     */
+    throwOnError: true,
     networkMode: isDevelopment() ? 'always' : 'online',
   });
 
@@ -293,15 +300,18 @@ export default function World(props) {
   }, []);
 
   React.useEffect(() => {// hmr query
-    query.data === false && query.refetch();
+    if (query.data === false && query.isRefetching === false) {
+      query.refetch();
+    }
   }, [query.data === false]);
 
-  React.useEffect(() => {// enable/disable animation
+  React.useEffect(() => {// enable/disable
     state.timer.reset();
+    state.view.syncRenderMode();
     if (!state.disabled) {
       state.onTick();
     }
-    return () => cancelAnimationFrame(state.reqAnimId);
+    return () => state.stopTick();
   }, [state.disabled]);
 
   return (
@@ -323,7 +333,6 @@ export default function World(props) {
                 <Debug
                   // showNavMesh
                   // showOrigNavPoly
-                  showTestNpcs
                   // showStaticColliders
                 />
               </>}
@@ -362,7 +371,12 @@ export default function World(props) {
  * @property {import("@react-three/fiber").RootState & { camera: THREE.PerspectiveCamera }} r3f
  * @property {Timer} timer
  *
- * @property {{ worker: WW.NavWorker } & NPC.TiledCacheResult} nav
+ * @property {{
+ *   worker: WW.NavWorker;
+ *   offMeshDefs: import("recast-navigation").OffMeshConnectionParams[];
+ *   offMeshLookup: NPC.SrcToOffMeshLookup;
+ *   doorToOffMesh: NPC.DoorToOffMeshLookup;
+ * } & NPC.TiledCacheResult} nav
  * @property {{ worker: WW.PhysicsWorker; rebuilds: number; } & import("../service/rapier").PhysicsBijection} physics
  *
  * @property {import('./WorldView').State} view
@@ -375,6 +389,8 @@ export default function World(props) {
  * @property {import('./Npcs').State} npc
  * Npcs (dynamic)
  * @property {import('./WorldMenu').State} menu
+ * @property {import("./NpcSpeechBubbles").State} bubble
+ * Npc speech bubbles
  * @property {import('./Debug').State} debug
  * @property {StateUtil & import("../service/helper").Helper} lib
  *
@@ -382,38 +398,54 @@ export default function World(props) {
  * Events state i.e. useHandleEvents state
  * @property {import("./Npcs").State['npc']} n
  * Shortcut for `w.npc.npc`
- * @property {(() => void)[]} oneTimeTicks
+ * @property {import("./Doors").State['byKey']} d
+ * Shortcut for `w.door.byKey`
+ * @property {import('./ContextMenu').State} cm
  *
+ * @property {TexArray} texFloor
+ * @property {TexArray} texCeil
  * @property {TexArray} texDecor
  * @property {TexArray} texObs
+ * @property {{ floor: number; ceiling: number; }} texVs
  * @property {Geomorph.LayoutInstance[]} gms
  * Aligned to `map.gms`.
  * Only populated for geomorph keys seen in some map.
  * @property {GmGraphClass} gmGraph
  * @property {GmRoomGraphClass} gmRoomGraph
- * @property {Crowd} crowd
+ * @property {import('@recast-navigation/core').Crowd} crowd
+ * @property {boolean} smallViewport Was viewport small when we mounted World?
  *
- * @property {() => boolean} isReady
- * @property {(exportedNavMesh: Uint8Array) => void} loadTiledMesh
+ * @property {() => void} onDebugTick
  * @property {() => void} onTick
+ * @property {(connectorKey?: string) => boolean} isReady
+ * @property {() => void} stopTick
  * @property {(next: State['hmr']) => Record<keyof State['hmr'], boolean>} trackHmr
  * Has function `createGmsData` changed?
  * @property {(mutator?: (w: State) => void) => void} update
  */
 
 /**
- * @typedef StateUtil Utility classes and `rxjs` functions
+ * @typedef StateUtil Utility functions and classes
  * @property {typeof filter} filter
  * @property {typeof firstValueFrom} firstValueFrom
  * @property {typeof import('../geom').Vect['isVectJson']} isVectJson
  * @property {typeof removeFirst} removeFirst
  * @property {typeof Subject} Subject
+ * @property {typeof toXZ} toXZ
+ * @property {typeof toV3} toV3
  * @property {typeof toPrecision} precision
  * @property {typeof import('../geom').Vect['from']} vectFrom
- * 
- * //@property {typeof first} first
- * //@property {typeof map} map
- * //@property {typeof merge} merge
- * //@property {typeof take} take
  */
 
+const lib = {
+  filter,
+  firstValueFrom,
+  isVectJson: Vect.isVectJson,
+  precision: toPrecision,
+  removeFirst,
+  vectFrom: Vect.from,
+  Subject,
+  toXZ,
+  toV3,
+  ...helper,
+};

@@ -62,9 +62,9 @@ function getTabIdentifier(meta: TabDef) {
 
 const classToComponent = {
   HelloWorld: {
-    loadable: loadable(() => import("../aux/HelloWorld")),
+    loadable: loadable(() => import("../components/HelloWorld")),
     get:
-      (module: typeof import("../aux/HelloWorld")) =>
+      (module: typeof import("../components/HelloWorld")) =>
       (props: React.ComponentProps<(typeof module)["default"]>) =>
         React.createElement(module.default, { disabled: true, ...props }),
   },
@@ -198,11 +198,9 @@ function computeJsonModel(tabsDefs: TabDef[][], rootOrientationVertical?: boolea
       tabEnableClose: false,
       tabSetEnableDivide: !isTouchDevice(),
       enableEdgeDock: !isTouchDevice(),
-      // Use `visibility: hidden` instead of `display: none`,
-      // otherwise <World> does not progress
-      enableUseVisibility: true,
       splitterExtra: 12,
       splitterSize: 2,
+      // enableUseVisibility: true, 🔔 no longer available
     },
     layout: {
       type: "row",

@@ -3,6 +3,8 @@
  */
 import * as THREE from "three";
 import { LineMaterial } from "three-stdlib";
+import { damp } from "maath/easing";
+
 import { Rect, Vect } from "../geom";
 import packRectangles from "./rects-packer";
 
@@ -268,7 +270,7 @@ export function createDebugCylinder(position, radius, height) {
  * @param {{ fontHeight: number; }} opts
  */
 export function createLabelSpriteSheet(labels, sheet, { fontHeight }) {
-  if (labels.length === sheet.numLabels && labels.every(label => label in sheet.lookup)) {
+  if (labels.length === sheet.count && labels.every(label => label in sheet.lookup)) {
     return; // Avoid re-computation
   }
 
@@ -277,7 +279,7 @@ export function createLabelSpriteSheet(labels, sheet, { fontHeight }) {
   const ct = /** @type {CanvasRenderingContext2D} */ (canvas.getContext('2d'));
   ct.font = `${fontHeight}px 'Courier new'`;
 
-  const strokeWidth = 3;
+  const strokeWidth = 5;
 
   const rects = labels.map(label => ({
     width: ct.measureText(label).width + 2 * strokeWidth,
@@ -291,7 +293,7 @@ export function createLabelSpriteSheet(labels, sheet, { fontHeight }) {
     agg[r.data.label] = { x: r.x, y: r.y, width: r.width, height: r.height };
     return agg;
   }, /** @type {LabelsSheetAndTex['lookup']} */ ({}));
-  sheet.numLabels = labels.length;
+  sheet.count = labels.length;
   
   // Draw sprite-sheet
   if (canvas.width !== bin.width || canvas.height !== bin.height) {
@@ -316,7 +318,7 @@ export function createLabelSpriteSheet(labels, sheet, { fontHeight }) {
   sheet.tex.needsUpdate = true;
 }
 
-export const yAxis = new THREE.Vector3(0, 1, 0);
+export const unitXVector3 = new THREE.Vector3(1, 0, 0);
 
 export const emptyGroup = new THREE.Group();
 
@@ -353,34 +355,37 @@ export const pickingRenderTarget = new THREE.WebGLRenderTarget(1, 1, {
 /**
  * @typedef LabelsSheetAndTex
  * @property {{ [label: string]: Geom.RectJson }} lookup
- * @property {number} numLabels
+ * @property {number} count
  * @property {THREE.CanvasTexture} tex
  */
 
 /**
- * - identity on `THREE.Vector3`
- * - convert { x, y, z } to `new THREE.Vector3(x, y, z)`
- * - convert {x, y } to `new THREE.Vector3(x, 0, y)`
+ * - clones `THREE.Vector3`
+ * - `{ x, y, z }` -> `new THREE.Vector3(x, y, z)`
+ * - `{ x, y }` -> `new THREE.Vector3(x, 0, y)`
  * @param {Geom.VectJson | THREE.Vector3Like} input 
+ * @returns {THREE.Vector3}
  */
 export function toV3(input) {
-  return 'z' in input
-    ? input instanceof THREE.Vector3 ? input : new THREE.Vector3().copy(input)
-    : new THREE.Vector3(input.x, 0, input.y)
-  ;
+  if ('z' in input) {
+    return input instanceof THREE.Vector3 ? input.clone() : new THREE.Vector3().copy(input);
+  } else {
+    return new THREE.Vector3(input.x, 0, input.y);
+  }
 }
 
 /**
  * - `{ x, y, z }` -> `{ x, y: z }`
  * - `THREE.Vector3` -> `{ x, y: z }`
- * - `{ x, y }` -> `{ x, y }` (fresh)
+ * - `{ x, y }` -> `{ x, y }`
  * @param {Geom.VectJson | THREE.Vector3Like} input 
+ * @returns {Geom.VectJson}
  */
 export function toXZ(input) {
   if ('z' in input) {
     return { x: input.x, y: input.z };
   } else {
-    return { x: input.x, y: input.y };
+    return input;
   }
 }
 
@@ -435,6 +440,8 @@ export function hasObjectPickShaderMaterial(o) {
 }
 
 const tempInstanceMesh = new THREE.Mesh();
+// 🚧 remove THREE.DoubleSide when e.g. all decor quads face correct way
+// tempInstanceMesh.material = new THREE.MeshBasicMaterial();
 tempInstanceMesh.material = new THREE.MeshBasicMaterial({ side: THREE.DoubleSide });
 const tempInstanceLocalMatrix = new THREE.Matrix4();
 const tempInstanceWorldMatrix = new THREE.Matrix4();
@@ -452,4 +459,29 @@ export function getTempInstanceMesh(inst, instanceId) {
   inst.getMatrixAt(instanceId, tempInstanceLocalMatrix);
   tempInstanceMesh.matrixWorld = tempInstanceWorldMatrix.multiplyMatrices(matrixWorld, tempInstanceLocalMatrix);
   return tempInstanceMesh;
+}
+
+const v3d = new THREE.Vector3();
+let resX = false, resY = false, resZ = false, dx = 0, dz = 0, dMax = 0;
+/**
+ * Based on https://github.com/pmndrs/maath/blob/626d198fbae28ba82f2f1b184db7fcafd4d23846/packages/maath/src/easing.ts#L229
+ * - Tries to sync x,z arrival time.
+ * @param {THREE.Vector3} current 
+ * @param {THREE.Vector3} target 
+ * @param {number} [smoothTime] 
+ * @param {number} [deltaMs] 
+ * @param {number} [maxSpeed] 
+ * @param {(t: number) => number} [easing] 
+ * @param {number} [eps]
+ * @returns 
+ */
+export function dampXZ(current, target, smoothTime, deltaMs, maxSpeed = Infinity, easing, eps = 0.001) {
+  v3d.copy(target);
+  dx = Math.abs(current.x - target.x);
+  dz = Math.abs(current.z - target.z);
+  dMax = Math.max(dx, dz);
+  resX = dMax < eps ? false : damp(current, "x", v3d.x, smoothTime, deltaMs, maxSpeed * (dx / dMax), easing, eps);
+  resY = damp(current, "y", v3d.y, smoothTime, deltaMs, maxSpeed, easing, eps);
+  resZ = dMax < eps ? false : damp(current, "z", v3d.z, smoothTime, deltaMs, maxSpeed * (dz / dMax), easing, eps);
+  return resX || resY || resZ;
 }

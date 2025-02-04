@@ -23,7 +23,7 @@ export class TexArray {
     }
 
     this.opts = opts;
-    this.ct = getContext2d(opts.ctKey);
+    this.ct = getContext2d(opts.ctKey, { willReadFrequently: true });
     this.ct.canvas.width = opts.width;
     this.ct.canvas.height = opts.height;
     
@@ -33,16 +33,6 @@ export class TexArray {
     tex.format = THREE.RGBAFormat;
     tex.type = THREE.UnsignedByteType;
     this.tex = tex;
-
-    // const firstTex = textures[0].tex;
-    // tex.anisotropy = firstTex.anisotropy;
-    // tex.minFilter = firstTex.minFilter;
-    // tex.magFilter = firstTex.magFilter;
-    // tex.wrapS = firstTex.wrapS;
-    // tex.wrapT = firstTex.wrapT;
-    // tex.encoding = THREE.sRGBEncoding;
-    // tex.generateMipmaps = true;
-    // tex.needsUpdate = true;
   }
 
   dispose() {
@@ -52,10 +42,11 @@ export class TexArray {
   }
 
   /**
+   * Resize if needed i.e. if "dimension" or "number of textures" has changed.
    * @param {Omit<TexArrayOpts, 'ctKey'>} opts
    */
   resize(opts) {
-    if (opts.width === this.opts.width && opts.height === this.opts.height && opts.numTextures === this.opts.numTextures) {
+    if (this.ct.canvas.width !== 0 && opts.width === this.opts.width && opts.height === this.opts.height && opts.numTextures === this.opts.numTextures) {
       return; // resize not needed
     }
 

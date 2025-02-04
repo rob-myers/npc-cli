@@ -1,15 +1,16 @@
 import React from "react";
 import * as THREE from "three";
 import { useGLTF } from "@react-three/drei";
+import debounce from "debounce";
 
-import { defaultClassKey, gmLabelHeightSgu, maxNumberOfNpcs, npcClassKeys, npcClassToMeta, physicsConfig, spriteSheetDecorExtraScale, wallHeight } from "../service/const";
+import { defaultClassKey, gmLabelHeightSgu, maxNumberOfNpcs, npcClassKeys, npcClassToMeta, spriteSheetDecorExtraScale, wallHeight } from "../service/const";
 import { info, pause, range, takeFirst, warn } from "../service/generic";
 import { getCanvas } from "../service/dom";
-import { createLabelSpriteSheet, emptyTexture, textureLoader, toV3, toXZ, yAxis } from "../service/three";
+import { createLabelSpriteSheet, emptyTexture, textureLoader, toV3, toXZ } from "../service/three";
 import { helper } from "../service/helper";
 import { cmUvService } from "../service/uv";
 import { CuboidManMaterial } from "../service/glsl";
-import { Npc, hotModuleReloadNpc } from "./npc";
+import { Npc } from "./npc";
 import { WorldContext } from "./world-context";
 import useStateRef from "../hooks/use-state-ref";
 import useUpdate from "../hooks/use-update";
@@ -26,13 +27,13 @@ export default function Npcs(props) {
     gltf: /** @type {*} */ ({}),
     group: /** @type {*} */ (null),
     label: {
-      numLabels: 0,
+      count: 0,
       lookup: {},
       tex: new THREE.CanvasTexture(getCanvas(`${w.key} npc.label`)),
     },
     npc: {},
     physicsPositions: [],
-    pickUid: {
+    uid: {
       free: new Set(range(maxNumberOfNpcs)),
       toKey: new Map(),
     },
@@ -59,14 +60,17 @@ export default function Npcs(props) {
     },
     getClosestNavigable(p, maxDelta = 0.5) {
       const { success, point: closest } = w.crowd.navMeshQuery.findClosestPoint(p, {
-        halfExtents: new THREE.Vector3(maxDelta / 2, maxDelta / 2, maxDelta / 2),
+        // 🔔 maxDelta "means" ~ (2 * maxDelta) * (2 * smallHalfExtent) * (2 * maxDelta) search space
+        halfExtents: { x: maxDelta, y: smallHalfExtent, z: maxDelta },
+        // filter: w.crowd.getFilter(w.lib.queryFilterType.excludeDoors),
       });
-      if (success === false) {
-        warn(`${'getClosestNavigable'} failed: ${JSON.stringify(p)}`);
-        return null;
-      } else {
-        return p.distanceTo(closest) < maxDelta ? toV3(closest) : null;
+
+      if (success === true && p.distanceTo(closest) <= maxDelta) {
+        return toV3(closest);
       }
+      
+      warn(`${'getClosestNavigable'} failed: ${JSON.stringify(p)}`);
+      return null;
     },
     getNpc(npcKey, processApi) {
       const npc = processApi === undefined
@@ -79,9 +83,14 @@ export default function Npcs(props) {
         return npc;
       }
     },
-    isPointInNavmesh(p) {
-      const { success, point } = w.crowd.navMeshQuery.findClosestPoint(toV3(p), { halfExtents: { x: 0, y: 0.05, z: 0 } });
-      return success === true && Math.abs(point.x - p.x) < 0.001 && Math.abs(point.z - p.y) < 0.001;
+    getByNpcUid(uid) {
+      const npcKey = state.uid.toKey.get(uid);
+      return state.npc[/** @type {string} */ (npcKey)];
+    },
+    isPointInNavmesh(input) {
+      const v3 = toV3(input);
+      const { success, point } = w.crowd.navMeshQuery.findClosestPoint(v3, { halfExtents: { x: smallHalfExtent, y: smallHalfExtent, z: smallHalfExtent } });
+      return success === true && Math.abs(point.x - v3.x) < smallHalfExtent && Math.abs(point.z - v3.z) < smallHalfExtent;
     },
     onTick(deltaMs) {
       Object.values(state.npc).forEach(npc => npc.onTick(deltaMs, state.physicsPositions));
@@ -113,21 +122,25 @@ export default function Npcs(props) {
         npc.removeAgent();
         
         delete state.npc[npcKey];
-        state.pickUid.free.add(npc.def.pickUid);
-        state.pickUid.toKey.delete(npc.def.pickUid);
+        state.uid.free.add(npc.def.pickUid);
+        state.uid.toKey.delete(npc.def.pickUid);
 
         w.events.next({ key: 'removed-npc', npcKey });
       }
       update();
     },
     async spawn(e) {
+      e.point = toXZ(e.point);
       if (!(typeof e.npcKey === 'string' && /^[a-z0-9-_]+$/i.test(e.npcKey))) {
         throw Error(`npc key: ${JSON.stringify(e.npcKey)} must match /^[a-z0-9-_]+$/i`);
       } else if (!(typeof e.point?.x === 'number' && typeof e.point.y === 'number')) {
         throw Error(`invalid point {x, y}: ${JSON.stringify(e)}`);
+      } else if (e.npcKey === 'default') {
+        throw Error('npc key cannot be "default"');
       }
 
-      const dstNav = state.isPointInNavmesh(e.point);
+
+      const dstNav = e.meta?.nav === true || state.isPointInNavmesh(e.point);
       // 🔔 attach agent by default if dst navigable
       dstNav === true && (e.agent ??= true);
 
@@ -168,13 +181,13 @@ export default function Npcs(props) {
         // Spawn
         npc = state.npc[e.npcKey] = new Npc({
           key: e.npcKey,
-          pickUid: takeFirst(state.pickUid.free),
+          pickUid: takeFirst(state.uid.free),
           angle: e.angle ?? 0,
           classKey: e.classKey ?? defaultClassKey,
           runSpeed: e.runSpeed ?? helper.defaults.runSpeed,
           walkSpeed: e.walkSpeed ?? helper.defaults.walkSpeed,
         }, w);
-        state.pickUid.toKey.set(npc.def.pickUid, e.npcKey);
+        state.uid.toKey.set(npc.def.pickUid, e.npcKey);
 
         npc.initialize(state.gltf[npc.def.classKey]);
       }
@@ -213,10 +226,15 @@ export default function Npcs(props) {
       
       npc.s.spawns++;
       npc.s.doMeta = e.meta?.do === true ? e.meta : null;
+      npc.s.offMesh = null;
       w.events.next({ key: 'spawned', npcKey: npc.key, gmRoomId });
 
       return npc;
     },
+    tickOnce: debounce(() => {
+      state.onTick(1000 / 60);
+      w.r3f.advance(Date.now()); // so they move
+    }, 30, { immediate: true }),
     update,
     updateLabels(...incomingLabels) {
       const { lookup } = state.label;
@@ -245,15 +263,13 @@ export default function Npcs(props) {
   state.gltf["cuboid-man"] = useGLTF(npcClassToMeta["cuboid-man"].url);
   state.gltf["cuboid-pet"] = useGLTF(npcClassToMeta["cuboid-pet"].url);
   
-  React.useEffect(() => {
+  React.useEffect(() => {// init + hmr
     cmUvService.initialize(state.gltf);
-
-    if (process.env.NODE_ENV === 'development') {
-      info('hot-reloading npcs');
-      Object.values(state.npc).forEach(npc =>
-        state.npc[npc.key] = hotModuleReloadNpc(npc)
-      );
-    }
+    process.env.NODE_ENV === 'development' && Object.values(state.npc).forEach(npc => {
+      // 🔔 we simply overwrite non-methods
+      state.npc[npc.key] = Object.assign(new Npc(npc.def, w), {...npc});
+      npc.dispose();
+    });
   }, []);
 
   React.useEffect(() => {// npc textures
@@ -297,20 +313,23 @@ export default function Npcs(props) {
  * @property {number[]} physicsPositions
  * Format `[npc.bodyUid, npc.position.x, npc.position.y, npc.position.z, ...]`
  * @property {Record<NPC.TextureKey, THREE.Texture>} tex
- * @property {{ free: Set<number>; toKey: Map<number, string> }} pickUid
- * `uid.free` are those npc uids not-yet-used.
- * They are removed/added on spawn/remove npc.
+ * @property {{ free: Set<number>; toKey: Map<number, string> }} uid
+ * 🚧 flatten
+ * Correspondence between Recast-Detour CrowdAgent uids and npcKeys.
+ * - also used when object-picking npcs
+ * - `uid.free` are those npc uids not-yet-used.
  *
  * @property {() => void} clearLabels
  * @property {(src: THREE.Vector3Like, dst: THREE.Vector3Like) => null | THREE.Vector3Like[]} findPath
  * @property {(npcKey: string, processApi?: any) => NPC.NPC} getNpc
- * Throws if does not exist 🚧 any -> ProcessApi (?)
  * @property {(p: THREE.Vector3, maxDelta?: number) => null | THREE.Vector3} getClosestNavigable
- * @property {(p: Geom.VectJson) => boolean} isPointInNavmesh
+ * @property {(uid: number) => NPC.NPC} getByNpcUid
+ * @property {(input: Geom.VectJson | THREE.Vector3Like) => boolean} isPointInNavmesh
  * @property {() => void} restore
  * @property {(deltaMs: number) => void} onTick
  * @property {(npcKey: string) => void} remove
  * @property {(e: NPC.SpawnOpts) => Promise<NPC.NPC>} spawn
+ * @property {() => void} tickOnce
  * @property {() => void} update
  * @property {(...incomingLabels: string[]) => boolean} updateLabels
  * - Ensures incomingLabels i.e. does not replace.
@@ -328,7 +347,7 @@ function NPC({ npc }) {
   return (
     <group
       key={npc.key}
-      ref={npc.onMount}
+      ref={npc.onMount.bind(npc)}
       scale={npc.m.scale}
       // dispose={null}
     >
@@ -391,3 +410,5 @@ function NPC({ npc }) {
 const MemoizedNPC = React.memo(NPC);
 
 useGLTF.preload(Object.values(npcClassToMeta).map(x => x.url));
+
+const smallHalfExtent = 0.001;

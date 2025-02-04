@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import { doorDepth, doorHeight, floorTextureDimension, gmFloorExtraScale, gmHitTestExtraScale, hitTestRed, hullDoorDepth, wallHeight, worldToSguScale } from "./const";
+import { doorDepth, doorHeight, gmHitTestExtraScale, hitTestRed, hullDoorDepth, wallHeight, worldToSguScale } from "./const";
 import { mapValues, pause, warn } from "./generic";
 import { drawPolygons } from "./dom";
 import { Poly } from '../geom';
@@ -8,7 +8,6 @@ import { geomorph } from "./geomorph";
 import { BaseGraph } from '../graph/base-graph';
 import { RoomGraphClass } from "../graph/room-graph";
 import { helper } from './helper';
-import { TexArray, emptyTexArray } from './tex-array';
 
 export default function createGmsData() {
   const gmsData = {
@@ -19,10 +18,6 @@ export default function createGmsData() {
     obstaclesCount: 0,
     /** This induces the floor/ceil texture array ordering */
     seenGmKeys: /** @type {Geomorph.GeomorphKey[]} */ ([]),
-    /** texture array */
-    texFloor: /** @type {TexArray} */ ({}),
-    /** texture array */
-    texCeil: /** @type {TexArray} */ ({}),
     /** Total number of walls, where each wall is a single quad:  */
     wallCount: 0,
     /** Per gmId, total number of wall line segments:  */
@@ -42,21 +37,31 @@ export default function createGmsData() {
       gmData.wallSegs = [
         ...gm.walls.flatMap((x) => x.lineSegs.map(seg => ({ seg, meta: x.meta }))),
         ...gm.doors.flatMap(connector => this.getLintelSegs(connector)),
+        ...gm.windows.flatMap(connector => this.getWindowSegs(connector)),
       ];
+
       gmData.wallPolyCount = gm.walls.length;
+
       gmData.wallPolySegCounts = gm.walls.map(({ outline, holes }) =>
-        outline.length // main walls
-        + holes.reduce((sum, hole) => sum + hole.length, 0) // inner walls
+        outline.length + holes.reduce((sum, hole) => sum + hole.length, 0)
       );
-      gmData.wallPolySegCounts.push(2 * gm.doors.length); // lintels
+      // lintels (2 quads per door):
+      gmData.wallPolySegCounts.push(2 * gm.doors.length);
+      // windows (upper/lower, may not be quads):
+      gmData.wallPolySegCounts.push(2 * gm.windows.reduce((sum, x) => sum + x.poly.outline.length, 0));
 
       const nonHullWallsTouchCeil = gm.walls.filter(x => !x.meta.hull &&
         (x.meta.h === undefined || (x.meta.y + x.meta.h === wallHeight)) // touches ceiling
       );
       gmData.tops = {
         broad: gm.walls.filter(x => x.meta.broad === true),
-        door: gm.hullDoors.map(door => door.computeThinPoly()),
-        nonHull: Poly.union(nonHullWallsTouchCeil.concat(gm.doors.map(door => door.computeThinPoly()))),
+        hull: Poly.union(gm.walls.filter(x => x.meta.hull).concat
+          (gm.hullDoors.map(x => x.computeThinPoly()))
+        ),
+        nonHull: Poly.union(nonHullWallsTouchCeil
+          .concat(gm.doors.map(door => door.computeThinPoly()))
+        ).flatMap(x => geom.createInset(x, 0.02)),
+        window: gm.windows.map(window => geom.createInset(window.poly, 0.005)[0]),
       };
 
       // canvas for quick "point -> roomId", "point -> doorId" computation
@@ -107,36 +112,15 @@ export default function createGmsData() {
         gmsData[gmKey].wallPolySegCounts.reduce((sum, count) => sum + count, 0),
       );
     },
-    
-    /**
-     * @param {{
-     *   seenGmKeys: Geomorph.GeomorphKey[];
-     *   texFloor: TexArray;
-     *   texCeil: TexArray;
-     * }} [prevGmsData]
-     * Previous lookup so can reuse memory
-     */
-    computeTextureArrays(prevGmsData) {
-      const dimension = floorTextureDimension;
-      const preserve = prevGmsData?.seenGmKeys.length === gmsData.seenGmKeys.length;
-      gmsData.texFloor = preserve ? prevGmsData.texFloor : new TexArray({ ctKey: 'tex-array-floor', width: dimension, height: dimension, numTextures: gmsData.seenGmKeys.length });
-      gmsData.texCeil = preserve ? prevGmsData.texCeil : new TexArray({ ctKey: 'tex-array-ceil', width: dimension, height: dimension, numTextures: gmsData.seenGmKeys.length });
-      
-      if (preserve) {// remove ref
-        prevGmsData.texFloor = prevGmsData.texCeil = emptyTexArray;
-      } else {// garbage collect
-        prevGmsData?.texFloor.dispose();
-        prevGmsData?.texCeil.dispose();
-      }
-    },
 
     /** Dispose `GmData` lookup. */
     dispose() {
       for (const gmKey of geomorph.gmKeys) {
-        Object.values(gmsData[gmKey]).forEach(v => {
+        Object.entries(gmsData[gmKey]).forEach(([k, v]) => {
           if (Array.isArray(v)) {
             v.length = 0;
           } else if (v instanceof CanvasRenderingContext2D) {
+            // console.log(`🔔 disposing canvas: ${k}`);
             v.canvas.width = v.canvas.height = 0;
           } else if (v instanceof THREE.Texture) {
             v.dispose();
@@ -169,6 +153,7 @@ export default function createGmsData() {
       );
     },
     /**
+     * Lookup pixel in "hit canvas"
      * @param {Geomorph.Layout} gm
      * @param {Geom.VectJson} localPoint local geomorph coords (meters)
      */
@@ -201,12 +186,28 @@ export default function createGmsData() {
     getLintelSegs({ seg: [u, v], normal, meta }) {
       const depths = lintelDepths[meta.hull === true ? 'hull' : 'nonHull'];
       meta = { ...meta, y: doorHeight, h: wallHeight - doorHeight };
-      return [1, -1].map((sign, i) => ({
-        seg: /** @type {[Geom.Vect, Geom.Vect]} */ (
-          [u, v].map(p => p.clone().addScaled(normal, sign * 0.5 * depths[i]))
-        ),
-        meta,
-      }));
+      return [
+        { seg: /** @type {[Geom.Vect, Geom.Vect]} */ (
+            [v, u].map(p => p.clone().addScaled(normal, +1 * 0.5 * depths[0]))
+          ), meta },
+        { seg: /** @type {[Geom.Vect, Geom.Vect]} */ (
+            [u, v].map(p => p.clone().addScaled(normal, -1 * 0.5 * depths[1]))
+          ), meta },
+      ];
+    },
+    /**
+     * @param {Geomorph.Connector} connector 
+     * @returns {{ seg: [Geom.Vect, Geom.Vect]; meta: Geom.Meta }[]}
+     */
+    getWindowSegs(connector) {
+      // (connector => connector.poly.lineSegs.map(seg => ({ seg, meta: connector.meta }))
+      const { poly: { lineSegs }, meta } = connector;
+      const yBot = typeof meta.y === 'number' ? meta.y : 0.1;
+      const yTop = typeof meta.h === 'number' ? yBot + meta.h : wallHeight - 0.1;
+      return [
+        ...lineSegs.map(seg => ({ seg, meta: {...connector.meta, y: 0, h: yBot } })),
+        ...lineSegs.map(seg => ({ seg, meta: {...connector.meta, y: yTop, h: wallHeight - yTop } })),
+      ];
     },
     /**
      * @param {Geomorph.GeomorphKey} gmKey 
@@ -236,7 +237,7 @@ const emptyGmData = {
   navPoly: undefined,
   polyDecals: [],
   roomGraph: new RoomGraphClass(),
-  tops: { broad: [], door: [], nonHull: [] },
+  tops: { broad: [], hull: [], nonHull: [], window: [] },
   unseen: true,
   wallPolyCount: 0,
   wallPolySegCounts: [],
@@ -257,11 +258,14 @@ const emptyGmData = {
  * @property {[Geom.Vect, Geom.Vect][]} doorSegs
  * @property {CanvasRenderingContext2D} hitCtxt
  * @property {import('three').BufferGeometry} [navPoly] Debug only
- * @property {{ broad: Geom.Poly[]; door: Geom.Poly[]; nonHull: Geom.Poly[] }} tops
+ * @property {{ broad: Geom.Poly[]; hull: Geom.Poly[]; nonHull: Geom.Poly[]; window: Geom.Poly[]; }} tops
  * @property {Geom.Poly[]} polyDecals
  * @property {import('../graph/room-graph').RoomGraphClass} roomGraph
  * @property {boolean} unseen Has this geomorph never occurred in any map so far?
  * @property {{ seg: [Geom.Vect, Geom.Vect]; meta: Geom.Meta; }[]} wallSegs
+ * - `gm.walls` segs
+ * - lintels i.e. 2 segs per door in `gm.doors`
+ * - `gm.windows` segs
  * @property {number} wallPolyCount Number of wall polygons in geomorph, where each wall can have many line segments
  * @property {number[]} wallPolySegCounts Per wall, number of line segments
  */

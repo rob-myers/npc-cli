@@ -15,6 +15,7 @@ export const DEV_EXPRESS_WEBSOCKET_PORT = 8012;
 export const DEV_ORIGIN = 'localhost';
 // export const DEV_ORIGIN = '192.168.16.66';
 // export const DEV_ORIGIN = '192.168.59.66';
+// export const DEV_ORIGIN = '192.168.219.66';
 
 /**
  * - Parsed JSON stored at `static/assets/${ASSETS_META_JSON_FILENAME}`
@@ -52,6 +53,11 @@ export function getObstaclesSheetUrl(sheetId) {
 /** @param {number} sheetId */
 export function getDecorSheetUrl(sheetId) {
   return `${assetsEndpoint}/2d/decor.${sheetId}.${imgExt}${getDevCacheBustQueryParam()}`;
+}
+
+/** @param {Geomorph.DecorImgKey} decorImgKey */
+export function getDecorIconUrl(decorImgKey) {
+  return `${assetsEndpoint}/2d/${decorImgKey}.${imgExt}${getDevCacheBustQueryParam()}`;
 }
 
 /** Override cache in development */

@@ -15,6 +15,8 @@ import useStateRef from "../npc-cli/hooks/use-state-ref";
 import useUpdate from "../npc-cli/hooks/use-update";
 import { Tabs, State as TabsState } from "../npc-cli/tabs/Tabs";
 import ViewerControls from "./ViewerControls";
+import { tryLocalStorageGet } from "src/npc-cli/service/generic";
+import { localStorageKey } from "src/npc-cli/service/const";
 
 export default function Viewer() {
   const site = useSite(({ browserLoaded, viewOpen }) => ({ browserLoaded, viewOpen }), shallow);
@@ -42,7 +44,11 @@ export default function Viewer() {
     trackVisible: true,
   });
 
-  // React.useEffect(() => state.tabs.focusRoot(), []);
+  React.useEffect(() => {// remember Viewer percentage
+    const percentStr = tryLocalStorageGet(localStorageKey.viewerBasePercentage);
+    // if (percentStr !== null && state.rootEl.style.getPropertyValue("--viewer-base") === '') {
+    percentStr !== null && state.rootEl.style.setProperty("--viewer-base", percentStr);
+  }, []);
 
   const update = useUpdate();
 
@@ -137,15 +143,15 @@ const viewerCss = css`
   justify-content: flex-end;
 
   // if never drag or maximise, toggle acts like this
-  --viewer-min: 50%;
+  --viewer-base: 50%;
   &.collapsed {
-    --viewer-min: 0%;
+    --viewer-base: 0%;
   }
 
   @media (min-width: ${afterBreakpoint}) {
     flex-direction: row;
     transition: min-width 500ms;
-    min-width: var(--viewer-min);
+    min-width: var(--viewer-base);
     &.collapsed {
       min-width: 0%;
     }
@@ -154,7 +160,7 @@ const viewerCss = css`
   @media (max-width: ${breakpoint}) {
     flex-direction: column;
     transition: min-height 500ms;
-    min-height: var(--viewer-min);
+    min-height: var(--viewer-base);
     &.collapsed {
       min-height: 0%;
     }

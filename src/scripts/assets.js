@@ -32,7 +32,7 @@ import PQueue from "p-queue-compat";
 // relative urls for sucrase-node
 import { Poly } from "../npc-cli/geom";
 import { spriteSheetSymbolExtraScale, worldToSguScale, spriteSheetDecorExtraScale, sguSymbolScaleDown, sguSymbolScaleUp } from "../npc-cli/service/const";
-import { hashText, info, keyedItemsToLookup, warn, debug, error, assertNonNull, hashJson, toPrecision, mapValues, range } from "../npc-cli/service/generic";
+import { hashText, info, keyedItemsToLookup, warn, debug, error, assertNonNull, hashJson, toPrecision, mapValues, range, keys } from "../npc-cli/service/generic";
 import { drawPolygons } from "../npc-cli/service/dom";
 import { geomorph } from "../npc-cli/service/geomorph";
 import { DEV_EXPRESS_WEBSOCKET_PORT, DEV_ORIGIN, ASSETS_JSON_FILENAME, GEOMORPHS_JSON_FILENAME } from "../npc-cli/service/fetch-assets";

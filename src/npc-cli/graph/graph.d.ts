@@ -188,11 +188,14 @@ declare namespace Graph {
 
   //#region GmRoomGraph
 
-  interface GmRoomGraphNode {
+  interface GmRoomGraphNode extends AStarNode {
     /** `g{gmId}-r{roomId}` */
-    id: string;
+    id: Geomorph.GmRoomKey;
     gmId: number;
     roomId: number;
+
+    /** Index into nodesArray for easy computation of astar.neighbours */
+    index: number;
   }
 
   interface GmWindowId {

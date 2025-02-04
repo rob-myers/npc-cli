@@ -13,7 +13,6 @@ import useUpdate from '../hooks/use-update';
 import useSession, { ProcessStatus } from '../sh/session.store';
 import TtyMenu from './TtyMenu';
 import { BaseTty, State as BaseTtyState } from './BaseTty';
-import { ansi } from '../sh/const';
 
 /**
  * A `BaseTty` which can be:
@@ -26,23 +25,21 @@ export default function Tty(props: Props) {
   const [rootRef, bounds] = useMeasure({ debounce: 0, scroll: false });
 
   const state = useStateRef(() => ({
+    // 🚧 use null
     base: {} as BaseTtyState,
+    // base: null as any as BaseTtyState,
     /**
      * Have we initiated the profile?
      * We don't want to re-run it on hmr.
      */
     booted: false,
     bounds,
-    fitDebounced: debounce(() => { state.base.fitAddon.fit(); }, 300),
+    fitDebounced: debounce(() => { state.base?.fitAddon.fit(); }, 300),
     functionFiles: {} as Props['functionFiles'],
     inputOnFocus: undefined as undefined | { input: string; cursor: number },
     isTouchDevice: isTouchDevice(),
     pausedPids: {} as Record<number, true>,
 
-    onCreateSession() {
-      state.booted = false;
-      update();
-    },
     onFocus() {
       if (state.inputOnFocus) {
         state.base.xterm.setInput(state.inputOnFocus.input);
@@ -52,12 +49,16 @@ export default function Tty(props: Props) {
     },
     pauseRunningProcesses() {
       Object.values(state.base.session.process ?? {})
-        .filter((p) => p.status === ProcessStatus.Running)
+        .filter((p) => p.status === ProcessStatus.Running && p.ptags?.[noPausePtag] !== true)
         .forEach((p) => {
           p.onSuspends = p.onSuspends.filter((onSuspend) => onSuspend());
           p.status = ProcessStatus.Suspended;
           state.pausedPids[p.key] = true;
         });
+    },
+    reboot() {
+      state.booted = false;
+      update();
     },
     async resize() {
       if (state.isTouchDevice) {
@@ -75,7 +76,7 @@ export default function Tty(props: Props) {
       }
     },
     resumeRunningProcesses() {
-      Object.values(state.base.session?.process ?? {})
+      Object.values(state.base?.session?.process ?? {})
         .filter((p) => state.pausedPids[p.key])
         .forEach((p) => {
           if (p.status === ProcessStatus.Suspended) {
@@ -172,10 +173,10 @@ export default function Tty(props: Props) {
   return (
     <div className={rootCss} ref={rootRef}>
       <BaseTty
-        ref={ts => ts && (state.base = ts)}
+        ref={state.ref('base')}
         sessionKey={props.sessionKey}
         env={props.env}
-        onCreateSession={state.onCreateSession}
+        onUnmount={state.reboot}
       />
       {state.base.session && (
         <TtyMenu
@@ -200,3 +201,5 @@ const rootCss = css`
   height: 100%;
   padding: 4px;
 `;
+
+const noPausePtag = 'no-pause';

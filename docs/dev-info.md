@@ -1,31 +1,78 @@
 
 ## Bits and pieces
 
-### SVG transformation
+### Bump versions in our branch of recast-navigation-js
 
-An example of advanced SVG manipulation without writing e.g. a Node.js script with a DOM parser.
+```sh
+# ---------------------------------
+# at recast-navigation-js repo root
+# ---------------------------------
+# generate changesets
+yarn change
+# bump respective versions
+yarn changeset version
+
+# 🔔 manually bump sub-versions
+
+# commit and push
+# e.g. branch feat/expose-off-mesh-anim
+# then finally:
+yarn publish
+
+# 🔔 may have to wait a bit for registry to update
+# finally, optionally run `yarn`
+
+# ---------------
+# at npc-cli repo
+# ---------------
+# bump package.json versions, e.g.
+# "@recast-navigation/core": "npm:@rob-myers/recast-navigation__core@0.38.4",
+# "@recast-navigation/generators": "npm:@rob-myers/recast-navigation__generators@0.38.4",
+# "@recast-navigation/three": "npm:@rob-myers/recast-navigation__three@0.38.4",
+# "@recast-navigation/wasm": "npm:@rob-myers/recast-navigation__wasm@0.38.4",
+
+# finally
+npm i
+
+```
+
+
+### Get closest position relative ancestor 
+
+> https://css-irl.info/finding-an-elements-nearest-relative-positioned-ancestor/
 
 ```js
-/**
- * $0 is a particular <g> containing symbols <use>
- * (could be manually duplicated via Chrome DevTools context menu)
- * @type {SVGGElement}
- */
-symGrp = $0
+// el in Chrome devtool
+$0.offsetParent
+// position
+getComputedStyle($0.offsetParent).position
+```
 
-function matToPrecision(mat) {
-    let { a, b, c, d, e, f } = mat;
-    [a, b, c, d, e, f] = [a, b, c, d, e, f].map(x => Number(x.toPrecision(6)))
-    Object.assign(mat, { a, b, c, d, e, f });
-    return mat;
+### Developing WASM / C++ locally with `recast-navigation-js` and `recastnavigation`
+
+Download parallel repos:
+- https://github.com/recastnavigation/recastnavigation
+- https://github.com/isaac-mason/recast-navigation-js
+
+See https://github.com/isaac-mason/recast-navigation-js/blob/main/DEVELOPMENT.md.
+
+> For example, my `~/.bash_profile` contains:
+
+```sh
+export PATH=/Users/robmyers/coding/emsdk:$PATH
+export PATH=/Users/robmyers/coding/emsdk/upstream/emscripten:$PATH
+export EMSDK=/Users/robmyers/coding/emsdk
+```
+
+Extend "paths" in tsconfig.json:
+
+```json
+"paths": {
+    "@recast-navigation/core": ["../recast-navigation-js/packages/recast-navigation-core"],
+    "@recast-navigation/generators": ["../recast-navigation-js/packages/recast-navigation-generators"],
+    "@recast-navigation/three": ["../recast-navigation-js/packages/recast-navigation-three"],
+    "@recast-navigation/wasm": ["../recast-navigation-js/packages/recast-navigation-wasm"]
 }
-
-Array.from(symGrp.children).filter(n => n.tagName === 'use').forEach(n => {
-    n.setAttribute("width", Number(n.getAttribute("width")) * 5);
-    n.setAttribute("height", Number(n.getAttribute("height")) * 5);
-    n.setAttribute("transform", matToPrecision(new DOMMatrix(n.getAttribute("transform")).scale(1 / 5)).toString());
-});
-
 ```
 
 ### Chrome DevTool filtering
@@ -43,9 +90,15 @@ npx patch-package some-package
 git add patches/some-package+$version.patch
 ```
 
-### Convert to GIF
+### Convert to MP4 or GIF
 
 ```sh
+# Convert mov to mp4
+ffmpeg -i ~/Desktop/but-it-exists.mov -qscale 0 but-it-exists.mp4
+ffmpeg -i ~/Desktop/but-it-exists.mov -filter_complex "[0:v] fps=10" -b:v 0 -crf 25 but-it-exists.mp4
+ffmpeg -i ~/Desktop/but-it-exists.mov -filter_complex "[0:v] fps=60" -b:v 0 -crf 25 but-it-exists.mp4
+
+# Convert mov to gif
 ffmpeg -i ~/Desktop/boxy-svg-slow-save.mov -filter_complex "[0:v] fps=10,scale=1600:-1" output.gif
 ```
 
