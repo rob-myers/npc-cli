@@ -8,7 +8,7 @@
 
 ## WIP
 
-- 🚧 Logger also records speech and provides link options
+- ✅ Logger also records speech and provides link options
   - ✅ Logger is always pinned
   - ✅ Implement demo link
     - ℹ️ https://github.com/xtermjs/xterm.js/issues/5222
@@ -121,7 +121,7 @@
       - ✅ works while disabled
         - ✅ some process group do not auto pause
   - ✅ fix npc speech heights
-  - 🚧 Docked ContextMenu has link to lookAt its position
+  - ✅ ContextMenu has "look" link which works when paused
 
 - 🚧 integrate Viewer into blog
   - 🚧 screenshots in 1st blog

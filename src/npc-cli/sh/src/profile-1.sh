@@ -15,7 +15,7 @@ w e.grantNpcAccess rob .
 w e.grantNpcAccess will .
 
 # write selectedNpcKey on click npc
-click | filter meta.npcKey | map '({ meta, keys }, { home, w }) => {
+ptags=no-pause; click | filter meta.npcKey | map '({ meta, keys }, { home, w }) => {
   w.n[home.selectedNpcKey]?.showSelector(false);
   w.n[meta.npcKey].showSelector(true);
   home.selectedNpcKey = meta.npcKey;
@@ -47,6 +47,6 @@ w update 'w => w.decor.showLabels = true'
 # w update 'w => w.view.targetFov = w.smallViewport ? 20 : 30'
 
 setupContextMenu
-events | handleContextMenu &
+ptags=no-pause; events | handleContextMenu &
 
 ptags=no-pause; events | handleLoggerLinks & 

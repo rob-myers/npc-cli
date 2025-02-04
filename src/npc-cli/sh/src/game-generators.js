@@ -146,6 +146,8 @@ export const setupContextMenu = ({ w }) => {
   w.cm.match.door = ({ meta }) => {
     const showLinks = /** @type {NPC.ContextMenuLink[]} */ ([]);
 
+    showLinks.push({ key: "look", label: "look" });
+
     if (typeof meta.switch === "number") {
       showLinks.push(
         { key: "open", label: "open" },
@@ -181,23 +183,31 @@ export async function* handleContextMenu({ api, w, datum: e }) {
     const { meta } = w.cm;
     const npcKey = w.cm.npcKey;
 
-    if (e.linkKey === "open" || e.linkKey === "close") {
-      w.e.toggleDoor(meta.gdKey, {
-        npcKey,
-        [e.linkKey]: true,
-        access: npcKey === undefined || (meta.inner === true && meta.secure !== true)
-          ? true
-          : w.e.npcCanAccess(npcKey, meta.gdKey),
-      });
-    } else if (e.linkKey === "lock" || e.linkKey === "unlock") {
-      w.e.toggleLock(meta.gdKey, {
-        npcKey: undefined,
-        [e.linkKey]: true,
-        access: npcKey === undefined
-          ? true
-          : w.e.npcCanAccess(npcKey, meta.gdKey),
-        // point,
-      });
+    switch (e.linkKey) {
+      case "look":
+        w.view.lookAt(w.cm.position).catch(() => {});
+        break;
+      case "open":
+      case "closed":
+        w.e.toggleDoor(meta.gdKey, {
+          npcKey,
+          [e.linkKey]: true,
+          access: npcKey === undefined || (meta.inner === true && meta.secure !== true)
+            ? true
+            : w.e.npcCanAccess(npcKey, meta.gdKey),
+        });
+        break;
+      case "lock":
+      case "unlock":
+        w.e.toggleLock(meta.gdKey, {
+          npcKey: undefined,
+          [e.linkKey]: true,
+          access: npcKey === undefined
+            ? true
+            : w.e.npcCanAccess(npcKey, meta.gdKey),
+          // point,
+        });
+        break;
     }
   }
 }
