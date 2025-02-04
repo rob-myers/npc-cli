@@ -114,22 +114,14 @@
       - ✅ avoid "finishing ordinate early" (use maxSpeed)
       - ✅ use linear easing function (maxSpeed small enough)
       - ✅ clean
-    - 🚧 profile-1: on click npcKey change camera
+    - ✅ profile-1: on click npcKey change camera
       - ✅ transition happens
       - ✅ look at agent height to avoid overlapping Logger
       - ✅ look at eases using default easing i.e. exp
-      - 🚧 works while disabled
-        - 🚧 some process group do not auto pause
+      - ✅ works while disabled
+        - ✅ some process group do not auto pause
   - ✅ fix npc speech heights
-  - Docked ContextMenu has link to lookAt its position
-
-- ✅ processes can have ptags
-  - ℹ️ e.g. `no-auto-pause` via `ptags=no-auto-pause; events | handleLoggerLinks &`
-    - need semicolon `;`, otherwise vars bind to `events`
-  - ✅ process has ptags via `ptags='foo bar=baz' echo qux`
-  - ✅ clean
-- ✅ `ps` shows yellow star when `ptags=...`
-- ✅ process ptags are inherited
+  - 🚧 Docked ContextMenu has link to lookAt its position
 
 - 🚧 integrate Viewer into blog
   - 🚧 screenshots in 1st blog
@@ -3670,3 +3662,12 @@ done
   - ℹ️ cannot remove scaling because speech bubbles need it
   - ✅ fix flicker issue when docked
   - ✅ clean
+
+- ✅ processes can have ptags
+  - ℹ️ e.g. `no-auto-pause` via `ptags=no-auto-pause; events | handleLoggerLinks &`
+    - need semicolon `;`, otherwise vars bind to `events`
+  - ✅ process has ptags via `ptags='foo bar=baz' echo qux`
+  - ✅ clean
+- ✅ `ps` shows yellow star when `ptags=...`
+- ✅ process ptags are inherited
+- ✅ `Tty` does not auto-pause processed with ptag `no-pause=true`
