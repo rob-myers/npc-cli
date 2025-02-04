@@ -303,6 +303,7 @@ export class ttyShellClass implements Device {
       this.input?.resolve();
       this.input = null;
       this.process.status = ProcessStatus.Suspended;
+      this.process.ptags = undefined;
     }
   }
 
