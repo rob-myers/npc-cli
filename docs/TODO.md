@@ -123,10 +123,13 @@
   - ✅ fix npc speech heights
   - Docked ContextMenu has link to lookAt its position
 
-- 🚧 processes can have ptags
-  - ℹ️ e.g. `no-auto-pause` via `PTAGS=no-auto-pause events | handleLoggerLinks &`
-  - ✅ process has ptags via `PTAGS='foo bar=baz' echo qux`
-  - 🚧 clean
+- ✅ processes can have ptags
+  - ℹ️ e.g. `no-auto-pause` via `ptags=no-auto-pause; events | handleLoggerLinks &`
+    - need semicolon `;`, otherwise vars bind to `events`
+  - ✅ process has ptags via `ptags='foo bar=baz' echo qux`
+  - ✅ clean
+- ✅ `ps` shows yellow star when `ptags=...`
+- ✅ process ptags are inherited
 
 - 🚧 integrate Viewer into blog
   - 🚧 screenshots in 1st blog

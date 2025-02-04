@@ -50,6 +50,7 @@ export type State = {
       pgid: number;
       src: string;
       posPositionals?: string[];
+      ptags?: Meta;
     }) => ProcessMeta;
     createFifo: (fifoKey: string, size?: number) => FifoDevice;
     createVarDevice: (meta: BaseMeta, varPath: string, mode: VarDeviceMode) => VarDevice;
@@ -178,8 +179,8 @@ export interface ProcessMeta {
   localVar: Record<string, any>;
   /** Inherited local variables. */
   inheritVar: Record<string, any>;
-  /** Can specify via e.g. `PTAGS="no-auto x=foo y=bar" echo baz` */
-  ptags: Record<string, any>;
+  /** Can specify via e.g. `ptags="no-auto x=foo y=bar" echo baz` */
+  ptags?: Record<string, any>;
 }
 
 export interface TtyLinkCtxt {
@@ -222,7 +223,7 @@ const useStore = create<State>()(
           return (get().device[fifo.key] = fifo);
         },
 
-        createProcess({ sessionKey, ppid, pgid, src, posPositionals }) {
+        createProcess({ sessionKey, ppid, pgid, src, posPositionals, ptags }) {
           const pid = get().api.getNextPid(sessionKey);
           const processes = get().api.getSession(sessionKey).process;
           processes[pid] = {
@@ -238,7 +239,7 @@ const useStore = create<State>()(
             onResumes: [],
             localVar: {},
             inheritVar: {},
-            ptags: emptyPtags,
+            ptags,
           };
           return processes[pid];
         },
@@ -552,7 +553,6 @@ const useStore = create<State>()(
   )
 );
 
-const emptyPtags = {} as Record<string, any>;
 const api = useStore.getState().api;
 const useSessionStore = Object.assign(useStore, { api });
 

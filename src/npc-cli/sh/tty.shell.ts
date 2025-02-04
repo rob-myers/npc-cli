@@ -193,16 +193,17 @@ export class ttyShellClass implements Device {
       this.process.status = ProcessStatus.Running;
     } else {
       const { ppid, pgid } = meta;
-      const { positionals } = useSession.api.getProcess(meta); // parent
+      const { positionals, ptags } = useSession.api.getProcess(meta); // parent
       const process = useSession.api.createProcess({
         ppid,
         pgid,
         sessionKey: meta.sessionKey,
         src: srcService.src(term),
         posPositionals: opts.posPositionals || positionals.slice(1),
+        ptags,
       });
       meta.pid = process.key;
-      opts.cleanups && process.cleanups.push(...opts.cleanups);
+      opts.cleanups !== undefined && process.cleanups.push(...opts.cleanups);
 
       const session = useSession.api.getSession(meta.sessionKey);
       const parent = session.process[meta.ppid]; // Exists

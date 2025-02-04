@@ -49,4 +49,4 @@ w update 'w => w.decor.showLabels = true'
 setupContextMenu
 events | handleContextMenu &
 
-PTAGS=no-auto-pause events | handleLoggerLinks &
+ptags=no-pause; events | handleLoggerLinks & 

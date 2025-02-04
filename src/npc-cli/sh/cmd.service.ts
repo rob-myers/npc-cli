@@ -356,12 +356,15 @@ class cmdServiceClass {
         });
 
         const allProcesses = useSession.api.getSession(meta.sessionKey).process;
+
         /** Either all processes, or all group leaders */
-        const processes = { ...allProcesses };
-        !opts.a &&
-          Object.values(allProcesses).forEach(
-            ({ key: pid, pgid }) => pid !== pgid && delete processes[pid]
-          );
+        const processes = opts.a
+          ? allProcesses
+          : Object.values(allProcesses).reduce(
+              (agg, proc) => (proc.key === proc.pgid && (agg[proc.key] = proc), agg),
+              {} as typeof allProcesses,
+            )
+        ;
 
         const statusColour: Record<ProcessStatus, string> = {
           0: ansi.DarkGrey,
@@ -374,34 +377,30 @@ class cmdServiceClass {
           2: "",
         };
 
-        // 🚧 better way?
-        function getDescLeaders(leader: ProcessMeta) {
+        function getProcessDescendants(leader: ProcessMeta) {// 🚧 better way?
           const lookup = { [leader.key]: true };
           Object.values(useSession.api.getSession(meta.sessionKey).process).forEach((other) => {
             if (other.ppid in lookup) lookup[other.key] = true;
           });
-          return Object.keys(lookup)
-            .slice(1)
-            .filter((pid) => processes[pid]);
+          return Object.keys(lookup).slice(1).filter((pid) => processes[pid]);
         }
 
-        function suppressLinks(process: ProcessMeta) {
+        function shouldSuppressLinks(process: ProcessMeta) {
           return (
             process.status === ProcessStatus.Killed ||
             process.key === 0 || // suppress links when leader has descendant leader
-            (!opts.a && !opts.s && getDescLeaders(process).length)
+            (!opts.a && !opts.s && getProcessDescendants(process).length > 0)
           );
         }
 
         function getProcessLineWithLinks(process: ProcessMeta) {
-          const info = [process.key, process.ppid, process.pgid]
-            .map((x) => `${x}`.padEnd(5))
-            .join(" ");
-          const hasLinks = !suppressLinks(process);
-          const line = `${statusColour[process.status]}${info}${ansi.Reset}${
-            hasLinks ? statusLinks[process.status] + "  " : ""
-          }${!opts.s ? truncateOneLine(process.src.trimStart(), 30) : ""}`;
-          hasLinks && registerStatusLinks(process, line);
+          const info = [process.key, process.ppid, process.pgid].map(x => `${x}`.padEnd(5)).join(' ');
+          const hasLinks = !shouldSuppressLinks(process);
+          const linksOrEmpty = hasLinks ? `${statusLinks[process.status]} ` : '';
+          const hasTagsOrEmpty = process.ptags !== undefined ? `${ansi.BrightYellow}*${ansi.Reset} ` : '';
+          const oneLineSrcOrEmpty = !opts.s ? truncateOneLine(process.src.trimStart(), 30) : '';
+          const line = `${statusColour[process.status]}${info}${ansi.Reset}${linksOrEmpty}${hasTagsOrEmpty}${oneLineSrcOrEmpty}`;
+          if (hasLinks === true) registerStatusLinks(process, line);
           return line;
         }
 

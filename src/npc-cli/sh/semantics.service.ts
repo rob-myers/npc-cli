@@ -127,6 +127,9 @@ class semanticsServiceClass {
       useSession.api.setVar(meta, Name.Value, '');
       return;
     }
+    if (Name.Value === 'ptags') {
+      return; // used to tag process instead
+    }
 
     const expanded = await this.lastExpanded(sem.Expand(Value));
     if (expanded.values.some(x => typeof x !== 'string')) {
@@ -256,18 +259,18 @@ class semanticsServiceClass {
   }
 
   /**
-   * Processes can be tagged e.g.
-   * > `PTAGS='foo bar=baz' echo qux`
+   * We support process tagging like:
+   * - `ptags='foo bar=baz' sleep 10 &`
+   * - `{ ptags=no-pause; sleep 10; } &`
+   * - `ptags=no-pause; foo | bar &` (via inheritance)
    */
   private async supportPTags(node: Sh.CallExpr) {
-    const tagAssign = node.Assigns.find(x => x.Name.Value === 'PTAGS');
-    if (tagAssign?.Value != null) {
-      let value = '';
-      for await (const expanded of this.Expand(tagAssign.Value))
-        value += expanded.value;
-      const ptags = tagsToMeta(textToTags(value));
+    const assign = node.Assigns.find(x => x.Name.Value === 'ptags');
+    if (assign?.Value != null) {
+      const expanded = await this.lastExpanded(sem.Expand(assign.Value));
+      const ptags = tagsToMeta(textToTags(expanded.value));
       useSession.api.getProcess(node.meta).ptags = ptags;
-      console.log({ptags}); // 🚧
+      // console.log({ptags});
     }
   }
 
