@@ -302,11 +302,6 @@ declare namespace NPC {
   interface ContextMenuLink {
     key: string;
     label: string;
-    /**
-     * If defined and `CMInstance[test]` falsy, we present as "disabled".
-     * For hard-coded links, but could extend class CMInstance.
-     */
-    test?: string;
   }
 
   interface ContextMenuContextDef {

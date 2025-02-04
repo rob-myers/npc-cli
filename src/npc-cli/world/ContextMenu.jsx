@@ -122,6 +122,7 @@ export function ContextMenu() {
         case 'hide': state.hide(true); break;
         case 'toggle-docked': state.toggleDocked(); break;
         case 'toggle-kvs': state.toggleKvs(); break;
+        case 'toggle-open': state.toggleOpen(); break;
         case 'toggle-pinned': state.togglePinned(); break;
         case 'toggle-scaled': state.toggleScaled(); break;
       }
@@ -171,11 +172,14 @@ export function ContextMenu() {
         state.draggable.el.style.visibility = 'hidden';
       }
     },
+    toggleOpen() {
+      state.open = !state.open;
+    },
     togglePinned() {
       state.pinned = !state.pinned;
-      if (state.pinned === false) {
-        state.open = false; // auto-close on un-pin
-      }
+      // if (state.pinned === false) {
+      //   state.open = false; // auto-close on un-pin
+      // }
     },
     toggleScaled() {
       state.scaled = !state.scaled;
@@ -232,7 +236,7 @@ function ContextMenuLinks({ state }) {
         data-key="toggle-docked"
         onKeyDown={state.onKeyDownButton}
       >
-        {state.docked ? 'embed' : 'dock'}
+        {state.docked ? '3d' : 'dock'}
       </button>
 
       <PopUp
@@ -279,14 +283,22 @@ function ContextMenuLinks({ state }) {
         className={!state.pinned ? 'off' : undefined}
         onKeyDown={state.onKeyDownButton}
       >
-        {state.pinned ? 'hide' : 'pin'}
+        pin
       </button>
 
-      {state.links.map(({ key, label, test }) =>
+      <button
+        key="toggle-open"
+        data-key="toggle-open"
+        onKeyDown={state.onKeyDownButton}
+      >
+        x
+      </button>
+
+      {state.links.map(({ key, label }) =>
         <button
           key={key}
           data-key={key}
-          className={test !== undefined && !(/** @type {*} */ (state)[test]) ? 'off' : undefined}
+          className="custom-link"
         >
           {label}
         </button>
@@ -344,7 +356,6 @@ export const contextMenuCss = css`
   }
 
   color: #fff;
-  letter-spacing: 1px;
   font-size: smaller;
 
   .links {
@@ -352,6 +363,7 @@ export const contextMenuCss = css`
     flex-wrap: wrap;
     
     line-height: normal;
+    letter-spacing: 1px;
     gap: 0px;
   }
 
@@ -362,6 +374,9 @@ export const contextMenuCss = css`
   }
   .links button.off {
     filter: brightness(0.7);
+  }
+  .links button.custom-link {
+    padding: 5px 4px;
   }
 
   .kvs {
@@ -433,6 +448,7 @@ const optsPopUpCss = css`
  * @property {(input?: import('three').Object3D) => void} setTracked
  * @property {() => void} show
  * @property {() => void} toggleDocked
+ * @property {() => void} toggleOpen
  * @property {() => void} togglePinned
  * @property {() => void} toggleScaled Ensure smooth transition when start scaling
  * @property {() => void} toggleKvs
