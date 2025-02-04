@@ -393,14 +393,14 @@ class cmdServiceClass {
           );
         }
 
-        function getProcessLineWithLinks(process: ProcessMeta) {
-          const info = [process.key, process.ppid, process.pgid].map(x => `${x}`.padEnd(5)).join(' ');
-          const hasLinks = !shouldSuppressLinks(process);
-          const linksOrEmpty = hasLinks ? `${statusLinks[process.status]} ` : '';
-          const hasTagsOrEmpty = process.ptags !== undefined ? `${ansi.BrightYellow}*${ansi.Reset} ` : '';
-          const oneLineSrcOrEmpty = !opts.s ? truncateOneLine(process.src.trimStart(), 30) : '';
-          const line = `${statusColour[process.status]}${info}${ansi.Reset}${linksOrEmpty}${hasTagsOrEmpty}${oneLineSrcOrEmpty}`;
-          if (hasLinks === true) registerStatusLinks(process, line);
+        function getProcessLineWithLinks(p: ProcessMeta) {
+          const info = [p.key, p.ppid, p.pgid].map(x => `${x}`.padEnd(5)).join(' ');
+          const hasLinks = !shouldSuppressLinks(p);
+          const linksOrEmpty = hasLinks ? `${statusLinks[p.status]} ` : '';
+          const tagsOrEmpty = p.ptags !== undefined ? `${ansi.BrightYellow}${opts.s ? jsStringify(p.ptags) : '* '}${ansi.Reset}` : '';
+          const oneLineSrcOrEmpty = !opts.s ? truncateOneLine(p.src.trimStart(), 30) : '';
+          const line = `${statusColour[p.status]}${info}${ansi.Reset}${linksOrEmpty}${tagsOrEmpty}${oneLineSrcOrEmpty}`;
+          if (hasLinks === true) registerStatusLinks(p, line);
           return line;
         }
 
@@ -450,8 +450,7 @@ class cmdServiceClass {
 
         for (const process of Object.values(processes)) {
           yield getProcessLineWithLinks(process);
-          if (opts.s) {
-            // Avoid multiline white in tty
+          if (opts.s) {// Avoid multiline white in tty
             yield* process.src.split("\n").map((x) => `${ansi.Reset}${x}`);
           }
         }
