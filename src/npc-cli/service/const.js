@@ -85,6 +85,7 @@ export const specialWallMetaKeys = /** @type {const} */ ([
   'y',
   'h',
   'broad',
+  'hollow',
 ]);
 
 export const wallHeight = 2.2;

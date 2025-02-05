@@ -54,6 +54,16 @@ export default function Ceiling(props) {
       drawPolygons(ct, tops.nonHull, ['#000', '#555', thickLineWidth]);
       drawPolygons(ct, tops.window, [black, wallsColor, thinLineWidth]);
       drawPolygons(ct, tops.broad, [black, grey90, thinLineWidth]);
+      
+      // decals
+      polyDecals.filter(x => x.meta.ceil === true).forEach(x => {
+        const strokeWidth = typeof x.meta.strokeWidth === 'number'
+          ? x.meta.strokeWidth * sguToWorldScale
+          : 0.08;
+        drawPolygons(ct, x, [x.meta.fill || 'red', x.meta.stroke || null, strokeWidth]);
+        // drawPolygons(ct, x, ['red', 'white', 0.08]);
+      });
+
       drawPolygons(ct, tops.hull, [black, wallsColor, thickLineWidth]); // hull walls and doors
       
       // Stroke a square at each corner to avoid z-fighting
@@ -65,14 +75,6 @@ export default function Ceiling(props) {
       ct.strokeRect(hullRect.x, hullRect.bottom - cornerDim, cornerDim, cornerDim);
       ct.strokeRect(hullRect.right - cornerDim, hullRect.bottom - cornerDim, cornerDim, cornerDim);
 
-      // decals
-      polyDecals.filter(x => x.meta.ceil === true).forEach(x => {
-        const strokeWidth = typeof x.meta.strokeWidth === 'number'
-          ? x.meta.strokeWidth * sguToWorldScale
-          : 0.08;
-        drawPolygons(ct, x, [x.meta.fill || 'red', x.meta.stroke || 'white', strokeWidth]);
-        // drawPolygons(ct, x, ['red', 'white', 0.08]);
-      });
     },
     positionInstances() {
       for (const [gmId, gm] of w.gms.entries()) {

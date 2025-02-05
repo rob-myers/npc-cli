@@ -10,9 +10,21 @@
     <title>decor label=fuel</title>
   </rect>
   <rect y="-20" width="1238" height="639" style="fill-opacity: 0.5; fill: rgb(0, 0, 255);" x="-20">
-    <title>obstacle color=#ddd y=0.01</title>
+    <title>obstacle color=#ddd y=-0.01</title>
   </rect>
   <rect x="-19.000004" width="1237.5" height="638.499994" style="stroke: rgb(0, 0, 0); opacity: 0.5; fill: rgb(255, 0, 0);" y="-19.500007">
-    <title>wall</title>
+    <title>wall hollow</title>
   </rect>
+  <path d="M -21 -20 L 19.7098 -20 L 19.7098 620 L -21 620 L -21 -20 Z" style="stroke-width: 3px; stroke-linecap: round; stroke-linejoin: round; fill-opacity: 0.5; fill: rgb(0, 0, 255);">
+    <title>poly ceil fill=#222222</title>
+  </path>
+  <path d="M 1182.33 -20 L 1220 -20 L 1220 620 L 1182.33 620 L 1182.33 -20 Z" style="stroke-width: 3px; stroke-linecap: round; stroke-linejoin: round; fill-opacity: 0.5; fill: rgb(0, 0, 255);">
+    <title>poly ceil fill=#222222</title>
+  </path>
+  <path d="M 578.595 -617.59 L 620.405 -617.59 L 620.405 619.404 L 578.595 619.404 L 578.595 -617.59 Z" style="stroke-width: 3px; stroke-linecap: round; stroke-linejoin: round; fill-opacity: 0.5; fill: rgb(0, 0, 255); transform-box: fill-box; transform-origin: 50% 50%;" transform="matrix(0, 1, -1, 0, 0.000018730792, 0.000003619689)">
+    <title>poly ceil fill=#222222</title>
+  </path>
+  <path d="M 578.992 -19.002 L 620.008 -19.002 L 620.008 1217.99 L 578.992 1217.99 L 578.992 -19.002 Z" style="stroke-width: 3px; stroke-linecap: round; stroke-linejoin: round; fill-opacity: 0.5; fill: rgb(0, 0, 255); transform-origin: 599.5px 599.493px;" transform="matrix(0, 1, -1, 0, 0.000024103687, -0.000003021214)">
+    <title>poly ceil fill=#222222</title>
+  </path>
 </svg>

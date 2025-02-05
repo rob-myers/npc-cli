@@ -50,7 +50,7 @@ export default function createGmsData() {
       // windows (upper/lower, may not be quads):
       gmData.wallPolySegCounts.push(2 * gm.windows.reduce((sum, x) => sum + x.poly.outline.length, 0));
 
-      const nonHullWallsTouchCeil = gm.walls.filter(x => !x.meta.hull &&
+      const nonHullWallsTouchCeil = gm.walls.filter(x => x.meta.hull !== true && x.meta.hollow !== true &&
         (x.meta.h === undefined || (x.meta.y + x.meta.h === wallHeight)) // touches ceiling
       );
       gmData.tops = {
