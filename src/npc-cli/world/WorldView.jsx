@@ -131,7 +131,7 @@ export default function WorldView(props) {
         && state.lastDown.longDown === false
         && state.lastDown.screenPoint.distanceTo(getRelativePointer(e)) < 1
       ) {
-        w.npc.tickOnce();
+        w.npc.tickOnceDebug();
       }
     },
     // linear via `{ maxSpeed: 1000 / 60 }`

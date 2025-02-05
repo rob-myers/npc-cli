@@ -37,7 +37,7 @@ click --long | map --forever 'async (input, {home, w}) => {
 }' &
 
 # click navmesh to move selectedNpcKey
-click | filter meta.floor | map --forever '(input, { w, home }) => {
+ptags=no-pause; click | filter meta.floor | map --forever '(input, { w, home }) => {
   const npc = w.n[home.selectedNpcKey];
   npc.s.run = input.keys?.includes("shift") ?? false;
   npc.moveTo(input).catch(() => {}); // can override

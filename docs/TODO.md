@@ -2,126 +2,19 @@
 
 ## Migration to Next.js (npc-cli-next)
 
-- keep in sync e.g. glsl.js, Logger
-  - `git diff --name-only "@{Sat 18 Sep}"`
+### Final clean before migration
+
+- ✅ paused select npc should work using only one click
+  - ℹ️ `selectedNpcKey` changed, but indicator did not
+
+- spawn command in profile-1
+  - e.g. `spawn rob $( click 1 ) --degrees=90`
+
+### Migration
+
 - get Decor working
 
 ## WIP
-
-- ✅ Logger also records speech and provides link options
-  - ✅ Logger is always pinned
-  - ✅ Implement demo link
-    - ℹ️ https://github.com/xtermjs/xterm.js/issues/5222
-    - ℹ️ https://github.com/xtermjs/xterm.js/tree/master/addons/addon-web-links
-    - ℹ️ https://github.com/xtermjs/xterm.js/discussions/5223#discussioncomment-11762329
-  - ✅ infer link meta on click link
-    - ✅ linkText is "uri" e.g. `[ test link ]` (with brackets, sans escape-codes)
-    - ✅ lineText follows from "hover location"
-    - ✅ linkStartIndex follows from "hover location"
-    - ✅ lineNumber follows from "hover location"
-    - ✅ construct lineText, startRow, endRow from IViewportRange
-      - ℹ️ this means finding the whole "wrapped line" that the link is part of
-  - ✅ setup matching system (lineText, linkText)
-    - ✅ can `w.menu.say(npcKey, line)`
-      - `w menu.say rob foo bar baz`
-    - ✅ speech always has initial link `[ {npcKey} ]`
-    - ✅ send event `click-npc-link` with `{ npcKey, line, link }`
-  - ✅ can clear Logger
-  - ✅ link NpcSpeechBubble "say" to Logger
-  - ✅ Draggable component
-  - ✅ Split ContextMenus into DefaultContextMenu, NpcSpeechBubbles
-    - ✅ DefaultContextMenu.jsx
-    - ✅ NpcSpeechBubbles.jsx
-    - ℹ️ `w bubble.say rob Hello everyone!{1..5}`
-    - ❌ Only send DefaultContextMenu thru portal
-      - we are sending Logger thru portal
-  - ✅ Logger fixed at bottom
-  - ✅ DefaultContextMenu bottom right
-  - ℹ️ https://stackoverflow.com/questions/20926551/recommended-way-of-making-react-component-div-draggable
-  - ✅ can move DefaultContextMenu whilst docked via Draggable
-    - ✅ can drag around while docked
-    - ✅ test Draggable on mobile
-    - ✅ drag continues when off element
-    - ✅ set initial position at bottom
-      - cm.dock.point
-    - ✅ prevent link click whilst dragging
-      - must drag "draggable bar"
-    - ✅ try remove draggable bar, whilst preventing links
-    - ✅ prevent popup toggle while drag
-    - ✅ can toggle top links via tab-space
-    - ✅ while docked ensure whole menu visible
-      - ✅ while dragging
-      - ✅ on viewport resize
-    - ✅ remember position
-    - reposition PopUp when too high
-  - ✅ rename DefaultContextMenu -> ContextMenu
-  - ✅ another BaseContextMenu refactor
-    - ✅ ContextMenu does not have corresponding class
-    - ✅ ContextMenuUi state merged into parent
-    - ✅ NpcSpeechBubbleApi is self-contained class (remove BaseContextMenu)
-    - ℹ️ `w bubble.say rob 'the quick brown [ fox ] jumped over the lazy [ dog ]'`
-  - ✅ on open meta in ContextMenu, ensure whole menu visible
-    - ✅ remove resizeSubject prop from Draggable
-    - ✅ expose Draggable api, and updatePos when appropriate
-  - ✅ could move ResizeObserver inside ContextMenu and track both container and cm
-  - ✅ remove `refresh` link from PopUp opts
-    - ✅ auto-refresh npc select e.g. with debounce
-  - ✅ can move Logger
-  - ✅ move Logger on mobile via toggle between move/scroll
-  - ✅ can resize Logger
-    - ❌ try extend Draggable
-    - ✅ PopUp with "opts" label
-    - ✅ mobile drag disabled by default
-    - ✅ PopUp has resize ui
-    - ✅ can resize width and height
-    - ✅ can remember width and height
-    - ✅ can move Logger on mobile via "move" link
-    - ✅ avoid xterm scroll while drag e.g. only allow PopUp
-  - ✅ ContextMenu: prevent link action when drag (again)
-  - ❌ can add keyed callback to be persisted onbeforeunload
-  - ✅ Draggable remembers last position stored as props.storageKey
-    - remembered position overrides initPos (e.g. ContextMenu initPos aligned bottom-left)
-  - ✅ Logger should remember docked position
-  - ✅ ContextMenu should remember docked position
-  - ✅ ContextMenu can be initially docked
-  - ❌ Logger/ContextMenu z-index changes onclick
-    - instead, ContextMenu always in front of Logger
-  - ❌ Draggables are sticky e.g. to bottom, to right
-  - ❌ Logger logs disconnected message
-    - ❌ remove hard-coded message
-  - ✅ Logger logs connected message
-  - ❌ Paused "Opts" with PopUp and Logger measure option
-  - ✅ Loggers Opts has X-ray slider
-    - x-ray should be default view
-  - ✅ Loggers Opts has Brightness slider
-  - ✅ move `w.bubble.say` -> `w.e.say`
-  - 🚧 profile-1 has link listener
-    - ✅ can pan camera (via controls)
-      - `w view.pan 1 -1`
-    - ✅ change w.view.pan args
-      - `w view.pan $( click 1 )`
-      - `click 1 | w view.pan -`
-    - ✅ can smooth target camera
-      - ℹ️ easier to use target than stepwise pan
-    - ✅ can lookAt while World disabled but in debug mode
-    - ✅ can specify time
-    - ✅ using controls stops lookAt
-    - ✅ what if we switch between enabled and disabled while target moves?
-      - ℹ️ seems to work i.e. debugTick and onTick both handle
-    - ✅ fix zoom issue while looking
-    - ✅ w.view.lookAt is async
-    - ✅ linear damp3 e.g. via our own implementation
-      - ✅ avoid "finishing ordinate early" (use maxSpeed)
-      - ✅ use linear easing function (maxSpeed small enough)
-      - ✅ clean
-    - ✅ profile-1: on click npcKey change camera
-      - ✅ transition happens
-      - ✅ look at agent height to avoid overlapping Logger
-      - ✅ look at eases using default easing i.e. exp
-      - ✅ works while disabled
-        - ✅ some process group do not auto pause
-  - ✅ fix npc speech heights
-  - ✅ ContextMenu has "look" link which works when paused
 
 - 🚧 integrate Viewer into blog
   - 🚧 screenshots in 1st blog
@@ -134,9 +27,7 @@
     - can totally overwrite
     - can change World mapKey
     - can change tty env (e.g. PROFILE) and reboot
-  - 🚧 clean up profile-1
-    - e.g. `spawn rob $( click 1 ) --degrees=90`
-    - e.g. `npc rob --showSelector=true --setLabel=Robbo`
+
 
 ### On hold
 
@@ -3671,3 +3562,118 @@ done
 - ✅ `ps` shows yellow star when `ptags=...`
 - ✅ process ptags are inherited
 - ✅ `Tty` does not auto-pause processed with ptag `no-pause=true`
+
+- ✅ Logger also records speech and provides link options
+  - ✅ Logger is always pinned
+  - ✅ Implement demo link
+    - ℹ️ https://github.com/xtermjs/xterm.js/issues/5222
+    - ℹ️ https://github.com/xtermjs/xterm.js/tree/master/addons/addon-web-links
+    - ℹ️ https://github.com/xtermjs/xterm.js/discussions/5223#discussioncomment-11762329
+  - ✅ infer link meta on click link
+    - ✅ linkText is "uri" e.g. `[ test link ]` (with brackets, sans escape-codes)
+    - ✅ lineText follows from "hover location"
+    - ✅ linkStartIndex follows from "hover location"
+    - ✅ lineNumber follows from "hover location"
+    - ✅ construct lineText, startRow, endRow from IViewportRange
+      - ℹ️ this means finding the whole "wrapped line" that the link is part of
+  - ✅ setup matching system (lineText, linkText)
+    - ✅ can `w.menu.say(npcKey, line)`
+      - `w menu.say rob foo bar baz`
+    - ✅ speech always has initial link `[ {npcKey} ]`
+    - ✅ send event `click-npc-link` with `{ npcKey, line, link }`
+  - ✅ can clear Logger
+  - ✅ link NpcSpeechBubble "say" to Logger
+  - ✅ Draggable component
+  - ✅ Split ContextMenus into DefaultContextMenu, NpcSpeechBubbles
+    - ✅ DefaultContextMenu.jsx
+    - ✅ NpcSpeechBubbles.jsx
+    - ℹ️ `w bubble.say rob Hello everyone!{1..5}`
+    - ❌ Only send DefaultContextMenu thru portal
+      - we are sending Logger thru portal
+  - ✅ Logger fixed at bottom
+  - ✅ DefaultContextMenu bottom right
+  - ℹ️ https://stackoverflow.com/questions/20926551/recommended-way-of-making-react-component-div-draggable
+  - ✅ can move DefaultContextMenu whilst docked via Draggable
+    - ✅ can drag around while docked
+    - ✅ test Draggable on mobile
+    - ✅ drag continues when off element
+    - ✅ set initial position at bottom
+      - cm.dock.point
+    - ✅ prevent link click whilst dragging
+      - must drag "draggable bar"
+    - ✅ try remove draggable bar, whilst preventing links
+    - ✅ prevent popup toggle while drag
+    - ✅ can toggle top links via tab-space
+    - ✅ while docked ensure whole menu visible
+      - ✅ while dragging
+      - ✅ on viewport resize
+    - ✅ remember position
+    - reposition PopUp when too high
+  - ✅ rename DefaultContextMenu -> ContextMenu
+  - ✅ another BaseContextMenu refactor
+    - ✅ ContextMenu does not have corresponding class
+    - ✅ ContextMenuUi state merged into parent
+    - ✅ NpcSpeechBubbleApi is self-contained class (remove BaseContextMenu)
+    - ℹ️ `w bubble.say rob 'the quick brown [ fox ] jumped over the lazy [ dog ]'`
+  - ✅ on open meta in ContextMenu, ensure whole menu visible
+    - ✅ remove resizeSubject prop from Draggable
+    - ✅ expose Draggable api, and updatePos when appropriate
+  - ✅ could move ResizeObserver inside ContextMenu and track both container and cm
+  - ✅ remove `refresh` link from PopUp opts
+    - ✅ auto-refresh npc select e.g. with debounce
+  - ✅ can move Logger
+  - ✅ move Logger on mobile via toggle between move/scroll
+  - ✅ can resize Logger
+    - ❌ try extend Draggable
+    - ✅ PopUp with "opts" label
+    - ✅ mobile drag disabled by default
+    - ✅ PopUp has resize ui
+    - ✅ can resize width and height
+    - ✅ can remember width and height
+    - ✅ can move Logger on mobile via "move" link
+    - ✅ avoid xterm scroll while drag e.g. only allow PopUp
+  - ✅ ContextMenu: prevent link action when drag (again)
+  - ❌ can add keyed callback to be persisted onbeforeunload
+  - ✅ Draggable remembers last position stored as props.storageKey
+    - remembered position overrides initPos (e.g. ContextMenu initPos aligned bottom-left)
+  - ✅ Logger should remember docked position
+  - ✅ ContextMenu should remember docked position
+  - ✅ ContextMenu can be initially docked
+  - ❌ Logger/ContextMenu z-index changes onclick
+    - instead, ContextMenu always in front of Logger
+  - ❌ Draggables are sticky e.g. to bottom, to right
+  - ❌ Logger logs disconnected message
+    - ❌ remove hard-coded message
+  - ✅ Logger logs connected message
+  - ❌ Paused "Opts" with PopUp and Logger measure option
+  - ✅ Loggers Opts has X-ray slider
+    - x-ray should be default view
+  - ✅ Loggers Opts has Brightness slider
+  - ✅ move `w.bubble.say` -> `w.e.say`
+  - 🚧 profile-1 has link listener
+    - ✅ can pan camera (via controls)
+      - `w view.pan 1 -1`
+    - ✅ change w.view.pan args
+      - `w view.pan $( click 1 )`
+      - `click 1 | w view.pan -`
+    - ✅ can smooth target camera
+      - ℹ️ easier to use target than stepwise pan
+    - ✅ can lookAt while World disabled but in debug mode
+    - ✅ can specify time
+    - ✅ using controls stops lookAt
+    - ✅ what if we switch between enabled and disabled while target moves?
+      - ℹ️ seems to work i.e. debugTick and onTick both handle
+    - ✅ fix zoom issue while looking
+    - ✅ w.view.lookAt is async
+    - ✅ linear damp3 e.g. via our own implementation
+      - ✅ avoid "finishing ordinate early" (use maxSpeed)
+      - ✅ use linear easing function (maxSpeed small enough)
+      - ✅ clean
+    - ✅ profile-1: on click npcKey change camera
+      - ✅ transition happens
+      - ✅ look at agent height to avoid overlapping Logger
+      - ✅ look at eases using default easing i.e. exp
+      - ✅ works while disabled
+        - ✅ some process group do not auto pause
+  - ✅ fix npc speech heights
+  - ✅ ContextMenu has "look" link which works when paused

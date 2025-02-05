@@ -231,10 +231,16 @@ export default function Npcs(props) {
 
       return npc;
     },
-    tickOnce: debounce(() => {
+    tickOnceDebounced: debounce(() => {
       state.onTick(1000 / 60);
       w.r3f.advance(Date.now()); // so they move
     }, 30, { immediate: true }),
+    async tickOnceDebug() {
+      state.onTick(1000 / 60);
+      // delay render e.g. for paused npc selection
+      await pause(30);
+      w.r3f.advance(Date.now());
+    },
     update,
     updateLabels(...incomingLabels) {
       const { lookup } = state.label;
@@ -329,7 +335,8 @@ export default function Npcs(props) {
  * @property {(deltaMs: number) => void} onTick
  * @property {(npcKey: string) => void} remove
  * @property {(e: NPC.SpawnOpts) => Promise<NPC.NPC>} spawn
- * @property {() => void} tickOnce
+ * @property {() => void} tickOnceDebounced
+ * @property {() => Promise<void>} tickOnceDebug
  * @property {() => void} update
  * @property {(...incomingLabels: string[]) => boolean} updateLabels
  * - Ensures incomingLabels i.e. does not replace.
