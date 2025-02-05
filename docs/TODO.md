@@ -6,6 +6,22 @@
 
 - ✅ paused select npc should work using only one click
   - ℹ️ `selectedNpcKey` changed, but indicator did not
+- ✅ can set npc targets while paused
+  - apply prefix `ptags=no-pause; ...` to relevant process in profile-1
+- 🚧 relax constraints on simultaneous npc door entry
+  - ℹ️ only need to test intersection when both npcs on their 2nd seg
+  - ℹ️ assume they have constant speed (walk or run)
+  - ❌ test for intersection
+    - https://github.com/rob-myers/the-last-redoubt/blob/97849fef7f65543c4e722074cba3570d8ca990ab/src/components/snippet/collide-npcs-moving.mdx
+  - ℹ️ jerks just after doorway are ok
+  - ℹ️ but intersection inside main segment is not ok
+  - ✅ on enter offMeshConnection main seg, if another is traversing main seg, go slowly
+  - resume speed/anim afterwards
+
+- ❌ BUG `click 1>p` sometimes overridden by moveTo
+  - ℹ️ seems clickId is undefined
+  - cannot use syntax `click 1>r` because `1` is not an operand,
+    must use `click 1 >r` or `click 1 > r`
 
 - spawn command in profile-1
   - e.g. `spawn rob $( click 1 ) --degrees=90`

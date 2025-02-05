@@ -302,6 +302,10 @@ export class Npc {
     }
   }
 
+  getSlowSpeed() {
+    return this.def.walkSpeed * 0.5;
+  }
+
   getMaxSpeed() {
     // return 0.5;
     return this.s.run === true ? this.def.runSpeed : this.def.walkSpeed;
@@ -329,11 +333,12 @@ export class Npc {
     const anim = /** @type {dtCrowdAgentAnimation} */ (this.agentAnim);
 
     if (offMesh.seg === 0) {// handle collisions
+      const closeDst = helper.defaults.radius * 0.85;
       const nneis  = agent.raw.nneis;
       /** @type {dtCrowdNeighbour} */ let nei;
       for (let i = 0; i < nneis; i++) {
         nei = agent.raw.get_neis(i);
-        if (nei.dist < helper.defaults.radius * 0.85) {// cancel traversal and other
+        if (nei.dist < closeDst) {// cancel traversal and other
           this.stopMoving();
           this.w.npc.getByNpcUid(nei.idx).stopMoving();
           break;
@@ -343,6 +348,16 @@ export class Npc {
 
     if (offMesh.seg === 0 && anim.t > anim.tmid) {
       offMesh.seg = 1;
+      // 🔔 on enter offMeshConnection main seg, if another is traversing main seg, go slowly
+      for (const tr of this.w.e.doorToOffMesh[offMesh.orig.gdKey] ?? []) {
+        if (tr.npcKey === this.key) continue;
+        if (tr.seg === 0) continue;
+        const other = this.w.n[tr.npcKey];
+        const anim = /** @type {dtCrowdAgentAnimation} */ (this.agentAnim);
+        anim.set_tmax(anim.t + this.position.distanceTo(toV3(offMesh.dst)) / other.getSlowSpeed());
+        this.startAnimation('Walk');
+      }
+
     } else if (offMesh.seg === 1 && anim.t > 0.5 * (anim.tmid + anim.tmax)) {
       offMesh.seg = 2;
     }
@@ -911,6 +926,7 @@ export const crowdAgentParams = {
 };
 
 const showLastNavPath = false;
+const tmpVector3 = new THREE.Vector3();
 
 /**
  * @typedef {ReturnType<

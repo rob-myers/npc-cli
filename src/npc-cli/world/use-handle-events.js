@@ -366,7 +366,7 @@ export default function useHandleEvents(w) {
       // detect conflicting traversal
       if (state.doorToOffMesh[offMesh.gdKey]?.findLast(other => 
         other.orig.srcGrKey !== offMesh.srcGrKey // opposite direction
-        || other.seg === 0 // hasn't reached main segment
+        // || other.seg === 0 // hasn't reached main segment
       )) {
         return npc.stopMoving();
       }
@@ -378,12 +378,8 @@ export default function useHandleEvents(w) {
         return npc.stopMoving();
       }
       
-      // detect slower npcKey
-      if (npc.s.run === true && state.doorToOffMesh[offMesh.gdKey]?.some(x => w.n[x.npcKey].s.run === false)) {
-        return npc.stopMoving();
-      }
 
-      // detect un-openable door
+      // try open closed door
       if (door.open === false &&
         state.toggleDoor(offMesh.gdKey, { open: true, npcKey: e.npcKey }) === false
       ) {
@@ -405,7 +401,7 @@ export default function useHandleEvents(w) {
       (state.doorToOffMesh[offMesh.gdKey] ??= []).push(npc.s.offMesh);
       (state.npcToDoors[e.npcKey] ??= { inside: null, nearby: new Set() }).inside = offMesh.gdKey;
 
-      w.door.toggleDoorRaw(door, { open: true, access: true }); // force open door
+      w.door.toggleDoorRaw(door, { open: true, access: true }); // force open door (open longer)
       w.events.next({ key: 'exit-room', npcKey: e.npcKey, ...w.lib.getGmRoomId(e.offMesh.srcGrKey) });
     },
     onExitDoorCollider(e) {// e.type === 'nearby'
