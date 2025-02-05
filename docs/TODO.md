@@ -16,7 +16,14 @@
   - ℹ️ jerks just after doorway are ok
   - ℹ️ but intersection inside main segment is not ok
   - ✅ on enter offMeshConnection main seg, if another is traversing main seg, go slowly
+  - 🚧 avoid jerk on enter main segment because init seg collision radius was too small
   - resume speed/anim afterwards
+  - move to useHandleEvents
+
+- BUG close door not working
+- can click through doors
+  - use door light to toggle open/close instead
+- easier to touch switches
 
 - ❌ BUG `click 1>p` sometimes overridden by moveTo
   - ℹ️ seems clickId is undefined
