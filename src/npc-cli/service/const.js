@@ -88,7 +88,7 @@ export const specialWallMetaKeys = /** @type {const} */ ([
   'hollow',
 ]);
 
-export const wallHeight = 2.2;
+export const wallHeight = 2;
 
 export const doorHeight = 1.6;
 
