@@ -88,7 +88,7 @@ export function ContextMenu() {
     onPointerUp(e) {
       const { downAt } = state;
       state.downAt = null;
-      e.stopPropagation();
+      // e.stopPropagation();
 
       if (
         downAt === null
