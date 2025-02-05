@@ -333,7 +333,7 @@ export class Npc {
     const anim = /** @type {dtCrowdAgentAnimation} */ (this.agentAnim);
 
     if (offMesh.seg === 0) {// handle collisions
-      const closeDst = helper.defaults.radius * 0.85;
+      const closeDst = helper.defaults.radius * 1.25;
       const nneis  = agent.raw.nneis;
       /** @type {dtCrowdNeighbour} */ let nei;
       for (let i = 0; i < nneis; i++) {
@@ -348,6 +348,7 @@ export class Npc {
 
     if (offMesh.seg === 0 && anim.t > anim.tmid) {
       offMesh.seg = 1;
+      // 🚧 move to useHandleEvents
       // 🔔 on enter offMeshConnection main seg, if another is traversing main seg, go slowly
       for (const tr of this.w.e.doorToOffMesh[offMesh.orig.gdKey] ?? []) {
         if (tr.npcKey === this.key) continue;
