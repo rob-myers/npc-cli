@@ -31,11 +31,15 @@
 - ✅ can click through doors when x-ray
 - ✅ don't render npc label when object-pick
 - ✅ can use door light to toggle open/close instead
+- ✅ profile-1: can just click door light to open
 - can use door light to toggle lock on/off (for GM, not Player)
 - doors solid when x-ray off
 - ceiling solid when x-ray off
 - easier to touch switches
 - avoid turn around behind offMeshConnection
+- separationWeight turning for idle npcs
+- npc re-target fail keeps in place
+- npcs at least turn toward target even if immediately fails
 
 - ❌ BUG `click 1>p` sometimes overridden by moveTo
   - ℹ️ seems clickId is undefined
