@@ -123,11 +123,11 @@ export default function useHandleEvents(w) {
 
       if (r === 9) {// lock-light
         const instanceId = (g << 8) + b;
-        const door = w.door.decodeInstance(instanceId);
+        const decoded = w.door.decodeInstance(instanceId);
         return {
           picked: 'lock-light',
           'lock-light': true,
-          ...door.meta,
+          ...decoded,
           instanceId,
         };
       }
