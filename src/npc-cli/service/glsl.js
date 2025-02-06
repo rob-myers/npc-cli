@@ -413,7 +413,7 @@ export const cuboidManShader = {
     }
 
     if (objectPick == true) {
-      gl_FragColor = encodeNpcObjectPick();
+      if (vId < 60) gl_FragColor = encodeNpcObjectPick();
       return;
     }
 
