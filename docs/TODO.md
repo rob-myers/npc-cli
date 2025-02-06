@@ -28,9 +28,9 @@
   - resume speed/anim afterwards
 
 - ✅ BUG close door not working
-- 🚧 can click through doors when x-ray
-  - doors solid when x-ray off
-  - ceiling solid when x-ray off
+- ✅ can click through doors when x-ray
+- doors solid when x-ray off
+- ceiling solid when x-ray off
 - use door light to toggle open/close instead
 - easier to touch switches
 
