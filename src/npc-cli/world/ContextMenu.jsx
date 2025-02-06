@@ -236,7 +236,7 @@ function ContextMenuLinks({ state }) {
         data-key="toggle-docked"
         onKeyDown={state.onKeyDownButton}
       >
-        {state.docked ? '@3D' : 'dock'}
+        {state.docked ? '@3d' : 'dock'}
       </button>
 
       <PopUp

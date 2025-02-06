@@ -29,11 +29,12 @@
 
 - ✅ BUG close door not working
 - ✅ can click through doors when x-ray
+- ✅ don't render npc label when object-pick
 - doors solid when x-ray off
 - ceiling solid when x-ray off
 - use door light to toggle open/close instead
 - easier to touch switches
-- ✅ don't render npc label when object-pick
+- avoid turn around behind offMeshConnection
 
 - ❌ BUG `click 1>p` sometimes overridden by moveTo
   - ℹ️ seems clickId is undefined
