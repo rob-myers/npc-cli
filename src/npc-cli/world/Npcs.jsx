@@ -238,7 +238,7 @@ export default function Npcs(props) {
     async tickOnceDebug() {
       state.onTick(1000 / 60);
       // delay render e.g. for paused npc selection
-      await pause(30);
+      await pause(100);
       w.r3f.advance(Date.now());
     },
     update,
