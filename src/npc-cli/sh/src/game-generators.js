@@ -188,7 +188,7 @@ export async function* handleContextMenu({ api, w, datum: e }) {
         w.view.lookAt(w.cm.position).catch(() => {});
         break;
       case "open":
-      case "closed":
+      case "close":
         w.e.toggleDoor(meta.gdKey, {
           npcKey,
           [e.linkKey]: true,

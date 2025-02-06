@@ -20,7 +20,7 @@
   - resume speed/anim afterwards
   - move to useHandleEvents
 
-- BUG close door not working
+- ✅ BUG close door not working
 - can click through doors
   - use door light to toggle open/close instead
 - easier to touch switches
