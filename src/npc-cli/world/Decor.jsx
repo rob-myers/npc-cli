@@ -2,7 +2,7 @@ import React from "react";
 import * as THREE from "three";
 import { useQuery } from "@tanstack/react-query";
 
-import { decorGridSize, decorIconRadius, fallbackDecorImgKey, gmLabelHeightSgu, sguToWorldScale, spriteSheetDecorExtraScale, spriteSheetLabelExtraScale, wallHeight } from "../service/const";
+import { decorGridSize, decorIconRadius, fallbackDecorImgKey, gmLabelHeightSgu, instancedMeshName, sguToWorldScale, spriteSheetDecorExtraScale, spriteSheetLabelExtraScale, wallHeight } from "../service/const";
 import { isDevelopment, pause, removeDups, testNever, toPrecision, warn } from "../service/generic";
 import { tmpMat1, tmpRect1 } from "../service/geom";
 import { getCanvas } from "../service/dom";
@@ -542,7 +542,7 @@ export default function Decor(props) {
 
   return <>
     <instancedMesh // cuboids
-      name="decor-cuboids"
+      name={instancedMeshName.decorCuboids}
       key={`${state.cuboids.length} cuboids`}
       ref={instances => instances && (state.cuboidInst = instances)}
       args={[state.cuboidGeom, undefined, state.cuboids.length]}
@@ -562,7 +562,7 @@ export default function Decor(props) {
     </instancedMesh>
 
     <instancedMesh //quads
-      name="decor-quads"
+      name={instancedMeshName.decorQuads}
       key={`${state.quads.length} quads`}
       ref={instances => instances && (state.quadInst = instances)}
       args={[state.quad, undefined, state.quads.length]}
@@ -584,7 +584,7 @@ export default function Decor(props) {
     </instancedMesh>
 
     <instancedMesh // labels
-      name="decor-labels"
+      name={instancedMeshName.decorLabels}
       key={`${labels.length} labels`}
       ref={instances => void (instances && (state.labelInst = instances))}
       args={[state.labelQuad, undefined, labels.length]}

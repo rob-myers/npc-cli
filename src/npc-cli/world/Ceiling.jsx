@@ -2,7 +2,7 @@ import React from "react";
 import * as THREE from "three";
 
 import { Mat, Poly } from "../geom";
-import { wallHeight, gmFloorExtraScale, worldToSguScale, sguToWorldScale } from "../service/const";
+import { wallHeight, gmFloorExtraScale, worldToSguScale, sguToWorldScale, instancedMeshName } from "../service/const";
 import { pause } from "../service/generic";
 import { drawPolygons } from "../service/dom";
 import { getQuadGeometryXZ } from "../service/three";
@@ -98,7 +98,7 @@ export default function Ceiling(props) {
 
   return (
     <instancedMesh
-      name={"multi-tex-ceiling"}
+      name={instancedMeshName.ceiling}
       ref={instances => void (instances && (state.inst = instances))}
       args={[w.floor.quad, undefined, w.gms.length]} // 🔔 reuse floor quad
       position={[0, wallHeight, 0]}

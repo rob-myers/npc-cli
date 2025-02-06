@@ -3,7 +3,7 @@ import * as THREE from "three";
 import { damp } from "maath/easing"
 
 import { Mat, Vect } from "../geom";
-import { doorDepth, doorHeight, doorLockedColor, doorUnlockedColor, hullDoorDepth, offMeshConnectionHalfDepth, precision, wallOutset } from "../service/const";
+import { doorDepth, doorHeight, doorLockedColor, doorUnlockedColor, hullDoorDepth, instancedMeshName, offMeshConnectionHalfDepth, precision, wallOutset } from "../service/const";
 import * as glsl from "../service/glsl";
 import { getBoxGeometry, getColor, getQuadGeometryXY } from "../service/three";
 import { geomorph } from "../service/geomorph";
@@ -303,7 +303,7 @@ export default function Doors(props) {
 
   return <>
     <instancedMesh
-      name="doors"
+      name={instancedMeshName.doors}
       key={`${w.hash} doors`}
       ref={inst => inst && (state.inst = inst)}
       args={[state.quad, undefined, w.gmsData.doorCount]}

@@ -190,10 +190,10 @@ export default function Debug(props) {
     >
       <mesh
         position={[0.01, 0, 0]}
-        rotation={[0, Math.PI/2, 0]}
+        rotation={[Math.PI / 8, Math.PI/2, 0]}
         renderOrder={1}
       >
-        <circleGeometry args={[0.08, 24]} />
+        <circleGeometry args={[0.08, 8]} />
         <meshBasicMaterial color="#0f9" opacity={0.5} transparent wireframe={false} />
       </mesh>
     </group>}

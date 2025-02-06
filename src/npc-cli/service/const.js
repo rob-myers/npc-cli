@@ -390,3 +390,25 @@ export const offMeshConnectionHalfDepth = {
   hull: wallOutset + 0.25,
   nonHull: wallOutset + 0.125,
 };
+
+export const instancedMeshName = /** @type {const} */ ({
+  ceiling: 'ceiling',
+  doors: 'doors',
+  floor: 'floor',
+  obstacles: 'obstacles',
+  decorCuboids: 'decorCuboids',
+  decorLabels: 'decorLabels',
+  decorQuads: 'decorQuads',
+  walls: 'walls',
+});
+
+/** @type {Partial<Record<InstancedMeshName, true>>} */
+export const fromXrayInstancedMeshName = {
+  [instancedMeshName.ceiling]: true,
+  [instancedMeshName.doors]: true,
+  [instancedMeshName.walls]: true,
+};
+
+/**
+ * @typedef {keyof typeof instancedMeshName} InstancedMeshName
+ */

@@ -8,7 +8,7 @@ import { damp } from "maath/easing";
 import { testNever, debug } from "../service/generic.js";
 import { Rect, Vect } from "../geom/index.js";
 import { dataUrlToBlobUrl, getModifierKeys, getRelativePointer, isRMB, isTouchDevice } from "../service/dom.js";
-import { longPressMs, pickedTypesInSomeRoom } from "../service/const.js";
+import { fromXrayInstancedMeshName, longPressMs, pickedTypesInSomeRoom } from "../service/const.js";
 import { dampXZ, emptySceneForPicking, getTempInstanceMesh, hasObjectPickShaderMaterial, pickingRenderTarget, toV3, toXZ, unitXVector3, v3Precision } from "../service/three.js";
 import { popUpRootDataAttribute } from "../components/PopUp.jsx";
 import { WorldContext } from "./world-context.js";
@@ -419,10 +419,8 @@ export default function WorldView(props) {
         }
       });
       renderList.transparent.forEach(x => {
-        if (w.wall.opacity < 1 && (
-          // 🔔 ignore walls and ceilings
-          x.object.name === 'walls' || x.object.name === 'multi-tex-ceiling'
-        )) {
+        // 🔔 ignore walls, ceilings, doors
+        if (w.wall.opacity < 1 && x.object.name in fromXrayInstancedMeshName) {
           return;
         }
         if (hasObjectPickShaderMaterial(x)) {

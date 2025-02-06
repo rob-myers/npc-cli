@@ -6,6 +6,7 @@ import { info, warn } from "../service/generic";
 import { getColor, getQuadGeometryXZ } from "../service/three";
 import * as glsl from "../service/glsl"
 import { geomorph } from "../service/geomorph";
+import { instancedMeshName } from "../service/const";
 import { WorldContext } from "./world-context";
 import useStateRef from "../hooks/use-state-ref";
 
@@ -104,7 +105,7 @@ export default function Obstacles(props) {
 
   return (
     <instancedMesh
-      name="static-obstacles"
+      name={instancedMeshName.obstacles}
       key={`${[w.mapKey, w.hash.full]}`}
       ref={instances => instances && (state.inst = instances)}
       args={[state.quad, undefined, w.gmsData.obstaclesCount]}

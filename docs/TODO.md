@@ -24,11 +24,13 @@
     q=$( expr {x:7.092,y:0,z:5.3544} )
     r=$( expr {x:6.713,y:0,z:6.488} )
     ```
+  - 🚧 move to useHandleEvents
   - resume speed/anim afterwards
-  - move to useHandleEvents
 
 - ✅ BUG close door not working
 - 🚧 can click through doors when x-ray
+  - doors solid when x-ray off
+  - ceiling solid when x-ray off
 - use door light to toggle open/close instead
 - easier to touch switches
 

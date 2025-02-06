@@ -2,7 +2,7 @@ import React from "react";
 import * as THREE from "three";
 
 import { Mat, Vect } from "../geom";
-import { wallHeight } from "../service/const";
+import { instancedMeshName, wallHeight } from "../service/const";
 import { getQuadGeometryXY } from "../service/three";
 import { InstancedMonochromeShader } from "../service/glsl";
 import { geomorph } from "../service/geomorph";
@@ -119,7 +119,7 @@ export default function Walls(props) {
 
   return (
     <instancedMesh
-      name="walls"
+      name={instancedMeshName.walls}
       key={`${[w.mapKey, w.hash.full]}`}
       ref={instances => instances && (state.inst = instances)}
       args={[state.quad, undefined, w.gmsData.wallCount]}

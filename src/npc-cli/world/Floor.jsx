@@ -2,9 +2,9 @@ import React from "react";
 import * as THREE from "three";
 
 import { Mat, Poly } from "../geom";
-import { geomorphGridMeters, gmFloorExtraScale, worldToSguScale } from "../service/const";
+import { geomorphGridMeters, gmFloorExtraScale, instancedMeshName, worldToSguScale } from "../service/const";
 import { pause } from "../service/generic";
-import { getGridPattern, drawCircle, drawPolygons, drawSimplePoly } from "../service/dom";
+import { getGridPattern, drawPolygons } from "../service/dom";
 import { geomorph } from "../service/geomorph";
 import { InstancedMultiTextureMaterial } from "../service/glsl";
 import { getQuadGeometryXZ } from "../service/three";
@@ -154,7 +154,7 @@ export default function Floor(props) {
 
   return (
     <instancedMesh
-      name={"multi-tex-floor"}
+      name={instancedMeshName.floor}
       ref={instances => void (instances && (state.inst = instances))}
       args={[state.quad, undefined, w.gms.length]}
       renderOrder={-3} // 🔔 must render before other transparent e.g. npc drop shadow
