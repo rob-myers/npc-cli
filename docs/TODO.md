@@ -38,8 +38,9 @@
 - easier to touch switches
 - avoid turn around behind offMeshConnection
 - separationWeight turning for idle npcs
-- npc re-target fail keeps in place
-- npcs at least turn toward target even if immediately fails
+- npc re-target-fail keeps in place
+- npc at least turns toward target even if immediately fails
+- improve npc finish-moving condition
 
 - ❌ BUG `click 1>p` sometimes overridden by moveTo
   - ℹ️ seems clickId is undefined
