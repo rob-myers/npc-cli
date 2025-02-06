@@ -332,7 +332,7 @@ export class Npc {
     const anim = /** @type {dtCrowdAgentAnimation} */ (this.agentAnim);
 
     if (offMesh.seg === 0) {// handle collisions
-      const closeDist = helper.defaults.radius * 1.5;
+      const closeDist = helper.defaults.radius * 2;
       const closerDist = helper.defaults.radius * 1;
 
       const nneis  = agent.raw.nneis;
