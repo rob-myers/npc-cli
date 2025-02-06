@@ -333,12 +333,14 @@ export class Npc {
     const anim = /** @type {dtCrowdAgentAnimation} */ (this.agentAnim);
 
     if (offMesh.seg === 0) {// handle collisions
-      const closeDst = helper.defaults.radius * 1.25;
+      // 🔔 when too small saw npcs too close inside/after doorway
+      const closeDst = helper.defaults.radius * 1.5;
       const nneis  = agent.raw.nneis;
       /** @type {dtCrowdNeighbour} */ let nei;
       for (let i = 0; i < nneis; i++) {
         nei = agent.raw.get_neis(i);
         if (nei.dist < closeDst) {// cancel traversal and other
+          // 🚧 do not stop other if its offMesh.seg > 0
           this.stopMoving();
           this.w.npc.getByNpcUid(nei.idx).stopMoving();
           break;
@@ -353,12 +355,11 @@ export class Npc {
       for (const tr of this.w.e.doorToOffMesh[offMesh.orig.gdKey] ?? []) {
         if (tr.npcKey === this.key) continue;
         if (tr.seg === 0) continue;
-        const other = this.w.n[tr.npcKey];
         const anim = /** @type {dtCrowdAgentAnimation} */ (this.agentAnim);
-        anim.set_tmax(anim.t + this.position.distanceTo(toV3(offMesh.dst)) / other.getSlowSpeed());
+        anim.set_tmax(anim.t + this.position.distanceTo(toV3(offMesh.dst)) / this.getSlowSpeed());
+        agent.updateParameters({ maxSpeed: this.getSlowSpeed() });
         this.startAnimation('Walk');
       }
-
     } else if (offMesh.seg === 1 && anim.t > 0.5 * (anim.tmid + anim.tmax)) {
       offMesh.seg = 2;
     }
@@ -881,11 +882,10 @@ export class Npc {
     
     this.startAnimation('Idle');
 
-    if (this.s.offMesh === null || (this.s.offMesh.seg === 0)) {
+    if (this.s.offMesh === null || this.s.offMesh.seg === 0) {
       const position = this.agent.position();
       this.agent.teleport(position);
       this.agent.requestMoveTarget(position);
-      // case offMesh.seg === 0:
       /** @type {dtCrowdAgentAnimation} */ (this.agentAnim).set_active(false);
     } else {// midway through traversal, so stop when finish
       this.agent.requestMoveTarget(toV3(this.s.offMesh.dst));

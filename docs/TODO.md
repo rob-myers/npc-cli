@@ -17,12 +17,19 @@
   - ℹ️ but intersection inside main segment is not ok
   - ✅ on enter offMeshConnection main seg, if another is traversing main seg, go slowly
   - 🚧 avoid jerk on enter main segment because init seg collision radius was too small
+    - ℹ️ still seeing on exit e.g. when both run
+    - ℹ️ increased from 1.25 to 1.5 (still < 2)
+    ```js
+    p=$( expr {x:6.451,y:0,z:5.2122} )
+    q=$( expr {x:7.092,y:0,z:5.3544} )
+    r=$( expr {x:6.713,y:0,z:6.488} )
+    ```
   - resume speed/anim afterwards
   - move to useHandleEvents
 
 - ✅ BUG close door not working
-- can click through doors
-  - use door light to toggle open/close instead
+- 🚧 can click through doors when x-ray
+- use door light to toggle open/close instead
 - easier to touch switches
 
 - ❌ BUG `click 1>p` sometimes overridden by moveTo
