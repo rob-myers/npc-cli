@@ -329,20 +329,27 @@ export class Npc {
    * @param {NPC.OffMeshState} offMesh
    */
   handleOffMeshConnection(agent, offMesh) {
-    
     const anim = /** @type {dtCrowdAgentAnimation} */ (this.agentAnim);
 
     if (offMesh.seg === 0) {// handle collisions
-      // 🔔 when too small saw npcs too close inside/after doorway
-      const closeDst = helper.defaults.radius * 1.5;
+      const closeDist = helper.defaults.radius * 1.4;
+      const closerDist = helper.defaults.radius * 1;
+
       const nneis  = agent.raw.nneis;
       /** @type {dtCrowdNeighbour} */ let nei;
+
       for (let i = 0; i < nneis; i++) {
         nei = agent.raw.get_neis(i);
-        if (nei.dist < closeDst) {// cancel traversal and other
-          // 🚧 do not stop other if its offMesh.seg > 0
+        if (nei.dist < closeDist) {// maybe cancel traversal and other
+          const other = this.w.npc.getByNpcUid(nei.idx);
+          if (other.s.target === null && !(nei.dist < closerDist)) {
+            continue;
+          }
           this.stopMoving();
-          this.w.npc.getByNpcUid(nei.idx).stopMoving();
+          if (other.s.offMesh !== null && other.s.offMesh.seg > 0) {
+            continue;
+          }
+          other.stopMoving();
           break;
         }
       }
