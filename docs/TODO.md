@@ -31,6 +31,7 @@
 - ✅ can click through doors when x-ray
 - ✅ don't render npc label when object-pick
 - ✅ can use door light to toggle open/close instead
+- can use door light to toggle lock on/off (for GM, not Player)
 - doors solid when x-ray off
 - ceiling solid when x-ray off
 - easier to touch switches
