@@ -329,39 +329,18 @@ export class Npc {
    * @param {NPC.OffMeshState} offMesh
    */
   handleOffMeshConnection(agent, offMesh) {
-    const anim = /** @type {dtCrowdAgentAnimation} */ (this.agentAnim);
 
-    if (offMesh.seg === 0) {// handle collisions
-      const nneis  = agent.raw.nneis;
-      /** @type {dtCrowdNeighbour} */ let nei;
-
-      for (let i = 0; i < nneis; i++) {
-        nei = agent.raw.get_neis(i);
-        if (nei.dist < closeDist) {// maybe cancel traversal
-          const other = this.w.npc.getByUid(nei.idx);
-          if (other.s.target === null && !(nei.dist < closerDist)) {
-            continue;
-          }
-          this.stopMoving();
-          break;
-        }
-      }
+    if (offMesh.seg === 0) {
+      this.handlePreOffMeshCollisions(agent);
     }
+
+    const anim = /** @type {dtCrowdAgentAnimation} */ (this.agentAnim);
 
     if (offMesh.seg === 0 && anim.t > anim.tmid) {
       offMesh.seg = 1;
-      // 🚧 move to useHandleEvents
-      // 🔔 on enter offMeshConnection main seg, if another is traversing main seg, go slowly
-      for (const tr of this.w.e.doorToOffMesh[offMesh.orig.gdKey] ?? []) {
-        if (tr.npcKey === this.key) continue;
-        if (tr.seg === 0) continue;
-        const anim = /** @type {dtCrowdAgentAnimation} */ (this.agentAnim);
-        anim.set_tmax(anim.t + this.position.distanceTo(toV3(offMesh.dst)) / this.getSlowSpeed());
-        agent.updateParameters({ maxSpeed: this.getSlowSpeed() });
-        this.startAnimation('Walk');
-      }
+      this.w.events.next({ key: 'enter-off-mesh-main', npcKey: this.key });
     } else if (offMesh.seg === 1 && anim.t > 0.5 * (anim.tmid + anim.tmax)) {
-      offMesh.seg = 2;
+      offMesh.seg = 2; // midway in main segment
     }
 
     let dirX = 0, dirY = 0;
@@ -373,9 +352,28 @@ export class Npc {
       dirX = offMesh.main.x;
       dirY = offMesh.main.y;
     }
-    
     this.s.lookAngleDst = this.getEulerAngle(Math.atan2(-dirY, dirX));
+  }
 
+  /**
+   * Detect collisions whilst on initial segment of offMeshConnection
+   * @param {NPC.CrowdAgent} agent
+   */
+  handlePreOffMeshCollisions(agent) {
+    const nneis  = agent.raw.nneis;
+    /** @type {dtCrowdNeighbour} */ let nei;
+
+    for (let i = 0; i < nneis; i++) {
+      nei = agent.raw.get_neis(i);
+      if (nei.dist < closeDist) {// maybe cancel traversal
+        const other = this.w.npc.getByUid(nei.idx);
+        if (other.s.target === null && !(nei.dist < closerDist)) {
+          continue;
+        }
+        this.stopMoving();
+        break;
+      }
+    }
   }
 
   /**

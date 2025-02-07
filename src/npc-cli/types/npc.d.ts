@@ -129,6 +129,7 @@ declare namespace NPC {
     | { key: "nav-updated" }
     | { key: 'contextmenu-link'; linkKey: string }
     | { key: 'enter-off-mesh'; npcKey: string; offMesh: NPC.OffMeshLookupValue }
+    | { key: 'enter-off-mesh-main'; npcKey: string }
     | { key: 'exit-off-mesh'; npcKey: string; offMesh: NPC.OffMeshLookupValue }
     | { key: 'logger-link'; npcKey: string; } & NPC.LoggerLinkEvent
     | { key: 'speech'; npcKey: string; speech: string }

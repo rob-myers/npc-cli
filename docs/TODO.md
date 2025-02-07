@@ -19,8 +19,8 @@
   - ✅ avoid jerk on enter main segment because init seg collision radius was too small
     - ℹ️ still seeing on exit e.g. when both run
     - ℹ️ increased from 1.25 to 1.8 (still < 2)
-  - 🚧 move to useHandleEvents
-    - mention that we permit "crossing npcs"
+  - ✅ move to useHandleEvents
+    - ✅ mention that we permit "crossing npcs"
   - 🚧 resume speed/anim afterwards
 
 - ✅ BUG close door not working

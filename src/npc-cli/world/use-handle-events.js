@@ -237,10 +237,13 @@ export default function useHandleEvents(w) {
             state.onExitDoorCollider(e);
           }
           break;
-        case "enter-off-mesh":
+        case "enter-off-mesh": // enter init segment
           state.onEnterOffMeshConnection(e, npc);
           break;
-        case "exit-off-mesh":
+        case "enter-off-mesh-main": // enter main segment
+          state.onEnterOffMeshConnectionMain(e, npc);
+          break;
+        case "exit-off-mesh": // exit main segment
           state.onExitOffMeshConnection(e, npc);
           break;
         case "enter-room": {
@@ -403,6 +406,21 @@ export default function useHandleEvents(w) {
 
       w.door.toggleDoorRaw(door, { open: true, access: true }); // force open door (open longer)
       w.events.next({ key: 'exit-room', npcKey: e.npcKey, ...w.lib.getGmRoomId(e.offMesh.srcGrKey) });
+    },
+    onEnterOffMeshConnectionMain(e, npc) {
+      const offMesh = /** @type {NPC.OffMeshState} */ (npc.s.offMesh);
+      const agent = /** @type {NPC.CrowdAgent} */ (npc.agent);
+      
+      // 🔔 on enter main seg, if another is traversing main seg, go slowly
+      // 🔔 we ignore intersections e.g. where two npcs go diagonally at same time
+      for (const tr of state.doorToOffMesh[offMesh.orig.gdKey] ?? []) {
+        if (tr.npcKey === e.npcKey) continue;
+        if (tr.seg === 0) continue;
+        const anim = /** @type {import("./npc").dtCrowdAgentAnimation} */ (npc.agentAnim);
+        anim.set_tmax(anim.t + tmpVect1.copy(npc.getPoint()).distanceTo(offMesh.dst) / npc.getSlowSpeed());
+        agent.updateParameters({ maxSpeed: npc.getSlowSpeed() });
+        npc.startAnimation('Walk');
+      }
     },
     onExitDoorCollider(e) {// e.type === 'nearby'
       const door = w.door.byKey[e.gdKey];
@@ -608,6 +626,7 @@ export default function useHandleEvents(w) {
  * @property {(e: Extract<NPC.Event, { npcKey?: string }>) => void} handleNpcEvents
  * @property {(e: Extract<NPC.Event, { key: 'enter-collider'; type: 'nearby' }>) => void} onEnterDoorCollider
  * @property {(e: Extract<NPC.Event, { key: 'enter-off-mesh' }>, npc: NPC.NPC) => void} onEnterOffMeshConnection
+ * @property {(e: Extract<NPC.Event, { key: 'enter-off-mesh-main' }>, npc: NPC.NPC) => void} onEnterOffMeshConnectionMain
  * @property {(e: Extract<NPC.Event, { key: 'exit-collider'; type: 'nearby' }>) => void} onExitDoorCollider
  * @property {(e: Extract<NPC.Event, { key: 'exit-off-mesh' }>, npc: NPC.NPC) => void} onExitOffMeshConnection
  * @property {(npcKey: string, gdKey: Geomorph.GmDoorKey) => boolean} npcNearDoor
