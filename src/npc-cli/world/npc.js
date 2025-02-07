@@ -3,7 +3,7 @@ import { SkeletonUtils } from 'three-stdlib';
 import { damp, dampAngle } from "maath/easing";
 
 import { Vect } from '../geom';
-import { defaultAgentUpdateFlags, defaultNpcInteractRadius, glbFadeIn, glbFadeOut, npcClassToMeta } from '../service/const';
+import { defaultAgentUpdateFlags, defaultNpcInteractRadius, glbFadeIn, glbFadeOut, npcClassToMeta, showLastNavPath } from '../service/const';
 import { error, info, warn } from '../service/generic';
 import { geom } from '../service/geom';
 import { buildObjectLookup, emptyAnimationMixer, emptyGroup, getParentBones, tmpVectThree1, toV3, toXZ } from '../service/three';
@@ -307,7 +307,6 @@ export class Npc {
   }
 
   getMaxSpeed() {
-    // return 0.5;
     return this.s.run === true ? this.def.runSpeed : this.def.walkSpeed;
   }
 
@@ -926,9 +925,6 @@ export const crowdAgentParams = {
   queryFilterType: 0,
   updateFlags: defaultAgentUpdateFlags,
 };
-
-const showLastNavPath = false;
-
 
 /**
  * @typedef {ReturnType<

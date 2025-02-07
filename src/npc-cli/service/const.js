@@ -414,3 +414,5 @@ export const fromXrayInstancedMeshName = {
 
 /** @type {Geom.SixTuple} */
 export const switchDecorQuadScaleUp = [1, 0, 0, 1.5, 0, 0];
+
+export const showLastNavPath = false;
