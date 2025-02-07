@@ -161,6 +161,9 @@ export const setupContextMenu = ({ w }) => {
       showLinks.push(
         { key: "open", label: "open" },
         { key: "close", label: "close" },
+        // GM only...
+        { key: "lock", label: "lock" },
+        { key: "unlock", label: "unlock" },
         // 🚧 knock
       );
     }

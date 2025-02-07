@@ -28,9 +28,9 @@
 - ✅ don't render npc label when object-pick
 - ✅ can use door light to toggle open/close instead
 - ✅ profile-1: can just click door light to open
-- can use door light to toggle lock on/off (for GM, not Player)
-- doors solid when x-ray off
-- ceiling solid when x-ray off
+- ✅ can use door light to toggle lock on/off (for GM, not Player)
+- 🚧 doors solid when x-ray off
+- 🚧 ceiling solid when x-ray off
 - easier to touch switches
 - avoid turn around behind offMeshConnection
 - separationWeight turning for idle npcs
