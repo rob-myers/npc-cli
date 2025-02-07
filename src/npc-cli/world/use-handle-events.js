@@ -496,13 +496,23 @@ export default function useHandleEvents(w) {
       const npcPoint = Vect.from(npc.getPoint());
       const agent = /** @type {NPC.CrowdAgent} */ (npc.agent);
       const corner = { x: agent.raw.get_cornerVerts(6 + 0), y: agent.raw.get_cornerVerts(6 + 2) };
+
       /** Entrances are aligned to offMeshConnections */
       const entranceSeg = door.entrances[offMesh.aligned === true ? 0 : 1];
       const exitSeg = door.entrances[offMesh.aligned === true ? 1 : 0];
+
       // corners() not available because ag->ncorners is 0
       const targetSeg = { src: npcPoint, dst: corner };
+
+      // 🔔 scale targetSeg.src --> targetSeg.dst to ensure it hits dstSeg (offMeshConnections slightly away from door)
+      // small amount would suffices, but doubling OK too 
+      const extendedDst = {
+        x: targetSeg.dst.x + (targetSeg.dst.x - targetSeg.src.x),
+        y: targetSeg.dst.y + (targetSeg.dst.y - targetSeg.src.y),
+      };
+
       const newSrc = geom.getClosestOnSegToSeg(entranceSeg.src, entranceSeg.dst, targetSeg.src, targetSeg.dst);
-      const newDst = geom.getClosestOnSegToSeg(exitSeg.src, exitSeg.dst, targetSeg.src, targetSeg.dst);
+      const newDst = geom.getClosestOnSegToSeg(exitSeg.src, exitSeg.dst, targetSeg.src, extendedDst);
       // console.log({
       //   src: offMesh.src,
       //   dst: offMesh.dst,
@@ -510,6 +520,7 @@ export default function useHandleEvents(w) {
       //   newSrc,
       //   newDst,
       // });
+
       const anim = /** @type {import("./npc").dtCrowdAgentAnimation} */ (npc.agentAnim);
       anim.set_initPos(0, npcPoint.x);
       anim.set_initPos(2, npcPoint.y);

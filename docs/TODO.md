@@ -39,7 +39,10 @@
 - 🚧 easier to touch switches
   - ✅ try scale up their transform
   - maybe extend their sprite
-- avoid turn around behind offMeshConnection
+- ✅ avoid turn around behind offMeshConnection
+  - ℹ️ only "on navigate from other side" e.g. click doorway center
+  - ✅ fix overrideOffMeshConnectionAngle
+    - "corner" correct but too close to intersect targetSeg.src -> targetSeg.dst
 - separationWeight turning for idle npcs
 - npc re-target-fail keeps in place
 - npc at least turns toward target even if immediately fails
