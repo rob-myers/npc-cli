@@ -24,6 +24,7 @@ export default function Npcs(props) {
   const update = useUpdate();
 
   const state = useStateRef(/** @returns {State} */ () => ({
+    freeUid: new Set(range(maxNumberOfNpcs)),
     gltf: /** @type {*} */ ({}),
     group: /** @type {*} */ (null),
     label: {
@@ -33,11 +34,8 @@ export default function Npcs(props) {
     },
     npc: {},
     physicsPositions: [],
-    uid: {
-      free: new Set(range(maxNumberOfNpcs)),
-      toKey: new Map(),
-    },
     tex: /** @type {*} */ ({}),
+    uidToKey: new Map(),
 
     clearLabels() {
       w.menu.measure('npc.clearLabels');
@@ -83,8 +81,8 @@ export default function Npcs(props) {
         return npc;
       }
     },
-    getByNpcUid(uid) {
-      const npcKey = state.uid.toKey.get(uid);
+    getByUid(uid) {
+      const npcKey = state.uidToKey.get(uid);
       return state.npc[/** @type {string} */ (npcKey)];
     },
     isPointInNavmesh(input) {
@@ -122,8 +120,8 @@ export default function Npcs(props) {
         npc.removeAgent();
         
         delete state.npc[npcKey];
-        state.uid.free.add(npc.def.pickUid);
-        state.uid.toKey.delete(npc.def.pickUid);
+        state.freeUid.add(npc.def.pickUid);
+        state.uidToKey.delete(npc.def.pickUid);
 
         w.events.next({ key: 'removed-npc', npcKey });
       }
@@ -181,13 +179,13 @@ export default function Npcs(props) {
         // Spawn
         npc = state.npc[e.npcKey] = new Npc({
           key: e.npcKey,
-          pickUid: takeFirst(state.uid.free),
+          pickUid: takeFirst(state.freeUid),
           angle: e.angle ?? 0,
           classKey: e.classKey ?? defaultClassKey,
           runSpeed: e.runSpeed ?? helper.defaults.runSpeed,
           walkSpeed: e.walkSpeed ?? helper.defaults.walkSpeed,
         }, w);
-        state.uid.toKey.set(npc.def.pickUid, e.npcKey);
+        state.uidToKey.set(npc.def.pickUid, e.npcKey);
 
         npc.initialize(state.gltf[npc.def.classKey]);
       }
@@ -312,6 +310,7 @@ export default function Npcs(props) {
 
 /**
  * @typedef State
+ * @property {Set<number>} freeUid Those npc uids not-yet-used.
  * @property {THREE.Group} group
  * @property {import("../service/three").LabelsSheetAndTex} label
  * @property {Record<NPC.ClassKey, import("three-stdlib").GLTF & import("@react-three/fiber").ObjectMap>} gltf
@@ -319,17 +318,14 @@ export default function Npcs(props) {
  * @property {number[]} physicsPositions
  * Format `[npc.bodyUid, npc.position.x, npc.position.y, npc.position.z, ...]`
  * @property {Record<NPC.TextureKey, THREE.Texture>} tex
- * @property {{ free: Set<number>; toKey: Map<number, string> }} uid
- * 🚧 flatten
+ * @property {Map<number, string>} uidToKey
  * Correspondence between Recast-Detour CrowdAgent uids and npcKeys.
- * - also used when object-picking npcs
- * - `uid.free` are those npc uids not-yet-used.
  *
  * @property {() => void} clearLabels
  * @property {(src: THREE.Vector3Like, dst: THREE.Vector3Like) => null | THREE.Vector3Like[]} findPath
  * @property {(npcKey: string, processApi?: any) => NPC.NPC} getNpc
  * @property {(p: THREE.Vector3, maxDelta?: number) => null | THREE.Vector3} getClosestNavigable
- * @property {(uid: number) => NPC.NPC} getByNpcUid
+ * @property {(uid: number) => NPC.NPC} getByUid
  * @property {(input: Geom.VectJson | THREE.Vector3Like) => boolean} isPointInNavmesh
  * @property {() => void} restore
  * @property {(deltaMs: number) => void} onTick

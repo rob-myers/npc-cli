@@ -332,16 +332,13 @@ export class Npc {
     const anim = /** @type {dtCrowdAgentAnimation} */ (this.agentAnim);
 
     if (offMesh.seg === 0) {// handle collisions
-      const closeDist = helper.defaults.radius * 1.8;
-      const closerDist = helper.defaults.radius * 1;
-
       const nneis  = agent.raw.nneis;
       /** @type {dtCrowdNeighbour} */ let nei;
 
       for (let i = 0; i < nneis; i++) {
         nei = agent.raw.get_neis(i);
         if (nei.dist < closeDist) {// maybe cancel traversal
-          const other = this.w.npc.getByNpcUid(nei.idx);
+          const other = this.w.npc.getByUid(nei.idx);
           if (other.s.target === null && !(nei.dist < closerDist)) {
             continue;
           }
@@ -917,6 +914,9 @@ const movingSeparationWeight = 0.5;
 const staticCollisionQueryRange = 1;
 const movingCollisionQueryRange = 1.5;
 
+const closeDist = helper.defaults.radius * 1.8;
+const closerDist = helper.defaults.radius * 1;
+
 /** @type {Partial<import("@recast-navigation/core").CrowdAgentParams>} */
 export const crowdAgentParams = {
   radius: helper.defaults.radius, // 🔔 too large causes jerky collisions
@@ -930,7 +930,7 @@ export const crowdAgentParams = {
 };
 
 const showLastNavPath = false;
-const tmpVector3 = new THREE.Vector3();
+
 
 /**
  * @typedef {ReturnType<
