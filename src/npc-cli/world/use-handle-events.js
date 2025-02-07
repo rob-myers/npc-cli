@@ -479,6 +479,12 @@ export default function useHandleEvents(w) {
       );
       (state.npcToDoors[e.npcKey] ??= { inside: null, nearby: new Set() }).inside = null;
       // w.nav.navMesh.setPolyFlags(state.npcToOffMesh[e.npcKey].offMeshRef, w.lib.navPolyFlag.walkable);
+
+      if (npc.agent?.maxSpeed === npc.getSlowSpeed()) {// resume original speed/anim
+        npc.agent.updateParameters({ maxSpeed: npc.getMaxSpeed() });
+        npc.s.run === true && npc.startAnimation('Run');
+      }
+
       w.events.next({ key: 'enter-room', npcKey: e.npcKey, ...w.lib.getGmRoomId(e.offMesh.dstGrKey) });
     },
     onPointerUpMenuDesktop(e) {

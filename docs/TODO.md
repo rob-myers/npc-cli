@@ -8,7 +8,7 @@
   - ℹ️ `selectedNpcKey` changed, but indicator did not
 - ✅ can set npc targets while paused
   - apply prefix `ptags=no-pause; ...` to relevant process in profile-1
-- 🚧 relax constraints on simultaneous npc door entry
+- ✅ relax constraints on simultaneous npc door entry
   - ℹ️ only need to test intersection when both npcs on their 2nd seg
   - ℹ️ assume they have constant speed (walk or run)
   - ❌ test for intersection
@@ -21,7 +21,7 @@
     - ℹ️ increased from 1.25 to 1.8 (still < 2)
   - ✅ move to useHandleEvents
     - ✅ mention that we permit "crossing npcs"
-  - 🚧 resume speed/anim afterwards
+  - ✅ resume speed/anim afterwards
 
 - ✅ BUG close door not working
 - ✅ can click through doors when x-ray
