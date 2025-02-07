@@ -340,16 +340,12 @@ export class Npc {
 
       for (let i = 0; i < nneis; i++) {
         nei = agent.raw.get_neis(i);
-        if (nei.dist < closeDist) {// maybe cancel traversal and other
+        if (nei.dist < closeDist) {// maybe cancel traversal
           const other = this.w.npc.getByNpcUid(nei.idx);
           if (other.s.target === null && !(nei.dist < closerDist)) {
             continue;
           }
           this.stopMoving();
-          if (other.s.offMesh !== null && other.s.offMesh.seg > 0) {
-            continue;
-          }
-          other.stopMoving();
           break;
         }
       }
