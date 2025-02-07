@@ -29,14 +29,19 @@
 - ✅ can use door light to toggle open/close instead
 - ✅ profile-1: can just click door light to open
 - ✅ can use door light to toggle lock on/off (for GM, not Player)
-- 🚧 doors solid when x-ray off
-- 🚧 ceiling solid when x-ray off
+- ❌ doors solid when x-ray off
+- ✅ support `w.door.opacity`
+  - `w update 'w => w.door.opacity = 1'`
+- ❌ ceiling solid when x-ray off
+- ✅ support `w.door.opacity`
+  - `w update 'w => w.ceil.opacity = 1'`
 - easier to touch switches
 - avoid turn around behind offMeshConnection
 - separationWeight turning for idle npcs
 - npc re-target-fail keeps in place
 - npc at least turns toward target even if immediately fails
 - improve npc finish-moving condition
+- clean up z-index
 
 - ❌ BUG `click 1>p` sometimes overridden by moveTo
   - ℹ️ seems clickId is undefined

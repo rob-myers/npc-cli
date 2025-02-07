@@ -20,6 +20,7 @@ export default function Ceiling(props) {
   const state = useStateRef(/** @returns {State} */ () => ({
     inst: /** @type {*} */ (null),
     quad: getQuadGeometryXZ(`${w.key}-multi-tex-ceiling-xz`),
+    opacity: 0.7,
 
     async draw() {
       w.menu.measure('ceil.draw');
@@ -92,7 +93,6 @@ export default function Ceiling(props) {
 
   React.useEffect(() => {
     state.positionInstances();
-    // 🚧 prefer three.js api (tried w.texCeil.tex.needsUpdate = true)
     state.draw().then(() => w.update());
   }, [w.mapKey, w.hash.full, w.texVs.ceiling]);
 
@@ -110,7 +110,7 @@ export default function Ceiling(props) {
         side={THREE.DoubleSide}
         transparent
         atlas={tex}
-        alphaTest={0.5} opacity={0.7} depthWrite={false}
+        alphaTest={0.5} opacity={state.opacity} depthWrite={false}
         diffuse={[1, 1, 1]}
         colorSpace
         objectPickRed={3}
@@ -128,6 +128,7 @@ export default function Ceiling(props) {
  * @typedef State
  * @property {THREE.InstancedMesh} inst
  * @property {THREE.BufferGeometry} quad
+ * @property {number} opacity
  *
  * @property {() => Promise<void>} draw
  * @property {(gmKey: Geomorph.GeomorphKey) => void} drawGm

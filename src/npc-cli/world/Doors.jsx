@@ -25,6 +25,7 @@ export default function Doors(props) {
     lockSigGeom: getBoxGeometry(`${w.key}-lock-lights`),
     lockSigInst: /** @type {*} */ (null),
     movingDoors: new Map(),
+    opacity: 0.6,
     ready: false,
 
     addCuboidAttributes() {
@@ -318,7 +319,7 @@ export default function Doors(props) {
         atlas={w.texDecor.tex}
         diffuse={[.5, .5, .5]}
         objectPickRed={4}
-        alphaTest={0} opacity={0.6} depthWrite={true}
+        alphaTest={0} opacity={state.opacity} depthWrite={true}
       />}
     </instancedMesh>
 
@@ -356,6 +357,7 @@ export default function Doors(props) {
  * @property {THREE.BoxGeometry} lockSigGeom
  * @property {THREE.InstancedMesh} lockSigInst
  * @property {Map<number, Geomorph.DoorState>} movingDoors To be animated until they open/close.
+ * @property {number} opacity
  * @property {boolean} ready avoid initial flicker
  *
  * @property {() => void} addCuboidAttributes
