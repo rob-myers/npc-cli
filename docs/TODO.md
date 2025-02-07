@@ -35,7 +35,10 @@
 - ❌ ceiling solid when x-ray off
 - ✅ support `w.door.opacity`
   - `w update 'w => w.ceil.opacity = 1'`
-- easier to touch switches
+
+- 🚧 easier to touch switches
+  - ✅ try scale up their transform
+  - maybe extend their sprite
 - avoid turn around behind offMeshConnection
 - separationWeight turning for idle npcs
 - npc re-target-fail keeps in place

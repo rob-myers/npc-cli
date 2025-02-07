@@ -176,8 +176,7 @@ export const defaultDoorCloseMs = 3000;
 /** Meters */
 export const doorSwitchHeight = 1;
 
-/** @type {Geomorph.DecorImgKey} */
-export const doorSwitchDecorImgKey = 'icon--square';
+export const doorSwitchDecorImgKey = /** @type {const} */ ('icon--square');
 
 /**
  * @typedef {keyof fromDecorImgKey} DecorImgKey
@@ -412,3 +411,6 @@ export const fromXrayInstancedMeshName = {
 /**
  * @typedef {keyof typeof instancedMeshName} InstancedMeshName
  */
+
+/** @type {Geom.SixTuple} */
+export const switchDecorQuadScaleUp = [1, 0, 0, 1.5, 0, 0];

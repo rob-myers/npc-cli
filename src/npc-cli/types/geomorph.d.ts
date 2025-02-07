@@ -212,7 +212,7 @@ declare namespace Geomorph {
       width: number;
       /** Original height (Starship Symbols coordinates i.e. 60 ~ 1 grid) */
       height: number;
-      /** Normalized affine transform */
+      /** Normalized affine transform acting on rect `(0, 0, width, height)` */
       transform: Geom.SixTuple;
       meta: Geom.Meta;
     }[];

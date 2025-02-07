@@ -1,7 +1,7 @@
 import * as htmlparser2 from "htmlparser2";
 import * as THREE from "three";
 
-import { sguToWorldScale, precision, wallOutset, obstacleOutset, hullDoorDepth, doorDepth, decorIconRadius, sguSymbolScaleDown, doorSwitchHeight, doorSwitchDecorImgKey, specialWallMetaKeys, wallHeight, offMeshConnectionHalfDepth } from "./const";
+import { sguToWorldScale, precision, wallOutset, obstacleOutset, hullDoorDepth, doorDepth, decorIconRadius, sguSymbolScaleDown, doorSwitchHeight, doorSwitchDecorImgKey, specialWallMetaKeys, wallHeight, offMeshConnectionHalfDepth, switchDecorQuadScaleUp } from "./const";
 import { Mat, Poly, Rect, Vect } from "../geom";
 import {
   info,
@@ -477,8 +477,8 @@ class GeomorphService {
    * Support: cuboid, point, quad.
    * @private
    * @param {{ tagName: string; attributes: Record<string, string>; title: string; }} tagMeta
-   * @param {Geom.Meta} meta
-   * @returns {Geom.Poly | null}
+   * @param {Meta} meta
+   * @returns {Geom.Poly}
    */
   extractDecorPoly(tagMeta, meta) {
     const scale = sguToWorldScale * sguSymbolScaleDown;
@@ -486,29 +486,32 @@ class GeomorphService {
     tmpMat1.setMatrixValue(tagMeta.attributes.transform)
       .preMultiply([1, 0, 0, 1, -trOrigin.x, -trOrigin.y])
       .postMultiply([scale, 0, 0, scale, trOrigin.x * scale, trOrigin.y * scale])
-      .precision(precision)
     ;
-    const poly = Poly.fromRect(new Rect(0, 0, 1, 1)).applyMatrix(tmpMat1);
 
-    // 🔔 only support cuboid/point/quad, with point fallback
-    poly.meta = Object.assign(meta, {
-      ...meta.cuboid === true && {
-        transform: tmpMat1.toArray(),
-      } || meta.quad === true && {
-        quad: true,
-        transform: tmpMat1.toArray(),
-        // 🔔 meta.switch means door switch
-        // 🔔 SVG symbols with meta.quad should have meta.img
-        ...typeof meta.switch === 'number' && {
-          y: doorSwitchHeight,
-          tilt: true, // 90° so in XY plane
-          img: doorSwitchDecorImgKey,
-        }
-      } || {
-        point: true,
-        direction: tmpVect1.set(tmpMat1.a, tmpMat1.b).normalize().json,
-      },
-    });
+    const poly = Poly.fromRect(new Rect(0, 0, 1, 1)).applyMatrix(tmpMat1);
+    poly.meta = meta;
+
+    // support cuboid/point/quad with point fallback
+    if (meta.cuboid === true) {
+      meta.transform = tmpMat1.precision(precision).toArray();
+    } else if (meta.quad === true) {
+      /**
+       * 🔔 SVG symbols with meta.quad should have meta.img
+       * 🔔 meta.switch means door switch
+       */
+      if (typeof meta.switch === 'number') {
+        meta.y = doorSwitchHeight;
+        meta.tilt = true; // 90° so in XY plane
+        meta.img = doorSwitchDecorImgKey;
+        // 🔔 scale up for easier mobile press
+        meta.transform = tmpMat1.preMultiply(switchDecorQuadScaleUp).precision(precision).toArray();
+      } else {
+        meta.transform = tmpMat1.precision(precision).toArray();
+      }
+    } else {
+      meta.point = true;
+      meta.direction = tmpVect1.set(tmpMat1.a, tmpMat1.b).normalize().json;
+    }
 
     return poly.precision(precision).cleanFinalReps().fixOrientation();
   }
@@ -996,7 +999,7 @@ class GeomorphService {
           const transform = geomorph.extractSixTuple(parent.attributes.transform);
           const { transformOrigin } = geomorph.extractTransformData(parent);
 
-          if (transform) {
+          if (transform !== null) {
             const reduced = geom.reduceAffineTransform(
               { ...rect },
               transform,
@@ -1037,7 +1040,7 @@ class GeomorphService {
           return;
         }
 
-        // Sort polygon
+        // insert polygon into specific array
         if (meta.wall === true) {
           (meta.hull === true ? hullWalls : walls).push(poly);
         } else if (meta.obstacle === true) {

@@ -97,6 +97,7 @@ export class Mat {
       Number(this.e.toFixed(dp)),
       Number(this.f.toFixed(dp)),
     ]);
+    return this;
   }
 
   /**
