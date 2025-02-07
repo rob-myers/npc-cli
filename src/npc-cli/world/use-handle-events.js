@@ -1,10 +1,12 @@
 import React from "react";
+import * as THREE from "three";
 import { Vect } from "../geom";
 import { defaultDoorCloseMs, wallHeight } from "../service/const";
-import { pause, warn, debug } from "../service/generic";
+import { pause, warn, debug, testNever } from "../service/generic";
 import { geom } from "../service/geom";
 import { globalLoggerLinksRegex } from "../terminal/Logger";
 import { npcToBodyKey } from "../service/rapier";
+import { getTempInstanceMesh } from "../service/three";
 import useStateRef from "../hooks/use-state-ref";
 
 /**
@@ -134,6 +136,37 @@ export default function useHandleEvents(w) {
 
       // warn(`${'decodeObjectPick'}: failed to decode: ${JSON.stringify({ r, g, b, a })}`);
       return null;
+    },
+    getRaycastIntersection(e, decoded) {
+      /** @type {THREE.Mesh} */
+      let mesh;
+
+      // handle fractional device pixel ratio e.g. 2.625 on Pixel
+      const glPixelRatio = w.r3f.gl.getPixelRatio();
+      const { left, top } = (/** @type {HTMLElement} */ (e.target)).getBoundingClientRect();
+
+      const normalizedDeviceCoords = new THREE.Vector2(
+        -1 + 2 * (((e.clientX - left) * glPixelRatio) / w.view.canvas.width),
+        +1 - 2 * (((e.clientY - top) * glPixelRatio) / w.view.canvas.height),
+      );
+      w.view.raycaster.setFromCamera(normalizedDeviceCoords, w.r3f.camera);
+
+      switch (decoded.picked) {
+        case 'floor': mesh = getTempInstanceMesh(w.floor.inst, decoded.instanceId); break;
+        case 'wall': mesh = getTempInstanceMesh(w.wall.inst, decoded.instanceId); break;
+        case 'npc': mesh = w.n[decoded.npcKey].m.mesh; break;
+        case 'door': mesh = getTempInstanceMesh(w.door.inst, decoded.instanceId); break;
+        case 'quad': mesh = getTempInstanceMesh(w.decor.quadInst, decoded.instanceId); break;
+        case 'obstacle': mesh = getTempInstanceMesh(w.obs.inst, decoded.instanceId); break;
+        case 'ceiling': mesh = getTempInstanceMesh(w.ceil.inst, decoded.instanceId); break;
+        case 'cuboid': mesh = getTempInstanceMesh(w.decor.cuboidInst, decoded.instanceId); break;
+        case 'lock-light': mesh = getTempInstanceMesh(w.door.lockSigInst, decoded.instanceId); break;
+        default: throw testNever(decoded.picked);
+      }
+
+      const [intersection] = w.view.raycaster.intersectObject(mesh);
+
+      return { intersection, mesh }; // provide temp mesh
     },
     grantNpcAccess(npcKey, regexDef) {
       (state.npcToAccess[npcKey] ??= new Set()).add(regexDef);
@@ -621,6 +654,7 @@ export default function useHandleEvents(w) {
  * @property {(door: Geomorph.DoorState) => boolean} canCloseDoor
  * @property {(npcKey: string, gdKey: Geomorph.GmDoorKey) => boolean} npcCanAccess
  * @property {(r: number, g: number, b: number, a: number) => null | NPC.DecodedObjectPick} decodeObjectPick
+ * @property {(e: React.PointerEvent<Element>, decoded: NPC.DecodedObjectPick) => undefined | { intersection: THREE.Intersection; mesh: THREE.Mesh }} getRaycastIntersection
  * @property {(npcKey: string, regexDef: string) => void} grantNpcAccess
  * @property {(e: NPC.Event) => void} handleEvents
  * @property {(e: Extract<NPC.Event, { npcKey?: string }>) => void} handleNpcEvents

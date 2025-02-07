@@ -169,60 +169,33 @@ export default function WorldView(props) {
       w.r3f = /** @type {typeof w['r3f']} */ (rootState);
       w.update(); // e.g. show stats
     },
-    onObjectPickPixel(e, pixel) {
+    onObjectPickPixel(e, pixel) {// 🔔 references `w.e`
+      
+      state.lastDown = undefined; // overwritten below on successful raycast
+      
       const [r, g, b, a] = Array.from(pixel);
       const decoded = w.e.decodeObjectPick(r, g, b, a);
       debug('picked:', { r, g, b, a }, '\n', decoded);
-
-      // overwritten below on successful raycast
-      state.lastDown = undefined;
 
       if (decoded === null) {
         return;
       }
 
-      /** @type {THREE.Mesh} */
-      let mesh;
+      const res = w.e.getRaycastIntersection(e, decoded);
 
-      // handle fractional device pixel ratio e.g. 2.625 on Pixel
-      const glPixelRatio = w.r3f.gl.getPixelRatio();
-      const { left, top } = (/** @type {HTMLElement} */ (e.target)).getBoundingClientRect();
-
-      const normalizedDeviceCoords = new THREE.Vector2(
-        -1 + 2 * (((e.clientX - left) * glPixelRatio) / state.canvas.width),
-        +1 - 2 * (((e.clientY - top) * glPixelRatio) / state.canvas.height),
-      );
-      state.raycaster.setFromCamera(normalizedDeviceCoords, w.r3f.camera);
-
-      switch (decoded.picked) {
-        case 'floor': mesh = getTempInstanceMesh(w.floor.inst, decoded.instanceId); break;
-        case 'wall': mesh = getTempInstanceMesh(w.wall.inst, decoded.instanceId); break;
-        case 'npc': mesh = w.n[decoded.npcKey].m.mesh; break;
-        case 'door': mesh = getTempInstanceMesh(w.door.inst, decoded.instanceId); break;
-        case 'quad': mesh = getTempInstanceMesh(w.decor.quadInst, decoded.instanceId); break;
-        case 'obstacle': mesh = getTempInstanceMesh(w.obs.inst, decoded.instanceId); break;
-        case 'ceiling': mesh = getTempInstanceMesh(w.ceil.inst, decoded.instanceId); break;
-        case 'cuboid': mesh = getTempInstanceMesh(w.decor.cuboidInst, decoded.instanceId); break;
-        case 'lock-light': mesh = getTempInstanceMesh(w.door.lockSigInst, decoded.instanceId); break;
-        default: throw testNever(decoded.picked);
-      }
-
-      const [intersection] = state.raycaster.intersectObject(mesh);
-
-      if (intersection === undefined) {
-        return;
+      if (res === undefined) {
+        return; // reachable?
       }
 
       const position = v3Precision(decoded.picked === 'npc'
         ? w.n[decoded.npcKey].position.clone()
-        : intersection.point.clone()
+        : res.intersection.point.clone()
       );
       
       const normal = decoded.picked === 'npc'
         ? new THREE.Vector3(0, 1, 0)
-        : state.computeNormal(mesh, intersection)
+        : state.computeNormal(res.mesh, res.intersection)
       ;
-
       // 🔔 fix flipped normals e.g. double-sided decor quad
       w.r3f.camera.getWorldDirection(tmpVectThree);
       if (normal.dot(tmpVectThree) > 0) {
@@ -231,7 +204,8 @@ export default function WorldView(props) {
 
       const meta = {
         ...decoded,
-        ...pickedTypesInSomeRoom[decoded.picked] === true && w.gmGraph.findRoomContaining(toXZ(position), true),
+        ...pickedTypesInSomeRoom[decoded.picked] === true
+          && w.gmGraph.findRoomContaining(toXZ(position), true),
       };
 
       state.lastDown = {
@@ -295,10 +269,6 @@ export default function WorldView(props) {
         pointerIds: (state.down?.pointerIds ?? []).concat(e.pointerId),
       };
 
-      if (w.r3f === null) {
-        return; // ignore early clicks
-      }
-      
       // includes async render-and-read-pixel
       state.pickObject(e);
     },
@@ -457,7 +427,7 @@ export default function WorldView(props) {
       resize={{ debounce: 0 }}
       gl={state.glOpts}
       onCreated={state.onCreated}
-      onPointerDown={state.onPointerDown}
+      onPointerDown={w.r3f ? state.onPointerDown : undefined}
       onPointerMove={state.onPointerMove}
       onPointerUp={state.onPointerUp}
       onPointerLeave={state.onPointerLeave}
