@@ -504,14 +504,17 @@ export default function useHandleEvents(w) {
       // corners() not available because ag->ncorners is 0
       const targetSeg = { src: npcPoint, dst: corner };
 
-      // 🔔 scale targetSeg.src --> targetSeg.dst to ensure it hits dstSeg (offMeshConnections slightly away from door)
-      // small amount would suffices, but doubling OK too 
+      // 🔔 scale targetSeg.src --> targetSeg.dst to ensure hits srcSeg, dstSeg, since
+      // offMeshConnections are slightly away from doorway
+      const extendedSrc = {
+        x: targetSeg.src.x - (targetSeg.dst.x - targetSeg.src.x),
+        y: targetSeg.src.y - (targetSeg.dst.y - targetSeg.src.y),
+      };
       const extendedDst = {
         x: targetSeg.dst.x + (targetSeg.dst.x - targetSeg.src.x),
         y: targetSeg.dst.y + (targetSeg.dst.y - targetSeg.src.y),
       };
-
-      const newSrc = geom.getClosestOnSegToSeg(entranceSeg.src, entranceSeg.dst, targetSeg.src, targetSeg.dst);
+      const newSrc = geom.getClosestOnSegToSeg(entranceSeg.src, entranceSeg.dst, extendedSrc, targetSeg.dst);
       const newDst = geom.getClosestOnSegToSeg(exitSeg.src, exitSeg.dst, targetSeg.src, extendedDst);
       // console.log({
       //   src: offMesh.src,
