@@ -36,9 +36,9 @@
 - ✅ support `w.door.opacity`
   - `w update 'w => w.ceil.opacity = 1'`
 
-- 🚧 easier to touch switches
+- ✅ easier to touch switches
   - ✅ try scale up their transform
-  - maybe extend their sprite
+  - ✅ extend their sprite
 - ✅ avoid turn around behind offMeshConnection
   - ℹ️ only "on navigate from other side" e.g. click doorway center
   - ✅ fix overrideOffMeshConnectionAngle
