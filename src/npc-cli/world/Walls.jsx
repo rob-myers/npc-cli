@@ -21,7 +21,7 @@ export default function Walls(props) {
   const state = useStateRef(/** @returns {State} */ () => ({
     inst: /** @type {*} */ (null),
     quad: getQuadGeometryXY(`${w.key}-walls-xy`),
-    opacity: 0.45,
+    opacity: 0.5,
 
     decodeInstanceId(instanceId) {
       // compute gmId, gmData.wallSegs[wallSegsId]
