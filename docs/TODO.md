@@ -56,6 +56,7 @@
 - auto-dock ContextMenu in profile-1
 - can only spawn onto navigable floor or do point
 - spawn onto do point uses orient
+- should not be able to spawn from offMesh do to any nav point
 
 - ❌ BUG `click 1>p` sometimes overridden by moveTo
   - ℹ️ seems clickId is undefined
