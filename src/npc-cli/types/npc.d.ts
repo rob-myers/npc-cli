@@ -90,7 +90,7 @@ declare namespace NPC {
     | { key: "enabled" }
     | { key: "npc-internal"; npcKey: string; event: "cancelled" | "paused" | "resumed" }
     | { key: "spawned"; npcKey: string; gmRoomId: Geomorph.GmRoomId }
-    | { key: "started-moving"; npcKey: string }
+    | { key: "started-moving"; npcKey: string; showNavPath: boolean }
     | { key: "stopped-moving"; npcKey: string }
     | { key: "removed-npc"; npcKey: string }
     | { key: "enter-doorway"; npcKey: string } & Geomorph.GmDoorId

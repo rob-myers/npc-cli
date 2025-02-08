@@ -353,14 +353,21 @@ export default function useHandleEvents(w) {
         case "speech":
           w.menu.say(e.npcKey, e.speech);
           break;
-        case "started-moving":
+        case "started-moving": {
           /**
            * 🔔 avoid initial incorrect offMeshConnection traversal, by
-           * replanning immediately before 1st updateRequestMoveTarget.
+           *   replanning immediately before 1st updateRequestMoveTarget.
+           * 🚧 better fix e.g. inside Recast-Detour
            */
-          // 🚧 better fix e.g. inside Recast-Detour
-          /** @type {NPC.CrowdAgent} */ (npc.agent).raw.set_targetReplan(true);
+          const agent = /** @type {NPC.CrowdAgent} */ (npc.agent);
+          agent.raw.set_targetReplan(true);
+
+          if (e.showNavPath) {
+            const path = w.npc.findPath(npc.getPosition(), /** @type {THREE.Vector3} */ (npc.s.target));
+            w.debug.setNavPath(path ?? []);
+          }
           break;
+        }
       }
     },
     npcCanAccess(npcKey, gdKey) {

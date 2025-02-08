@@ -37,6 +37,7 @@ export default function Npcs(props) {
     physicsPositions: [],
     tex: /** @type {*} */ ({}),
     pickIdToKey: new Map(),
+    showLastNavPath: false,
 
     attachAgent(npc) {
       if (npc.agent === null) {
@@ -282,7 +283,7 @@ export default function Npcs(props) {
       Object.values(state.npc).forEach(npc => cmUvService.updateLabelQuad(npc));
       return true;
     },
-  }));
+  }), { reset: { showLastNavPath: true } });
 
   w.npc = state;
   w.n = state.npc;
@@ -347,6 +348,7 @@ export default function Npcs(props) {
  * @property {Record<NPC.TextureKey, THREE.Texture>} tex
  * @property {Map<number, string>} pickIdToKey
  * Correspondence between object-pick ids and npcKeys.
+ * @property {boolean} showLastNavPath
  *
  * @property {(npc: NPC.NPC) => NPC.CrowdAgent} attachAgent
  * @property {() => void} clearLabels

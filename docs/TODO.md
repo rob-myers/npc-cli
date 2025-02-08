@@ -52,7 +52,7 @@
     - ✅ avoid turn on stop nearby, avoid others turning to other npc
   - ✅ can override this behaviour: set `npc.s.autoIdleLook` false
 
-- review how `npc.js` is using `this.w.*`
+- 🚧 review how `npc.js` is using `this.w.*`
 
 - npc re-target-fail keeps in place
   - could store start point and revert
@@ -68,6 +68,9 @@
 - spawn onto do point uses orient
 - should not be able to spawn from offMesh do to any nav point
 - fade Html3d labels whilst window/canvas resize (jerks otherwise)
+
+- try avoid "narrowEntrances" by allocating more links
+  > https://github.com/recastnavigation/recastnavigation/pull/756#issuecomment-2633978785
 
 - ❌ BUG `click 1>p` sometimes overridden by moveTo
   - ℹ️ seems clickId is undefined

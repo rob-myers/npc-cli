@@ -3,7 +3,7 @@ import { SkeletonUtils } from 'three-stdlib';
 import { damp, dampAngle } from "maath/easing";
 
 import { Vect } from '../geom';
-import { defaultAgentUpdateFlags, defaultNpcInteractRadius, glbFadeIn, glbFadeOut, npcClassToMeta, showLastNavPath } from '../service/const';
+import { defaultAgentUpdateFlags, defaultNpcInteractRadius, glbFadeIn, glbFadeOut, npcClassToMeta } from '../service/const';
 import { error, info, warn } from '../service/generic';
 import { geom } from '../service/geom';
 import { buildObjectLookup, emptyAnimationMixer, emptyGroup, getParentBones, tmpVectThree1, toV3, toXZ } from '../service/three';
@@ -66,8 +66,6 @@ export class Npc {
     run: false,
     spawns: 0,
     target: /** @type {null | THREE.Vector3} */ (null),
-    /** Target gmRoomId */
-    targetGrId: /** @type {null | Geomorph.GmRoomId} */ (null),
     selectorColor: /** @type {[number, number, number]} */ ([0.6, 0.6, 1]),
     showSelector: false,
     wayIndex: 0,
@@ -445,17 +443,6 @@ export class Npc {
       throw new Error(`${this.key}: not navigable: ${JSON.stringify(dst)}`);
     }
 
-    // usually have target gmRoomId via dst.meta.grKey in `click`
-    this.s.targetGrId = dst.meta?.grKey !== undefined
-      ? helper.getGmRoomId(dst.meta.grKey)
-      : this.w.gmGraph.findRoomContaining(toXZ(closest))
-    ;
-
-    if (opts.debugPath ?? showLastNavPath) {
-      const path = this.w.npc.findPath(this.getPosition(), closest);
-      this.w.debug.setNavPath(path ?? []);
-    }
-
     this.s.wayIndex = 0;
     this.s.lookSecs = 0.15;
 
@@ -477,7 +464,11 @@ export class Npc {
     }
     
     try {
-      this.w.events.next({ key: 'started-moving', npcKey: this.key });
+      this.w.events.next({
+        key: 'started-moving',
+        npcKey: this.key,
+        showNavPath: opts.debugPath ?? this.w.npc.showLastNavPath,
+      });
       await this.waitUntilStopped();
     } catch (e) {
       this.stopMoving();
@@ -860,7 +851,6 @@ export class Npc {
     }
 
     this.s.target = null;
-    this.s.targetGrId = null;
     this.s.lookAngleDst = null;
     this.s.lookSecs = 0.3;
     this.agent.updateParameters({
