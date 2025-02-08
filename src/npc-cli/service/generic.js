@@ -283,6 +283,7 @@ export function keyedItemsToLookup(items) {
  * @template {string | number} K
  * @param {Partial<Record<K, any>> | Record<K, any>} record
  * Typed `Object.keys`, usually as finitely many string literals.
+ * Technically always returns a string, yet may have type `number`.
  */
 export function keys(record) {
   return /** @type {K[]} */ (Object.keys(record));

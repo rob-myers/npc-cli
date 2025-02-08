@@ -4,7 +4,7 @@ import { useGLTF } from "@react-three/drei";
 import debounce from "debounce";
 
 import { defaultClassKey, gmLabelHeightSgu, maxNumberOfNpcs, npcClassKeys, npcClassToMeta, spriteSheetDecorExtraScale, wallHeight } from "../service/const";
-import { info, pause, range, takeFirst, warn } from "../service/generic";
+import { pause, range, takeFirst, warn } from "../service/generic";
 import { getCanvas } from "../service/dom";
 import { createLabelSpriteSheet, emptyTexture, textureLoader, toV3, toXZ } from "../service/three";
 import { helper } from "../service/helper";
@@ -292,10 +292,13 @@ export default function Npcs(props) {
   
   React.useEffect(() => {// init + hmr
     cmUvService.initialize(state.gltf);
-    process.env.NODE_ENV === 'development' && Object.values(state.npc).forEach(npc => {
-      // 🔔 we simply overwrite non-methods
-      state.npc[npc.key] = Object.assign(new Npc(npc.def, w), {...npc});
-      npc.dispose();
+    process.env.NODE_ENV === 'development' && Object.values(state.npc).forEach(oldNpc => {
+      // 🔔 HMR by overwriting newNpc's non-methods with oldNpc's
+      const newNpc = state.npc[oldNpc.key] = Object.assign(new Npc(oldNpc.def, w), {...oldNpc});
+      if (newNpc.agent !== null) {// avoid stale ref
+        state.byAgId[newNpc.agent.agentIndex] = newNpc;
+      }
+      oldNpc.dispose();
     });
   }, []);
 
