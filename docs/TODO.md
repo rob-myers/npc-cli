@@ -43,15 +43,14 @@
   - ℹ️ only "on navigate from other side" e.g. click doorway center
   - ✅ fix overrideOffMeshConnectionAngle
     - "corner" correct but too close to intersect targetSeg.src -> targetSeg.dst
-- 🚧 separationWeight turning for idle npcs
+- ✅ separationWeight turning for idle npcs
   - ℹ️ ag->neis are ordered increasingly by distance from ag i.e. neis[i].dist
   - ℹ️ they are only computed when `ag->state` is DT_CROWDAGENT_STATE_WALKING
   - ✅ w.npc.byAgId is RecastDetour agentIndex -> npc lookup
   - ✅ npc.js HMR issue i.e. w.npc.byAgId must be hot-reloaded
-  - 🚧 try turn towards closest neighbour (neis[0]), but only if has target
-  - 🚧 avoid turn on stop nearby, avoid others turning to other npc
-  - 🚧 can override this behaviour
-  - 🚧 direct agent id -> npc lookup
+  - ✅ try turn towards closest neighbour (neis[0]), but only if has target
+    - ✅ avoid turn on stop nearby, avoid others turning to other npc
+  - ✅ can override this behaviour: set `npc.s.autoIdleLook` false
 
 - review how `npc.js` is using `this.w.*`
 

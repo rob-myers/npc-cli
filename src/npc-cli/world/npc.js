@@ -48,6 +48,7 @@ export class Npc {
   s = {
     act: /** @type {NPC.AnimKey} */ ('Idle'),
     agentState: /** @type {null | number} */ (null),
+    autoIdleLook: true,
     cancels: 0,
     doMeta: /** @type {null | Geom.Meta} */ (null),
     faceId: /** @type {null | NPC.UvQuadId} */ (null),
@@ -606,8 +607,6 @@ export class Npc {
   }
 
   /**
-   * An arrow function avoids using an inline-ref in <NPC>. However,
-   * `this.onMount` changes on HMR so we rely on idempotence nonetheless.
    * @param {THREE.Group | null} group 
    */
   onMount(group) {
@@ -706,23 +705,21 @@ export class Npc {
 
   /** @param {NPC.CrowdAgent} agent */
   onTickTurnNoTarget(agent) {
-    if (agent.raw.nneis === 0) {
+    if (this.s.autoIdleLook === false || agent.raw.nneis === 0) {
+      return;
+    }
+    if (agent.raw.desiredSpeed < 0.5) {
+      return;
+    }
+
+    const nei = agent.raw.get_neis(0); // 0th closest
+    const other = this.w.npc.byAgId[nei.idx];
+    if (other.s.target === null) {
       return;
     }
     
-    // 🚧 try turn towards "most recent neighbour"
-    // const vel = agent.velocity();
-    // const speedSqr = vel.x ** 2 + vel.z ** 2;
-    // if (speedSqr > 0.25 ** 2) {
-    //   const nei = agent.raw.get_neis(0); // 0th is closest
-    //   const other = this.w.npc.byAgId[nei.idx];
-    //   if (other.s.target === null) {
-    //     return;
-    //   }
-    //   // const { x, z } = /** @type {NPC.CrowdAgent} */ (this.w.crowd.getAgent(nei.idx)).position();
-    //   const { x, z } = other.position;
-    //   this.s.lookAngleDst = this.getEulerAngle(Math.atan2(-(z - this.position.z), (x - this.position.x)));
-    // }
+    // turn towards "closest neighbour" if they have a target
+    this.s.lookAngleDst = this.getEulerAngle(Math.atan2(-(other.position.z - this.position.z), (other.position.x - this.position.x)));
   }
 
   setupMixer() {
