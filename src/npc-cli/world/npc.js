@@ -118,16 +118,6 @@ export class Npc {
     this.bodyUid = addBodyKeyUidRelation(npcToBodyKey(def.key), w.physics)
   }
 
-  attachAgent() {
-    this.agent ??= this.w.crowd.addAgent(this.position, {
-      ...crowdAgentParams,
-      maxSpeed: this.s.run ? helper.defaults.runSpeed : helper.defaults.walkSpeed,
-      queryFilterType: this.w.lib.queryFilterType.excludeDoors,
-    });
-    this.agentAnim = this.w.crowd.raw.getAgentAnimation(this.agent.agentIndex) ?? null;
-    return this.agent;
-  }
-
   async cancel() {
     info(`${'cancel'}: cancelling ${this.key}`);
 
@@ -365,7 +355,7 @@ export class Npc {
     for (let i = 0; i < nneis; i++) {
       nei = agent.raw.get_neis(i);
       if (nei.dist < closeDist) {// maybe cancel traversal
-        const other = this.w.npc.getByUid(nei.idx);
+        const other = this.w.npc.byAgId[nei.idx];
         if (other.s.target === null && !(nei.dist < closerDist)) {
           continue;
         }
@@ -689,10 +679,11 @@ export class Npc {
     }
 
     if (this.s.target === null) {
+      this.onTickTurnNoTarget(agent);
       return;
     }
 
-    this.onTickAgentTurn(agent);
+    this.onTickTurnTarget(agent);
 
     const distance = this.s.target.distanceTo(pos);
 
@@ -702,28 +693,36 @@ export class Npc {
     }
   }
 
-  /**
-   * @param {import('@recast-navigation/core').CrowdAgent} agent
-   */
-  onTickAgentTurn(agent) {
+  /** @param {NPC.CrowdAgent} agent */
+  onTickTurnTarget(agent) {
     const vel = agent.velocity();
     const speedSqr = vel.x ** 2 + vel.z ** 2;
 
     if (speedSqr > 0.2 ** 2) {
+      // 🚧 clean angle computation
       this.s.lookAngleDst = this.getEulerAngle(Math.atan2(-vel.z, vel.x));
     }
   }
 
-  removeAgent() {
-    if (this.agent === null) {
+  /** @param {NPC.CrowdAgent} agent */
+  onTickTurnNoTarget(agent) {
+    if (agent.raw.nneis === 0) {
       return;
     }
-
-    this.w.crowd.removeAgent(this.agent.agentIndex);
     
-    this.agent = null;
-    this.agentAnim = null;
-    this.s.offMesh = null;
+    // 🚧 try turn towards "most recent neighbour"
+    // const vel = agent.velocity();
+    // const speedSqr = vel.x ** 2 + vel.z ** 2;
+    // if (speedSqr > 0.25 ** 2) {
+    //   const nei = agent.raw.get_neis(0); // 0th is closest
+    //   const other = this.w.npc.byAgId[nei.idx];
+    //   if (other.s.target === null) {
+    //     return;
+    //   }
+    //   // const { x, z } = /** @type {NPC.CrowdAgent} */ (this.w.crowd.getAgent(nei.idx)).position();
+    //   const { x, z } = other.position;
+    //   this.s.lookAngleDst = this.getEulerAngle(Math.atan2(-(z - this.position.z), (x - this.position.x)));
+    // }
   }
 
   setupMixer() {
@@ -866,6 +865,7 @@ export class Npc {
     this.s.target = null;
     this.s.targetGrId = null;
     this.s.lookAngleDst = null;
+    this.s.lookSecs = 0.3;
     this.agent.updateParameters({
       maxSpeed: this.getMaxSpeed() * 0.75,
       maxAcceleration: staticMaxAcceleration,
