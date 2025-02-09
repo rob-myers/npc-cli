@@ -54,7 +54,12 @@
 
 - review how `npc.js` is using `this.w.*`
 - 🚧 towards follow cam
-  - `w n.rob.position | w view.follow -`
+  - ℹ️ `w n.rob.position | w view.follow -`
+  - w.view.followPosition
+  - w.e.followNpc
+  - can stop following via ContextMenu
+
+- sh: fix "single quotes breaks things"
 
 - npc re-target-fail keeps in place
   - could store start point and revert

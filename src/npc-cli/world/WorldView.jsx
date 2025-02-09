@@ -304,7 +304,7 @@ export default function WorldView(props) {
     onPointerMove(e) {
       state.lastScreenPoint.copy(getRelativePointer(e));
 
-      if (state.target !== null && state.down !== null && state.getDownDistancePx() > 5) {
+      if (state.target?.resolve !== undefined && state.down !== null && state.getDownDistancePx() > 5) {
         state.clearTarget(); // cancel target if moved a bit
       }
     },

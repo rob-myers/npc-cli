@@ -157,6 +157,7 @@ export const setupContextMenu = ({ w }) => {
         // 🚧 ring bell
       );
     }
+
     if (meta.door === true) {
       showLinks.push(
         { key: "open", label: "open" },
@@ -166,6 +167,10 @@ export const setupContextMenu = ({ w }) => {
         { key: "unlock", label: "unlock" },
         // 🚧 knock
       );
+    }
+
+    if (typeof meta.npcKey === "string") {
+      showLinks.push({ key: "follow", label: "follow" });
     }
 
     return { showLinks };
@@ -188,7 +193,16 @@ export async function* handleContextMenu({ api, w, datum: e }) {
 
     switch (e.linkKey) {
       case "look":
-        w.view.lookAt(w.cm.position).catch(() => {});
+        if (typeof meta.npcKey === "string") {
+          w.view.lookAt(w.n[meta.npcKey].position).catch(() => {});
+        } else {
+          w.view.lookAt(w.cm.position).catch(() => {});
+        }
+        break;
+      case "follow":
+        if (typeof meta.npcKey === "string") {
+          w.view.follow(w.n[meta.npcKey].position);
+        }
         break;
       case "open":
       case "close":
