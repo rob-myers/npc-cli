@@ -67,8 +67,6 @@ export default function WorldView(props) {
     },
     clearTarget() {
       state.target?.reject?.('cancelled target');
-      state.controls.minAzimuthAngle = -Infinity;
-      state.controls.maxAzimuthAngle = +Infinity;
 
       state.target = null;
       state.syncRenderMode();
@@ -128,8 +126,6 @@ export default function WorldView(props) {
         dst, // offset by height?
         ...opts,
       };
-      // @ts-ignore see patch
-      // state.controls.zoomToConstant = state.controls.target;
     },
     handleClickInDebugMode(e) {
       if (
@@ -149,10 +145,6 @@ export default function WorldView(props) {
       }
 
       return new Promise((resolve, reject) => {
-        // Fix azimuth so we pan
-        state.controls.minAzimuthAngle = state.controls.getAzimuthalAngle();
-        state.controls.maxAzimuthAngle = state.controls.getAzimuthalAngle();
-        
         state.target = {
           dst: toV3(point),
           resolve,
@@ -340,13 +332,14 @@ export default function WorldView(props) {
       }
 
       if (state.target !== null) {
-        state.controls.update();
         if (dampXZ(state.controls.target, state.target.dst, state.target.smoothTime, deltaMs, state.target.maxSpeed, undefined, 0.01) === false) {
           if (state.target.resolve !== undefined) {
             state.target.resolve();
             state.clearTarget();
           }
         }
+        //@ts-ignore see patch i.e. fix azimuth angle
+        state.controls.update(true);
       }
     },
     openSnapshot(type = 'image/webp', quality) {

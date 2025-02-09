@@ -55,10 +55,11 @@
 - review how `npc.js` is using `this.w.*`
 - 🚧 towards follow cam
   - ℹ️ `w n.rob.position | w view.follow -`
+  - ✅ patch OrbitControls to keep follow cam "straight" and avoid "birdseye issue"
   - follow at agent height
+  - can start/stop via ContextMenu
   - w.view.followPosition
   - w.e.followNpc
-  - can stop following via ContextMenu
 
 - sh: fix "single quotes breaks things"
 
