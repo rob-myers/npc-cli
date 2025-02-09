@@ -48,6 +48,7 @@ export class Npc {
   s = {
     act: /** @type {NPC.AnimKey} */ ('Idle'),
     agentState: /** @type {null | number} */ (null),
+    autoIdleLook: true,
     cancels: 0,
     doMeta: /** @type {null | Geom.Meta} */ (null),
     faceId: /** @type {null | NPC.UvQuadId} */ (null),
@@ -116,16 +117,6 @@ export class Npc {
     this.def = def;
     this.w = w;
     this.bodyUid = addBodyKeyUidRelation(npcToBodyKey(def.key), w.physics)
-  }
-
-  attachAgent() {
-    this.agent ??= this.w.crowd.addAgent(this.position, {
-      ...crowdAgentParams,
-      maxSpeed: this.s.run ? helper.defaults.runSpeed : helper.defaults.walkSpeed,
-      queryFilterType: this.w.lib.queryFilterType.excludeDoors,
-    });
-    this.agentAnim = this.w.crowd.raw.getAgentAnimation(this.agent.agentIndex) ?? null;
-    return this.agent;
   }
 
   async cancel() {
@@ -365,7 +356,7 @@ export class Npc {
     for (let i = 0; i < nneis; i++) {
       nei = agent.raw.get_neis(i);
       if (nei.dist < closeDist) {// maybe cancel traversal
-        const other = this.w.npc.getByUid(nei.idx);
+        const other = this.w.npc.byAgId[nei.idx];
         if (other.s.target === null && !(nei.dist < closerDist)) {
           continue;
         }
@@ -616,8 +607,6 @@ export class Npc {
   }
 
   /**
-   * An arrow function avoids using an inline-ref in <NPC>. However,
-   * `this.onMount` changes on HMR so we rely on idempotence nonetheless.
    * @param {THREE.Group | null} group 
    */
   onMount(group) {
@@ -689,10 +678,11 @@ export class Npc {
     }
 
     if (this.s.target === null) {
+      this.onTickTurnNoTarget(agent);
       return;
     }
 
-    this.onTickAgentTurn(agent);
+    this.onTickTurnTarget(agent);
 
     const distance = this.s.target.distanceTo(pos);
 
@@ -702,28 +692,34 @@ export class Npc {
     }
   }
 
-  /**
-   * @param {import('@recast-navigation/core').CrowdAgent} agent
-   */
-  onTickAgentTurn(agent) {
+  /** @param {NPC.CrowdAgent} agent */
+  onTickTurnTarget(agent) {
     const vel = agent.velocity();
     const speedSqr = vel.x ** 2 + vel.z ** 2;
 
     if (speedSqr > 0.2 ** 2) {
+      // 🚧 clean angle computation
       this.s.lookAngleDst = this.getEulerAngle(Math.atan2(-vel.z, vel.x));
     }
   }
 
-  removeAgent() {
-    if (this.agent === null) {
+  /** @param {NPC.CrowdAgent} agent */
+  onTickTurnNoTarget(agent) {
+    if (this.s.autoIdleLook === false || agent.raw.nneis === 0) {
+      return;
+    }
+    if (agent.raw.desiredSpeed < 0.5) {
       return;
     }
 
-    this.w.crowd.removeAgent(this.agent.agentIndex);
+    const nei = agent.raw.get_neis(0); // 0th closest
+    const other = this.w.npc.byAgId[nei.idx];
+    if (other.s.target === null) {
+      return;
+    }
     
-    this.agent = null;
-    this.agentAnim = null;
-    this.s.offMesh = null;
+    // turn towards "closest neighbour" if they have a target
+    this.s.lookAngleDst = this.getEulerAngle(Math.atan2(-(other.position.z - this.position.z), (other.position.x - this.position.x)));
   }
 
   setupMixer() {
@@ -866,6 +862,7 @@ export class Npc {
     this.s.target = null;
     this.s.targetGrId = null;
     this.s.lookAngleDst = null;
+    this.s.lookSecs = 0.3;
     this.agent.updateParameters({
       maxSpeed: this.getMaxSpeed() * 0.75,
       maxAcceleration: staticMaxAcceleration,

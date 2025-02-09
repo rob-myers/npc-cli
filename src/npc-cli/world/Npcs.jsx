@@ -4,13 +4,13 @@ import { useGLTF } from "@react-three/drei";
 import debounce from "debounce";
 
 import { defaultClassKey, gmLabelHeightSgu, maxNumberOfNpcs, npcClassKeys, npcClassToMeta, spriteSheetDecorExtraScale, wallHeight } from "../service/const";
-import { info, pause, range, takeFirst, warn } from "../service/generic";
+import { pause, range, takeFirst, warn } from "../service/generic";
 import { getCanvas } from "../service/dom";
 import { createLabelSpriteSheet, emptyTexture, textureLoader, toV3, toXZ } from "../service/three";
 import { helper } from "../service/helper";
 import { cmUvService } from "../service/uv";
 import { CuboidManMaterial } from "../service/glsl";
-import { Npc } from "./npc";
+import { crowdAgentParams, Npc } from "./npc";
 import { WorldContext } from "./world-context";
 import useStateRef from "../hooks/use-state-ref";
 import useUpdate from "../hooks/use-update";
@@ -24,7 +24,8 @@ export default function Npcs(props) {
   const update = useUpdate();
 
   const state = useStateRef(/** @returns {State} */ () => ({
-    freeUid: new Set(range(maxNumberOfNpcs)),
+    byAgId: {},
+    freePickId: new Set(range(maxNumberOfNpcs)),
     gltf: /** @type {*} */ ({}),
     group: /** @type {*} */ (null),
     label: {
@@ -35,8 +36,21 @@ export default function Npcs(props) {
     npc: {},
     physicsPositions: [],
     tex: /** @type {*} */ ({}),
-    uidToKey: new Map(),
+    pickIdToKey: new Map(),
 
+    attachAgent(npc) {
+      if (npc.agent === null) {
+        npc.agent = npc.w.crowd.addAgent(npc.position, {
+          ...crowdAgentParams,
+          maxSpeed: npc.s.run ? helper.defaults.runSpeed : helper.defaults.walkSpeed,
+          queryFilterType: npc.w.lib.queryFilterType.excludeDoors,
+        });
+        npc.agentAnim = npc.w.crowd.raw.getAgentAnimation(npc.agent.agentIndex);
+
+        state.byAgId[npc.agent.agentIndex] = npc;
+      }
+      return npc.agent;
+    },
     clearLabels() {
       w.menu.measure('npc.clearLabels');
       const fontHeight = gmLabelHeightSgu * spriteSheetDecorExtraScale;
@@ -81,10 +95,6 @@ export default function Npcs(props) {
         return npc;
       }
     },
-    getByUid(uid) {
-      const npcKey = state.uidToKey.get(uid);
-      return state.npc[/** @type {string} */ (npcKey)];
-    },
     isPointInNavmesh(input) {
       const v3 = toV3(input);
       const { success, point } = w.crowd.navMeshQuery.findClosestPoint(v3, { halfExtents: { x: smallHalfExtent, y: smallHalfExtent, z: smallHalfExtent } });
@@ -99,10 +109,12 @@ export default function Npcs(props) {
     },
     async restore() {// onchange nav-mesh restore agents
       const npcs = Object.values(state.npc).filter(x => x.agent !== null);
-      for (const npc of npcs) npc.removeAgent();
+      for (const npc of npcs) {
+        state.removeAgent(npc);
+      }
       await pause();
       for(const npc of npcs ) {
-        const agent = npc.attachAgent();
+        const agent = state.attachAgent(npc);
         const closest = state.getClosestNavigable(npc.getPosition());
         if (closest === null) {// Agent outside nav keeps target but `Idle`s 
           npc.startAnimation('Idle');
@@ -117,15 +129,25 @@ export default function Npcs(props) {
       for (const npcKey of npcKeys) {
         const npc = state.getNpc(npcKey); // throw if n'exist pas
         npc.cancel(); // rejects promises
-        npc.removeAgent();
+        state.removeAgent(npc);
         
         delete state.npc[npcKey];
-        state.freeUid.add(npc.def.pickUid);
-        state.uidToKey.delete(npc.def.pickUid);
+        state.freePickId.add(npc.def.pickUid);
+        state.pickIdToKey.delete(npc.def.pickUid);
 
         w.events.next({ key: 'removed-npc', npcKey });
       }
       update();
+    },
+    removeAgent(npc) {
+      if (npc.agent !== null) {
+        npc.w.crowd.removeAgent(npc.agent.agentIndex);
+        
+        delete state.byAgId[npc.agent.agentIndex];
+        npc.agent = null;
+        npc.agentAnim = null;
+        npc.s.offMesh = null;
+      }
     },
     async spawn(e) {
       e.point = toXZ(e.point);
@@ -179,13 +201,13 @@ export default function Npcs(props) {
         // Spawn
         npc = state.npc[e.npcKey] = new Npc({
           key: e.npcKey,
-          pickUid: takeFirst(state.freeUid),
+          pickUid: takeFirst(state.freePickId),
           angle: e.angle ?? 0,
           classKey: e.classKey ?? defaultClassKey,
           runSpeed: e.runSpeed ?? helper.defaults.runSpeed,
           walkSpeed: e.walkSpeed ?? helper.defaults.walkSpeed,
         }, w);
-        state.uidToKey.set(npc.def.pickUid, e.npcKey);
+        state.pickIdToKey.set(npc.def.pickUid, e.npcKey);
 
         npc.initialize(state.gltf[npc.def.classKey]);
       }
@@ -205,16 +227,17 @@ export default function Npcs(props) {
       if (npc.agent === null) {
         npc.setPosition(position);
         if (e.agent === true) {
-          const agent = npc.attachAgent();
+          const agent = state.attachAgent(npc);
           // 🔔 pin to current position
           agent.requestMoveTarget(npc.position);
           // must tell physics.worker because not moving
           state.physicsPositions.push(npc.bodyUid, position.x, position.y, position.z);
+          state.byAgId[agent.agentIndex] = npc;
         }
       } else {
         if (dstNav === false || e.agent === false) {
           npc.setPosition(position);
-          npc.removeAgent();
+          state.removeAgent(npc);
           // must tell physics.worker because not moving
           state.physicsPositions.push(npc.bodyUid, position.x, position.y, position.z);
         } else {
@@ -269,10 +292,13 @@ export default function Npcs(props) {
   
   React.useEffect(() => {// init + hmr
     cmUvService.initialize(state.gltf);
-    process.env.NODE_ENV === 'development' && Object.values(state.npc).forEach(npc => {
-      // 🔔 we simply overwrite non-methods
-      state.npc[npc.key] = Object.assign(new Npc(npc.def, w), {...npc});
-      npc.dispose();
+    process.env.NODE_ENV === 'development' && Object.values(state.npc).forEach(oldNpc => {
+      // 🔔 HMR by overwriting newNpc's non-methods with oldNpc's
+      const newNpc = state.npc[oldNpc.key] = Object.assign(new Npc(oldNpc.def, w), {...oldNpc});
+      if (newNpc.agent !== null) {// avoid stale ref
+        state.byAgId[newNpc.agent.agentIndex] = newNpc;
+      }
+      oldNpc.dispose();
     });
   }, []);
 
@@ -310,7 +336,8 @@ export default function Npcs(props) {
 
 /**
  * @typedef State
- * @property {Set<number>} freeUid Those npc uids not-yet-used.
+ * @property {{ [crowdAgentId: number]: NPC.NPC }} byAgId
+ * @property {Set<number>} freePickId Those npc object-pick ids not-currently-used.
  * @property {THREE.Group} group
  * @property {import("../service/three").LabelsSheetAndTex} label
  * @property {Record<NPC.ClassKey, import("three-stdlib").GLTF & import("@react-three/fiber").ObjectMap>} gltf
@@ -318,18 +345,19 @@ export default function Npcs(props) {
  * @property {number[]} physicsPositions
  * Format `[npc.bodyUid, npc.position.x, npc.position.y, npc.position.z, ...]`
  * @property {Record<NPC.TextureKey, THREE.Texture>} tex
- * @property {Map<number, string>} uidToKey
- * Correspondence between Recast-Detour CrowdAgent uids and npcKeys.
+ * @property {Map<number, string>} pickIdToKey
+ * Correspondence between object-pick ids and npcKeys.
  *
+ * @property {(npc: NPC.NPC) => NPC.CrowdAgent} attachAgent
  * @property {() => void} clearLabels
  * @property {(src: THREE.Vector3Like, dst: THREE.Vector3Like) => null | THREE.Vector3Like[]} findPath
  * @property {(npcKey: string, processApi?: any) => NPC.NPC} getNpc
  * @property {(p: THREE.Vector3, maxDelta?: number) => null | THREE.Vector3} getClosestNavigable
- * @property {(uid: number) => NPC.NPC} getByUid
  * @property {(input: Geom.VectJson | THREE.Vector3Like) => boolean} isPointInNavmesh
  * @property {() => void} restore
  * @property {(deltaMs: number) => void} onTick
  * @property {(npcKey: string) => void} remove
+ * @property {(npc: NPC.NPC) => void} removeAgent
  * @property {(e: NPC.SpawnOpts) => Promise<NPC.NPC>} spawn
  * @property {() => void} tickOnceDebounced
  * @property {() => Promise<void>} tickOnceDebug

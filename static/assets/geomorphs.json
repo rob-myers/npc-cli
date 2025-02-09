@@ -39308,10 +39308,10 @@
         "icon": true,
         "decorImgKey": "icon--square",
         "sheetId": 0,
-        "x": 318,
-        "y": 395,
+        "x": 438,
+        "y": 114,
         "width": 38,
-        "height": 38
+        "height": 58
       }
     },
     "decorDims": [{"width": 512, "height": 443}],
@@ -40090,7 +40090,7 @@
     },
     "obstacleDims": [{"width": 2210, "height": 2308}],
     "maxObstacleDim": {"width": 2210, "height": 2308},
-    "imagesHash": 322981428,
+    "imagesHash": 78692817,
     "skins": {
       "svgHash": {"cuboid-man": -1087841574, "cuboid-pet": -1224685710},
       "uvMap": {

@@ -36,18 +36,38 @@
 - ✅ support `w.door.opacity`
   - `w update 'w => w.ceil.opacity = 1'`
 
-- 🚧 easier to touch switches
+- ✅ easier to touch switches
   - ✅ try scale up their transform
-  - maybe extend their sprite
+  - ✅ extend their sprite
 - ✅ avoid turn around behind offMeshConnection
   - ℹ️ only "on navigate from other side" e.g. click doorway center
   - ✅ fix overrideOffMeshConnectionAngle
     - "corner" correct but too close to intersect targetSeg.src -> targetSeg.dst
-- separationWeight turning for idle npcs
+- ✅ separationWeight turning for idle npcs
+  - ℹ️ ag->neis are ordered increasingly by distance from ag i.e. neis[i].dist
+  - ℹ️ they are only computed when `ag->state` is DT_CROWDAGENT_STATE_WALKING
+  - ✅ w.npc.byAgId is RecastDetour agentIndex -> npc lookup
+  - ✅ npc.js HMR issue i.e. w.npc.byAgId must be hot-reloaded
+  - ✅ try turn towards closest neighbour (neis[0]), but only if has target
+    - ✅ avoid turn on stop nearby, avoid others turning to other npc
+  - ✅ can override this behaviour: set `npc.s.autoIdleLook` false
+
+- review how `npc.js` is using `this.w.*`
+
 - npc re-target-fail keeps in place
+  - could store start point and revert
 - npc at least turns toward target even if immediately fails
 - improve npc finish-moving condition
+  - optional strategy to avoid agent deadlock when have similar target
+  - e.g. stop when little progress
+  - e.g. stop when neighbour has similar target
 - clean up z-index
+  - e.g. "opts above menu"
+- auto-dock ContextMenu in profile-1
+- can only spawn onto navigable floor or do point
+- spawn onto do point uses orient
+- should not be able to spawn from offMesh do to any nav point
+- fade Html3d labels whilst window/canvas resize (jerks otherwise)
 
 - ❌ BUG `click 1>p` sometimes overridden by moveTo
   - ℹ️ seems clickId is undefined
@@ -82,28 +102,16 @@
   - e.g. `min/maxPolarAngle` is `Math.PI * 0.15`
 - profile-1: fov 20 when "close" and fov 5 when far
   - `w update 'w => w.view.fov = 20'`
-- optional strategy to avoid agent deadlock when have similar target
-  - e.g. stop when little progress
-  - e.g. stop when neighbour has similar target
-- avoid turning around after offMeshConnection
+- ✅ avoid turning around after offMeshConnection
   - ℹ️ happens when moveTo doorway
 - simplify offMeshConnection src intersects line to newDst
 - While zooming turn off ContextMenu pointer-events
 - ✅ Still seeing flicker on change "embed" -> "docked" on mobile
-- clean z-index e.g. "opts above menu"
-- Docked ContextMenu can focus i.e. panZoom to point
-- thinner fuel/machine symbols, or add dark poly border
-- avoid npc stepping forward small amounts when e.g. cannot traverse offMeshConnection
-  - could store start point and revert
-- auto-dock ContextMenu in profile-1?
+- ✅ Docked ContextMenu can focus i.e. panZoom to point
+- ✅ thinner fuel/machine symbols, or add dark poly border
 - isolated hull doors should be locked
-- strategy for dealing with "stuck at 0 velocity"
-  - ℹ️ arises from conflicting separationWeights
-  - e.g. relax target distance when neighbour detected
 - gridMin, gridMax should align with geomorph grid
 - npc diffuse does not apply to selector or label
-- can only spawn onto navigable floor or do point
-- spawn onto do point uses orient
 - redo cuboid-man: lower-spine-bone (for sit), independent face quad, clean skin
 - redo cuboid-pet
 - represent skins as single TexArray
