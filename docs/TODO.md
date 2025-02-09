@@ -55,6 +55,7 @@
 - review how `npc.js` is using `this.w.*`
 - 🚧 towards follow cam
   - ℹ️ `w n.rob.position | w view.follow -`
+  - follow at agent height
   - w.view.followPosition
   - w.e.followNpc
   - can stop following via ContextMenu
