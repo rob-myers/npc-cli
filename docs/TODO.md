@@ -53,6 +53,8 @@
   - ✅ can override this behaviour: set `npc.s.autoIdleLook` false
 
 - review how `npc.js` is using `this.w.*`
+- 🚧 towards follow cam
+  - `w n.rob.position | w view.follow -`
 
 - npc re-target-fail keeps in place
   - could store start point and revert

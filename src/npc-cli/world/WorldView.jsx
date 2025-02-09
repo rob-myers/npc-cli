@@ -66,7 +66,7 @@ export default function WorldView(props) {
       }
     },
     clearTarget() {
-      state.target?.reject('cancelled target');
+      state.target?.reject?.('cancelled target');
       state.controls.minAzimuthAngle = -Infinity;
       state.controls.maxAzimuthAngle = +Infinity;
 
@@ -123,6 +123,14 @@ export default function WorldView(props) {
         ...key === 'pointerup' && { clickId: state.clickIds.pop() },
       };
     },
+    follow(dst, opts = { smoothTime: 1 }) {// 🚧
+      state.target = {
+        dst, // offset by height?
+        ...opts,
+      };
+      // @ts-ignore see patch
+      // state.controls.zoomToConstant = state.controls.target;
+    },
     handleClickInDebugMode(e) {
       if (
         w.disabled === true
@@ -145,9 +153,13 @@ export default function WorldView(props) {
         state.controls.minAzimuthAngle = state.controls.getAzimuthalAngle();
         state.controls.maxAzimuthAngle = state.controls.getAzimuthalAngle();
         
-        const dst = toV3(point);
-        dst.y = 1.5; // ≈ agent height
-        state.target = { dst, resolve, reject, ...opts };
+        state.target = {
+          dst: toV3(point),
+          resolve,
+          reject,
+          ...opts,
+        };
+        state.target.dst.y = 1.5; // agent height
         // @ts-ignore see patch
         state.controls.zoomToConstant = state.target.dst.clone();
   
@@ -330,8 +342,10 @@ export default function WorldView(props) {
       if (state.target !== null) {
         state.controls.update();
         if (dampXZ(state.controls.target, state.target.dst, state.target.smoothTime, deltaMs, state.target.maxSpeed, undefined, 0.01) === false) {
-          state.target.resolve();
-          state.clearTarget();
+          if (state.target.resolve !== undefined) {
+            state.target.resolve();
+            state.clearTarget();
+          }
         }
       }
     },
@@ -497,7 +511,7 @@ export default function WorldView(props) {
  * @property {{ tri: THREE.Triangle; indices: THREE.Vector3; mat3: THREE.Matrix3 }} normal
  * @property {THREE.Raycaster} raycaster
  * @property {HTMLDivElement} rootEl
- * @property {null | { dst: THREE.Vector3; reject(err?: any): void; resolve(): void; } & LookAtOpts} target
+ * @property {null | { dst: THREE.Vector3; reject?(err?: any): void; resolve?(): void; } & LookAtOpts} target
  * Speed is m/s
  * @property {null | number} targetFov
  * @property {'near' | 'far'} zoomState
@@ -506,7 +520,9 @@ export default function WorldView(props) {
  * @property {() => number} getNumPointers
  * @property {(e: React.PointerEvent, pixel: THREE.TypedArray) => void} onObjectPickPixel
  * @property {(def: WorldPointerEventDef) => NPC.PointerUpEvent | NPC.PointerDownEvent | NPC.LongPointerDownEvent} getWorldPointerEvent
+ * @property {(dst: THREE.Vector3, opts?: LookAtOpts) => void} follow
  * @property {(e: React.PointerEvent) => void} handleClickInDebugMode
+ * @property {(input: Geom.VectJson | THREE.Vector3Like, opts?: LookAtOpts) => Promise<void>} lookAt
  * @property {() => import("@react-three/fiber").RootState['frameloop']} syncRenderMode
  * @property {import('@react-three/drei').MapControlsProps['onChange']} onChangeControls
  * @property {import('@react-three/fiber').CanvasProps['onCreated']} onCreated
@@ -516,7 +532,6 @@ export default function WorldView(props) {
  * @property {(e: React.PointerEvent<HTMLElement>) => void} onPointerUp
  * @property {(deltaMs: number) => void} onTick
  * @property {(type?: string, quality?: any) => void} openSnapshot
- * @property {(input: Geom.VectJson | THREE.Vector3Like, opts?: LookAtOpts) => Promise<void>} lookAt
  * @property {(e: React.PointerEvent<HTMLElement>) => void} pickObject
  * @property {(gl: THREE.WebGLRenderer, scene: THREE.Scene, camera: THREE.Camera, ri: THREE.RenderItem & { material: THREE.ShaderMaterial }) => void} renderObjectPickItem
  * @property {() => void} renderObjectPickScene
