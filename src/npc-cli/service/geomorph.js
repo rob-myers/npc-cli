@@ -1285,8 +1285,9 @@ class GeomorphService {
   transformDecorMeta(meta, mat, y) {
     return {
       ...meta,
-      // aggregate `y` i.e. height off ground
-      y: (Number(y) || 0) + (Number(meta.y) || 0.01),
+      // aggregate `y` i.e. height off ground,
+      // 🔔 except y=0 which is forced to be "on the ground"
+      y: meta.y === 0 ? 0.01 : (Number(y) || 0) + (Number(meta.y) || 0.01),
       // transform `transform` i.e. affine transform from unit quad (0,0)...(1,1) to rect
       ...Array.isArray(meta.transform) && {
         transform: tmpMat2.setMatrixValue(tmpMat1).preMultiply(/** @type {Geom.SixTuple} */ (meta.transform)).toArray(),
