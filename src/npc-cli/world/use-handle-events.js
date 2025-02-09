@@ -166,7 +166,11 @@ export default function useHandleEvents(w) {
 
       const [intersection] = w.view.raycaster.intersectObject(mesh);
 
-      return { intersection, mesh }; // provide temp mesh
+      if (intersection !== undefined) {
+        return { intersection, mesh }; // provide temp mesh
+      } else {
+        return null;
+      }
     },
     grantNpcAccess(npcKey, regexDef) {
       (state.npcToAccess[npcKey] ??= new Set()).add(regexDef);
@@ -671,7 +675,7 @@ export default function useHandleEvents(w) {
  * @property {(door: Geomorph.DoorState) => boolean} canCloseDoor
  * @property {(npcKey: string, gdKey: Geomorph.GmDoorKey) => boolean} npcCanAccess
  * @property {(r: number, g: number, b: number, a: number) => null | NPC.DecodedObjectPick} decodeObjectPick
- * @property {(e: React.PointerEvent<Element>, decoded: NPC.DecodedObjectPick) => undefined | { intersection: THREE.Intersection; mesh: THREE.Mesh }} getRaycastIntersection
+ * @property {(e: React.PointerEvent<Element>, decoded: NPC.DecodedObjectPick) => null | { intersection: THREE.Intersection; mesh: THREE.Mesh }} getRaycastIntersection
  * @property {(npcKey: string, regexDef: string) => void} grantNpcAccess
  * @property {(e: NPC.Event) => void} handleEvents
  * @property {(e: Extract<NPC.Event, { npcKey?: string }>) => void} handleNpcEvents
