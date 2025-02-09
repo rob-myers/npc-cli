@@ -126,7 +126,7 @@ export default function WorldView(props) {
     handleClickInDebugMode(e) {
       if (
         w.disabled === true
-        && w.menu.debugWhilePaused === true
+        && w.menu.debugMode === true
         && state.lastDown !== undefined
         && state.lastDown.longDown === false
         && state.lastDown.screenPoint.distanceTo(getRelativePointer(e)) < 1
