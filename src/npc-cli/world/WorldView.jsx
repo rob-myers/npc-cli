@@ -568,6 +568,3 @@ const statsCss = css`
 
 const pixelBuffer = new Uint8Array(4);
 const tmpVectThree = new THREE.Vector3();
-
-/** meters per second */
-const defaultSpeed = 2;
