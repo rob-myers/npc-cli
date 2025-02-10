@@ -4,73 +4,12 @@
 
 ### Final clean before migration
 
-- ✅ paused select npc should work using only one click
-  - ℹ️ `selectedNpcKey` changed, but indicator did not
-- ✅ can set npc targets while paused
-  - apply prefix `ptags=no-pause; ...` to relevant process in profile-1
-- ✅ relax constraints on simultaneous npc door entry
-  - ℹ️ only need to test intersection when both npcs on their 2nd seg
-  - ℹ️ assume they have constant speed (walk or run)
-  - ❌ test for intersection
-    - https://github.com/rob-myers/the-last-redoubt/blob/97849fef7f65543c4e722074cba3570d8ca990ab/src/components/snippet/collide-npcs-moving.mdx
-  - ℹ️ jerks just after doorway are ok
-  - ℹ️ but intersection inside main segment is not ok
-  - ✅ on enter offMeshConnection main seg, if another is traversing main seg, go slowly
-  - ✅ avoid jerk on enter main segment because init seg collision radius was too small
-    - ℹ️ still seeing on exit e.g. when both run
-    - ℹ️ increased from 1.25 to 1.8 (still < 2)
-  - ✅ move to useHandleEvents
-    - ✅ mention that we permit "crossing npcs"
-  - ✅ resume speed/anim afterwards
-
-- ✅ BUG close door not working
-- ✅ can click through doors when x-ray
-- ✅ don't render npc label when object-pick
-- ✅ can use door light to toggle open/close instead
-- ✅ profile-1: can just click door light to open
-- ✅ can use door light to toggle lock on/off (for GM, not Player)
-- ❌ doors solid when x-ray off
-- ✅ support `w.door.opacity`
-  - `w update 'w => w.door.opacity = 1'`
-- ❌ ceiling solid when x-ray off
-- ✅ support `w.door.opacity`
-  - `w update 'w => w.ceil.opacity = 1'`
-
-- ✅ easier to touch switches
-  - ✅ try scale up their transform
-  - ✅ extend their sprite
-- ✅ avoid turn around behind offMeshConnection
-  - ℹ️ only "on navigate from other side" e.g. click doorway center
-  - ✅ fix overrideOffMeshConnectionAngle
-    - "corner" correct but too close to intersect targetSeg.src -> targetSeg.dst
-- ✅ separationWeight turning for idle npcs
-  - ℹ️ ag->neis are ordered increasingly by distance from ag i.e. neis[i].dist
-  - ℹ️ they are only computed when `ag->state` is DT_CROWDAGENT_STATE_WALKING
-  - ✅ w.npc.byAgId is RecastDetour agentIndex -> npc lookup
-  - ✅ npc.js HMR issue i.e. w.npc.byAgId must be hot-reloaded
-  - ✅ try turn towards closest neighbour (neis[0]), but only if has target
-    - ✅ avoid turn on stop nearby, avoid others turning to other npc
-  - ✅ can override this behaviour: set `npc.s.autoIdleLook` false
-
-- ✅ follow cam
-  - ℹ️ `w n.rob.position | w view.follow -`
-  - ✅ patch OrbitControls to keep follow cam "straight" and avoid "birdseye issue"
-  - ✅ follow at agent height
-  - ✅ can start/stop via ContextMenu
-    - ℹ️ follow starts, look (at anything) stops
-  - ✅ w.view.followPosition
-  - ✅ w.e.followNpc
-    - `w e.followNpc rob`
-  - ✅ can directly stop follow
-    - `w e.stopFollowing`
-
-- review how `npc.js` is using `this.w.*`
-- sh: fix "single quotes breaks things"
 - 🚧 avoid rebuild w.texFloor w.texCeil on World hmr
   - ℹ️ previously needed for Floor/Ceil hmr on edit drawGm
   - ℹ️ strangely seems fixed if initialize textures to correct width, height
-- improve hmr strategy
-  - changing service/const
+- ✅ review how `npc.js` is using `this.w.*`
+  - ℹ️ w.events, w.gmGraph, w.npc, w.n
+- sh: fix "single quotes breaks things"
 
 - npc re-target-fail keeps in place
   - could store start point and revert
@@ -93,6 +32,7 @@
     must use `click 1 >r` or `click 1 > r`
 
 - spawn command in profile-1
+  - change `w.npc.spawn` args
   - e.g. `spawn rob $( click 1 ) --degrees=90`
 
 ### Migration
@@ -116,6 +56,7 @@
 
 ### On hold
 
+- improve hmr onchange service/const
 - Logger opts for fixing camera angles
   - e.g. `min/maxPolarAngle` is `Math.PI * 0.15`
 - profile-1: fov 20 when "close" and fov 5 when far
@@ -3750,3 +3691,64 @@ done
         - ✅ some process group do not auto pause
   - ✅ fix npc speech heights
   - ✅ ContextMenu has "look" link which works when paused
+
+
+- ✅ paused select npc should work using only one click
+  - ℹ️ `selectedNpcKey` changed, but indicator did not
+- ✅ can set npc targets while paused
+  - apply prefix `ptags=no-pause; ...` to relevant process in profile-1
+- ✅ relax constraints on simultaneous npc door entry
+  - ℹ️ only need to test intersection when both npcs on their 2nd seg
+  - ℹ️ assume they have constant speed (walk or run)
+  - ❌ test for intersection
+    - https://github.com/rob-myers/the-last-redoubt/blob/97849fef7f65543c4e722074cba3570d8ca990ab/src/components/snippet/collide-npcs-moving.mdx
+  - ℹ️ jerks just after doorway are ok
+  - ℹ️ but intersection inside main segment is not ok
+  - ✅ on enter offMeshConnection main seg, if another is traversing main seg, go slowly
+  - ✅ avoid jerk on enter main segment because init seg collision radius was too small
+    - ℹ️ still seeing on exit e.g. when both run
+    - ℹ️ increased from 1.25 to 1.8 (still < 2)
+  - ✅ move to useHandleEvents
+    - ✅ mention that we permit "crossing npcs"
+  - ✅ resume speed/anim afterwards
+
+- ✅ BUG close door not working
+- ✅ can click through doors when x-ray
+- ✅ don't render npc label when object-pick
+- ✅ can use door light to toggle open/close instead
+- ✅ profile-1: can just click door light to open
+- ✅ can use door light to toggle lock on/off (for GM, not Player)
+- ❌ doors solid when x-ray off
+- ✅ support `w.door.opacity`
+  - `w update 'w => w.door.opacity = 1'`
+- ❌ ceiling solid when x-ray off
+- ✅ support `w.door.opacity`
+  - `w update 'w => w.ceil.opacity = 1'`
+
+- ✅ easier to touch switches
+  - ✅ try scale up their transform
+  - ✅ extend their sprite
+- ✅ avoid turn around behind offMeshConnection
+  - ℹ️ only "on navigate from other side" e.g. click doorway center
+  - ✅ fix overrideOffMeshConnectionAngle
+    - "corner" correct but too close to intersect targetSeg.src -> targetSeg.dst
+- ✅ separationWeight turning for idle npcs
+  - ℹ️ ag->neis are ordered increasingly by distance from ag i.e. neis[i].dist
+  - ℹ️ they are only computed when `ag->state` is DT_CROWDAGENT_STATE_WALKING
+  - ✅ w.npc.byAgId is RecastDetour agentIndex -> npc lookup
+  - ✅ npc.js HMR issue i.e. w.npc.byAgId must be hot-reloaded
+  - ✅ try turn towards closest neighbour (neis[0]), but only if has target
+    - ✅ avoid turn on stop nearby, avoid others turning to other npc
+  - ✅ can override this behaviour: set `npc.s.autoIdleLook` false
+
+- ✅ follow cam
+  - ℹ️ `w n.rob.position | w view.follow -`
+  - ✅ patch OrbitControls to keep follow cam "straight" and avoid "birdseye issue"
+  - ✅ follow at agent height
+  - ✅ can start/stop via ContextMenu
+    - ℹ️ follow starts, look (at anything) stops
+  - ✅ w.view.followPosition
+  - ✅ w.e.followNpc
+    - `w e.followNpc rob`
+  - ✅ can directly stop follow
+    - `w e.stopFollowing`
