@@ -18,6 +18,8 @@
 - ✅ sh: fix "single quotes breaks things"
   - use `$'...'` from `syntax.Variant(syntax.LangBash)`
 
+- improve offMeshConnection traversal when can go direct from src -> nextCorner
+
 - npc re-target-fail keeps in place
   - could store start point and revert
 - npc at least turns toward target even if immediately fails
