@@ -471,17 +471,17 @@ let resX = false, resY = false, resZ = false, dx = 0, dz = 0, dMax = 0;
  * @param {number} [smoothTime] 
  * @param {number} [deltaMs] 
  * @param {number} [maxSpeed] 
- * @param {(t: number) => number} [easing] 
+ * @param {number} [y] override target.y (originally `easing`)
  * @param {number} [eps]
  * @returns 
  */
-export function dampXZ(current, target, smoothTime, deltaMs, maxSpeed = Infinity, easing, eps = 0.001) {
+export function dampXZ(current, target, smoothTime, deltaMs, maxSpeed = Infinity, y, eps = 0.001) {
   v3d.copy(target);
   dx = Math.abs(current.x - target.x);
   dz = Math.abs(current.z - target.z);
   dMax = Math.max(dx, dz);
-  resX = dMax < eps ? false : damp(current, "x", v3d.x, smoothTime, deltaMs, maxSpeed * (dx / dMax), easing, eps);
-  resY = damp(current, "y", v3d.y, smoothTime, deltaMs, maxSpeed, easing, eps);
-  resZ = dMax < eps ? false : damp(current, "z", v3d.z, smoothTime, deltaMs, maxSpeed * (dz / dMax), easing, eps);
+  resX = dMax < eps ? false : damp(current, "x", v3d.x, smoothTime, deltaMs, maxSpeed * (dx / dMax), undefined, eps);
+  resY = damp(current, "y", y ?? v3d.y, smoothTime, deltaMs, maxSpeed, undefined, eps);
+  resZ = dMax < eps ? false : damp(current, "z", v3d.z, smoothTime, deltaMs, maxSpeed * (dz / dMax), undefined, eps);
   return resX || resY || resZ;
 }

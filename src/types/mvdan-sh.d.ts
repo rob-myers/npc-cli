@@ -315,8 +315,9 @@ declare namespace MvdanSh {
     Naked: boolean;
     /**
      * Variable name.
+     * Can be `null` e.g. for options like `-F`
      */
-    Name: LitGeneric<Base, Pos, Op>;
+    Name: LitGeneric<Base, Pos, Op> | null;
     /**
      * [i], ["k"]
      */

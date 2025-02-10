@@ -25,7 +25,7 @@ export default function WorldMenu(props) {
   const state = useStateRef(/** @returns {State} */ () => ({
 
     brightness: 5, // [1..10] inducing percentage `50 + 10 * b`
-    debugWhilePaused: false,
+    debugMode: false,
     disconnected: true,
     draggable: /** @type {*} */ (null),
     dragClassName: w.smallViewport ? popUpButtonClassName : undefined,
@@ -104,7 +104,7 @@ export default function WorldMenu(props) {
     },
     toggleDebug() {
       // by hiding overlay we permit user to use camera while World paused
-      state.debugWhilePaused = !state.debugWhilePaused;
+      state.debugMode = !state.debugMode;
       update();
     },
     toggleXRay() {
@@ -133,7 +133,7 @@ export default function WorldMenu(props) {
   return <>
     <div
       className={cx(faderOverlayCss, {
-        faded: w.disabled && !state.debugWhilePaused,
+        faded: w.disabled && !state.debugMode,
       })}
       onPointerUp={state.onOverlayPointerUp}
     />
@@ -147,7 +147,7 @@ export default function WorldMenu(props) {
       </button>
       <button
         onClick={state.toggleDebug}
-        className={state.debugWhilePaused ? 'text-green' : undefined}
+        className={state.debugMode ? 'text-green' : undefined}
         >
         debug
       </button>
@@ -417,7 +417,7 @@ const cssTtyDisconnectedMessage = css`
 /**
  * @typedef State
  * @property {number} brightness
- * @property {boolean} debugWhilePaused Is the camera usable whilst paused?
+ * @property {boolean} debugMode e.g. camera usable whilst paused and in debugMode
  * @property {import('../components/Draggable').State} draggable Draggable containing Logger
  * @property {string} [dragClassName] We can restrict Logger dragging to this className
  * @property {boolean} disconnected

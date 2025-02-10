@@ -1,36 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
-<svg viewBox="0 0 150 150" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:bx="https://boxy-svg.com">
-  <defs>
-    <bx:grid x="0" y="0" width="300" height="300"/>
-    <symbol id="symbol-8" viewBox="0 0 1 1">
-      <title>decor-arrow</title>
-      <rect width="1" height="1" style="fill: url('#pattern-2');">
-        <title>pattern</title>
-      </rect>
-    </symbol>
-    <pattern id="pattern-2" viewBox="0 0 300 300" patternUnits="userSpaceOnUse" preserveAspectRatio="none" width="1" height="1">
-      <title>decor-arrow-pattern</title>
-      <defs>
-        <bx:grid x="0" y="0" width="300" height="300"/>
-      </defs>
-      <rect x="0.000029" y="-0.000047" width="300.000003" height="299.999989" style="stroke: rgb(0, 0, 0); fill: none; stroke-width: 8px;">
-        <title>bg</title>
-      </rect>
-      <rect width="149.998993" height="19.999998" style="stroke: rgb(0, 0, 0); fill: rgb(255, 0, 0);" y="139.999992" x="50.000671">
-        <title>arrow-body</title>
-      </rect>
-      <path d="M 199.999648 125 L 249.999314 149.999997 L 199.999648 174.999997 L 199.999648 125 Z" style="stroke: rgb(0, 0, 0);">
-        <title>arrow-head</title>
-      </path>
-    </pattern>
-  </defs>
-  <image width="101" height="93" x="24.5" style="pointer-events: none;" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGUAAABdCAQAAAAWXGCEAAAAIGNIUk0AAHomAACAhAAA+gAAAIDoAAB1MAAA6mAAADqYAAAXcJy6UTwAAAACYktHRAD/h4/MvwAAAAd0SU1FB+gEDhAuKXYP0IwAAALnSURBVHja7ZvbssMgCEXV6f//suehJ4k3FBBQM90vnTbRskSiUfTR6cgDFUev9IcuaFVMRZzXR95AXLvTS5igwC2dX/CIEnwpdDC6mTJggijRUS2ilzBCGUnt0aWBgjE2D3FJPEGUyyz884hewghltURQ0lbFdSC4BF/iD/iywudrbrH8BEYIBZxxpfcAZaWgpkZ7mXZ4apmDmogV2BO9oa93ba5phKaTDjDQN3+Hu52PfM8wGyLpFPA9xXWPut85bkdjeEXvjSP9BzoOESXHkGWKrnwNoOEQUDQxJHCQKBYYszgIFBkMWtfn4AxQ4GkIT5TyMcMf43RQpDF44HgcZKzYY0A4sMBB4rrAh7hfrJJvM00yelED5mDzIPKevOqDWr+Joj+ea8A0UDDzq9VqwXQm+TuC9GyqUCSixAKm9kuBsjtIDyZD2TXcIeX2NmNld6K2fQnKCZ2rhEn94ssfJUHqYVmn9u/4H2o6Odn6t4gV/Zcqvdo+vYu7GV/Xnnbh4Nx5D+FSX/sP35RIfRDaP5+ow71SoJweKc59GW6vnMrz2P2uDvYW3RsgOh0sHcLU0rX+P4MViJ4u23+JIRTJJuUsRbGSCYpNzBig5GvH6ig27aaj+2Gslyyb+0E/9MVSEMYwyv/k3/gEOzVaHruDZmq5naL/DZF7Kl0zXm0LQ9U62OnRkq0Zv0H5VtFqa4jK7X2fV65oOckvZXbFsw52GEydJpKuGR8E07IxYG/cSe3c1wzltPEltze0L+7MBCVTVR1sdxg4KyyMC+2knk0NlBMipmVj6N24G1M/5RDoYDvCjHInhysu3u2wI4Zp0s5GpGXyOh4DjuTBnupqHMpRN8T28Coc6ok95E63NQ7n4CFh094Kh3t+kph/oI0zcwyUnEqhd36itJs66yCv5EdvkUrCmTyxraoLcmpqWcydA040cK9or9aepTNTWaWtohVzN7Fuz69o2/P2mEp13ogM8tp4x2jp+gMkzOWr2PnQMwAAACV0RVh0ZGF0ZTpjcmVhdGUAMjAyNC0wNC0xNFQxNjo0Njo0MSswMDowMEjSR/QAAAAldEVYdGRhdGU6bW9kaWZ5ADIwMjQtMDQtMTRUMTY6NDY6NDErMDA6MDA5j/9IAAAAKHRFWHRkYXRlOnRpbWVzdGFtcAAyMDI0LTA0LTE0VDE2OjQ2OjQxKzAwOjAwbprelwAAAABJRU5ErkJggg==">
-    <title>counter--010--0.4x0.4</title>
-  </image>
-  <path d="M 23.84738 0 L 125 0 L 125 57.1 L 120.64155 72.54821 L 103.57673 86.92753 L 74.87358 94.79387 L 52.19204 89.91778 L 33.552021 76.020592 L 23.84738 60.09393 L 23.84738 0 Z" style="fill-opacity: 0.5; fill: rgb(0, 0, 255);">
-    <title>obstacle</title>
-  </path>
-  <use width="1" height="1" transform="matrix(0, -20, -20, 0, 74.5, 124.5)" style="opacity: 0.5; transform-origin: 0.5px 0.5px;" xlink:href="#symbol-8">
-    <title>decor do stand</title>
-  </use>
+<svg viewBox="0 0 150 150" xmlns="http://www.w3.org/2000/svg" xmlns:bx="https://boxy-svg.com">
+        <defs>
+                <bx:grid x="0" y="0" width="300" height="300"/>
+                <symbol id="symbol-8" viewBox="0 0 1 1">
+                        <title>decor-arrow</title>
+                        <rect width="1" height="1" style="fill: url('#pattern-2');">
+                                <title>pattern</title>
+                        </rect>
+                </symbol>
+                <pattern id="pattern-2" viewBox="0 0 300 300" patternUnits="userSpaceOnUse" preserveAspectRatio="none" width="1" height="1">
+                        <title>decor-arrow-pattern</title>
+                        <defs>
+                                <bx:grid x="0" y="0" width="300" height="300"/>
+                        </defs>
+                        <rect x="0.000029" y="-0.000047" width="300.000003" height="299.999989" style="stroke: rgb(0, 0, 0); fill: none; stroke-width: 8px;">
+                                <title>bg</title>
+                        </rect>
+                        <rect width="149.998993" height="19.999998" style="stroke: rgb(0, 0, 0); fill: rgb(255, 0, 0);" y="139.999992" x="50.000671">
+                                <title>arrow-body</title>
+                        </rect>
+                        <path d="M 199.999648 125 L 249.999314 149.999997 L 199.999648 174.999997 L 199.999648 125 Z" style="stroke: rgb(0, 0, 0);">
+                                <title>arrow-head</title>
+                        </path>
+                </pattern>
+        </defs>
+        <image width="101" height="93" x="24.5" style="pointer-events: none;" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGUAAABdCAQAAAAWXGCEAAAAIGNIUk0AAHomAACAhAAA+gAAAIDoAAB1MAAA6mAAADqYAAAXcJy6UTwAAAACYktHRAD/h4/MvwAAAAd0SU1FB+gEDhAuKXYP0IwAAALnSURBVHja7ZvbssMgCEXV6f//suehJ4k3FBBQM90vnTbRskSiUfTR6cgDFUev9IcuaFVMRZzXR95AXLvTS5igwC2dX/CIEnwpdDC6mTJggijRUS2ilzBCGUnt0aWBgjE2D3FJPEGUyyz884hewghltURQ0lbFdSC4BF/iD/iywudrbrH8BEYIBZxxpfcAZaWgpkZ7mXZ4apmDmogV2BO9oa93ba5phKaTDjDQN3+Hu52PfM8wGyLpFPA9xXWPut85bkdjeEXvjSP9BzoOESXHkGWKrnwNoOEQUDQxJHCQKBYYszgIFBkMWtfn4AxQ4GkIT5TyMcMf43RQpDF44HgcZKzYY0A4sMBB4rrAh7hfrJJvM00yelED5mDzIPKevOqDWr+Joj+ea8A0UDDzq9VqwXQm+TuC9GyqUCSixAKm9kuBsjtIDyZD2TXcIeX2NmNld6K2fQnKCZ2rhEn94ssfJUHqYVmn9u/4H2o6Odn6t4gV/Zcqvdo+vYu7GV/Xnnbh4Nx5D+FSX/sP35RIfRDaP5+ow71SoJweKc59GW6vnMrz2P2uDvYW3RsgOh0sHcLU0rX+P4MViJ4u23+JIRTJJuUsRbGSCYpNzBig5GvH6ig27aaj+2Gslyyb+0E/9MVSEMYwyv/k3/gEOzVaHruDZmq5naL/DZF7Kl0zXm0LQ9U62OnRkq0Zv0H5VtFqa4jK7X2fV65oOckvZXbFsw52GEydJpKuGR8E07IxYG/cSe3c1wzltPEltze0L+7MBCVTVR1sdxg4KyyMC+2knk0NlBMipmVj6N24G1M/5RDoYDvCjHInhysu3u2wI4Zp0s5GpGXyOh4DjuTBnupqHMpRN8T28Coc6ok95E63NQ7n4CFh094Kh3t+kph/oI0zcwyUnEqhd36itJs66yCv5EdvkUrCmTyxraoLcmpqWcydA040cK9or9aepTNTWaWtohVzN7Fuz69o2/P2mEp13ogM8tp4x2jp+gMkzOWr2PnQMwAAACV0RVh0ZGF0ZTpjcmVhdGUAMjAyNC0wNC0xNFQxNjo0Njo0MSswMDowMEjSR/QAAAAldEVYdGRhdGU6bW9kaWZ5ADIwMjQtMDQtMTRUMTY6NDY6NDErMDA6MDA5j/9IAAAAKHRFWHRkYXRlOnRpbWVzdGFtcAAyMDI0LTA0LTE0VDE2OjQ2OjQxKzAwOjAwbprelwAAAABJRU5ErkJggg==">
+                <title>counter--010--0.4x0.4</title>
+        </image>
+        <path d="M 23.84738 0 L 125 0 L 125 57.1 L 120.64155 72.54821 L 103.57673 86.92753 L 74.87358 94.79387 L 52.19204 89.91778 L 33.552021 76.020592 L 23.84738 60.09393 L 23.84738 0 Z" style="fill-opacity: 0.5; fill: rgb(0, 0, 255);">
+                <title>obstacle</title>
+        </path>
+        <use width="1" height="1" transform="matrix(0, -20, -20, 0, 74.5, 154.5)" style="opacity: 0.5; transform-origin: 0.5px 0.5px;" href="#symbol-8">
+                <title>decor do stand y=0</title>
+        </use>
 </svg>

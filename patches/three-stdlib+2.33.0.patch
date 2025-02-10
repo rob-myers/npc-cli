@@ -1,5 +1,5 @@
 diff --git a/node_modules/three-stdlib/controls/OrbitControls.js b/node_modules/three-stdlib/controls/OrbitControls.js
-index 23e5b19..b7f66bc 100644
+index 23e5b19..6ea67cc 100644
 --- a/node_modules/three-stdlib/controls/OrbitControls.js
 +++ b/node_modules/three-stdlib/controls/OrbitControls.js
 @@ -79,6 +79,8 @@ class OrbitControls extends EventDispatcher {
@@ -21,7 +21,28 @@ index 23e5b19..b7f66bc 100644
      this.getPolarAngle = () => spherical.phi;
      this.getAzimuthalAngle = () => spherical.theta;
      this.setPolarAngle = (value) => {
-@@ -234,6 +239,9 @@ class OrbitControls extends EventDispatcher {
+@@ -167,7 +172,8 @@ class OrbitControls extends EventDispatcher {
+       const lastPosition = new Vector3();
+       const lastQuaternion = new Quaternion();
+       const twoPI = 2 * Math.PI;
+-      return function update() {
++      return function update(fixAzimuth) {
++        const fixedAzimuth = fixAzimuth === true ? scope.getAzimuthalAngle() : null;
+         const position = scope.object.position;
+         quat.setFromUnitVectors(object.up, up);
+         quatInverse.copy(quat).invert();
+@@ -184,8 +190,8 @@ class OrbitControls extends EventDispatcher {
+           spherical.theta += sphericalDelta.theta;
+           spherical.phi += sphericalDelta.phi;
+         }
+-        let min = scope.minAzimuthAngle;
+-        let max = scope.maxAzimuthAngle;
++        let min = fixedAzimuth === null ? scope.minAzimuthAngle : fixedAzimuth;
++        let max = fixedAzimuth === null ? scope.maxAzimuthAngle : fixedAzimuth;
+         if (isFinite(min) && isFinite(max)) {
+           if (min < -Math.PI)
+             min += twoPI;
+@@ -234,6 +240,9 @@ class OrbitControls extends EventDispatcher {
              const prevRadius = offset.length();
              newRadius = clampDistance(prevRadius * scale);
              const radiusDelta = prevRadius - newRadius;
@@ -31,7 +52,7 @@ index 23e5b19..b7f66bc 100644
              scope.object.position.addScaledVector(dollyDirection, radiusDelta);
              scope.object.updateMatrixWorld();
            } else if (scope.object.isOrthographicCamera) {
-@@ -366,6 +374,9 @@ class OrbitControls extends EventDispatcher {
+@@ -366,6 +375,9 @@ class OrbitControls extends EventDispatcher {
        return function panLeft2(distance, objectMatrix) {
          v.setFromMatrixColumn(objectMatrix, 0);
          v.multiplyScalar(-distance);
@@ -41,7 +62,7 @@ index 23e5b19..b7f66bc 100644
          panOffset.add(v);
        };
      })();
-@@ -379,6 +390,9 @@ class OrbitControls extends EventDispatcher {
+@@ -379,6 +391,9 @@ class OrbitControls extends EventDispatcher {
            v.crossVectors(scope.object.up, v);
          }
          v.multiplyScalar(distance);

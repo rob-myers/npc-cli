@@ -231,9 +231,9 @@ export function generateSelector(selector, extraArgs) {
         /** @type {*} */ (x)
       ); // If we selected a function, invoke it
       return typeof selected === "function"
-        ? // ℹ️ Forwarding ...xs can break invocation
-          selected.call(x, ...(extraArgs ?? []))
-        : selected;
+        ? selected.call(x, ...(extraArgs ?? []))
+        : selected // 🔔 permits using args supplied elsewhere
+      ;
     };
   }
   if (typeof selector === "function") {

@@ -1,5 +1,10 @@
 /**
- * Execute a javascript function
+ * Execute a javascript function, e.g.
+ * ```sh
+ * call "() => 42"
+ * call "({ home }) => home.foo"
+ * call '({ args }) => `Hello, ${args[0]}`' Rob
+ * ```
  * @param {RunArg} ctxt
  */
 export async function* call(ctxt) {
@@ -10,6 +15,11 @@ export async function* call(ctxt) {
 
 /**
  * Evaluate and return a javascript expression
+ * ```sh
+ * expr 2 ** 10
+ * expr window.navigator.vendor
+ * expr '((x) => [x, x, x])("a lady")'
+ * ```
  * @param {RunArg} ctxt 
  */
 export function* expr({ api, args }) {
@@ -19,6 +29,10 @@ export function* expr({ api, args }) {
 
 /**
  * Filter inputs
+ * ```sh
+ * seq 10 | filter 'x => !(x % 2)'
+ * expr window | keysAll | split | filter /^n/
+ * ```
  * @param {RunArg} ctxt
  */
 export async function* filter(ctxt) {
@@ -34,23 +48,32 @@ export async function* filter(ctxt) {
 
 /**
  * Combines map (singleton), filter (empty array) and split (of arrays)
+ * ```sh
+ * seq 10 | flatMap 'x => [...Array(x)].map((_, i) => i)'
+ * { range 10; range 20; } | flatMap 'x => x'
+ * ```
+ * - ℹ️ supports chunks
  * @param {RunArg} ctxt
  */
 export async function* flatMap(ctxt) {
-  let { api, args } = ctxt;
-  let datum, result;
+  let { api, args, datum } = ctxt;
+  let result;
   const func = Function(`return ${args[0]}`)();
-  while ((datum = await api.read(true)) !== api.eof)
+  while ((datum = await api.read(true)) !== api.eof) {
     if (api.isDataChunk(datum)) yield api.dataChunk(datum.items.flatMap((x) => func(x, ctxt)));
     else if (Array.isArray((result = func(datum, ctxt)))) yield* result;
     else yield result;
+  }
 }
 
 /**
- * Usage: `log $foo bar`, `seq 10 | log`
- * - initially logs args, then stdin.
- * - `map console.log` would log 2nd arg too
- * - logs chunks larger than 1000, so e.g. `seq 1000000 | log` works
+ * ```sh
+ * # initially logs args, then stdin.
+ * log $foo bar
+ * seq 10 | log
+ * ```
+ * - ℹ️ `map console.log` would log 2nd arg too
+ * - ℹ️ logs chunks larger than 1000, so e.g. `seq 1000000 | log` works
  * @param {RunArg} ctxt 
  * @returns 
  */
@@ -68,8 +91,12 @@ export async function* log({ api, args, datum }) {
 
 /**
  * Apply function to each item from stdin.
- * 
- * To use `await`, the provided function must begin with `async`.
+ * ```sh
+ * seq 10 | map 'x => 2 ** x'
+ * echo foo | map Array.from
+ * expr window | map navigator.connection | log
+ * ```
+ * - ℹ️ To use `await`, the provided function must begin with `async`.
  * @param {RunArg} ctxt
  */
 export async function* map(ctxt) {
@@ -77,11 +104,54 @@ export async function* map(ctxt) {
   const { operands, opts } = api.getOpts(args, { boolean: ["forever"] });
 
   const baseSelector = api.parseFnOrStr(operands[0]);
-  const func = api.generateSelector(baseSelector, operands.slice(1).map(api.parseJsArg));
+  const func = typeof baseSelector === "string"
+    // e.g. expr "{ foo: { inc: (x) => x+1  }  }" | map foo.inc 3
+    ? api.generateSelector(baseSelector, operands.slice(1).map(api.parseJsArg))
+    // e.g. echo | map "(x, {args}) => args[1]" foo
+    : api.generateSelector(baseSelector)
+  ;
   // fix e.g. `expr "new Set([1, 2, 3])" | map Array.from`
   const isNativeCode = /\{\s*\[\s*native code\s*\]\s*\}$/m.test(`${baseSelector}`);
   const isAsync = func.constructor.name === "AsyncFunction";
   let count = 0;
+
+  if (isNativeCode === false) {
+
+    while ((datum = await api.read(true)) !== api.eof) {
+      try {
+        if (api.isDataChunk(datum) === true) {
+          if (isAsync === false) {// fast on chunks:
+            yield api.dataChunk(datum.items.map(x => func(x, ctxt, count++)));
+          } else {// unwind chunks:
+            for (const item of datum.items) yield await func(item, ctxt, count++);
+          }
+        } else {
+          yield await func(datum, ctxt, count++);
+        }
+      } catch (e) {
+        if (opts.forever === true) {
+          api.error(`${api.meta.stack.join(": ")}: ${e instanceof Error ? e.message : e}`);
+          continue;
+        }
+        throw e;
+      }
+    }
+
+  } else {
+
+    while ((datum = await api.read()) !== api.eof) {
+      try {
+        yield await func(datum);
+      } catch (e) {
+        if (opts.forever === true) {
+          api.error(`${api.meta.stack.join(": ")}: ${e instanceof Error ? e.message : e}`);
+          continue;
+        }
+        throw e;
+      }
+    }
+
+  }
 
   while ((datum = await api.read(true)) !== api.eof) {
     try {
@@ -96,6 +166,34 @@ export async function* map(ctxt) {
       } else {
         yield await (isNativeCode ? func(datum) : func(datum, ctxt, count++));
       }
+    } catch (e) {
+      if (opts.forever === true) {
+        api.error(`${api.meta.stack.join(": ")}: ${e instanceof Error ? e.message : e}`);
+      } else {
+        throw e;
+      }
+    }
+  }
+}
+
+/**
+ * Apply native or one-arg-function to each item from stdin.
+ * ```sh
+ * echo foo | mapBasic Array.from
+ * ```
+ * - ℹ️ We do not support chunks.
+ * - ℹ️ To use `await`, the one-arg-function must begin with `async`.
+ * @param {RunArg} ctxt
+ */
+export async function* mapBasic(ctxt) {
+  let { api, args, datum } = ctxt;
+  const { operands, opts } = api.getOpts(args, { boolean: ["forever"] });
+  // e.g. "Array.from", "x => [x, x]"
+  const func = Function(`return ${operands[0]}`)();
+
+  while ((datum = await api.read()) !== api.eof) {
+    try {
+      yield await func(datum);
     } catch (e) {
       if (opts.forever === true) {
         api.error(`${api.meta.stack.join(": ")}: ${e instanceof Error ? e.message : e}`);

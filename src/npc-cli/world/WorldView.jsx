@@ -5,11 +5,11 @@ import { Canvas } from "@react-three/fiber";
 import { MapControls, PerspectiveCamera, Stats } from "@react-three/drei";
 import { damp } from "maath/easing";
 
-import { testNever, debug } from "../service/generic.js";
+import { debug } from "../service/generic.js";
 import { Rect, Vect } from "../geom/index.js";
 import { dataUrlToBlobUrl, getModifierKeys, getRelativePointer, isRMB, isTouchDevice } from "../service/dom.js";
 import { fromXrayInstancedMeshName, longPressMs, pickedTypesInSomeRoom } from "../service/const.js";
-import { dampXZ, emptySceneForPicking, getTempInstanceMesh, hasObjectPickShaderMaterial, pickingRenderTarget, toV3, toXZ, unitXVector3, v3Precision } from "../service/three.js";
+import { dampXZ, emptySceneForPicking, hasObjectPickShaderMaterial, pickingRenderTarget, toV3, toXZ, unitXVector3, v3Precision } from "../service/three.js";
 import { popUpRootDataAttribute } from "../components/PopUp.jsx";
 import { WorldContext } from "./world-context.js";
 import useStateRef from "../hooks/use-state-ref.js";
@@ -66,9 +66,7 @@ export default function WorldView(props) {
       }
     },
     clearTarget() {
-      state.target?.reject('cancelled target');
-      state.controls.minAzimuthAngle = -Infinity;
-      state.controls.maxAzimuthAngle = +Infinity;
+      state.target?.reject?.('cancelled target');
 
       state.target = null;
       state.syncRenderMode();
@@ -123,10 +121,20 @@ export default function WorldView(props) {
         ...key === 'pointerup' && { clickId: state.clickIds.pop() },
       };
     },
+    followPosition(dst, opts = { smoothTime: 1 }) {
+      // @ts-ignore see patch
+      state.controls.zoomToConstant = null;
+
+      state.target = {
+        dst,
+        y: 1.5, // agent height
+        ...opts,
+      };
+    },
     handleClickInDebugMode(e) {
       if (
         w.disabled === true
-        && w.menu.debugWhilePaused === true
+        && w.menu.debugMode === true
         && state.lastDown !== undefined
         && state.lastDown.longDown === false
         && state.lastDown.screenPoint.distanceTo(getRelativePointer(e)) < 1
@@ -141,13 +149,13 @@ export default function WorldView(props) {
       }
 
       return new Promise((resolve, reject) => {
-        // Fix azimuth so we pan
-        state.controls.minAzimuthAngle = state.controls.getAzimuthalAngle();
-        state.controls.maxAzimuthAngle = state.controls.getAzimuthalAngle();
-        
-        const dst = toV3(point);
-        dst.y = 1.5; // ≈ agent height
-        state.target = { dst, resolve, reject, ...opts };
+        state.target = {
+          dst: toV3(point),
+          y: 1.5, // agent height
+          resolve,
+          reject,
+          ...opts,
+        };
         // @ts-ignore see patch
         state.controls.zoomToConstant = state.target.dst.clone();
   
@@ -183,8 +191,8 @@ export default function WorldView(props) {
 
       const res = w.e.getRaycastIntersection(e, decoded);
 
-      if (res === undefined) {
-        return; // reachable?
+      if (res === null) {
+        return;
       }
 
       const position = v3Precision(decoded.picked === 'npc'
@@ -292,7 +300,7 @@ export default function WorldView(props) {
     onPointerMove(e) {
       state.lastScreenPoint.copy(getRelativePointer(e));
 
-      if (state.target !== null && state.down !== null && state.getDownDistancePx() > 5) {
+      if (state.target?.resolve !== undefined && state.down !== null && state.getDownDistancePx() > 5) {
         state.clearTarget(); // cancel target if moved a bit
       }
     },
@@ -328,11 +336,14 @@ export default function WorldView(props) {
       }
 
       if (state.target !== null) {
-        state.controls.update();
-        if (dampXZ(state.controls.target, state.target.dst, state.target.smoothTime, deltaMs, state.target.maxSpeed, undefined, 0.01) === false) {
-          state.target.resolve();
-          state.clearTarget();
+        if (dampXZ(state.controls.target, state.target.dst, state.target.smoothTime, deltaMs, state.target.maxSpeed, state.target.y, 0.01) === false) {
+          if (state.target.resolve !== undefined) {
+            state.target.resolve();
+            state.clearTarget();
+          }
         }
+        //@ts-ignore see patch i.e. fix azimuth angle
+        state.controls.update(true);
       }
     },
     openSnapshot(type = 'image/webp', quality) {
@@ -442,7 +453,7 @@ export default function WorldView(props) {
       }
 
       <PerspectiveCamera
-        position={[0, 64, 0]}
+        position={[0, 32, 0]}
         makeDefault
         fov={state.fov}
         zoom={1}
@@ -497,7 +508,7 @@ export default function WorldView(props) {
  * @property {{ tri: THREE.Triangle; indices: THREE.Vector3; mat3: THREE.Matrix3 }} normal
  * @property {THREE.Raycaster} raycaster
  * @property {HTMLDivElement} rootEl
- * @property {null | { dst: THREE.Vector3; reject(err?: any): void; resolve(): void; } & LookAtOpts} target
+ * @property {null | { dst: THREE.Vector3; y?: number; reject?(err?: any): void; resolve?(): void; } & LookAtOpts} target
  * Speed is m/s
  * @property {null | number} targetFov
  * @property {'near' | 'far'} zoomState
@@ -506,7 +517,9 @@ export default function WorldView(props) {
  * @property {() => number} getNumPointers
  * @property {(e: React.PointerEvent, pixel: THREE.TypedArray) => void} onObjectPickPixel
  * @property {(def: WorldPointerEventDef) => NPC.PointerUpEvent | NPC.PointerDownEvent | NPC.LongPointerDownEvent} getWorldPointerEvent
+ * @property {(dst: THREE.Vector3, opts?: LookAtOpts) => void} followPosition
  * @property {(e: React.PointerEvent) => void} handleClickInDebugMode
+ * @property {(input: Geom.VectJson | THREE.Vector3Like, opts?: LookAtOpts) => Promise<void>} lookAt
  * @property {() => import("@react-three/fiber").RootState['frameloop']} syncRenderMode
  * @property {import('@react-three/drei').MapControlsProps['onChange']} onChangeControls
  * @property {import('@react-three/fiber').CanvasProps['onCreated']} onCreated
@@ -516,7 +529,6 @@ export default function WorldView(props) {
  * @property {(e: React.PointerEvent<HTMLElement>) => void} onPointerUp
  * @property {(deltaMs: number) => void} onTick
  * @property {(type?: string, quality?: any) => void} openSnapshot
- * @property {(input: Geom.VectJson | THREE.Vector3Like, opts?: LookAtOpts) => Promise<void>} lookAt
  * @property {(e: React.PointerEvent<HTMLElement>) => void} pickObject
  * @property {(gl: THREE.WebGLRenderer, scene: THREE.Scene, camera: THREE.Camera, ri: THREE.RenderItem & { material: THREE.ShaderMaterial }) => void} renderObjectPickItem
  * @property {() => void} renderObjectPickScene
@@ -568,6 +580,3 @@ const statsCss = css`
 
 const pixelBuffer = new Uint8Array(4);
 const tmpVectThree = new THREE.Vector3();
-
-/** meters per second */
-const defaultSpeed = 2;

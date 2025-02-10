@@ -1512,11 +1512,11 @@
             "decor": true,
             "do": true,
             "stand": true,
-            "point": true,
-            "y": 0.66
+            "y": 0.01,
+            "point": true
           },
-          "bounds2d": {"x": 12, "y": 3.38, "width": 4.25, "height": 4.25},
-          "x": 14.125,
+          "bounds2d": {"x": 12.15, "y": 3.38, "width": 4.25, "height": 4.25},
+          "x": 14.275,
           "y": 5.505,
           "orient": 180
         },
@@ -1841,11 +1841,11 @@
             "decor": true,
             "do": true,
             "stand": true,
-            "point": true,
-            "y": 0.66
+            "y": 0.01,
+            "point": true
           },
-          "bounds2d": {"x": 19.5, "y": 10.25, "width": 4.25, "height": 4.25},
-          "x": 21.625,
+          "bounds2d": {"x": 19.75, "y": 10.25, "width": 4.25, "height": 4.25},
+          "x": 21.875,
           "y": 12.375,
           "orient": -180
         },
@@ -1856,11 +1856,11 @@
             "decor": true,
             "do": true,
             "stand": true,
-            "point": true,
-            "y": 0.66
+            "y": 0.01,
+            "point": true
           },
-          "bounds2d": {"x": 19.5, "y": 11, "width": 4.25, "height": 4.25},
-          "x": 21.625,
+          "bounds2d": {"x": 19.75, "y": 11, "width": 4.25, "height": 4.25},
+          "x": 21.875,
           "y": 13.125,
           "orient": -180
         },
@@ -1952,11 +1952,11 @@
             "decor": true,
             "do": true,
             "stand": true,
-            "point": true,
-            "y": 0.66
+            "y": 0.01,
+            "point": true
           },
-          "bounds2d": {"x": 19.5, "y": 15.5, "width": 4.25, "height": 4.25},
-          "x": 21.625,
+          "bounds2d": {"x": 19.75, "y": 15.5, "width": 4.25, "height": 4.25},
+          "x": 21.875,
           "y": 17.625,
           "orient": 180
         },
@@ -1967,11 +1967,11 @@
             "decor": true,
             "do": true,
             "stand": true,
-            "point": true,
-            "y": 0.66
+            "y": 0.01,
+            "point": true
           },
-          "bounds2d": {"x": 19.5, "y": 14.75, "width": 4.25, "height": 4.25},
-          "x": 21.625,
+          "bounds2d": {"x": 19.75, "y": 14.75, "width": 4.25, "height": 4.25},
+          "x": 21.875,
           "y": 16.875,
           "orient": 180
         },
@@ -5676,8 +5676,8 @@
               "obsId": 0
             }
           },
-          "transform": [0, -1, 1, 0, 21, 12.75],
-          "center": {"x": 21.3, "y": 12.37},
+          "transform": [0, -1, 1, 0, 21.1, 12.75],
+          "center": {"x": 21.4, "y": 12.37},
           "meta": {
             "obstacle": true,
             "symKey": "counter--010--0.4x0.4",
@@ -5709,8 +5709,8 @@
               "obsId": 0
             }
           },
-          "transform": [0, -1, 1, 0, 21, 13.5],
-          "center": {"x": 21.3, "y": 13.12},
+          "transform": [0, -1, 1, 0, 21.1, 13.5],
+          "center": {"x": 21.4, "y": 13.12},
           "meta": {
             "obstacle": true,
             "symKey": "counter--010--0.4x0.4",
@@ -5874,8 +5874,8 @@
               "obsId": 0
             }
           },
-          "transform": [0, 1, 1, 0, 21, 17.25],
-          "center": {"x": 21.3, "y": 17.63},
+          "transform": [0, 1, 1, 0, 21.1, 17.25],
+          "center": {"x": 21.4, "y": 17.63},
           "meta": {
             "obstacle": true,
             "symKey": "counter--010--0.4x0.4",
@@ -5907,8 +5907,8 @@
               "obsId": 0
             }
           },
-          "transform": [0, 1, 1, 0, 21, 16.5],
-          "center": {"x": 21.3, "y": 16.88},
+          "transform": [0, 1, 1, 0, 21.1, 16.5],
+          "center": {"x": 21.4, "y": 16.88},
           "meta": {
             "obstacle": true,
             "symKey": "counter--010--0.4x0.4",
@@ -10679,38 +10679,6 @@
           "orient": 0
         },
         {
-          "type": "point",
-          "key": "",
-          "meta": {
-            "decor": true,
-            "do": true,
-            "stand": true,
-            "sink": true,
-            "point": true,
-            "y": 0.01
-          },
-          "bounds2d": {"x": 22.375, "y": 12.125, "width": 4.25, "height": 4.25},
-          "x": 24.5,
-          "y": 14.25,
-          "orient": 90
-        },
-        {
-          "type": "point",
-          "key": "",
-          "meta": {
-            "decor": true,
-            "do": true,
-            "stand": true,
-            "sink": true,
-            "point": true,
-            "y": 0.01
-          },
-          "bounds2d": {"x": 23.375, "y": 12.125, "width": 4.25, "height": 4.25},
-          "x": 25.5,
-          "y": 14.25,
-          "orient": 90
-        },
-        {
           "type": "quad",
           "key": "",
           "meta": {
@@ -10806,6 +10774,36 @@
           "x": 29.505,
           "y": 14.525,
           "orient": -90
+        },
+        {
+          "type": "point",
+          "key": "",
+          "meta": {
+            "decor": true,
+            "do": true,
+            "stand": true,
+            "y": 0.01,
+            "point": true
+          },
+          "bounds2d": {"x": 23.38, "y": 12.04, "width": 4.25, "height": 4.25},
+          "x": 25.505,
+          "y": 14.165,
+          "orient": 90
+        },
+        {
+          "type": "point",
+          "key": "",
+          "meta": {
+            "decor": true,
+            "do": true,
+            "stand": true,
+            "y": 0.01,
+            "point": true
+          },
+          "bounds2d": {"x": 22.38, "y": 12.04, "width": 4.25, "height": 4.25},
+          "x": 24.505,
+          "y": 14.165,
+          "orient": 90
         },
         {
           "type": "quad",
@@ -14084,6 +14082,72 @@
             "surface": true,
             "table": true,
             "symKey": "extra--008--desk--0.4x1.33",
+            "obsId": 0
+          }
+        },
+        {
+          "symbolKey": "counter--010--0.4x0.4",
+          "obstacleId": 0,
+          "height": 0.65,
+          "origPoly": {
+            "type": "Polygon",
+            "coordinates": [
+              [
+                [0.1192, 0],
+                [0.625, 0],
+                [0.625, 0.2855],
+                [0.6032, 0.3627],
+                [0.5179, 0.4346],
+                [0.3744, 0.474],
+                [0.261, 0.4496],
+                [0.1678, 0.3801],
+                [0.1192, 0.3005]
+              ]
+            ],
+            "meta": {
+              "obstacle": true,
+              "symKey": "counter--010--0.4x0.4",
+              "obsId": 0
+            }
+          },
+          "transform": [1, 0, 0, -1, 25.13, 14.94],
+          "center": {"x": 25.51, "y": 14.64},
+          "meta": {
+            "obstacle": true,
+            "symKey": "counter--010--0.4x0.4",
+            "obsId": 0
+          }
+        },
+        {
+          "symbolKey": "counter--010--0.4x0.4",
+          "obstacleId": 0,
+          "height": 0.65,
+          "origPoly": {
+            "type": "Polygon",
+            "coordinates": [
+              [
+                [0.1192, 0],
+                [0.625, 0],
+                [0.625, 0.2855],
+                [0.6032, 0.3627],
+                [0.5179, 0.4346],
+                [0.3744, 0.474],
+                [0.261, 0.4496],
+                [0.1678, 0.3801],
+                [0.1192, 0.3005]
+              ]
+            ],
+            "meta": {
+              "obstacle": true,
+              "symKey": "counter--010--0.4x0.4",
+              "obsId": 0
+            }
+          },
+          "transform": [1, 0, 0, -1, 24.13, 14.94],
+          "center": {"x": 24.51, "y": 14.64},
+          "meta": {
+            "obstacle": true,
+            "symKey": "counter--010--0.4x0.4",
             "obsId": 0
           }
         },

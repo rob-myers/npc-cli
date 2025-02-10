@@ -123,7 +123,10 @@ class semanticsServiceClass {
   }
 
   private async *Assign({ meta, Name, Value, Naked }: Sh.Assign) {
-    if (Naked || !Value) {
+    if (Name === null) {
+      return; // e.g. `declare -F`
+    }
+    if (Naked === true || Value === null) {
       useSession.api.setVar(meta, Name.Value, '');
       return;
     }
@@ -265,7 +268,7 @@ class semanticsServiceClass {
    * - `ptags=no-pause; foo | bar &` (via inheritance)
    */
   private async supportPTags(node: Sh.CallExpr) {
-    const assign = node.Assigns.find(x => x.Name.Value === 'ptags');
+    const assign = node.Assigns.find(x => x.Name?.Value === 'ptags');
     if (assign?.Value != null) {
       const expanded = await this.lastExpanded(sem.Expand(assign.Value));
       const ptags = tagsToMeta(textToTags(expanded.value));
@@ -382,29 +385,48 @@ class semanticsServiceClass {
     }
   }
 
-  /** Bash language variant only? */
+  /**
+   * 🔔 Reachable when `syntax.Variant(syntax.LangBash)`
+   *    not for `syntax.Variant(syntax.LangPOSIX)`.
+   *  
+   * - we do not take advantage of extra Bash parsing
+   * - we forward the semantics to cmd.service builtin "declare"
+   * - we only support listing variables/functions
+   *   e.g. `declare`, `declare -F`, `declare -f myFunc`
+   * - we use `syntax.Variant(syntax.LangBash)` to support the syntax $'...',
+   *   allowing us to use all possible quotes in our js defs
+   */
   private async *DeclClause(node: Sh.DeclClause) {
-    if (node.Variant.Value === "declare") {
-      if (node.Args.length) {
-        // TODO support options e.g. interpret as json
-        for (const assign of node.Args) yield* this.Assign(assign);
-      } else {
-        node.exitCode = 0;
-        yield* cmdService.runCmd(node, "declare", []);
-      }
-    } else if (node.Variant.Value === "local") {
-      for (const arg of node.Args) {
-        const process = useSession.api.getProcess(node.meta);
-        if (process.key > 0) {
-          // Can only set local variable outside session leader,
-          // where variables are e.g. /home/foo
-          process.localVar[arg.Name.Value] = undefined;
-        }
-        yield* this.Assign(arg);
-      }
-    } else {
-      throw new ShError(`Command: DeclClause: ${node.Variant.Value} unsupported`, 2);
+    const args = [] as string[];
+    for (const { Name, Value } of node.Args) {
+      if (Name !== null)
+        args.push(Name.Value); // myFunc in `declare -f myFunc`
+      else if (Value !== null && Value.Parts[0]?.type === 'Lit')
+        args.push(Value.Parts[0].Value); // -f in `declare -f myFunc`
     }
+    yield* cmdService.runCmd(node, 'declare', args);
+
+    // if (node.Variant.Value === "declare") {
+    //   if (node.Args.length) {
+    //     // TODO support options e.g. interpret as json
+    //     for (const assign of node.Args) yield* this.Assign(assign);
+    //   } else {
+    //     node.exitCode = 0;
+    //     yield* cmdService.runCmd(node, "declare", []);
+    //   }
+    // } else if (node.Variant.Value === "local") {
+    //   for (const arg of node.Args) {
+    //     const process = useSession.api.getProcess(node.meta);
+    //     if (process.key > 0) {
+    //       // Can only set local variable outside session leader,
+    //       // where variables are e.g. /home/foo
+    //       process.localVar[arg.Name.Value] = undefined;
+    //     }
+    //     yield* this.Assign(arg);
+    //   }
+    // } else {
+    //   throw new ShError(`Command: DeclClause: ${node.Variant.Value} unsupported`, 2);
+    // }
   }
 
   /**
