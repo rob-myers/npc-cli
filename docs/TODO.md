@@ -55,7 +55,7 @@
 - 🚧 towards follow cam
   - ℹ️ `w n.rob.position | w view.follow -`
   - ✅ patch OrbitControls to keep follow cam "straight" and avoid "birdseye issue"
-  - follow at agent height
+  - ✅ follow at agent height
   - can start/stop via ContextMenu
   - w.view.followPosition
   - w.e.followNpc

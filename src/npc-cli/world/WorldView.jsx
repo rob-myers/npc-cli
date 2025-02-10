@@ -121,9 +121,13 @@ export default function WorldView(props) {
         ...key === 'pointerup' && { clickId: state.clickIds.pop() },
       };
     },
-    follow(dst, opts = { smoothTime: 1 }) {// 🚧
+    follow(dst, opts = { smoothTime: 1 }) {
+      // @ts-ignore see patch
+      state.controls.zoomToConstant = null;
+
       state.target = {
-        dst, // offset by height?
+        dst,
+        y: 1.5, // agent height
         ...opts,
       };
     },
@@ -147,11 +151,11 @@ export default function WorldView(props) {
       return new Promise((resolve, reject) => {
         state.target = {
           dst: toV3(point),
+          y: 1.5, // agent height
           resolve,
           reject,
           ...opts,
         };
-        state.target.dst.y = 1.5; // agent height
         // @ts-ignore see patch
         state.controls.zoomToConstant = state.target.dst.clone();
   
@@ -332,7 +336,7 @@ export default function WorldView(props) {
       }
 
       if (state.target !== null) {
-        if (dampXZ(state.controls.target, state.target.dst, state.target.smoothTime, deltaMs, state.target.maxSpeed, undefined, 0.01) === false) {
+        if (dampXZ(state.controls.target, state.target.dst, state.target.smoothTime, deltaMs, state.target.maxSpeed, state.target.y, 0.01) === false) {
           if (state.target.resolve !== undefined) {
             state.target.resolve();
             state.clearTarget();
@@ -504,7 +508,7 @@ export default function WorldView(props) {
  * @property {{ tri: THREE.Triangle; indices: THREE.Vector3; mat3: THREE.Matrix3 }} normal
  * @property {THREE.Raycaster} raycaster
  * @property {HTMLDivElement} rootEl
- * @property {null | { dst: THREE.Vector3; reject?(err?: any): void; resolve?(): void; } & LookAtOpts} target
+ * @property {null | { dst: THREE.Vector3; y?: number; reject?(err?: any): void; resolve?(): void; } & LookAtOpts} target
  * Speed is m/s
  * @property {null | number} targetFov
  * @property {'near' | 'far'} zoomState
