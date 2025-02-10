@@ -63,6 +63,7 @@ export function handleProcessError(node: Sh.ParsedSh, e: ProcessError) {
 export function interpretEscapeSequences(input: string): string {
   return JSON.parse(
     JSON.stringify(input)
+      .replace(/\\\\'/g, "\\u0027")
       // '\\e' -> '\\u001b'.
       .replace(/\\\\e/g, "\\u001b")
       // Hex escape-code (0-255) e.g. '\\\\x1b' -> '\\u001b'.

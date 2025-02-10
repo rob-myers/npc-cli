@@ -476,6 +476,9 @@ class srcServiceClass {
         return `(${contents.join(" ")})`;
       }
       case "Assign": {
+        if (node.Name === null) {
+          return this.src(node.Value);
+        }
         const varName = node.Name.Value;
         if (node.Array) {
           return `${varName}=${this.src(node.Array)}`;
@@ -773,8 +776,8 @@ class ParseShService {
     }
     const parser = syntax.NewParser(
       syntax.KeepComments(true),
-      syntax.Variant(syntax.LangPOSIX)
-      // syntax.Variant(syntax.LangBash),
+      // syntax.Variant(syntax.LangPOSIX)
+      syntax.Variant(syntax.LangBash),
       // syntax.Variant(syntax.LangMirBSDKorn),
     );
     const parsed = parser.Parse(src, "src.sh");
@@ -903,15 +906,15 @@ class ParseShService {
     Rparen: this.pos(Rparen),
   });
 
-  private Assign = ({ Pos, End, Append, Array, Index, Naked, Name, Value }: Sh.Assign): Assign => ({
+  private Assign = ({ Pos, End, Append, Array, Index, Naked, Name, Value,  }: Sh.Assign): Assign => ({
     ...this.base({ Pos, End }),
     type: "Assign",
     Append,
     Array: Array ? this.ArrayExpr(Array) : null,
     Index: Index ? this.ArithmExpr(Index) : null,
     Naked,
-    Name: this.Lit(Name),
-    Value: Value ? this.Word(Value) : Value,
+    Name: Name === null ? null : this.Lit(Name),
+    Value: Value === null ? null : this.Word(Value),
     // declOpts: {},
   });
 

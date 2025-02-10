@@ -14,7 +14,9 @@
   - support `map foo.bar baz` (`x.foo.bar(baz)`)
   - support `map x => [x, x] foo` (`["foo", "foo"]`)
 - ✅ sh: clean `map`
-- 🚧 sh: fix "single quotes breaks things"
+
+- ✅ sh: fix "single quotes breaks things"
+  - use `$'...'` from `syntax.Variant(syntax.LangBash)`
 
 - npc re-target-fail keeps in place
   - could store start point and revert
@@ -196,7 +198,7 @@
 - ✅ can color obstacles
 - request new nav-mesh onchange base "getTileCacheGeneratorConfig()"
 - can choose colour of obstacle instances
-- permit single quotes inside e.g. game-generators
+- ✅ permit single quotes inside e.g. game-generators
 - ❌ rebuild animation actions `IdleLeftLead`, `IdleRightLead`
 - ❌ shoulder mesh (extend from chest), or arms closer to chest ❌
 - decor sprite bounds issue on edit decor
@@ -245,7 +247,7 @@ WorldMenu log extras
   - no visible difference, probably due to "quick approach"
 - verify HMR which propagates from assets -> geomorphs.json -> gmsData
 - avoid connector re-computation i.e. extend serialization
-- currently single quotes are breaking game-generators
+- ✅ currently single quotes are breaking game-generators
 - 🚧 Boxy SVG can be slow to save
   - https://boxy-svg.com/bugs/370/intermittent-slow-saving
   - 🚧 try replicate again in Chrome vs Incognito Chrome

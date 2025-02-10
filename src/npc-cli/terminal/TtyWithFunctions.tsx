@@ -50,14 +50,17 @@ function jsFunctionToShellFunction(
 }
 
 function wrapWithRun(fn: (arg: gameGeneratorsJs.RunArg) => any) {
-  const fnText = `${fn}`;
-  return `{\n  run '${fnText.slice(fnText.indexOf('('))}\n' "$@"\n}`;
+  // 🔔 support single-quotes via (a) escaping, (b) bash-syntax $'...'
+  const fnText = `${fn}`.replace(/'/g, "\\'");
+  return `{\n  run $'${fnText.slice(fnText.indexOf('('))}\n' "$@"\n}`;
 }
 
 function wrapWithCall(fn: (arg: gameGeneratorsJs.RunArg) => any) {
-  return `{\n  call '${fn}'\n}`;
+  const fnText = `${fn}`.replace(/'/g, "\\'");
+  return `{\n  call $'${fnText}'\n}`;
 }
 
 function wrapWithMap(fn: (input: any, arg: gameGeneratorsJs.RunArg) => any) {
-  return `{\n  map '${fn}'\n}`;
+  const fnText = `${fn}`.replace(/'/g, "\\'");
+  return `{\n  map $'${fnText}'\n}`;
 }
