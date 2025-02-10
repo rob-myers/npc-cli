@@ -115,6 +115,44 @@ export async function* map(ctxt) {
   const isAsync = func.constructor.name === "AsyncFunction";
   let count = 0;
 
+  if (isNativeCode === false) {
+
+    while ((datum = await api.read(true)) !== api.eof) {
+      try {
+        if (api.isDataChunk(datum) === true) {
+          if (isAsync === false) {// fast on chunks:
+            yield api.dataChunk(datum.items.map(x => func(x, ctxt, count++)));
+          } else {// unwind chunks:
+            for (const item of datum.items) yield await func(item, ctxt, count++);
+          }
+        } else {
+          yield await func(datum, ctxt, count++);
+        }
+      } catch (e) {
+        if (opts.forever === true) {
+          api.error(`${api.meta.stack.join(": ")}: ${e instanceof Error ? e.message : e}`);
+          continue;
+        }
+        throw e;
+      }
+    }
+
+  } else {
+
+    while ((datum = await api.read()) !== api.eof) {
+      try {
+        yield await func(datum);
+      } catch (e) {
+        if (opts.forever === true) {
+          api.error(`${api.meta.stack.join(": ")}: ${e instanceof Error ? e.message : e}`);
+          continue;
+        }
+        throw e;
+      }
+    }
+
+  }
+
   while ((datum = await api.read(true)) !== api.eof) {
     try {
       if (api.isDataChunk(datum) === true) {
@@ -128,6 +166,34 @@ export async function* map(ctxt) {
       } else {
         yield await (isNativeCode ? func(datum) : func(datum, ctxt, count++));
       }
+    } catch (e) {
+      if (opts.forever === true) {
+        api.error(`${api.meta.stack.join(": ")}: ${e instanceof Error ? e.message : e}`);
+      } else {
+        throw e;
+      }
+    }
+  }
+}
+
+/**
+ * Apply native or one-arg-function to each item from stdin.
+ * ```sh
+ * echo foo | mapBasic Array.from
+ * ```
+ * - ℹ️ We do not support chunks.
+ * - ℹ️ To use `await`, the one-arg-function must begin with `async`.
+ * @param {RunArg} ctxt
+ */
+export async function* mapBasic(ctxt) {
+  let { api, args, datum } = ctxt;
+  const { operands, opts } = api.getOpts(args, { boolean: ["forever"] });
+  // e.g. "Array.from", "x => [x, x]"
+  const func = Function(`return ${operands[0]}`)();
+
+  while ((datum = await api.read()) !== api.eof) {
+    try {
+      yield await func(datum);
     } catch (e) {
       if (opts.forever === true) {
         api.error(`${api.meta.stack.join(": ")}: ${e instanceof Error ? e.message : e}`);

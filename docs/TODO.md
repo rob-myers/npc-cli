@@ -13,7 +13,7 @@
 - ✅ sh `map` can supply args to function selector
   - support `map foo.bar baz` (`x.foo.bar(baz)`)
   - support `map x => [x, x] foo` (`["foo", "foo"]`)
-- 🚧 sh: clean `map`
+- ✅ sh: clean `map`
 - 🚧 sh: fix "single quotes breaks things"
 
 - npc re-target-fail keeps in place
