@@ -52,7 +52,6 @@
     - ✅ avoid turn on stop nearby, avoid others turning to other npc
   - ✅ can override this behaviour: set `npc.s.autoIdleLook` false
 
-- review how `npc.js` is using `this.w.*`
 - 🚧 towards follow cam
   - ℹ️ `w n.rob.position | w view.follow -`
   - ✅ patch OrbitControls to keep follow cam "straight" and avoid "birdseye issue"
@@ -61,7 +60,13 @@
   - w.view.followPosition
   - w.e.followNpc
 
+- review how `npc.js` is using `this.w.*`
 - sh: fix "single quotes breaks things"
+- 🚧 avoid rebuild w.texFloor w.texCeil on World hmr
+  - ℹ️ previously needed for Floor/Ceil hmr on edit drawGm
+  - ℹ️ strangely seems fixed if initialize textures to correct width, height
+- improve hmr strategy
+  - changing service/const
 
 - npc re-target-fail keeps in place
   - could store start point and revert

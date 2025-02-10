@@ -138,7 +138,7 @@ export default function Floor(props) {
       state.inst.instanceMatrix.needsUpdate = true;
       state.inst.computeBoundingSphere();
     },
-  }), { reset: { grid: true, largeGrid: true } });
+  }), { reset: { grid: false, largeGrid: false } });
 
   w.floor = state;
   const { tex } = w.texFloor;

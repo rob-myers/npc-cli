@@ -29,10 +29,9 @@ export class TexArray {
     
     const data = new Uint8Array(opts.numTextures * 4 * opts.width * opts.height);
 
-    const tex = new THREE.DataArrayTexture(data, opts.width, opts.height, opts.numTextures);
-    tex.format = THREE.RGBAFormat;
-    tex.type = THREE.UnsignedByteType;
-    this.tex = tex;
+    this.tex = new THREE.DataArrayTexture(data, opts.width, opts.height, opts.numTextures);
+    this.tex.format = THREE.RGBAFormat;
+    this.tex.type = THREE.UnsignedByteType;
   }
 
   dispose() {
@@ -58,10 +57,9 @@ export class TexArray {
     this.tex.dispose();
     const data = new Uint8Array(opts.numTextures * 4 * opts.width * opts.height);
 
-    const tex = new THREE.DataArrayTexture(data, opts.width, opts.height, opts.numTextures);
-    tex.format = THREE.RGBAFormat;
-    tex.type = THREE.UnsignedByteType;
-    this.tex = tex;
+    this.tex = new THREE.DataArrayTexture(data, opts.width, opts.height, opts.numTextures);
+    this.tex.format = THREE.RGBAFormat;
+    this.tex.type = THREE.UnsignedByteType;
   }
 
   update() {

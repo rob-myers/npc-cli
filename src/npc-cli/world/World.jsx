@@ -65,8 +65,9 @@ export default function World(props) {
     hmr: /** @type {*} */ ({}),
     smallViewport: isSmallViewport(),
 
-    texFloor: new TexArray({ ctKey: 'floor-tex-array', numTextures: 1, width: 0, height: 0 }),
-    texCeil: new TexArray({ ctKey: 'ceil-tex-array', numTextures: 1, width: 0, height: 0 }),
+    // 🔔 hmr issue when initial width = height = 0
+    texFloor: new TexArray({ ctKey: 'floor-tex-array', numTextures: 1, width: floorTextureDimension, height: floorTextureDimension }),
+    texCeil: new TexArray({ ctKey: 'ceil-tex-array', numTextures: 1, width: floorTextureDimension, height: floorTextureDimension }),
     texDecor: new TexArray({ ctKey: 'decor-tex-array', numTextures: 1, width: 0, height: 0 }),
     texObs: new TexArray({ ctKey: 'obstacle-tex-array', numTextures: 1, width: 0, height: 0 }),
     texVs: { floor: 0, ceiling: 0 },
@@ -140,7 +141,7 @@ export default function World(props) {
       mutator?.(state);
       update();
     },
-  }), { reset: { lib: true } });
+  }), { reset: { lib: true, texFloor: false, texCeil: false } });
 
   state.disabled = !!props.disabled;
 
@@ -153,7 +154,6 @@ export default function World(props) {
         return false; // Avoid query from disposed module
       }
 
-      const justHmr = query.data === false;
       const prevGeomorphs = state.geomorphs;
       const geomorphsJson = await fetchGeomorphsJson();
 
@@ -206,7 +206,7 @@ export default function World(props) {
         state.menu.measure('gmsData');
       }
 
-      if (mapChanged || justHmr) {
+      if (mapChanged) {
         const dimension = floorTextureDimension;
         state.texFloor.resize({ width: dimension, height: dimension, numTextures: next.gmsData.seenGmKeys.length });
         state.texCeil.resize({ width: dimension, height: dimension, numTextures: next.gmsData.seenGmKeys.length });
