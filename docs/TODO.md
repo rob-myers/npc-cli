@@ -9,7 +9,12 @@
   - ℹ️ strangely seems fixed if initialize textures to correct width, height
 - ✅ review how `npc.js` is using `this.w.*`
   - ℹ️ w.events, w.gmGraph, w.npc, w.n
-- sh: fix "single quotes breaks things"
+
+- ✅ sh `map` can supply args to function selector
+  - support `map foo.bar baz` (`x.foo.bar(baz)`)
+  - support `map x => [x, x] foo` (`["foo", "foo"]`)
+- 🚧 sh: clean `map`
+- 🚧 sh: fix "single quotes breaks things"
 
 - npc re-target-fail keeps in place
   - could store start point and revert
@@ -24,6 +29,7 @@
 - can only spawn onto navigable floor or do point
 - spawn onto do point uses orient
 - should not be able to spawn from offMesh do to any nav point
+  - ℹ️ e.g. restrict to current room
 - fade Html3d labels whilst window/canvas resize (jerks otherwise)
 
 - ❌ BUG `click 1>p` sometimes overridden by moveTo
