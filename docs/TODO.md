@@ -52,13 +52,17 @@
     - ✅ avoid turn on stop nearby, avoid others turning to other npc
   - ✅ can override this behaviour: set `npc.s.autoIdleLook` false
 
-- 🚧 towards follow cam
+- ✅ follow cam
   - ℹ️ `w n.rob.position | w view.follow -`
   - ✅ patch OrbitControls to keep follow cam "straight" and avoid "birdseye issue"
   - ✅ follow at agent height
-  - can start/stop via ContextMenu
-  - w.view.followPosition
-  - w.e.followNpc
+  - ✅ can start/stop via ContextMenu
+    - ℹ️ follow starts, look (at anything) stops
+  - ✅ w.view.followPosition
+  - ✅ w.e.followNpc
+    - `w e.followNpc rob`
+  - ✅ can directly stop follow
+    - `w e.stopFollowing`
 
 - review how `npc.js` is using `this.w.*`
 - sh: fix "single quotes breaks things"

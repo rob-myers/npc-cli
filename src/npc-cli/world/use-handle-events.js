@@ -137,6 +137,10 @@ export default function useHandleEvents(w) {
       // warn(`${'decodeObjectPick'}: failed to decode: ${JSON.stringify({ r, g, b, a })}`);
       return null;
     },
+    followNpc(npcKey) {
+      const npc = w.n[npcKey];
+      w.view.followPosition(npc.position);
+    },
     getRaycastIntersection(e, decoded) {
       /** @type {THREE.Mesh} */
       let mesh;
@@ -588,6 +592,9 @@ export default function useHandleEvents(w) {
     someNpcNearDoor(gdKey) {
       return state.doorToNearbyNpcs[gdKey]?.size > 0;
     },
+    stopFollowing() {
+      w.view.clearTarget();
+    },
     toggleDoor(gdKey, opts) {
       const door = w.door.byKey[gdKey];
 
@@ -678,6 +685,7 @@ export default function useHandleEvents(w) {
  * @property {(door: Geomorph.DoorState) => boolean} canCloseDoor
  * @property {(npcKey: string, gdKey: Geomorph.GmDoorKey) => boolean} npcCanAccess
  * @property {(r: number, g: number, b: number, a: number) => null | NPC.DecodedObjectPick} decodeObjectPick
+ * @property {(npcKey: string) => void} followNpc
  * @property {(e: React.PointerEvent<Element>, decoded: NPC.DecodedObjectPick) => null | { intersection: THREE.Intersection; mesh: THREE.Mesh }} getRaycastIntersection
  * @property {(npcKey: string, regexDef: string) => void} grantNpcAccess
  * @property {(e: NPC.Event) => void} handleEvents
@@ -697,6 +705,7 @@ export default function useHandleEvents(w) {
  * @property {(npcKey: string, regexDef: string) => void} revokeNpcAccess
  * @property {(npcKey: string, ...parts: string[]) => void} say
  * @property {(gdKey: Geomorph.GmDoorKey) => boolean} someNpcNearDoor
+ * @property {() => void} stopFollowing
  * @property {(gdKey: Geomorph.GmDoorKey, opts: { npcKey?: string; } & Geomorph.ToggleDoorOpts) => boolean} toggleDoor
  * Returns `true` iff successful.
  * @property {(gdKey: Geomorph.GmDoorKey, opts: { npcKey?: string; point?: Geom.VectJson; } & Geomorph.ToggleLockOpts) => boolean} toggleLock

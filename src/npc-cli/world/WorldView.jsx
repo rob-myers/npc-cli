@@ -121,7 +121,7 @@ export default function WorldView(props) {
         ...key === 'pointerup' && { clickId: state.clickIds.pop() },
       };
     },
-    follow(dst, opts = { smoothTime: 1 }) {
+    followPosition(dst, opts = { smoothTime: 1 }) {
       // @ts-ignore see patch
       state.controls.zoomToConstant = null;
 
@@ -517,7 +517,7 @@ export default function WorldView(props) {
  * @property {() => number} getNumPointers
  * @property {(e: React.PointerEvent, pixel: THREE.TypedArray) => void} onObjectPickPixel
  * @property {(def: WorldPointerEventDef) => NPC.PointerUpEvent | NPC.PointerDownEvent | NPC.LongPointerDownEvent} getWorldPointerEvent
- * @property {(dst: THREE.Vector3, opts?: LookAtOpts) => void} follow
+ * @property {(dst: THREE.Vector3, opts?: LookAtOpts) => void} followPosition
  * @property {(e: React.PointerEvent) => void} handleClickInDebugMode
  * @property {(input: Geom.VectJson | THREE.Vector3Like, opts?: LookAtOpts) => Promise<void>} lookAt
  * @property {() => import("@react-three/fiber").RootState['frameloop']} syncRenderMode

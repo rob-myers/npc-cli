@@ -201,7 +201,7 @@ export async function* handleContextMenu({ api, w, datum: e }) {
         break;
       case "follow":
         if (typeof meta.npcKey === "string") {
-          w.view.follow(w.n[meta.npcKey].position);
+          w.view.followPosition(w.n[meta.npcKey].position);
         }
         break;
       case "open":
