@@ -28,12 +28,15 @@
 - clean up z-index
   - e.g. "opts above menu"
 - auto-dock ContextMenu in profile-1
-- can only spawn onto navigable floor or do point
+- 🚧 can only spawn onto navigable floor or do point
+  - redo spawn args
+  - maybe every npc has an agent?
 - spawn onto do point uses orient
 - should not be able to spawn from offMesh do to any nav point
   - ℹ️ e.g. restrict to current room
 - fade Html3d labels whilst window/canvas resize (jerks otherwise)
 
+- changing `npc-cli/service/const` does not restore agent position
 - try avoid "narrowEntrances" by allocating more links
   > https://github.com/recastnavigation/recastnavigation/pull/756#issuecomment-2633978785
 

@@ -76,7 +76,6 @@ declare namespace NPC {
      */
     agent?: boolean;
     meta?: Geom.Meta;
-    requireNav?: boolean;
   }
 
   type AnimKey = keyof import('../service/helper').Helper['fromAnimKey'];

@@ -165,8 +165,8 @@ export default function Npcs(props) {
       // 🔔 attach agent by default if dst navigable
       dstNav === true && (e.agent ??= true);
 
-      if (e.requireNav === true && dstNav === false) {
-        throw Error(`cannot spawn outside navPoly: ${JSON.stringify(e)}`);
+      if (dstNav === false && e.meta?.do !== true) {
+        throw Error(`must spawn on navPoly or do point: ${JSON.stringify(e)}`);
       } else if (e.agent === true && dstNav === false) {
         throw Error(`cannot add agent outside navPoly`);
       } else if (e.classKey !== undefined && !w.lib.isNpcClassKey(e.classKey)) {
