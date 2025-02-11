@@ -711,15 +711,15 @@ class semanticsServiceClass {
       if (process.status === ProcessStatus.Killed) {
         throw killError(node.meta);
       }
-      // Force iteration to take at least 1 second
-      if ((itLengthMs = Date.now() - itStartMs) < 1000) {
-        await sleep(node.meta, 1 - itLengthMs / 1000);
+      /** Force iteration to take at least @see {itMinLengthMs} milliseconds */
+      if ((itLengthMs = Date.now() - itStartMs) < itMinLengthMs) {
+        await sleep(node.meta, (itMinLengthMs - itLengthMs) / 1000);
       }
       itStartMs = Date.now();
 
       yield* this.stmts(node, Cond);
 
-      if (Until ? !node.exitCode : node.exitCode) {
+      if (Until === true ? !node.exitCode : node.exitCode) {
         // e.g. consider `while false; do echo foo; done`
         node.exitCode = 0;
         break;
@@ -734,3 +734,6 @@ export const semanticsService = new semanticsServiceClass();
 
 /** Local shortcut */
 const sem = semanticsService;
+
+const itMinLengthMs = 300;
+
