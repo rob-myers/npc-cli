@@ -460,10 +460,12 @@ class geomServiceClass {
 
   /**
    * Find closest point on segment `[p0, p1]` to segment `[q0, q1]`
+   * Returns `lambda` ∊ [0, 1] s.t. intersection is `p0 + (p1 - p0) * lambda`.
    * @param {Geom.VectJson} p0 
    * @param {Geom.VectJson} p1 
    * @param {Geom.VectJson} q0 
    * @param {Geom.VectJson} q1 
+   * @returns {number} 
    */
   getClosestOnSegToSeg(p0, p1, q0, q1) {
     const lambda = this.getLineSegsIntersection(p0, p1, q0, q1);
@@ -471,9 +473,11 @@ class geomServiceClass {
       const normal = tmpVec1.set(-(q1.y - q0.y), q1.x - q0.x).normalize();
       const dist0 = Math.abs(normal.dot(tmpVec2.copy(p0).sub(q0)));
       const dist1 = Math.abs(normal.dot(tmpVec2.copy(p1).sub(q0)));
-      return dist0 < dist1 ? p0 : p1;
+      // return dist0 < dist1 ? p0 : p1;
+      return dist0 < dist1 ? 0 : 1;
     } else {// p0 + (p1 - p0) * lambda
-      return Vect.from(p0).addScaled(Vect.from(p1).sub(p0), lambda);
+      // return Vect.from(p0).addScaled(Vect.from(p1).sub(p0), lambda);
+      return lambda;
     }
   }
 

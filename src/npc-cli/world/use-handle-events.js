@@ -524,7 +524,7 @@ export default function useHandleEvents(w) {
       };
 
       // 🔔 extend npcPoint --> corner in each direction, since
-      // offMeshConnections are slightly away from doorway
+      // offMeshConnections are slightly away from doorway 
       const agSrc = {
         x: npcPoint.x - (corner.x - npcPoint.x),
         y: npcPoint.y - (corner.y - npcPoint.y),
@@ -534,18 +534,34 @@ export default function useHandleEvents(w) {
         y: corner.y + (corner.y - npcPoint.y),
       };
 
-      const newSrc = geom.getClosestOnSegToSeg(enSrc, enDst, agSrc, agDst);
+      // ❌ what do we know when lambda1 === null ?
+      // 🚧 shorter path when can go direct from npcPoint --> newDst
+
+      const enLambda = geom.getClosestOnSegToSeg(enSrc, enDst, agSrc, agDst);
+      const newSrc = {
+        x: enSrc.x + enLambda * (enDst.x - enSrc.x),
+        y: enSrc.y + enLambda * (enDst.y - enSrc.y),
+      };
       
       // if newSrc --> corner intersects exit segment, use it (avoid turn)
-      const lambda = geom.getLineSegsIntersection(exSrc, exDst, newSrc, corner);
+      const exIota = geom.getLineSegsIntersection(exSrc, exDst, newSrc, corner);
 
-      const newDst = lambda === null
-        ? geom.getClosestOnSegToSeg(exSrc, exDst, agSrc, agDst)
-        : { 
-            x: exSrc.x + lambda * (exDst.x - exSrc.x),
-            y: exSrc.y + lambda * (exDst.y - exSrc.y),
-          }
-      ;
+      /** @type {Geom.VectJson} */
+      let newDst;
+
+      if (exIota === null) {
+        const exLambda = geom.getClosestOnSegToSeg(exSrc, exDst, agSrc, agDst);
+        newDst = { 
+          x: exSrc.x + exLambda * (exDst.x - exSrc.x),
+          y: exSrc.y + exLambda * (exDst.y - exSrc.y),
+        }
+      } else {
+        newDst = { 
+          x: exSrc.x + exIota * (exDst.x - exSrc.x),
+          y: exSrc.y + exIota * (exDst.y - exSrc.y),
+        }
+      }
+
       // console.log({
       //   src: offMesh.src,
       //   dst: offMesh.dst,
