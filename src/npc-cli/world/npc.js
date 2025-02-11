@@ -256,20 +256,6 @@ export class Npc {
   }
 
   /**
-   * @param {NPC.CrowdAgent} agent
-   * Next corner, possibly after an offMeshConnection.
-   */
-  getNextCorner(agent) {
-    const offset = agent.state() === 2 ? 6 : 0;
-    // agent.corners() can be empty because ncorners 0 while offMeshConnection
-    return {
-      x: agent.raw.get_cornerVerts(offset + 0),
-      y: agent.raw.get_cornerVerts(offset + 1),
-      z: agent.raw.get_cornerVerts(offset + 2),
-    };
-  }
-
-  /**
    * @param {number} ccwEastAngle ccw from east (standard mathematical convention)
    * @returns {number} respective value of `rotation.y` taking initial facing angle into account
    * - euler y rotation has same sense/sign as "ccw from east"
@@ -865,12 +851,21 @@ export class Npc {
       return;
     }
 
-    this.s.target = null;
-    // this.s.lookAngleDst = null;
-    const nextCorner = this.getNextCorner(this.agent);
-    this.s.lookAngleDst = this.getEulerAngle(this.getLookAngle(nextCorner));
-
     this.s.lookSecs = 0.3;
+    if (this.position.distanceTo(this.s.target) < 0.1) {
+      this.s.lookAngleDst = null; // e.g. after offMeshConnection
+    } else {
+      const offset = this.agent.state() === 2 ? 6 : 0;
+      const lookTarget = {// agent.corners() empty while offMeshConnection
+        x: this.agent.raw.get_cornerVerts(offset + 0),
+        y: this.agent.raw.get_cornerVerts(offset + 1),
+        z: this.agent.raw.get_cornerVerts(offset + 2),
+      };
+      this.s.lookAngleDst = this.getEulerAngle(this.getLookAngle(lookTarget));
+    }
+
+    this.s.target = null;
+
     this.agent.updateParameters({
       maxSpeed: this.getMaxSpeed() * 0.75,
       maxAcceleration: staticMaxAcceleration,
