@@ -25,6 +25,9 @@
 - ✅ npc re-target-fail keeps in place
   - store start point and revert if moved less than 5cms
 - ✅ npc turns towards "next corner" on stopMoving
+- fix turning 
+  - turning other when stop nearby
+  - still sometimes seeing bad final turn after offMeshConnection
 - improve npc finish-moving condition
   - optional strategy to avoid agent deadlock when have similar target
   - e.g. stop when little progress
