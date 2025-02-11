@@ -534,32 +534,39 @@ export default function useHandleEvents(w) {
         y: corner.y + (corner.y - npcPoint.y),
       };
 
-      // ❌ what do we know when lambda1 === null ?
-      // 🚧 shorter path when can go direct from npcPoint --> newDst
-
       const enLambda = geom.getClosestOnSegToSeg(enSrc, enDst, agSrc, agDst);
-      const newSrc = {
+      let newSrc = {
         x: enSrc.x + enLambda * (enDst.x - enSrc.x),
         y: enSrc.y + enLambda * (enDst.y - enSrc.y),
       };
+      /** @type {Geom.VectJson} */
+      let newDst;
       
       // if newSrc --> corner intersects exit segment, use it (avoid turn)
       const exIota = geom.getLineSegsIntersection(exSrc, exDst, newSrc, corner);
-
-      /** @type {Geom.VectJson} */
-      let newDst;
-
+      
       if (exIota === null) {
         const exLambda = geom.getClosestOnSegToSeg(exSrc, exDst, agSrc, agDst);
         newDst = { 
           x: exSrc.x + exLambda * (exDst.x - exSrc.x),
           y: exSrc.y + exLambda * (exDst.y - exSrc.y),
+        };
+        
+        if (exLambda === 0 || exLambda === 1) {// if "turning around corner"
+          // if npcPoint --> newDst intersects entrance segment, use it (avoid turn)
+          const enIota = geom.getLineSegsIntersection(enSrc, enDst, npcPoint, newDst);
+          if (enIota !== null) {
+            newSrc = { 
+              x: enSrc.x + enIota * (enDst.x - enSrc.x),
+              y: enSrc.y + enIota * (enDst.y - enSrc.y),
+            };
+          }
         }
       } else {
         newDst = { 
           x: exSrc.x + exIota * (exDst.x - exSrc.x),
           y: exSrc.y + exIota * (exDst.y - exSrc.y),
-        }
+        };
       }
 
       // console.log({
@@ -570,6 +577,7 @@ export default function useHandleEvents(w) {
       //   newDst,
       // });
 
+      // adjust RecastDetour dtCrowdAgentAnimation
       const anim = /** @type {import("./npc").dtCrowdAgentAnimation} */ (npc.agentAnim);
       anim.set_initPos(0, npcPoint.x);
       anim.set_initPos(2, npcPoint.y);
@@ -577,7 +585,6 @@ export default function useHandleEvents(w) {
       anim.set_startPos(2, newSrc.y);
       anim.set_endPos(0, newDst.x);
       anim.set_endPos(2, newDst.y);
-      // adjust "times"
       anim.set_t(0);
       anim.set_tmid(npcPoint.distanceTo(newSrc) / npc.getMaxSpeed());
       anim.set_tmax(anim.tmid + (Vect.from(newSrc).distanceTo(newDst) / npc.getMaxSpeed()));

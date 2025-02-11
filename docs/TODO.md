@@ -18,9 +18,9 @@
 - ✅ sh: fix "single quotes breaks things"
   - use `$'...'` from `syntax.Variant(syntax.LangBash)`
 
-- 🚧 improve offMeshConnection traversal
+- ✅ improve offMeshConnection traversal
   - ✅ when can go direct from newSrc -> corner
-  - when can go direct from npcPoint -> newDst
+  - ✅ when can go direct from npcPoint -> newDst
 
 - ✅ npc re-target-fail keeps in place
   - store start point and revert if moved less than 5cms
