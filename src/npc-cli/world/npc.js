@@ -77,6 +77,10 @@ export class Npc {
   agentAnim = null;
   
   /**
+   * Last starting position.
+   */
+  lastStart = new THREE.Vector3();
+  /**
    * - Current target (if moving)
    * - Last set one (if not)
    */
@@ -235,7 +239,6 @@ export class Npc {
         meta: opts.meta,
         npcKey: this.key,
         point,
-        requireNav: opts.requireNav,
       });
     } finally {
       await this.fade(1, 300);
@@ -319,7 +322,7 @@ export class Npc {
   handleOffMeshConnection(agent, offMesh) {
 
     if (offMesh.seg === 0) {
-      this.handlePreOffMeshCollisions(agent);
+      this.handlePreOffMeshCollision(agent);
     }
 
     const anim = /** @type {dtCrowdAgentAnimation} */ (this.agentAnim);
@@ -347,7 +350,7 @@ export class Npc {
    * Detect collisions whilst on initial segment of offMeshConnection
    * @param {NPC.CrowdAgent} agent
    */
-  handlePreOffMeshCollisions(agent) {
+  handlePreOffMeshCollision(agent) {
     const nneis  = agent.raw.nneis;
     /** @type {dtCrowdNeighbour} */ let nei;
 
@@ -455,9 +458,11 @@ export class Npc {
       separationWeight: movingSeparationWeight,
       queryFilterType: this.w.lib.queryFilterType.excludeDoors,
     });
+
+    this.lastStart.copy(this.position);
+    this.s.target = this.lastTarget.copy(closest);
     this.agent.requestMoveTarget(closest);
 
-    this.s.target = this.lastTarget.copy(closest);
     const nextAct = this.s.run ? 'Run' : 'Walk';
     if (this.s.act !== nextAct) {
       this.startAnimation(nextAct);
@@ -867,7 +872,11 @@ export class Npc {
     this.startAnimation('Idle');
 
     if (this.s.offMesh === null || this.s.offMesh.seg === 0) {
-      const position = this.agent.position();
+      const agentPosition = this.agent.position();
+      const position = this.lastStart.distanceTo(agentPosition) <= 0.05
+        ? this.lastStart
+        : agentPosition
+      ;
       this.agent.teleport(position);
       this.agent.requestMoveTarget(position);
       /** @type {dtCrowdAgentAnimation} */ (this.agentAnim).set_active(false);

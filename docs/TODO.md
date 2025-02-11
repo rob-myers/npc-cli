@@ -20,8 +20,8 @@
 
 - improve offMeshConnection traversal when can go direct from src -> nextCorner
 
-- npc re-target-fail keeps in place
-  - could store start point and revert
+- ✅ npc re-target-fail keeps in place
+  - store start point and revert if moved less than 5cms
 - npc at least turns toward target even if immediately fails
 - improve npc finish-moving condition
   - optional strategy to avoid agent deadlock when have similar target
