@@ -11,8 +11,8 @@
 yarn change
 # bump respective versions
 yarn changeset version
-
 # 🔔 manually bump sub-versions
+yarn
 
 # commit and push
 # e.g. branch feat/expose-off-mesh-anim
@@ -20,7 +20,6 @@ yarn changeset version
 yarn publish
 
 # 🔔 may have to wait a bit for registry to update
-# finally, optionally run `yarn`
 
 # ---------------
 # at npc-cli repo
