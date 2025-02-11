@@ -508,29 +508,44 @@ export default function useHandleEvents(w) {
       }
     },
     overrideOffMeshConnectionAngle(npc, offMesh, door) {
+      // Entrances are aligned to offMeshConnections
+      // - entrance segment (enSrc, enDst)
+      // - exit segment (exSrc, exDst)
+      const { src: enSrc, dst: enDst } = door.entrances[offMesh.aligned === true ? 0 : 1];
+      const { src: exSrc, dst: exDst } = door.entrances[offMesh.aligned === true ? 1 : 0];
+
       const npcPoint = Vect.from(npc.getPoint());
+
+      // agent.corners() not available because ag->ncorners is 0
       const agent = /** @type {NPC.CrowdAgent} */ (npc.agent);
-      const corner = { x: agent.raw.get_cornerVerts(6 + 0), y: agent.raw.get_cornerVerts(6 + 2) };
+      const corner = {
+        x: agent.raw.get_cornerVerts(6 + 0),
+        y: agent.raw.get_cornerVerts(6 + 2),
+      };
 
-      /** Entrances are aligned to offMeshConnections */
-      const entranceSeg = door.entrances[offMesh.aligned === true ? 0 : 1];
-      const exitSeg = door.entrances[offMesh.aligned === true ? 1 : 0];
-
-      // corners() not available because ag->ncorners is 0
-      const targetSeg = { src: npcPoint, dst: corner };
-
-      // 🔔 scale targetSeg.src --> targetSeg.dst to ensure hits srcSeg, dstSeg, since
+      // 🔔 extend npcPoint --> corner in each direction, since
       // offMeshConnections are slightly away from doorway
-      const extendedSrc = {
-        x: targetSeg.src.x - (targetSeg.dst.x - targetSeg.src.x),
-        y: targetSeg.src.y - (targetSeg.dst.y - targetSeg.src.y),
+      const agSrc = {
+        x: npcPoint.x - (corner.x - npcPoint.x),
+        y: npcPoint.y - (corner.y - npcPoint.y),
       };
-      const extendedDst = {
-        x: targetSeg.dst.x + (targetSeg.dst.x - targetSeg.src.x),
-        y: targetSeg.dst.y + (targetSeg.dst.y - targetSeg.src.y),
+      const agDst = {
+        x: corner.x + (corner.x - npcPoint.x),
+        y: corner.y + (corner.y - npcPoint.y),
       };
-      const newSrc = geom.getClosestOnSegToSeg(entranceSeg.src, entranceSeg.dst, extendedSrc, targetSeg.dst);
-      const newDst = geom.getClosestOnSegToSeg(exitSeg.src, exitSeg.dst, targetSeg.src, extendedDst);
+
+      const newSrc = geom.getClosestOnSegToSeg(enSrc, enDst, agSrc, agDst);
+      
+      // if newSrc --> corner intersects exit segment, use it (avoid turn)
+      const lambda = geom.getLineSegsIntersection(exSrc, exDst, newSrc, corner);
+
+      const newDst = lambda === null
+        ? geom.getClosestOnSegToSeg(exSrc, exDst, agSrc, agDst)
+        : { 
+            x: exSrc.x + lambda * (exDst.x - exSrc.x),
+            y: exSrc.y + lambda * (exDst.y - exSrc.y),
+          }
+      ;
       // console.log({
       //   src: offMesh.src,
       //   dst: offMesh.dst,
