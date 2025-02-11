@@ -180,7 +180,7 @@ export default function WorldWorkers() {
         mapKey: w.mapKey, // On HMR must provide existing npcs:
         npcs: Object.values(w.npc?.npc ?? {}).map((npc) => ({
           npcKey: npc.key,
-          position: npc.getPosition(),
+          position: npc.position,
         })),
       });
 

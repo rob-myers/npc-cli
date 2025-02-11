@@ -333,7 +333,7 @@ export default function useHandleEvents(w) {
         case "spawned": {
           if (npc.s.spawns === 1) {
             // 1st spawn
-            const { x, y, z } = npc.getPosition();
+            const { x, y, z } = npc.position;
             w.physics.worker.postMessage({
               type: 'add-npcs',
               npcs: [{ npcKey: e.npcKey, position: { x, y, z } }],
@@ -370,8 +370,8 @@ export default function useHandleEvents(w) {
           const agent = /** @type {NPC.CrowdAgent} */ (npc.agent);
           agent.raw.set_targetReplan(true);
 
-          if (e.showNavPath) {
-            const path = w.npc.findPath(npc.getPosition(), /** @type {THREE.Vector3} */ (npc.s.target));
+          if (e.showNavPath === true) {
+            const path = w.npc.findPath(npc.position, /** @type {THREE.Vector3} */ (npc.s.target));
             w.debug.setNavPath(path ?? []);
           }
           break;
@@ -468,6 +468,7 @@ export default function useHandleEvents(w) {
         anim.set_tmax(anim.t + tmpVect1.copy(npc.getPoint()).distanceTo(offMesh.dst) / npc.getSlowSpeed());
         agent.updateParameters({ maxSpeed: npc.getSlowSpeed() });
         npc.startAnimation('Walk');
+        break;
       }
     },
     onExitDoorCollider(e) {// e.type === 'nearby'
@@ -516,7 +517,7 @@ export default function useHandleEvents(w) {
 
       const npcPoint = Vect.from(npc.getPoint());
 
-      // agent.corners() not available because ag->ncorners is 0
+      // agent.corners() not available because ag->ncorners is 0 on offMeshConnection
       const agent = /** @type {NPC.CrowdAgent} */ (npc.agent);
       const corner = {
         x: agent.raw.get_cornerVerts(6 + 0),

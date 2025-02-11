@@ -4,7 +4,7 @@
 
 ### Final clean before migration
 
-- 🚧 avoid rebuild w.texFloor w.texCeil on World hmr
+- ✅ avoid rebuild w.texFloor w.texCeil on World hmr
   - ℹ️ previously needed for Floor/Ceil hmr on edit drawGm
   - ℹ️ strangely seems fixed if initialize textures to correct width, height
 - ✅ review how `npc.js` is using `this.w.*`
@@ -24,7 +24,7 @@
 
 - ✅ npc re-target-fail keeps in place
   - store start point and revert if moved less than 5cms
-- npc at least turns toward target even if immediately fails
+- ✅ npc turns towards "next corner" on stopMoving
 - improve npc finish-moving condition
   - optional strategy to avoid agent deadlock when have similar target
   - e.g. stop when little progress

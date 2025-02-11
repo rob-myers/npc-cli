@@ -116,13 +116,13 @@ export default function Npcs(props) {
       await pause();
       for(const npc of npcs ) {
         const agent = state.attachAgent(npc);
-        const closest = state.getClosestNavigable(npc.getPosition());
+        const closest = state.getClosestNavigable(npc.position);
         if (closest === null) {// Agent outside nav keeps target but `Idle`s 
           npc.startAnimation('Idle');
         } else if (npc.s.target !== null) {
           npc.moveTo(toXZ(npc.s.target));
         } else {// so they'll move "out of the way" of other npcs
-          agent.requestMoveTarget(npc.getPosition());
+          agent.requestMoveTarget(npc.position);
         }
       }
     },

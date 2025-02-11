@@ -49,7 +49,6 @@ export class Npc {
     act: /** @type {NPC.AnimKey} */ ('Idle'),
     agentState: /** @type {null | number} */ (null),
     autoIdleLook: true,
-    cancels: 0,
     doMeta: /** @type {null | Geom.Meta} */ (null),
     faceId: /** @type {null | NPC.UvQuadId} */ (null),
     fadeSecs: 0.3,
@@ -64,11 +63,10 @@ export class Npc {
     /** Desired opacity */
     opacityDst: /** @type {null | number} */ (null),
     run: false,
-    spawns: 0,
-    target: /** @type {null | THREE.Vector3} */ (null),
     selectorColor: /** @type {[number, number, number]} */ ([0.6, 0.6, 1]),
     showSelector: false,
-    wayIndex: 0,
+    spawns: 0,
+    target: /** @type {null | THREE.Vector3} */ (null),
   };
   
   /** @type {null | NPC.CrowdAgent} */
@@ -154,7 +152,7 @@ export class Npc {
     }
 
     const point = { ...toXZ(p), meta: p.meta }; // handle v3
-    const srcNav = this.w.npc.isPointInNavmesh(this.getPoint());
+    const srcNav = this.w.npc.isPointInNavmesh(this.position);
     
     // point.meta.do
     if (point.meta.do === true) {
@@ -258,6 +256,20 @@ export class Npc {
   }
 
   /**
+   * @param {NPC.CrowdAgent} agent
+   * Next corner, possibly after an offMeshConnection.
+   */
+  getNextCorner(agent) {
+    const offset = agent.state() === 2 ? 6 : 0;
+    // agent.corners() can be empty because ncorners 0 while offMeshConnection
+    return {
+      x: agent.raw.get_cornerVerts(offset + 0),
+      y: agent.raw.get_cornerVerts(offset + 1),
+      z: agent.raw.get_cornerVerts(offset + 2),
+    };
+  }
+
+  /**
    * @param {number} ccwEastAngle ccw from east (standard mathematical convention)
    * @returns {number} respective value of `rotation.y` taking initial facing angle into account
    * - euler y rotation has same sense/sign as "ccw from east"
@@ -271,14 +283,20 @@ export class Npc {
     return defaultNpcInteractRadius;
   }
 
+  /** @param {Geom.VectJson | THREE.Vector3Like} input */
+  getLookAngle(input) {
+    const src = this.getPoint();
+    const dst = toXZ(input);
+    return src.x === dst.x && src.y === dst.y
+      ? this.getAngle()
+      : Math.atan2(-(dst.y - src.y), dst.x - src.x)
+    ;
+  }
+
   /** @returns {Geom.VectJson} */
   getPoint() {
     const { x, z: y } = this.position;
     return { x, y };
-  }
-
-  getPosition() {
-    return this.position;
   }
 
   /**
@@ -397,21 +415,15 @@ export class Npc {
   }
 
   /**
-   * @param {number | Geom.VectJson | THREE.Vector3Like} input
+   * @param { number | Geom.VectJson | THREE.Vector3Like} input
    * - radians (ccw from east), or
    * - point
    * @param {number} [ms]
    */
   async look(input, ms = 300) {
-    if (this.w.lib.isVectJson(input)) {
-      const src = this.getPoint();
-      const p = toXZ(input); // handle v3
-      input = src.x === p.x && src.y === p.y
-        ? this.getAngle()
-        : Math.atan2(-(p.y - src.y), p.x - src.x)
-      ;
+    if (this.w.lib.isVectJson(input) === true) {
+      input = this.getLookAngle(input);
     }
-
     if (!Number.isFinite(input)) {
       throw new Error(`${'look'}: 1st arg must be radians or point`);
     }
@@ -440,13 +452,12 @@ export class Npc {
       throw new Error(`${this.key}: npc lacks agent`);
     }
 
-    // doorway half-depth 0.3 or 0.4, i.e. ≤ 0.5
+    // doorway half-depth is 0.3 or 0.4, i.e. ≤ 0.5
     const closest = this.w.npc.getClosestNavigable(toV3(dst), 0.5);
     if (closest === null) {
       throw new Error(`${this.key}: not navigable: ${JSON.stringify(dst)}`);
     }
 
-    this.s.wayIndex = 0;
     this.s.lookSecs = 0.15;
 
     this.agent.updateParameters({
@@ -468,12 +479,13 @@ export class Npc {
       this.startAnimation(nextAct);
     }
     
+    this.w.events.next({
+      key: 'started-moving',
+      npcKey: this.key,
+      showNavPath: opts.debugPath ?? this.w.npc.showLastNavPath,
+    });
+
     try {
-      this.w.events.next({
-        key: 'started-moving',
-        npcKey: this.key,
-        showNavPath: opts.debugPath ?? this.w.npc.showLastNavPath,
-      });
       await this.waitUntilStopped();
     } catch (e) {
       this.stopMoving();
@@ -544,8 +556,8 @@ export class Npc {
     if (this.s.agentState === 2) {// exit offMeshConnection
       if (this.s.offMesh !== null) {
         this.w.events.next({ key: 'exit-off-mesh', npcKey: this.key, offMesh: this.s.offMesh.orig  });
-      } else {
-        warn(`${this.key}: exited offMeshConnection but this.s.offMesh already null`);
+      } else {// cancelled offMeshConnection before reaching main segment
+        // warn(`${this.key}: exited offMeshConnection but this.s.offMesh already null`);
       }
       return;
     }
@@ -692,9 +704,7 @@ export class Npc {
   onTickTurnTarget(agent) {
     const vel = agent.velocity();
     const speedSqr = vel.x ** 2 + vel.z ** 2;
-
-    if (speedSqr > 0.2 ** 2) {
-      // 🚧 clean angle computation
+    if (speedSqr > 0.2 ** 2) {// 🚧 clean angle computation
       this.s.lookAngleDst = this.getEulerAngle(Math.atan2(-vel.z, vel.x));
     }
   }
@@ -856,7 +866,10 @@ export class Npc {
     }
 
     this.s.target = null;
-    this.s.lookAngleDst = null;
+    // this.s.lookAngleDst = null;
+    const nextCorner = this.getNextCorner(this.agent);
+    this.s.lookAngleDst = this.getEulerAngle(this.getLookAngle(nextCorner));
+
     this.s.lookSecs = 0.3;
     this.agent.updateParameters({
       maxSpeed: this.getMaxSpeed() * 0.75,
@@ -873,6 +886,7 @@ export class Npc {
 
     if (this.s.offMesh === null || this.s.offMesh.seg === 0) {
       const agentPosition = this.agent.position();
+      // reset small motions
       const position = this.lastStart.distanceTo(agentPosition) <= 0.05
         ? this.lastStart
         : agentPosition
@@ -880,7 +894,8 @@ export class Npc {
       this.agent.teleport(position);
       this.agent.requestMoveTarget(position);
       /** @type {dtCrowdAgentAnimation} */ (this.agentAnim).set_active(false);
-    } else {// midway through traversal, so stop when finish
+    } else {
+      // midway through traversal, so stop when finish
       this.agent.requestMoveTarget(toV3(this.s.offMesh.dst));
     }
 
