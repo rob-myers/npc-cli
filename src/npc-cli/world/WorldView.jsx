@@ -119,7 +119,8 @@ export default function WorldView(props) {
         screenPoint: getRelativePointer(event),
         touch: isTouchDevice(),
         meta,
-        ...key === 'pointerup' && { clickId: state.clickIds.pop() },
+        // 🚧 abstract distance check as isPointerUpClick
+        ...key === 'pointerup' && distancePx <= (isTouchDevice() ? 20 : 5) && { clickId: state.clickIds.pop() },
       };
     },
     followPosition(dst, opts = { smoothTime: 1 }) {

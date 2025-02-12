@@ -42,7 +42,7 @@ export async function* click({ api, args, w }) {
   let eventsSub;
   api.addCleanup(() => eventsSub?.unsubscribe());
 
-  while (numClicks-- > 0) {
+  while (numClicks > 0) {
     clickId !== undefined && w.view.clickIds.push(clickId);
     
     const e = await /** @type {Promise<NPC.PointerUpEvent>} */ (new Promise((resolve, reject) => {
@@ -80,6 +80,7 @@ export async function* click({ api, args, w }) {
       xz: {...e.point},
     };
 
+    numClicks--;
     yield output;
   }
 }

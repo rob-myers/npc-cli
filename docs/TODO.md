@@ -16,6 +16,10 @@
   - ✅ auto stopMoving
   - ✅ custom strategy
 
+- 🚧 "spawn while loop" sometimes spawns and simultaneously navigates
+  - ✅ `click 1` from while loop should not propagate
+  - ✅ `click 1` should not resolve on long press
+  - abstract distance check as isPointerUpClick
 - clean z-index
   - e.g. "opts above menu"
 - auto-dock ContextMenu in profile-1
@@ -23,8 +27,6 @@
   - ℹ️ e.g. restrict to current room
 - fade Html3d labels whilst window/canvas resize (jerks otherwise)
 
-- "spawn while loop" sometimes spawns and simultaneously navigates
-  - `click 1` from while loop should not propagate
 - changing `npc-cli/service/const` does not restore agent position
 - try avoid "narrowEntrances" by allocating more links
   > https://github.com/recastnavigation/recastnavigation/pull/756#issuecomment-2633978785
