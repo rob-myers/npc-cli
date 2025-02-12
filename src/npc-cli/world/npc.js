@@ -43,6 +43,8 @@ export class Npc {
   mixer = emptyAnimationMixer;
   /** Shortcut to `this.m.group.position` */
   position = tmpVectThree1;
+  /** Difference between last position */
+  delta = new THREE.Vector3();
 
   /** State */
   s = {
@@ -65,6 +67,11 @@ export class Npc {
     run: false,
     selectorColor: /** @type {[number, number, number]} */ ([0.6, 0.6, 1]),
     showSelector: false,
+    /**
+     * World timer elapsedTime (seconds) when slowness detected.
+     * 🤔 Pausing currently resets World timer.
+     */
+    slowBegin: /** @type {null | number} */ (null),
     spawns: 0,
     target: /** @type {null | THREE.Vector3} */ (null),
   };
@@ -129,8 +136,8 @@ export class Npc {
     this.w.events.next({ key: 'npc-internal', npcKey: this.key, event: 'cancelled' });
   }
 
-  dispose() {// 🚧
-
+  dispose() {
+    // 🚧
   }
 
   /**
@@ -300,6 +307,8 @@ export class Npc {
   }
 
   getMaxSpeed() {
+    // return 0.5;
+    // return this.def.runSpeed;
     return this.s.run === true ? this.def.runSpeed : this.def.walkSpeed;
   }
 
@@ -655,7 +664,8 @@ export class Npc {
   onTickAgent(deltaMs, agent) {
     const pos = agent.position();
     const state = agent.state();
-    
+
+    this.delta.copy(pos).sub(this.position);
     this.position.copy(pos);
 
     if (state !== this.s.agentState) {
@@ -681,13 +691,43 @@ export class Npc {
       this.stopMoving();
       return;
     }
+
+    if (distance > closeDist) {
+      this.onTickSlowDetect(deltaMs, agent); // 🚧 better name
+    } else {
+      this.s.slowBegin = null;
+    }
+  }
+
+  /**
+   * @param {number} deltaMs 
+   * @param {NPC.CrowdAgent} agent 
+   * @returns 
+   */
+  onTickSlowDetect(deltaMs, agent) {
+    const smallDist = 0.1 * agent.raw.desiredSpeed * deltaMs;
+
+    if (Math.abs(this.delta.x) > smallDist || Math.abs(this.delta.z) > smallDist) {
+      this.s.slowBegin = null;
+      return;
+    }
+
+    // 🚧 do something
+    const { elapsedTime } = this.w.timer;
+    this.s.slowBegin ??= elapsedTime;
+
+    if (elapsedTime - this.s.slowBegin > 0.3) {
+      warn(`${this.key}: going slow`);
+      this.s.slowBegin = null;
+    }
   }
 
   /** @param {NPC.CrowdAgent} agent */
   onTickTurnTarget(agent) {
     const vel = agent.velocity();
     const speedSqr = vel.x ** 2 + vel.z ** 2;
-    if (speedSqr > 0.2 ** 2) {// 🚧 clean angle computation
+
+    if (speedSqr > 0.2 ** 2) {
       this.s.lookAngleDst = this.getEulerAngle(Math.atan2(-vel.z, vel.x));
     }
   }
@@ -862,6 +902,7 @@ export class Npc {
     }
 
     this.s.target = null;
+    this.s.slowBegin = null;
 
     this.agent.updateParameters({
       maxSpeed: this.getMaxSpeed() * 0.75,

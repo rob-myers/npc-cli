@@ -4,55 +4,11 @@
 
 ### Final clean before migration
 
-- ✅ avoid rebuild w.texFloor w.texCeil on World hmr
-  - ℹ️ previously needed for Floor/Ceil hmr on edit drawGm
-  - ℹ️ strangely seems fixed if initialize textures to correct width, height
-- ✅ review how `npc.js` is using `this.w.*`
-  - ℹ️ w.events, w.gmGraph, w.npc, w.n
-
-- ✅ sh `map` can supply args to function selector
-  - support `map foo.bar baz` (`x.foo.bar(baz)`)
-  - support `map x => [x, x] foo` (`["foo", "foo"]`)
-- ✅ sh: clean `map`
-
-- ✅ sh: fix "single quotes breaks things"
-  - use `$'...'` from `syntax.Variant(syntax.LangBash)`
-
-- ✅ improve offMeshConnection traversal
-  - ✅ when can go direct from newSrc -> corner
-  - ✅ when can go direct from npcPoint -> newDst
-
-- ✅ npc re-target-fail keeps in place
-  - store start point and revert if moved less than 5cms
-- ✅ npc turns towards "next corner" on stopMoving
-
-- ✅ can only spawn onto navigable floor or do point
-  - ❌ every npc has an agent
-  - ✅ redo spawn args
-    - ℹ️ agent iff spawn on navigable
-  - ✅ can `w npc.spawn rob $( click 1 )`
-  - ✅ fix "spawn while loop" so do points work
-    ```sh
-    c=0
-    while true; do
-      w npc.spawn "rob_${c}" $( click 1 ) >/dev/null
-      call 'x => x.home.c++'
-    done
-    ```
-  - ✅ spawn onto do point has correct orientation
-  - ❌ cannot spawn too close to existing
-- ✅ Geom.Meta -> Meta
-- ✅ Geom.MaybeMeta -> MaybeMeta
-
-
-- improve npc finish-moving condition
-  ```sh
-  click 1 > p
-  w n.rob.moveTo $p & w n.will.moveTo $p &
-  ```
-  - optional strategy to avoid agent deadlock when have similar target
-  - e.g. stop when little progress
-  - e.g. stop when neighbour has similar target
+- 🚧 improve npc finish-moving condition
+  - ℹ️ repro `click 1 > p && w n.rob.moveTo $p & w n.will.moveTo $p &`
+  - ℹ️ maybe relevant even when not close to target
+  - ✅ detect when displacement small for more than 300ms
+  - 🚧 detect when nei has close final target
 - clean up z-index
   - e.g. "opts above menu"
 - auto-dock ContextMenu in profile-1
@@ -3791,3 +3747,43 @@ done
     - `w e.followNpc rob`
   - ✅ can directly stop follow
     - `w e.stopFollowing`
+
+- ✅ avoid rebuild w.texFloor w.texCeil on World hmr
+  - ℹ️ previously needed for Floor/Ceil hmr on edit drawGm
+  - ℹ️ strangely seems fixed if initialize textures to correct width, height
+- ✅ review how `npc.js` is using `this.w.*`
+  - ℹ️ w.events, w.gmGraph, w.npc, w.n
+
+- ✅ sh `map` can supply args to function selector
+  - support `map foo.bar baz` (`x.foo.bar(baz)`)
+  - support `map x => [x, x] foo` (`["foo", "foo"]`)
+- ✅ sh: clean `map`
+
+- ✅ sh: fix "single quotes breaks things"
+  - use `$'...'` from `syntax.Variant(syntax.LangBash)`
+
+- ✅ improve offMeshConnection traversal
+  - ✅ when can go direct from newSrc -> corner
+  - ✅ when can go direct from npcPoint -> newDst
+
+- ✅ npc re-target-fail keeps in place
+  - store start point and revert if moved less than 5cms
+- ✅ npc turns towards "next corner" on stopMoving
+
+- ✅ can only spawn onto navigable floor or do point
+  - ❌ every npc has an agent
+  - ✅ redo spawn args
+    - ℹ️ agent iff spawn on navigable
+  - ✅ can `w npc.spawn rob $( click 1 )`
+  - ✅ fix "spawn while loop" so do points work
+    ```sh
+    c=0
+    while true; do
+      w npc.spawn "rob_${c}" $( click 1 ) >/dev/null
+      call 'x => x.home.c++'
+    done
+    ```
+  - ✅ spawn onto do point has correct orientation
+  - ❌ cannot spawn too close to existing
+- ✅ Geom.Meta -> Meta
+- ✅ Geom.MaybeMeta -> MaybeMeta
