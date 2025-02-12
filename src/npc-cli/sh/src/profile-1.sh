@@ -50,3 +50,5 @@ setupContextMenu
 ptags=no-pause; events | handleContextMenu &
 
 ptags=no-pause; events | handleLoggerLinks & 
+
+setupOnSlowNpcCustom

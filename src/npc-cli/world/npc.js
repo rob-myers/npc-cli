@@ -714,19 +714,12 @@ export class Npc {
 
     const { elapsedTime } = this.w.timer;
     this.s.slowBegin ??= elapsedTime;
-    if (elapsedTime - this.s.slowBegin < 0.3) {
+    if (elapsedTime - this.s.slowBegin < 0.1) {// 100ms
       return;
     }
 
-    // 🚧 WIP
-    warn(`${this.key}: going slow`);
-    const nei = agent.raw.get_neis(0); // 0th is closest
-    const other = this.w.npc.byAgId[nei.idx];
-    const target = /** @type {THREE.Vector3} */ (this.s.target);
 
-    if (target.distanceTo(other.lastTarget) < 3 * helper.defaults.radius) {
-      this.stopMoving();
-    }
+    this.w.npc.onSlowNpcCustom?.(this, agent);
   }
 
   /** @param {NPC.CrowdAgent} agent */

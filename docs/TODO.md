@@ -4,7 +4,8 @@
 
 ### Final clean before migration
 
-- 🚧 improve npc finish-moving condition
+- ✅ spawn onto do point uses orient
+- ✅ improve npc finish-moving condition
   - ℹ️ repro `click 1 > p && w n.rob.moveTo $p & w n.will.moveTo $p &`
   - ℹ️ maybe relevant even when not close to target
   - ✅ detect when displacement small for more than 300ms
@@ -13,11 +14,11 @@
     - movingSeparationWeight `0.5` -> `0.4`
   - ✅ detect when nei has close final target
   - ✅ auto stopMoving
-  - 🚧 custom strategy
-- clean up z-index
+  - ✅ custom strategy
+
+- clean z-index
   - e.g. "opts above menu"
 - auto-dock ContextMenu in profile-1
-- ✅ spawn onto do point uses orient
 - should not be able to spawn from offMesh do to any nav point
   - ℹ️ e.g. restrict to current room
 - fade Html3d labels whilst window/canvas resize (jerks otherwise)

@@ -250,6 +250,31 @@ export async function* handleLoggerLinks({ api, datum: e, w }) {
   }
 }
 
+/**
+ * @param {RunArg} ctxt
+ */
+export const setupOnSlowNpcCustom = ({ w, args }) => {
+
+  w.npc.onSlowNpcCustom = (npc, agent) => {
+    // warn(`${npc.key}: going slow`);
+
+    switch (args[0]) {
+      case 'closest-nei': {
+        const nei = agent.raw.get_neis(0); // 0th is closest
+        const other = w.npc.byAgId[nei.idx];
+        const target = /** @type {import('three').Vector3} */ (npc.s.target);
+        if (target.distanceTo(other.lastTarget) < 3 * w.lib.defaults.radius) {
+          npc.stopMoving();
+        }
+        break;
+      }
+      default:
+        npc.stopMoving();
+        break;
+    }
+  };
+
+}
 
 /**
  * Usage:

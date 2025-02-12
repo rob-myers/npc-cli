@@ -156,6 +156,8 @@ w n.rob.moveTo ${r} & w n.will.moveTo ${s} &
 
 # sometimes 2nd agent gets blocked, but usually not because
 # pushed out of the way before starts offMeshConnection
+
+w npc.onSlowNpcCustom.toString
 ```
 
 ## Local variables
