@@ -570,7 +570,7 @@ const statsCss = css`
  * @property {number} [distancePx]
  * @property {React.PointerEvent | React.MouseEvent} event
  * @property {boolean} [justLongDown]
- * @property {Geom.Meta} meta
+ * @property {Meta} meta
  * @property {THREE.Vector3Like} position
 */
 

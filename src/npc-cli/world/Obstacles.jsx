@@ -138,7 +138,7 @@ export default function Obstacles(props) {
  * @property {THREE.BufferGeometry} quad
  * @property {() => void} addObstacleUvs
  * @property {(gmTransform: Geom.SixTuple, obstacle: Geomorph.LayoutObstacle) => THREE.Matrix4} createObstacleMatrix4
- * @property {(instanceId: number) => Geom.Meta<{ gmId: number}>} decodeInstanceId
+ * @property {(instanceId: number) => Meta<{ gmId: number}>} decodeInstanceId
  * Points to `w.gms[gmId].obstacles[obstacleId]`.
  * @property {() => void} positionObstacles
  */

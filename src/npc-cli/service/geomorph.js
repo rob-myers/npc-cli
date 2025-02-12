@@ -305,7 +305,7 @@ class GeomorphService {
    */
   decorFromPoly(poly, assets) {
     // 🔔 key, gmId, roomId provided on instantiation
-    const meta = /** @type {Geom.Meta<Geomorph.GmRoomId>} */ (poly.meta);
+    const meta = /** @type {Meta<Geomorph.GmRoomId>} */ (poly.meta);
     meta.y = toPrecision(Number(meta.y) || 0);
     const base = { key: '', meta };
     
@@ -525,7 +525,7 @@ class GeomorphService {
    * - <polygon>
    * @private
    * @param {{ tagName: string; attributes: Record<string, string>; title: string; }} tagMeta
-   * @param {Geom.Meta} meta
+   * @param {Meta} meta
    * @param {number} [scale]
    * @returns {Geom.Poly | null}
    */
@@ -730,7 +730,7 @@ class GeomorphService {
    * - we can remove walls tagged with `optional`
    * - we can modify every wall's baseHeight and height
    * @param {Geomorph.FlatSymbol} sym
-   * @param {Geom.Meta<{ doors?: string[]; walls?: string[] }>} meta
+   * @param {Meta<{ doors?: string[]; walls?: string[] }>} meta
    * `meta.{doors,walls}` e.g. `['e']`, `['s']`
    * @param {Geom.SixTuple} transform
    * @returns {Geomorph.FlatSymbol}
@@ -1277,10 +1277,10 @@ class GeomorphService {
 
   /**
    * For nested symbols i.e. before decor becomes `Geomorph.Decor`
-   * @param {Geom.Meta} meta 
+   * @param {Meta} meta 
    * @param {Geom.Mat} mat
    * @param {number} [y] Height off the ground
-   * @returns {Geom.Meta}
+   * @returns {Meta}
    */
   transformDecorMeta(meta, mat, y) {
     return {
@@ -1315,7 +1315,7 @@ export class Connector {
     this.poly = poly;
     /** @type {Geom.Vect} */
     this.center = poly.center;
-    /** @type {Geom.Meta} */
+    /** @type {Meta} */
     this.meta = poly.meta || {};
 
     const { angle, baseRect } = geom.polyToAngledRect(poly);

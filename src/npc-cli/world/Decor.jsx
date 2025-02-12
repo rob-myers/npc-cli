@@ -60,7 +60,7 @@ export default function Decor(props) {
         }
 
         return agg;
-      }, /** @type {Record<`g${number}r${number}`, { meta: Geom.Meta<Geomorph.GmRoomId> } & { [x in 'add' | 'remove']: Geomorph.Decor[] }>} */ ({}));
+      }, /** @type {Record<`g${number}r${number}`, { meta: Meta<Geomorph.GmRoomId> } & { [x in 'add' | 'remove']: Geomorph.Decor[] }>} */ ({}));
 
       if (removeExisting) {
         Object.values(grouped).forEach(({ meta, remove }) =>
@@ -179,7 +179,7 @@ export default function Decor(props) {
       );
     },
     computeDecorMeta(decor, instanceId) {
-      /** @type {Geom.Meta} */
+      /** @type {Meta} */
       const meta = { decor: true, ...decor.meta, instanceId };
       if (decor.type === 'point' && decor.meta.do === true) {
         meta.doPoint = { x: decor.x, y: decor.y };
@@ -401,7 +401,7 @@ export default function Decor(props) {
       const grouped = ds.reduce((agg, d) => {
         (agg[d.meta.grKey] ??= { meta: d.meta, ds: [] }).ds.push(d);
         return agg;
-      }, /** @type {Record<`g${number}r${number}`, { meta: Geom.Meta<Geomorph.GmRoomId> } & { ds: Geomorph.Decor[] }>} */ ({}));
+      }, /** @type {Record<`g${number}r${number}`, { meta: Meta<Geomorph.GmRoomId> } & { ds: Geomorph.Decor[] }>} */ ({}));
 
       for (const { meta, ds } of Object.values(grouped)) {
         state.removeDecorFromRoom(meta.gmId, meta.roomId, ds)
@@ -639,7 +639,7 @@ export default function Decor(props) {
  * @property {() => void} addLabelUvs
  * @property {() => void} addQuadUvs
  * @property {() => void} addCuboidAttributes
- * @property {(decor: Geomorph.Decor, instanceId: number) => Geom.Meta} computeDecorMeta
+ * @property {(decor: Geomorph.Decor, instanceId: number) => Meta} computeDecorMeta
  * @property {(gmId: number, roomId: number, decors: Geomorph.Decor[]) => void} addDecorToRoom
  * @property {(d: Geomorph.DecorCuboid) => THREE.Matrix4} createCuboidMatrix4
  * @property {(d: Geomorph.DecorPoint | Geomorph.DecorQuad) => THREE.Matrix4} createQuadMatrix4

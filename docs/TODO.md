@@ -26,7 +26,7 @@
   - store start point and revert if moved less than 5cms
 - ✅ npc turns towards "next corner" on stopMoving
 
-- 🚧 can only spawn onto navigable floor or do point
+- ✅ can only spawn onto navigable floor or do point
   - ❌ every npc has an agent
   - ✅ redo spawn args
     - ℹ️ agent iff spawn on navigable
@@ -35,15 +35,15 @@
     ```sh
     c=0
     while true; do
-      w npc.spawn "rob_${c}"  $( click 1 ) >/dev/null
+      w npc.spawn "rob_${c}" $( click 1 ) >/dev/null
       call 'x => x.home.c++'
     done
     ```
   - ✅ spawn onto do point has correct orientation
-  - 🚧 cannot spawn too close to existing
+  - ❌ cannot spawn too close to existing
+- ✅ Geom.Meta -> Meta
+- ✅ Geom.MaybeMeta -> MaybeMeta
 
-- Geom.Meta -> Meta
-- Geom.MaybeMeta -> MaybeMeta
 
 - improve npc finish-moving condition
   ```sh

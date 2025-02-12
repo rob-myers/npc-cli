@@ -723,7 +723,7 @@ export default function useHandleEvents(w) {
  * Relate `npcKey` to (a) doorway we're inside, (b) nearby `Geomorph.GmDoorKey`s
  * @property {Map<string, Geomorph.GmRoomId>} npcToRoom npcKey to gmRoomId
  * Relates `npcKey` to current room, unless in a doorway (offMeshConnection)
- * @property {((lastDownMeta: Geom.Meta) => boolean)[]} pressMenuFilters
+ * @property {((lastDownMeta: Meta) => boolean)[]} pressMenuFilters
  * Prevent ContextMenu on long press if any of these return `true`.
  * @property {{[roomId: number]: Set<string>}[]} roomToNpcs
  * The "inverse" of npcToRoom i.e. `roomToNpc[gmId][roomId]` is a set of `npcKey`s
@@ -756,7 +756,7 @@ export default function useHandleEvents(w) {
  * Returns `true` iff successful.
  * @property {(gdKey: Geomorph.GmDoorKey, opts: { npcKey?: string; point?: Geom.VectJson; } & Geomorph.ToggleLockOpts) => boolean} toggleLock
  * Returns `true` iff successful.
- * @property {(gmId: number, doorId: number, eventMeta?: Geom.Meta) => void} tryCloseDoor
+ * @property {(gmId: number, doorId: number, eventMeta?: Meta) => void} tryCloseDoor
  * Try close door every `N` seconds, starting in `N` seconds.
  * @property {(npc: NPC.NPC) => void} tryPutNpcIntoRoom
  */

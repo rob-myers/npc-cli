@@ -181,7 +181,7 @@ export default function createGmsData() {
     /**
      * Two wall segments representing lintels i.e. wall above each door
      * @param {Geomorph.Connector} connector 
-     * @returns {{ seg: [Geom.Vect, Geom.Vect]; meta: Geom.Meta }[]}
+     * @returns {{ seg: [Geom.Vect, Geom.Vect]; meta: Meta }[]}
      */
     getLintelSegs({ seg: [u, v], normal, meta }) {
       const depths = lintelDepths[meta.hull === true ? 'hull' : 'nonHull'];
@@ -197,7 +197,7 @@ export default function createGmsData() {
     },
     /**
      * @param {Geomorph.Connector} connector 
-     * @returns {{ seg: [Geom.Vect, Geom.Vect]; meta: Geom.Meta }[]}
+     * @returns {{ seg: [Geom.Vect, Geom.Vect]; meta: Meta }[]}
      */
     getWindowSegs(connector) {
       // (connector => connector.poly.lineSegs.map(seg => ({ seg, meta: connector.meta }))
@@ -262,7 +262,7 @@ const emptyGmData = {
  * @property {Geom.Poly[]} polyDecals
  * @property {import('../graph/room-graph').RoomGraphClass} roomGraph
  * @property {boolean} unseen Has this geomorph never occurred in any map so far?
- * @property {{ seg: [Geom.Vect, Geom.Vect]; meta: Geom.Meta; }[]} wallSegs
+ * @property {{ seg: [Geom.Vect, Geom.Vect]; meta: Meta; }[]} wallSegs
  * - `gm.walls` segs
  * - lintels i.e. 2 segs per door in `gm.doors`
  * - `gm.windows` segs

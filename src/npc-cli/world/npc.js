@@ -49,7 +49,7 @@ export class Npc {
     act: /** @type {NPC.AnimKey} */ ('Idle'),
     agentState: /** @type {null | number} */ (null),
     autoIdleLook: true,
-    doMeta: /** @type {null | Geom.Meta} */ (null),
+    doMeta: /** @type {null | Meta} */ (null),
     faceId: /** @type {null | NPC.UvQuadId} */ (null),
     fadeSecs: 0.3,
     iconId: /** @type {null | NPC.UvQuadId} */ (null),
@@ -139,7 +139,7 @@ export class Npc {
    * - `p.meta.nav` and `npc.doMeta` i.e. point navigable, npc at a "do point"
    * - `p` is nearly navigable and `npc` is off-mesh
    * 
-   * @param {Geom.Meta<Geom.VectJson | THREE.Vector3Like>} p 
+   * @param {Meta<Geom.VectJson | THREE.Vector3Like>} p 
    * @param {object} opts
    * @param {any[]} [opts.extraParams] // 🚧 clarify
    */
@@ -211,9 +211,9 @@ export class Npc {
   /**
    * Fade out, spawn, then fade in.
    * - `spawn` sets `npc.doMeta` when `meta.do === true`
-   * @param {Geom.MaybeMeta<Geom.VectJson>} point 
+   * @param {MaybeMeta<Geom.VectJson>} point 
    * @param {object} opts
-   * @param {Geom.Meta} [opts.meta]
+   * @param {Meta} [opts.meta]
    * @param {number} [opts.angle]
    * @param {NPC.ClassKey} [opts.classKey]
    * @param {boolean} [opts.requireNav]
@@ -426,7 +426,7 @@ export class Npc {
   }
 
   /**
-   * @param {Geom.MaybeMeta<Geom.VectJson | THREE.Vector3Like>} dst
+   * @param {MaybeMeta<Geom.VectJson | THREE.Vector3Like>} dst
    * @param {object} [opts]
    * @param {boolean} [opts.debugPath]
    */
@@ -476,7 +476,7 @@ export class Npc {
   }
 
   /**
-   * @param {Geom.MaybeMeta<Geom.VectJson>} point 
+   * @param {MaybeMeta<Geom.VectJson>} point 
    */
   async offMeshDo(point) {
     const src = Vect.from(this.getPoint());
@@ -547,7 +547,7 @@ export class Npc {
   }
 
   /**
-   * @param {Geom.MaybeMeta<Geom.VectJson>} point 
+   * @param {MaybeMeta<Geom.VectJson>} point 
    * @param {object} opts
    * @param {boolean} [opts.preferSpawn]
    */
@@ -813,7 +813,7 @@ export class Npc {
   /**
    * Start specific animation, or animation induced by meta.
    * Returns height to raise off ground e.g. for beds. 
-   * @param {NPC.AnimKey | Geom.Meta} input
+   * @param {NPC.AnimKey | Meta} input
    * @returns {number}
    */
   startAnimation(input) {
@@ -825,7 +825,7 @@ export class Npc {
       this.mixer.timeScale = npcClassToMeta[this.def.classKey].timeScale[input] ?? 1;
       this.s.act = input;
       return 0;
-    } else { // input is Geom.Meta
+    } else { // input is Meta
       switch (true) {
         case input.sit:
           this.startAnimation('Sit');

@@ -22,12 +22,12 @@ export class Poly {
   /**
    * @param {Vect[]} outline
    * @param {Vect[][]} holes
-   * @param {Geom.Meta} [meta]
+   * @param {Meta} [meta]
    */
   constructor(outline = [], holes = [], meta = {}) {
     /** @type {Vect[]} */ this.outline = outline;
     /** @type {Vect[][]} */ this.holes = holes;
-    /** @type {Geom.Meta} */ this.meta = meta;
+    /** @type {Meta} */ this.meta = meta;
   }
 
   get allPoints() {
@@ -187,7 +187,7 @@ export class Poly {
 
   /**
    * @param {Geom.Mat} [mat]
-   * @param {Geom.Meta} [extraMeta]
+   * @param {Meta} [extraMeta]
    * @param {number} [precision]
    */
   cleanClone(mat, extraMeta = undefined, precision = 4) {

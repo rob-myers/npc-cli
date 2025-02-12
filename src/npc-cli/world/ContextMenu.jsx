@@ -421,7 +421,7 @@ const optsPopUpCss = css`
  * @property {{ k: string; v: string; length: number }[]} kvs
  * @property {NPC.ContextMenuLink[]} links
  * @property {{ [matcherKey: string]: NPC.ContextMenuMatcher }} match
- * @property {Geom.Meta} meta
+ * @property {Meta} meta
  * @property {undefined | string} npcKey
  * @property {undefined | import("three").Vector3Like} offset
  * @property {boolean} open
@@ -432,7 +432,7 @@ const optsPopUpCss = css`
  * @property {boolean} scaled
  * @property {string[]} selectNpcKeys
  * @property {boolean} showKvs
- * @property {(meta: Geom.Meta) => void} computeKvsFromMeta
+ * @property {(meta: Meta) => void} computeKvsFromMeta
  * @property {() => void} computeLinks
  * @property {(force?: boolean | undefined) => void} hide
  * @property {(e: React.KeyboardEvent<HTMLButtonElement>) => void} onKeyDownButton

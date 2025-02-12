@@ -151,7 +151,7 @@ export default function Walls(props) {
  * @property {THREE.BufferGeometry} quad
  * @property {number} opacity
  *
- * @property {(instanceId: number) => Geom.Meta} decodeInstanceId
+ * @property {(instanceId: number) => Meta} decodeInstanceId
  * @property {(
  *  seg: [Geom.Vect, Geom.Vect],
  *  transform: Geom.SixTuple,

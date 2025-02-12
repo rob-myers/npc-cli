@@ -95,12 +95,12 @@ declare namespace NPC {
     | {
       /** Try close door after countdown, and keep trying thereafter */
       key: "try-close-door";
-      gmId: number; doorId: number; meta?: Geom.Meta
+      gmId: number; doorId: number; meta?: Meta
     }
-    | { key: "opened-door"; gmId: number; doorId: number; meta?: Geom.Meta }
-    | { key: "closed-door"; gmId: number; doorId: number; meta?: Geom.Meta }
-    | { key: "locked-door"; gmId: number; doorId: number; meta?: Geom.Meta }
-    | { key: "unlocked-door"; gmId: number; doorId: number; meta?: Geom.Meta }
+    | { key: "opened-door"; gmId: number; doorId: number; meta?: Meta }
+    | { key: "closed-door"; gmId: number; doorId: number; meta?: Meta }
+    | { key: "locked-door"; gmId: number; doorId: number; meta?: Meta }
+    | { key: "unlocked-door"; gmId: number; doorId: number; meta?: Meta }
     | { key: "changed-zoom"; level: 'near' | 'far' }
     | { key: "enter-collider"; npcKey: string; } & BaseColliderEvent
     | { key: "exit-collider"; npcKey: string; } & BaseColliderEvent
@@ -171,12 +171,12 @@ declare namespace NPC {
     /** `{ x: position.x, y: position.z }` */
     point: Geom.VectJson;
     /** Properties of the thing we clicked. */
-    meta: Geom.Meta;
+    meta: Meta;
   };
 
   type ClickOutput = import('three').Vector3Like & {
     keys?: BasePointerEvent['keys'];
-    meta: Geom.Meta;
+    meta: Meta;
     xz: Geom.VectJson;
   };
 
@@ -216,7 +216,7 @@ declare namespace NPC {
     /** Whether respective door's normal points towards `src` */
     aligned: boolean;
     /** Meta of dst room e.g. for small rooms */
-    dstRoomMeta: Geom.Meta;
+    dstRoomMeta: Meta;
   };
 
   type OffMeshState = {
@@ -249,7 +249,7 @@ declare namespace NPC {
 
   type ObstacleRef = import("@recast-navigation/core").ObstacleRef;
 
-  type DecodedObjectPick = Geom.Meta<{
+  type DecodedObjectPick = Meta<{
     picked: ObjectPickedType;
     instanceId: number;
   }>;
@@ -279,7 +279,7 @@ declare namespace NPC {
     /** `icon--*` key */
     icon: Geomorph.DecorImgKey;
     /** The meta of ContextMenu (from prior click) when button was clicked */
-    meta: Geom.Meta<T>;
+    meta: Meta<T>;
   }
 
   interface DownData {
@@ -287,7 +287,7 @@ declare namespace NPC {
     screenPoint: Geom.Vect;
     position: import('three').Vector3;
     normal: import('three').Vector3;
-    meta: Geom.Meta;
+    meta: Meta;
     /** Derived from `normal` */
     quaternion: import('three').Quaternion;
   }
@@ -299,7 +299,7 @@ declare namespace NPC {
 
   interface ContextMenuContextDef {
     position: THREE.Vector3;
-    meta: Geom.Meta;
+    meta: Meta;
   }
 
   /**

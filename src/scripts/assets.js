@@ -597,7 +597,7 @@ function detectChangedObstacles(obstacles, assets, prev) {
   }
 }
 
-/** @param {Geom.Meta} meta */
+/** @param {Meta} meta */
 function extractObstacleDescriptor(meta) {
   for (const tag of ['table', 'chair', 'bed', 'shower', 'surface']) {
     if (meta[tag] === true) return tag;
@@ -669,7 +669,7 @@ async function createDecorSheetJson(assets, prev) {
 
     if (img) {// changedSvgBasenames.includes(baseName)
       const tags = baseName.split('--').slice(0, -1); // ignore e.g. `001.svg`
-      const meta = tags.reduce((agg, tag) => { agg[tag] = true; return agg; }, /** @type {Geom.Meta} */ ({}));
+      const meta = tags.reduce((agg, tag) => { agg[tag] = true; return agg; }, /** @type {Meta} */ ({}));
       imgKeyToRect[decorImgKey] = {
         width: toPrecision(img.width * scale, 0),
         height: toPrecision(img.height * scale, 0),

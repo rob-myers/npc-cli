@@ -67,7 +67,7 @@ declare namespace Geomorph {
     roomIds: [null | number, null | number];
   }
 
-  type HullDoorMeta = Geom.Meta<{ edge: Geom.DirectionString }>;
+  type HullDoorMeta = Meta<{ edge: Geom.DirectionString }>;
 
   interface DoorState extends Geomorph.GmDoorId {
     /** gmDoorKey format i.e. `g{gmId}d{doorId}` */
@@ -214,7 +214,7 @@ declare namespace Geomorph {
       height: number;
       /** Normalized affine transform acting on rect `(0, 0, width, height)` */
       transform: Geom.SixTuple;
-      meta: Geom.Meta;
+      meta: Meta;
     }[];
 
     /** Doors tagged with `optional` can be removed */
@@ -331,7 +331,7 @@ declare namespace Geomorph {
     /** `origPoly.center` transformed by `transform` */
     center: V;
     /** Shortcut to `origPoly.meta` */
-    meta: Geom.Meta;
+    meta: Meta;
   }
 
   type LayoutObstacle = LayoutObstacleGeneric<Geom.Poly, Geom.Vect>;
@@ -365,7 +365,7 @@ declare namespace Geomorph {
     type: 'point';
     /** Orientation in degrees, where the unit vector `(1, 0)` corresponds to `0`  */
     orient: number;
-    meta: Geom.Meta<Geomorph.GmRoomId & { img?: DecorImgKey }>;
+    meta: Meta<Geomorph.GmRoomId & { img?: DecorImgKey }>;
   }
   
   /** Simple polygon sans holes. */
@@ -375,7 +375,7 @@ declare namespace Geomorph {
     center: Geom.VectJson;
     /** Determinant of 2x2 part of `transform` */
     det: number;
-    meta: Geom.Meta<Geomorph.GmRoomId & { img: DecorImgKey }>;
+    meta: Meta<Geomorph.GmRoomId & { img: DecorImgKey }>;
   }
 
   interface DecorRect extends BaseDecor {
@@ -390,7 +390,7 @@ declare namespace Geomorph {
   interface BaseDecor {
     /** Either auto-assigned e.g. decor from geomorphs, or specified by user. */
     key: string;
-    meta: Geom.Meta<Geomorph.GmRoomId>;
+    meta: Meta<Geomorph.GmRoomId>;
     /** 2D bounds inside XZ plane */
     bounds2d: Geom.RectJson;
     /** Epoch ms when last updated (overwritten) */
@@ -404,7 +404,7 @@ declare namespace Geomorph {
     // tags?: string[];
   }
 
-  type DecorSheetRectCtxt = Geom.Meta<{
+  type DecorSheetRectCtxt = Meta<{
     decorImgKey: Geomorph.DecorImgKey;
     /** 0-based index of sheet */
     sheetId: number;
