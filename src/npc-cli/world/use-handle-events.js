@@ -38,11 +38,12 @@ export default function useHandleEvents(w) {
       return true;
     },
     clearOffMesh(npc) {
+      // offMeshConnection can happen when `npc.s.offMesh === null`
+      // e.g. npc without access near door
+      npc.agentAnim?.set_active(false);
+      
       if (npc.s.offMesh === null) {
         return;
-      }
-      if (npc.agentAnim !== null) {
-        npc.agentAnim.active = false;
       }
 
       const { gdKey } = npc.s.offMesh.orig;

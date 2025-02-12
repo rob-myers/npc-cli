@@ -22,6 +22,7 @@
   - abstract distance check as isPointerUpClick
 
 - ✅ can cancel offMeshConnection earlier i.e. during initial segment
+- ✅ npc sans access next to door should not traverse offMeshConnection (and flicker back)
 
 - clean z-index
   - e.g. "opts above menu"

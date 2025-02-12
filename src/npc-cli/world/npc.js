@@ -465,7 +465,7 @@ export class Npc {
     this.lastStart.copy(this.position);
     this.s.target = this.lastTarget.copy(closest);
 
-    if (this.s.offMesh !== null && this.tryStopOffMesh()) {
+    if (this.tryStopOffMesh()) {
       this.agent.teleport(this.position);
     }
     this.agent.requestMoveTarget(closest);
@@ -924,10 +924,8 @@ export class Npc {
     const pos = this.agent.position(); // reset small motions:
     const position = this.lastStart.distanceTo(pos) <= 0.05 ? this.lastStart : pos;
 
-    if (this.s.offMesh === null) {
-      this.agent.teleport(position);
-      this.agent.requestMoveTarget(position);
-    } else if (this.tryStopOffMesh()) {
+    if (this.s.offMesh === null || this.s.offMesh.seg === 0) {
+      this.tryStopOffMesh();
       this.agent.teleport(position);
       this.agent.requestMoveTarget(position);
     } else {// midway through traversal, so stop when finish
@@ -938,10 +936,12 @@ export class Npc {
     this.w.events.next({ key: 'stopped-moving', npcKey: this.key });
   }
 
-  /** Assumes `this.s.offMesh !== null` */
   tryStopOffMesh() {
-    const agentAnim = /** @type {dtCrowdAgentAnimation} */ (this.agentAnim);
-    if (agentAnim.t < agentAnim.tmid) {
+    // offMeshConnection can happen when `this.s.offMesh` null,
+    // e.g. when npc without access is close to door
+    if (this.agentAnim === null || this.agentAnim?.active === false) {
+      return false;
+    } else if (this.agentAnim.t < this.agentAnim.tmid) {
       this.w.events.next({ key: 'clear-off-mesh', npcKey: this.key });
       return true;
     } else {
