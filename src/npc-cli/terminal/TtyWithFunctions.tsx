@@ -57,10 +57,10 @@ function wrapWithRun(fn: (arg: gameGeneratorsJs.RunArg) => any) {
 
 function wrapWithCall(fn: (arg: gameGeneratorsJs.RunArg) => any) {
   const fnText = `${fn}`.replace(/'/g, "\\'");
-  return `{\n  call $'${fnText}'\n}`;
+  return `{\n  call $'${fnText}' "$@"\n}`;
 }
 
 function wrapWithMap(fn: (input: any, arg: gameGeneratorsJs.RunArg) => any) {
   const fnText = `${fn}`.replace(/'/g, "\\'");
-  return `{\n  map $'${fnText}'\n}`;
+  return `{\n  map $'${fnText}' "$@"\n}`;
 }
