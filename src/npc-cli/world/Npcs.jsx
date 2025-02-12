@@ -235,7 +235,7 @@ export default function Npcs(props) {
       npc.lastTarget.copy(position);
 
       if (npc.agent === null) {
-        npc.setPosition(position);
+        npc.position.copy(position);
         if (agent === true) {
           const agent = state.attachAgent(npc);
           // 🔔 pin to current position
@@ -246,7 +246,7 @@ export default function Npcs(props) {
         }
       } else {
         if (dstNav === false || agent === false) {
-          npc.setPosition(position);
+          npc.position.copy(position);
           state.removeAgent(npc);
           // must tell physics.worker because not moving
           state.physicsPositions.push(npc.bodyUid, position.x, position.y, position.z);

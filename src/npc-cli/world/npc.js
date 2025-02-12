@@ -814,11 +814,6 @@ export class Npc {
     this.w.npc.update();
   }
 
-  /** @param {THREE.Vector3Like} dst  */
-  setPosition(dst) {
-    this.position.copy(dst);
-  }
-
   /**
    * @param {number} r in `[0, 1]`
    * @param {number} g in `[0, 1]`
