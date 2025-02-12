@@ -20,6 +20,9 @@
   - ✅ `click 1` from while loop should not propagate
   - ✅ `click 1` should not resolve on long press
   - abstract distance check as isPointerUpClick
+
+- ✅ can cancel offMeshConnection earlier i.e. during initial segment
+
 - clean z-index
   - e.g. "opts above menu"
 - auto-dock ContextMenu in profile-1

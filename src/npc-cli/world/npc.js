@@ -464,6 +464,10 @@ export class Npc {
 
     this.lastStart.copy(this.position);
     this.s.target = this.lastTarget.copy(closest);
+
+    if (this.s.offMesh?.seg === 0) {
+      this.stopOffMeshAnimation();
+    }
     this.agent.requestMoveTarget(closest);
 
     const nextAct = this.s.run ? 'Run' : 'Walk';
@@ -917,23 +921,27 @@ export class Npc {
     
     this.startAnimation('Idle');
 
-    if (this.s.offMesh === null || this.s.offMesh.seg === 0) {
-      const agentPosition = this.agent.position();
-      // reset small motions
-      const position = this.lastStart.distanceTo(agentPosition) <= 0.05
-        ? this.lastStart
-        : agentPosition
-      ;
+    const pos = this.agent.position(); // reset small motions:
+    const position = this.lastStart.distanceTo(pos) <= 0.05 ? this.lastStart : pos;
+
+    if (this.s.offMesh === null) {
       this.agent.teleport(position);
       this.agent.requestMoveTarget(position);
-      /** @type {dtCrowdAgentAnimation} */ (this.agentAnim).set_active(false);
-    } else {
-      // midway through traversal, so stop when finish
+    } else if (this.s.offMesh.seg === 0) {
+      this.stopOffMeshAnimation();
+      this.agent.requestMoveTarget(position);
+    } else {// midway through traversal, so stop when finish
       this.agent.requestMoveTarget(toV3(this.s.offMesh.dst));
     }
 
     this.resolve.move?.();
     this.w.events.next({ key: 'stopped-moving', npcKey: this.key });
+  }
+
+  stopOffMeshAnimation() {
+    this.s.offMesh = null;
+    /** @type {dtCrowdAgentAnimation} */ (this.agentAnim).set_active(false);
+    /** @type {NPC.CrowdAgent} */ (this.agent).teleport(this.position);
   }
 
   updateUniforms() {
