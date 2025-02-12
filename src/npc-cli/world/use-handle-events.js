@@ -37,6 +37,23 @@ export default function useHandleEvents(w) {
       }
       return true;
     },
+    clearOffMesh(npc) {
+      if (npc.s.offMesh === null) {
+        return;
+      }
+      if (npc.agentAnim !== null) {
+        npc.agentAnim.active = false;
+      }
+
+      const { gdKey } = npc.s.offMesh.orig;
+      npc.s.offMesh = null;
+
+      state.doorToOffMesh[gdKey] = state.doorToOffMesh[gdKey].filter(
+        x => x.npcKey !== npc.key
+      );
+      (state.npcToDoors[npc.key] ??= { inside: null, nearby: new Set() }).inside = null;
+      // w.nav.navMesh.setPolyFlags(state.npcToOffMesh[e.npcKey].offMeshRef, w.lib.navPolyFlag.walkable);
+    },
     decodeObjectPick(r, g, b, a) {
       if (r === 1) {// wall
         const instanceId = (g << 8) + b;
@@ -268,6 +285,9 @@ export default function useHandleEvents(w) {
       const npc = w.n[e.npcKey];
 
       switch (e.key) {
+        case "clear-off-mesh":
+          state.clearOffMesh(npc);
+          break;
         case "enter-collider":
           if (e.type === 'nearby') {
             state.onEnterDoorCollider(e);
@@ -489,12 +509,7 @@ export default function useHandleEvents(w) {
       }
     },
     onExitOffMeshConnection(e, npc) {
-      npc.s.offMesh = null;
-      state.doorToOffMesh[e.offMesh.gdKey] = state.doorToOffMesh[e.offMesh.gdKey].filter(
-        x => x.npcKey !== e.npcKey
-      );
-      (state.npcToDoors[e.npcKey] ??= { inside: null, nearby: new Set() }).inside = null;
-      // w.nav.navMesh.setPolyFlags(state.npcToOffMesh[e.npcKey].offMeshRef, w.lib.navPolyFlag.walkable);
+      state.clearOffMesh(npc);
 
       if (npc.agent?.maxSpeed === npc.getSlowSpeed()) {// resume original speed/anim
         npc.agent.updateParameters({ maxSpeed: npc.getMaxSpeed() });
@@ -729,6 +744,7 @@ export default function useHandleEvents(w) {
  * The "inverse" of npcToRoom i.e. `roomToNpc[gmId][roomId]` is a set of `npcKey`s
  *
  * @property {(door: Geomorph.DoorState) => boolean} canCloseDoor
+ * @property {(npc: NPC.NPC) => void} clearOffMesh
  * @property {(npcKey: string, gdKey: Geomorph.GmDoorKey) => boolean} npcCanAccess
  * @property {(r: number, g: number, b: number, a: number) => null | NPC.DecodedObjectPick} decodeObjectPick
  * @property {(npcKey: string) => void} followNpc

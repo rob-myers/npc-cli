@@ -465,8 +465,8 @@ export class Npc {
     this.lastStart.copy(this.position);
     this.s.target = this.lastTarget.copy(closest);
 
-    if (this.s.offMesh?.seg === 0) {
-      this.stopOffMeshAnimation();
+    if (this.s.offMesh !== null && this.tryStopOffMesh()) {
+      this.agent.teleport(this.position);
     }
     this.agent.requestMoveTarget(closest);
 
@@ -927,8 +927,8 @@ export class Npc {
     if (this.s.offMesh === null) {
       this.agent.teleport(position);
       this.agent.requestMoveTarget(position);
-    } else if (this.s.offMesh.seg === 0) {
-      this.stopOffMeshAnimation();
+    } else if (this.tryStopOffMesh()) {
+      this.agent.teleport(position);
       this.agent.requestMoveTarget(position);
     } else {// midway through traversal, so stop when finish
       this.agent.requestMoveTarget(toV3(this.s.offMesh.dst));
@@ -938,10 +938,15 @@ export class Npc {
     this.w.events.next({ key: 'stopped-moving', npcKey: this.key });
   }
 
-  stopOffMeshAnimation() {
-    this.s.offMesh = null;
-    /** @type {dtCrowdAgentAnimation} */ (this.agentAnim).set_active(false);
-    /** @type {NPC.CrowdAgent} */ (this.agent).teleport(this.position);
+  /** Assumes `this.s.offMesh !== null` */
+  tryStopOffMesh() {
+    const agentAnim = /** @type {dtCrowdAgentAnimation} */ (this.agentAnim);
+    if (agentAnim.t < agentAnim.tmid) {
+      this.w.events.next({ key: 'clear-off-mesh', npcKey: this.key });
+      return true;
+    } else {
+      return false;
+    }
   }
 
   updateUniforms() {

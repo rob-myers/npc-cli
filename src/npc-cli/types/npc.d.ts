@@ -120,6 +120,7 @@ declare namespace NPC {
     | { key: "pre-setup-physics" }
     | { key: "nav-updated" }
     | { key: 'contextmenu-link'; linkKey: string }
+    | { key: 'clear-off-mesh'; npcKey: string; }
     | { key: 'enter-off-mesh'; npcKey: string; offMesh: NPC.OffMeshLookupValue }
     | { key: 'enter-off-mesh-main'; npcKey: string }
     | { key: 'exit-off-mesh'; npcKey: string; offMesh: NPC.OffMeshLookupValue }
