@@ -852,7 +852,7 @@ export class Npc {
     }
 
     this.s.lookSecs = 0.3;
-    if (this.position.distanceTo(this.s.target) < 0.1) {
+    if (this.position.distanceTo(this.s.target) < 0.4) {
       this.s.lookAngleDst = null; // e.g. after offMeshConnection
     } else {
       const offset = this.agent.state() === 2 ? 6 : 0;
