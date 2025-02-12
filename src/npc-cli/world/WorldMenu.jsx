@@ -124,7 +124,7 @@ export default function WorldMenu(props) {
   React.useLayoutEffect(() => {
     const obs = new ResizeObserver(([_entry]) => {
       state.loggerWidthDelta = Math.floor(w.view.rootEl.clientWidth / 10);
-      state.logger && state.onResizeLoggerWidth();
+      state.logger?.container && state.onResizeLoggerWidth();
     });
     obs.observe(w.view.rootEl);
     return () => obs.disconnect();
