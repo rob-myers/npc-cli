@@ -69,13 +69,6 @@ declare namespace NPC {
 
   interface SpawnOpts extends Partial<Pick<NPCDef, 'angle' | 'classKey' | 'runSpeed' | 'walkSpeed'>> {
     npcKey: string;
-    point: Geom.VectJson;
-    /**
-     * Should NPC have agent?
-     * - defaults true if `point` navigable
-     */
-    agent?: boolean;
-    meta?: Geom.Meta;
   }
 
   type AnimKey = keyof import('../service/helper').Helper['fromAnimKey'];

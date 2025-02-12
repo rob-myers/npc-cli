@@ -214,15 +214,15 @@ export class Npc {
    * @param {Geom.MaybeMeta<Geom.VectJson>} point 
    * @param {object} opts
    * @param {Geom.Meta} [opts.meta]
-   * @param {boolean} [opts.agent]
    * @param {number} [opts.angle]
    * @param {NPC.ClassKey} [opts.classKey]
    * @param {boolean} [opts.requireNav]
    */
   async fadeSpawn(point, opts = {}) {
     try {
-      const meta = opts.meta ?? point.meta ?? {};
-      point.meta ??= meta; // 🚧 justify
+      // const meta = opts.meta ?? point.meta ?? {};
+      // point.meta ??= meta;
+      Object.assign(point.meta ??= {}, opts.meta);
       await this.fade(0, 300);
 
       const currPoint = this.getPoint();
@@ -230,14 +230,11 @@ export class Npc {
       const dy = point.y - currPoint.y;
 
       await this.w.npc.spawn({
-        agent: opts.agent,
         // -dy because "ccw east" relative to (+x,-z)
         angle: opts.angle ?? (dx === 0 && dy === 0 ? undefined : Math.atan2(-dy, dx)),
         classKey: opts.classKey,
-        meta: opts.meta,
         npcKey: this.key,
-        point,
-      });
+      }, point);
     } finally {
       await this.fade(1, 300);
     }

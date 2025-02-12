@@ -3,9 +3,9 @@ awaitWorld
 w npc.updateLabels rob will kate # efficiency
 
 # 🚧 introduce `spawn` command
-w npc.spawn '{ npcKey: "rob", point: { x: 0.5 * 1.5, y: 5 * 1.5 + 0.2 }, angle: -1.5707963268 }' >/dev/null
-w npc.spawn '{ npcKey: "will", point: { x: 2.5, y: 3 * 1.5 + 0.2 }, agent: true }' >/dev/null
-w npc.spawn '{ npcKey: "kate", point: { x: 4.5 * 1.5, y: 7 * 1.5 }, agent: true }' >/dev/null
+w npc.spawn '{ npcKey: "rob", angle: -Math.PI/2 }' '{ x: 0.5 * 1.5, y: 5 * 1.5 + 0.2 }' >/dev/null
+w npc.spawn will '{ x: 2.5, y: 3 * 1.5 + 0.2 }' >/dev/null
+w npc.spawn kate '{ x: 4.5 * 1.5, y: 7 * 1.5 }' >/dev/null
 
 w n.rob.showSelector true
 selectedNpcKey="rob"

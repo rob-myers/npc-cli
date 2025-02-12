@@ -25,20 +25,38 @@
 - ✅ npc re-target-fail keeps in place
   - store start point and revert if moved less than 5cms
 - ✅ npc turns towards "next corner" on stopMoving
-- fix turning 
-  - turning other when stop nearby
-  - still sometimes seeing bad final turn after offMeshConnection
+
+- 🚧 can only spawn onto navigable floor or do point
+  - ❌ every npc has an agent
+  - ✅ redo spawn args
+    - ℹ️ agent iff spawn on navigable
+  - ✅ can `w npc.spawn rob $( click 1 )`
+  - ✅ fix "spawn while loop" so do points work
+    ```sh
+    c=0
+    while true; do
+      w npc.spawn "rob_${c}"  $( click 1 ) >/dev/null
+      call 'x => x.home.c++'
+    done
+    ```
+  - ✅ spawn onto do point has correct orientation
+  - 🚧 cannot spawn too close to existing
+
+- Geom.Meta -> Meta
+- Geom.MaybeMeta -> MaybeMeta
+
 - improve npc finish-moving condition
+  ```sh
+  click 1 > p
+  w n.rob.moveTo $p & w n.will.moveTo $p &
+  ```
   - optional strategy to avoid agent deadlock when have similar target
   - e.g. stop when little progress
   - e.g. stop when neighbour has similar target
 - clean up z-index
   - e.g. "opts above menu"
 - auto-dock ContextMenu in profile-1
-- 🚧 can only spawn onto navigable floor or do point
-  - redo spawn args
-  - maybe every npc has an agent?
-- spawn onto do point uses orient
+- ✅ spawn onto do point uses orient
 - should not be able to spawn from offMesh do to any nav point
   - ℹ️ e.g. restrict to current room
 - fade Html3d labels whilst window/canvas resize (jerks otherwise)
@@ -124,7 +142,7 @@
   ```sh
   c=0
   while true; do
-    w npc.spawn "{ npcKey: \"rob_${c}\", point: $( click 1 ) }" >/dev/null
+    w npc.spawn "rob_${c}"  $( click 1 ) >/dev/null
     call 'x => x.home.c++'
   done
   ```

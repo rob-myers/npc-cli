@@ -150,65 +150,72 @@ export default function Npcs(props) {
         npc.s.offMesh = null;
       }
     },
-    async spawn(e) {
-      e.point = toXZ(e.point);
-      if (!(typeof e.npcKey === 'string' && /^[a-z0-9-_]+$/i.test(e.npcKey))) {
-        throw Error(`npc key: ${JSON.stringify(e.npcKey)} must match /^[a-z0-9-_]+$/i`);
-      } else if (!(typeof e.point?.x === 'number' && typeof e.point.y === 'number')) {
-        throw Error(`invalid point {x, y}: ${JSON.stringify(e)}`);
-      } else if (e.npcKey === 'default') {
+    async spawn(opts, p) {
+      if (typeof opts === 'string') {
+        opts = { npcKey: opts };
+      }
+
+      const point = toXZ(p);
+      if (!(typeof opts.npcKey === 'string' && /^[a-z0-9-_]+$/i.test(opts.npcKey))) {
+        throw Error(`npc key: ${JSON.stringify(opts.npcKey)} must match /^[a-z0-9-_]+$/i`);
+      } else if (!(typeof point?.x === 'number' && typeof point.y === 'number')) {
+        throw Error(`invalid point {x, y}: ${JSON.stringify(p)}`);
+      } else if (opts.npcKey === 'default') {
         throw Error('npc key cannot be "default"');
       }
 
+      const dstNav = p.meta?.nav === true || state.isPointInNavmesh(point);
+      /** Attach agent iff dst navigable */
+      const agent = dstNav;
 
-      const dstNav = e.meta?.nav === true || state.isPointInNavmesh(e.point);
-      // 🔔 attach agent by default if dst navigable
-      dstNav === true && (e.agent ??= true);
-
-      if (dstNav === false && e.meta?.do !== true) {
-        throw Error(`must spawn on navPoly or do point: ${JSON.stringify(e)}`);
-      } else if (e.agent === true && dstNav === false) {
-        throw Error(`cannot add agent outside navPoly`);
-      } else if (e.classKey !== undefined && !w.lib.isNpcClassKey(e.classKey)) {
-        throw Error(`invalid classKey: ${JSON.stringify(e)}`);
+      if (dstNav === false && p.meta?.do !== true) {
+        throw Error(`must spawn on navPoly or do point: ${JSON.stringify(p)}`);
+      } else if (opts.classKey !== undefined && !w.lib.isNpcClassKey(opts.classKey)) {
+        throw Error(`invalid classKey: ${JSON.stringify(p)}`);
       }
       
-      const gmRoomId = w.gmGraph.findRoomContaining(e.point, true);
+      const gmRoomId = w.gmGraph.findRoomContaining(point, true);
       if (gmRoomId === null) {
-        throw Error(`must be in some room: ${JSON.stringify(e)}`);
+        throw Error(`must be in some room: ${JSON.stringify(p)}`);
       }
 
-      let npc = state.npc[e.npcKey];
-      const position = toV3(e.point);
+      let npc = state.npc[opts.npcKey];
+      const position = toV3(p);
+
+      // orient to meta 🚧 remove from elsewhere
+      opts.angle ??= typeof p.meta?.orient === 'number'
+        ? Math.PI/2 - (p.meta.orient * (Math.PI / 180))
+        : undefined
+      ;
 
       if (npc !== undefined) {// Respawn
         await npc.cancel();
         npc.epochMs = Date.now();
 
         npc.def = {
-          key: e.npcKey,
+          key: opts.npcKey,
           pickUid: npc.def.pickUid,
-          angle: e.angle ?? npc.getAngle() ?? 0, // prev angle fallback
-          classKey: e.classKey ?? npc.def.classKey ?? defaultClassKey,
-          runSpeed: e.runSpeed ?? helper.defaults.runSpeed,
-          walkSpeed: e.walkSpeed ?? helper.defaults.walkSpeed,
+          angle: opts.angle ?? npc.getAngle() ?? 0, // prev angle fallback
+          classKey: opts.classKey ?? npc.def.classKey ?? defaultClassKey,
+          runSpeed: opts.runSpeed ?? helper.defaults.runSpeed,
+          walkSpeed: opts.walkSpeed ?? helper.defaults.walkSpeed,
         };
 
         // Reorder keys
-        delete state.npc[e.npcKey];
-        state.npc[e.npcKey] = npc;
+        delete state.npc[opts.npcKey];
+        state.npc[opts.npcKey] = npc;
       } else {
         
         // Spawn
-        npc = state.npc[e.npcKey] = new Npc({
-          key: e.npcKey,
+        npc = state.npc[opts.npcKey] = new Npc({
+          key: opts.npcKey,
           pickUid: takeFirst(state.freePickId),
-          angle: e.angle ?? 0,
-          classKey: e.classKey ?? defaultClassKey,
-          runSpeed: e.runSpeed ?? helper.defaults.runSpeed,
-          walkSpeed: e.walkSpeed ?? helper.defaults.walkSpeed,
+          angle: opts.angle ?? 0,
+          classKey: opts.classKey ?? defaultClassKey,
+          runSpeed: opts.runSpeed ?? helper.defaults.runSpeed,
+          walkSpeed: opts.walkSpeed ?? helper.defaults.walkSpeed,
         }, w);
-        state.pickIdToKey.set(npc.def.pickUid, e.npcKey);
+        state.pickIdToKey.set(npc.def.pickUid, opts.npcKey);
 
         npc.initialize(state.gltf[npc.def.classKey]);
       }
@@ -222,12 +229,12 @@ export default function Npcs(props) {
       }
 
       // npc.startAnimation('Idle');
-      position.y = npc.startAnimation(e.meta ?? 'Idle');
+      position.y = npc.startAnimation(p.meta ?? 'Idle');
       npc.m.group.rotation.y = npc.getEulerAngle(npc.def.angle);
 
       if (npc.agent === null) {
         npc.setPosition(position);
-        if (e.agent === true) {
+        if (agent === true) {
           const agent = state.attachAgent(npc);
           // 🔔 pin to current position
           agent.requestMoveTarget(npc.position);
@@ -236,7 +243,7 @@ export default function Npcs(props) {
           state.byAgId[agent.agentIndex] = npc;
         }
       } else {
-        if (dstNav === false || e.agent === false) {
+        if (dstNav === false || agent === false) {
           npc.setPosition(position);
           state.removeAgent(npc);
           // must tell physics.worker because not moving
@@ -247,7 +254,8 @@ export default function Npcs(props) {
       }
       
       npc.s.spawns++;
-      npc.s.doMeta = e.meta?.do === true ? e.meta : null;
+      npc.s.doMeta = p.meta?.do === true ? p.meta : null;
+
       npc.s.offMesh = null;
       w.events.next({ key: 'spawned', npcKey: npc.key, gmRoomId });
 
@@ -360,7 +368,11 @@ export default function Npcs(props) {
  * @property {(deltaMs: number) => void} onTick
  * @property {(npcKey: string) => void} remove
  * @property {(npc: NPC.NPC) => void} removeAgent
- * @property {(e: NPC.SpawnOpts) => Promise<NPC.NPC>} spawn
+ * @property {(opts: string | NPC.SpawnOpts, position: MaybeMeta<(Geom.VectJson | THREE.Vector3Like)>) => Promise<NPC.NPC>} spawn
+ * - `spawn("rob", { x, y, meta })`
+ * - `spawn("rob", { x, y, z, meta })`
+ * - `spawn({ npcKey: "rob", classKey: "myClassKey" }, { x, y, z, meta })`
+ * - `w npc.spawn rob $( click 1 )`
  * @property {() => void} tickOnceDebounced
  * @property {() => Promise<void>} tickOnceDebug
  * @property {() => void} update
