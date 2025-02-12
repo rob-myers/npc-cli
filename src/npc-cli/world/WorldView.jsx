@@ -23,6 +23,7 @@ export default function WorldView(props) {
   const w = React.useContext(WorldContext);
 
   const state = useStateRef(/** @returns {State} */ () => ({
+    camInitPos: [0, w.smallViewport ? 48 : 32, 0],
     canvas: /** @type {*} */ (null),
     clickIds: [],
     controls: /** @type {*} */ (null),
@@ -424,8 +425,8 @@ export default function WorldView(props) {
 
   React.useEffect(() => {
     if (state.controls && !w.crowd) {// 🔔 initially only
-      state.controls.setPolarAngle(w.smallViewport ? Math.PI / 2 : Math.PI / 4);
-      state.controls.setAzimuthalAngle(w.smallViewport ? Math.PI / 6 : Math.PI / 4);
+      state.controls.setPolarAngle(Math.PI / 4);
+      state.controls.setAzimuthalAngle(Math.PI / 4);
     }
     emptySceneForPicking.onAfterRender = state.renderObjectPickScene;
   }, [state.controls]);
@@ -453,7 +454,7 @@ export default function WorldView(props) {
       }
 
       <PerspectiveCamera
-        position={[0, 32, 0]}
+        position={state.camInitPos}
         makeDefault
         fov={state.fov}
         zoom={1}
@@ -486,6 +487,7 @@ export default function WorldView(props) {
 
 /**
  * @typedef State
+ * @property {THREE.Vector3Tuple} camInitPos
  * @property {HTMLCanvasElement} canvas
  * @property {string[]} clickIds
  * - Pending click identifiers, provided by shell.
