@@ -8,7 +8,12 @@
   - ℹ️ repro `click 1 > p && w n.rob.moveTo $p & w n.will.moveTo $p &`
   - ℹ️ maybe relevant even when not close to target
   - ✅ detect when displacement small for more than 300ms
-  - 🚧 detect when nei has close final target
+  - ✅ issue where walking npc never arrives if target very near idle npc
+    - ℹ️ can fix by reducing separationWeight of walking npc, so they "push harder"
+    - movingSeparationWeight `0.5` -> `0.4`
+  - ✅ detect when nei has close final target
+  - ✅ auto stopMoving
+  - 🚧 custom strategy
 - clean up z-index
   - e.g. "opts above menu"
 - auto-dock ContextMenu in profile-1

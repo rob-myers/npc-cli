@@ -692,8 +692,8 @@ export class Npc {
       return;
     }
 
-    if (distance > closeDist) {
-      this.onTickSlowDetect(deltaMs, agent); // 🚧 better name
+    if (distance < 2.5 * helper.defaults.radius) {// we only detect slowness near target
+      this.onTickSlowDetect(deltaMs, agent);
     } else {
       this.s.slowBegin = null;
     }
@@ -708,17 +708,24 @@ export class Npc {
     const smallDist = 0.1 * agent.raw.desiredSpeed * deltaMs;
 
     if (Math.abs(this.delta.x) > smallDist || Math.abs(this.delta.z) > smallDist) {
-      this.s.slowBegin = null;
+      this.s.slowBegin = null; // reset
       return;
     }
 
-    // 🚧 do something
     const { elapsedTime } = this.w.timer;
     this.s.slowBegin ??= elapsedTime;
+    if (elapsedTime - this.s.slowBegin < 0.3) {
+      return;
+    }
 
-    if (elapsedTime - this.s.slowBegin > 0.3) {
-      warn(`${this.key}: going slow`);
-      this.s.slowBegin = null;
+    // 🚧 WIP
+    warn(`${this.key}: going slow`);
+    const nei = agent.raw.get_neis(0); // 0th is closest
+    const other = this.w.npc.byAgId[nei.idx];
+    const target = /** @type {THREE.Vector3} */ (this.s.target);
+
+    if (target.distanceTo(other.lastTarget) < 3 * helper.defaults.radius) {
+      this.stopMoving();
     }
   }
 
@@ -951,7 +958,8 @@ export class Npc {
 const staticMaxAcceleration = 4;
 const movingMaxAcceleration = 8;
 const staticSeparationWeight = 2;
-const movingSeparationWeight = 0.5;
+// const movingSeparationWeight = 0.5;
+const movingSeparationWeight = 0.4;
 const staticCollisionQueryRange = 1;
 const movingCollisionQueryRange = 1.5;
 
