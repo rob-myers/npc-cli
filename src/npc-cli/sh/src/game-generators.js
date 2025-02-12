@@ -34,7 +34,7 @@ export async function* click({ api, args, w }) {
   }
 
   const clickId = operands[0] ? api.getUid() : undefined;
-  if (clickId) {
+  if (clickId !== undefined) {
     api.addCleanup(() => w.lib.removeFirst(w.view.clickIds, clickId));
   }
 
@@ -43,15 +43,15 @@ export async function* click({ api, args, w }) {
   api.addCleanup(() => eventsSub?.unsubscribe());
 
   while (numClicks-- > 0) {
-    clickId && w.view.clickIds.push(clickId);
+    clickId !== undefined && w.view.clickIds.push(clickId);
     
     const e = await /** @type {Promise<NPC.PointerUpEvent>} */ (new Promise((resolve, reject) => {
       eventsSub = w.events.subscribe({ next(e) {
         if (e.key !== "pointerup" || e.distancePx > (w.smallViewport ? 15 : 5) || !api.isRunning()) {
           return;
-        } else if (e.clickId && !clickId) {
+        } else if (e.clickId !== undefined && clickId === undefined) {
           return; // `click {n}` overrides `click`
-        } else if (e.clickId && clickId !== e.clickId) {
+        } else if (e.clickId !== undefined && clickId !== e.clickId) {
           return; // later `click {n}` overrides earlier `click {n}`
         }
         resolve(e); // Must resolve before tear-down induced by unsubscribe 

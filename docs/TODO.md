@@ -22,6 +22,8 @@
   - ℹ️ e.g. restrict to current room
 - fade Html3d labels whilst window/canvas resize (jerks otherwise)
 
+- "spawn while loop" sometimes spawns and simultaneously navigates
+  - `click 1` from while loop should not propagate
 - changing `npc-cli/service/const` does not restore agent position
 - try avoid "narrowEntrances" by allocating more links
   > https://github.com/recastnavigation/recastnavigation/pull/756#issuecomment-2633978785
