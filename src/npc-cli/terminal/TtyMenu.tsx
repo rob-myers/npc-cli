@@ -1,7 +1,7 @@
 import React from "react";
 import { css, cx } from "@emotion/css";
 import { tryLocalStorageGet, tryLocalStorageSet } from "../service/generic";
-import { zIndex, localStorageKey, xtermJsTheme, xtermJsDebugTheme } from "../service/const";
+import { localStorageKey, zIndexTabs } from "../service/const";
 import type { Session } from "../sh/session.store";
 import useStateRef from "../hooks/use-state-ref";
 import useUpdate from "../hooks/use-update";
@@ -148,7 +148,7 @@ const menuCss = css`
   --menu-width: 54px;
 
   position: absolute;
-  z-index: ${zIndex.ttyTouchHelper};
+  z-index: ${zIndexTabs.ttyTouchHelper};
   top: 0;
   right: 0;
   width: var(--menu-width);
@@ -181,7 +181,6 @@ const menuCss = css`
 
   .left-menu-overlay {
     position: absolute;
-    /* z-index: ${zIndex.ttyTouchHelper}; */
     top: 0px;
     right: calc(var(--menu-width) - 1px);
 

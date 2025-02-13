@@ -4,28 +4,8 @@
 
 ### Final clean before migration
 
-- ✅ spawn onto do point uses orient
-- ✅ improve npc finish-moving condition
-  - ℹ️ repro `click 1 > p && w n.rob.moveTo $p & w n.will.moveTo $p &`
-  - ℹ️ maybe relevant even when not close to target
-  - ✅ detect when displacement small for more than 300ms
-  - ✅ issue where walking npc never arrives if target very near idle npc
-    - ℹ️ can fix by reducing separationWeight of walking npc, so they "push harder"
-    - movingSeparationWeight `0.5` -> `0.4`
-  - ✅ detect when nei has close final target
-  - ✅ auto stopMoving
-  - ✅ custom strategy
-
-- ✅ "spawn while loop" sometimes spawns and simultaneously navigates
-  - ✅ `click 1` from while loop should not propagate
-  - ✅ `click 1` should not resolve on long press
-  - ✅ abstract distance check as isPointerEventDrag
-
-- ✅ can cancel offMeshConnection earlier i.e. during initial segment
-- ✅ npc sans access next to door should not traverse offMeshConnection (and flicker back)
-
-- clean z-index
-  - e.g. "opts above menu"
+- 🚧 clean z-index
+  - e.g. "Logger PopUp above Logger scrollbar"
 - auto-dock ContextMenu in profile-1
 - should not be able to spawn from offMesh do to any nav point
   - ℹ️ e.g. restrict to current room
@@ -36,13 +16,8 @@
 - try avoid "narrowEntrances" by allocating more links
   > https://github.com/recastnavigation/recastnavigation/pull/756#issuecomment-2633978785
 
-- ❌ BUG `click 1>p` sometimes overridden by moveTo
-  - ℹ️ seems clickId is undefined
-  - cannot use syntax `click 1>r` because `1` is not an operand,
-    must use `click 1 >r` or `click 1 > r`
-
-- spawn command in profile-1
-  - change `w.npc.spawn` args
+- 🚧 spawn command in profile-1
+  - ✅ change `w.npc.spawn` args
   - e.g. `spawn rob $( click 1 ) --degrees=90`
 
 ### Migration
@@ -3802,3 +3777,29 @@ done
   - ❌ cannot spawn too close to existing
 - ✅ Geom.Meta -> Meta
 - ✅ Geom.MaybeMeta -> MaybeMeta
+
+
+- ❌ BUG `click 1>p` sometimes overridden by moveTo
+  - ℹ️ seems clickId is undefined
+  - cannot use syntax `click 1>r` because `1` is not an operand,
+    must use `click 1 >r` or `click 1 > r`
+
+- ✅ spawn onto do point uses orient
+- ✅ improve npc finish-moving condition
+  - ℹ️ repro `click 1 > p && w n.rob.moveTo $p & w n.will.moveTo $p &`
+  - ℹ️ maybe relevant even when not close to target
+  - ✅ detect when displacement small for more than 300ms
+  - ✅ issue where walking npc never arrives if target very near idle npc
+    - ℹ️ can fix by reducing separationWeight of walking npc, so they "push harder"
+    - movingSeparationWeight `0.5` -> `0.4`
+  - ✅ detect when nei has close final target
+  - ✅ auto stopMoving
+  - ✅ custom strategy
+
+- ✅ "spawn while loop" sometimes spawns and simultaneously navigates
+  - ✅ `click 1` from while loop should not propagate
+  - ✅ `click 1` should not resolve on long press
+  - ✅ abstract distance check as isPointerEventDrag
+
+- ✅ can cancel offMeshConnection earlier i.e. during initial segment
+- ✅ npc sans access next to door should not traverse offMeshConnection (and flicker back)

@@ -6,11 +6,11 @@ export const localStorageKey = {
 
 export const longPressMs = 500;
 
-export const zIndex = /** @type {const} */ ({
-  faderOverlay: 4,
-  speechBubble: 3,
-  ttyTouchHelper: 5,
+/** Includes World and Tty */
+export const zIndexTabs = /** @type {const} */ ({
   ttyTouchCircle: 3,
+  ttyTouchHelper: 5,
+  faderOverlay: 4,
 });
 
 /** @type {import('@xterm/xterm').ITheme} */

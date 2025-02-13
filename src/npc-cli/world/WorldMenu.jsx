@@ -284,7 +284,8 @@ const loggerContainerCss = css`
 
 const loggerPopUpCss = css`
   pointer-events: all;
-  z-index: 3;
+  /* z-index: 3; */
+  z-index: 4; // cover Logger scrollbars
   
   .${popUpButtonClassName} {
     color: #8888ff;

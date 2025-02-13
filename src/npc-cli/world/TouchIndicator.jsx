@@ -2,7 +2,7 @@ import React from 'react';
 import { css } from "@emotion/css";
 import { getRelativePointer } from '../service/dom';
 import useStateRef from '../hooks/use-state-ref';
-import { zIndex } from '../service/const';
+import { zIndexTabs } from '../service/const';
 import { WorldContext } from './world-context';
 
 export default function TouchIndicator() {
@@ -74,7 +74,7 @@ export default function TouchIndicator() {
 
 const touchIndicatorCss = css`
   position: fixed;
-  z-index: ${zIndex.ttyTouchCircle};
+  z-index: ${zIndexTabs.ttyTouchCircle};
 
   --touch-radius: 0px;
   --touch-fade-duration: 0s;

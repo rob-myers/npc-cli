@@ -175,7 +175,7 @@ interface Props {
 }
 
 const buttonsCss = css`
-  z-index: 5;
+  // z-index: 5; // above Nav overlay
   display: flex;
   justify-content: right;
   align-items: center;
