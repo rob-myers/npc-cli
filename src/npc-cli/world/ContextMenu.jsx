@@ -365,6 +365,8 @@ export const contextMenuCss = css`
     line-height: normal;
     letter-spacing: 1px;
     gap: 0px;
+
+    user-select: none;
   }
 
   .links button {
