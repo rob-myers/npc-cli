@@ -30,6 +30,7 @@
 - should not be able to spawn from offMesh do to any nav point
   - ℹ️ e.g. restrict to current room
 - fade Html3d labels whilst window/canvas resize (jerks otherwise)
+- profile-1: keyboard arrow keys/wsad rotates sets cameras rotation (compass points)
 
 - changing `npc-cli/service/const` does not restore agent position
 - try avoid "narrowEntrances" by allocating more links
