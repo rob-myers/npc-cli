@@ -152,7 +152,6 @@ declare namespace NPC {
   }
 
   type BasePointerEvent = {
-    /** For future use with CLI */
     clickId?: string;
     /** Distance in screen pixels from previous pointerdown. */
     distancePx: number;

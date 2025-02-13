@@ -16,10 +16,10 @@
   - ✅ auto stopMoving
   - ✅ custom strategy
 
-- 🚧 "spawn while loop" sometimes spawns and simultaneously navigates
+- ✅ "spawn while loop" sometimes spawns and simultaneously navigates
   - ✅ `click 1` from while loop should not propagate
   - ✅ `click 1` should not resolve on long press
-  - abstract distance check as isPointerUpClick
+  - ✅ abstract distance check as isPointerEventDrag
 
 - ✅ can cancel offMeshConnection earlier i.e. during initial segment
 - ✅ npc sans access next to door should not traverse offMeshConnection (and flicker back)

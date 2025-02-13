@@ -107,7 +107,8 @@ export default function WorldView(props) {
       meta,
       position,
     }) {
-      return {
+      /** @type {ReturnType<State['getWorldPointerEvent']>} */
+      const e = {
         key,
         position: new THREE.Vector3().copy(position),
         point: toXZ(position),
@@ -119,9 +120,11 @@ export default function WorldView(props) {
         screenPoint: getRelativePointer(event),
         touch: isTouchDevice(),
         meta,
-        // 🚧 abstract distance check as isPointerUpClick
-        ...key === 'pointerup' && distancePx <= (isTouchDevice() ? 20 : 5) && { clickId: state.clickIds.pop() },
       };
+      if (e.key === 'pointerup' && state.isPointerEventDrag(e) === false) {
+        e.clickId = state.clickIds.pop();
+      }
+      return e;
     },
     followPosition(dst, opts = { smoothTime: 1 }) {
       // @ts-ignore see patch
@@ -143,6 +146,9 @@ export default function WorldView(props) {
       ) {
         w.npc.tickOnceDebug();
       }
+    },
+    isPointerEventDrag(e) {
+      return e.distancePx > (e.touch ? 20 : 5);
     },
     // linear via `{ maxSpeed: 1000 / 60 }`
     async lookAt(point, opts = { smoothTime: 0.2 }) {
@@ -522,6 +528,7 @@ export default function WorldView(props) {
  * @property {(def: WorldPointerEventDef) => NPC.PointerUpEvent | NPC.PointerDownEvent | NPC.LongPointerDownEvent} getWorldPointerEvent
  * @property {(dst: THREE.Vector3, opts?: LookAtOpts) => void} followPosition
  * @property {(e: React.PointerEvent) => void} handleClickInDebugMode
+ * @property {(e: NPC.PointerUpEvent | NPC.LongPointerDownEvent) => boolean} isPointerEventDrag
  * @property {(input: Geom.VectJson | THREE.Vector3Like, opts?: LookAtOpts) => Promise<void>} lookAt
  * @property {() => import("@react-three/fiber").RootState['frameloop']} syncRenderMode
  * @property {import('@react-three/drei').MapControlsProps['onChange']} onChangeControls

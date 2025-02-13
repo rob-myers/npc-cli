@@ -215,11 +215,10 @@ export default function useHandleEvents(w) {
           if (lastDown?.meta === undefined) {
             return; // should be unreachable
           }
-          if (state.pressMenuFilters.some(fltr => fltr(lastDown.meta))) {
+          if (state.pressMenuFilters.some(filter => filter(lastDown.meta))) {
             return; // prevent ContextMenu
           }
-
-          if (e.distancePx <= (e.touch ? 20 : 5)) {
+          if (w.view.isPointerEventDrag(e) === false) {
             state.showDefaultContextMenu();
           }
           break;
