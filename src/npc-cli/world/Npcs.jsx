@@ -412,7 +412,8 @@ function NPC({ npc }) {
         position={mesh.position}
         skeleton={mesh.skeleton}
         userData={mesh.userData}
-        onUpdate={(skinnedMesh) => {// 🔔 keep shader up-to-date
+        key={CuboidManMaterial.key} // 🔔 keep shader up-to-date
+        onUpdate={(skinnedMesh) => {
           npc.m.mesh = skinnedMesh; 
           npc.m.material = /** @type {THREE.ShaderMaterial} */ (skinnedMesh.material);
         }}

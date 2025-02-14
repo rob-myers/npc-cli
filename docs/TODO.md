@@ -16,9 +16,11 @@
 - ❌ profile-1: keyboard arrow keys/wsad rotates sets cameras rotation (compass points)
 
 - ✅ changing `npc-cli/service/const` should restore agent positions
-  - move constant into BaseTty
+  - ℹ️ BaseTty is issue
+  - move constant into 
 
-- 🚧 changing `npc-cli/service/const` should not break npc selector (on select)
+- ✅ changing `npc-cli/service/const` should not break npc selector (on select)
+  - ℹ️ glsl.js is issue + did not remount npc onchange custom shader
 
 - try avoid "narrowEntrances" by allocating more links
   - https://github.com/recastnavigation/recastnavigation/pull/756#issuecomment-2633978785
