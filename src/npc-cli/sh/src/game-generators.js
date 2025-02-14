@@ -177,6 +177,7 @@ export const setupContextMenu = ({ w }) => {
     return { showLinks };
   };
 
+  w.cm.toggleDocked(true);
 }
 
 /**
@@ -254,7 +255,7 @@ export async function* handleLoggerLinks({ api, datum: e, w }) {
 /**
  * @param {RunArg} ctxt
  */
-export const setupOnSlowNpcCustom = ({ w, args }) => {
+export const setupOnSlowNpc = ({ w, args }) => {
 
   w.npc.onSlowNpcCustom = (npc, agent) => {
     // warn(`${npc.key}: going slow`);

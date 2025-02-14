@@ -1,6 +1,6 @@
 import React from "react";
 import * as THREE from "three";
-import { css, cx } from "@emotion/css";
+import { css } from "@emotion/css";
 import { stringify as javascriptStringify } from 'javascript-stringify';
 import debounce from "debounce";
 
@@ -129,7 +129,6 @@ export function ContextMenu() {
       }
 
       state.persist();
-      update();
     },
     onToggleOptsPopup(willOpen) {
       if (willOpen) {
@@ -163,8 +162,8 @@ export function ContextMenu() {
       state.open = true;
       update();
     },
-    toggleDocked() {
-      state.docked = !state.docked;
+    toggleDocked(next) {
+      state.docked = typeof next === 'boolean' ? next : !state.docked;
       
       if (state.docked === true) {// About to dock
         state.optsPopUp.close();
@@ -172,23 +171,29 @@ export function ContextMenu() {
         // 🔔 crucial to avoid flicker on mobile
         state.draggable.el.style.visibility = 'hidden';
       }
+
+      update();
     },
     toggleOpen() {
       state.open = !state.open;
+      update();
     },
     togglePinned() {
       state.pinned = !state.pinned;
       // if (state.pinned === false) {
       //   state.open = false; // auto-close on un-pin
       // }
+      update();
     },
     toggleScaled() {
       state.scaled = !state.scaled;
       const position = state.tracked?.position ?? state.position;
       state.baseScale = state.scaled === true ? 1 / objectScale(position, w.r3f.camera) : undefined;
+      update();
     },
     toggleKvs() {
       state.showKvs = !state.showKvs;
+      update();
     },
   }));
 
@@ -450,7 +455,7 @@ const optsPopUpCss = css`
  * @property {(npcKey?: string | undefined) => void} setNpc
  * @property {(input?: import('three').Object3D) => void} setTracked
  * @property {() => void} show
- * @property {() => void} toggleDocked
+ * @property {(next?: boolean) => void} toggleDocked optional set
  * @property {() => void} toggleOpen
  * @property {() => void} togglePinned
  * @property {() => void} toggleScaled Ensure smooth transition when start scaling
