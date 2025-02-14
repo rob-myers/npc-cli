@@ -76,13 +76,12 @@ export default function Floor(props) {
       // nav border
       const triangles = gm.navDecomp.tris.map(tri => new Poly(tri.map(i => gm.navDecomp.vs[i])));
       const navPoly = Poly.union(triangles.concat(gm.doors.map(x => x.computeDoorway())));
-      drawPolygons(ct, navPoly, [null, '#554', 0.02]);
+      drawPolygons(ct, navPoly, ['#00000022', '#554', 0.02]);
 
+      // grids
       ct.setTransform(1, 0, 0, 1, -gm.pngRect.x * worldToCanvas, -gm.pngRect.y * worldToCanvas);
-      // Small grid
       ct.fillStyle = state.grid;
       ct.fillRect(0, 0, ct.canvas.width, ct.canvas.height);
-      // Large grid
       ct.fillStyle = state.largeGrid;
       ct.fillRect(0, 0, ct.canvas.width, ct.canvas.height);
       ct.setTransform(worldToCanvas, 0, 0, worldToCanvas, -gm.pngRect.x * worldToCanvas, -gm.pngRect.y * worldToCanvas);
