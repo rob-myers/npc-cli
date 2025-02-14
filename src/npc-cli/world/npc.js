@@ -3,7 +3,7 @@ import { SkeletonUtils } from 'three-stdlib';
 import { damp, dampAngle } from "maath/easing";
 
 import { Vect } from '../geom';
-import { defaultAgentUpdateFlags, defaultNpcInteractRadius, glbFadeIn, glbFadeOut, npcClassToMeta } from '../service/const';
+import { defaultAgentUpdateFlags, geomorphGridMeters, glbFadeIn, glbFadeOut, npcClassToMeta } from '../service/const';
 import { error, info, warn } from '../service/generic';
 import { geom } from '../service/geom';
 import { buildObjectLookup, emptyAnimationMixer, emptyGroup, getParentBones, tmpVectThree1, toV3, toXZ } from '../service/three';
@@ -141,25 +141,28 @@ export class Npc {
   }
 
   /**
-   * Either:
-   * - `p.meta.do` i.e. p is a "do point"
-   * - `p.meta.nav` and `npc.doMeta` i.e. point navigable, npc at a "do point"
-   * - `p` is nearly navigable and `npc` is off-mesh
+   * Possible cases:
+   * - p is a "do point"
+   *   > `p.meta.do === true` 
+   * - npc is at a "do point" (e.g. off-mesh) and p is navigable 
+   *   > `p.meta.nav` and `npc.doMeta`
+   * - `npc` is off-mesh and `p` is nearly navigable
    * 
    * @param {Meta<Geom.VectJson | THREE.Vector3Like>} p 
    * @param {object} opts
    * @param {any[]} [opts.extraParams] // 🚧 clarify
    */
   async do(p, opts = {}) {
-    if (!Vect.isVectJson(p)) {
+    if (Vect.isVectJson(p) === false) {
       throw Error('point expected');
-    }
-    if (!p.meta) {
+    } else if (p.meta == null) {
       throw Error('point.meta expected');
     }
+    const point = /** @type {Meta<Geom.VectJson>} */ (toXZ(p));
+    point.meta = p.meta;
 
-    const point = { ...toXZ(p), meta: p.meta }; // handle v3
-    const srcNav = this.w.npc.isPointInNavmesh(this.position);
+    const w = this.w;
+    const srcNav = w.npc.isPointInNavmesh(this.position);
     
     // point.meta.do
     if (point.meta.do === true) {
@@ -177,8 +180,13 @@ export class Npc {
       if (srcNav === true) {
         this.s.doMeta = null;
         await this.moveTo(point);
-      // } else if (this.w.npc.canSee(this.getPosition(), point, this.getInteractRadius())) {
-      } else if (true) {
+      // } else if (w.npc.canSee(this.getPosition(), point, this.getInteractRadius())) {
+      // } else if (true) {
+      } else if (
+        typeof point.meta.grKey === 'string'
+          ? point.meta.grKey === w.e.npcToRoom.get(this.key)?.grKey
+          : false
+      ) {
         await this.fadeSpawn(point);
       } else {
         throw Error('cannot reach navigable point')
@@ -188,7 +196,7 @@ export class Npc {
 
     // handle offMesh and click near nav
     if (srcNav === false && point.meta.nav === false) {
-      const closest = this.w.npc.getClosestNavigable(toV3(p));
+      const closest = w.npc.getClosestNavigable(toV3(p));
       if (closest !== null) await this.offMeshDo({...toXZ(closest), meta: { nav: true }});
     }
   }
@@ -267,10 +275,6 @@ export class Npc {
    */
   getEulerAngle(ccwEastAngle) {
     return Math.PI/2 + ccwEastAngle;
-  }
-
-  getInteractRadius() {
-    return defaultNpcInteractRadius;
   }
 
   /** @param {Geom.VectJson | THREE.Vector3Like} input */
@@ -495,12 +499,8 @@ export class Npc {
     const src = Vect.from(this.getPoint());
     const meta = point.meta ?? {};
 
-    // if (meta.do !== true && meta.nav !== true) {
-    //   throw Error('not doable nor navigable');
-    // }
-
-    if (
-      !(src.distanceTo(point) <= this.getInteractRadius())
+    if (// 🔔 permit move between do points in same room, ≤ 3 grids away
+      !(src.distanceTo(point) <= geomorphGridMeters * 3)
       || !this.w.gmGraph.inSameRoom(src, point)
       // || !this.w.npc.canSee(src, point, this.getInteractRadius())
     ) {
