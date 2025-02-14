@@ -1,18 +1,20 @@
 import React from "react";
 import { css, cx } from "@emotion/css";
 import { createPortal } from "react-dom";
+import debounce from "debounce";
 
 import { tryLocalStorageGetParsed, tryLocalStorageSet, warn } from "../service/generic";
+import { zIndexWorld } from "../service/const";
 import { ansi } from "../sh/const";
 import { WorldContext } from "./world-context";
 import useStateRef from "../hooks/use-state-ref";
 import useUpdate from "../hooks/use-update";
 import { faderOverlayCss, pausedControlsCss } from "./overlay-menu-css";
 import { Draggable } from "../components/Draggable";
+import { html3DOpacityCssVar } from "../components/Html3d";
 import { PopUp, popUpBubbleClassName, popUpButtonClassName, popUpContentClassName } from "../components/PopUp";
 import { globalLoggerLinksRegex, Logger } from "../terminal/Logger";
 import TouchIndicator from "./TouchIndicator";
-import { zIndexWorld } from "../service/const";
 
 /**
  * @param {Pick<import('./World').Props, 'setTabsEnabled'>} props 
@@ -123,9 +125,17 @@ export default function WorldMenu(props) {
   w.menu = state;
 
   React.useLayoutEffect(() => {
+    const { rootEl } = w.view;
+    const showHtml3dsAfter300ms = debounce(() => 
+      rootEl.style.setProperty(html3DOpacityCssVar, '1')
+    , 300);
+
     const obs = new ResizeObserver(([_entry]) => {
       state.loggerWidthDelta = Math.floor(w.view.rootEl.clientWidth / 10);
       state.logger?.container && state.onResizeLoggerWidth();
+
+      rootEl.style.setProperty(html3DOpacityCssVar, '0');
+      showHtml3dsAfter300ms();
     });
     obs.observe(w.view.rootEl);
     return () => obs.disconnect();

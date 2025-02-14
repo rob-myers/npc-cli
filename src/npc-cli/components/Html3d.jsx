@@ -1,8 +1,8 @@
 import * as React from 'react';
-import { cx } from '@emotion/css';
+import { css, cx } from '@emotion/css';
 import * as ReactDOM from 'react-dom/client';
 import * as THREE from 'three';
-import { useFrame, useThree } from '@react-three/fiber'
+import { useFrame } from '@react-three/fiber'
 import useStateRef from '../hooks/use-state-ref';
 
 /**
@@ -16,10 +16,10 @@ export const Html3d = React.forwardRef(({
   docked,
   offset,
   position,
+  r3f,
   tracked,
   visible,
 }, ref) => {
-    const { gl, camera, scene, size } = useThree();
 
     const state = useStateRef(/** @returns {State} */ () => ({
       baseScale: 0,
@@ -35,11 +35,11 @@ export const Html3d = React.forwardRef(({
           return;
         }
   
-        camera.updateMatrixWorld();
+        r3f.camera.updateMatrixWorld();
         const vec = state.computePosition();
 
         if (
-          Math.abs(state.zoom - camera.zoom) > eps ||
+          Math.abs(state.zoom - r3f.camera.zoom) > eps ||
           Math.abs(state.delta[0] - vec[0]) > eps ||
           Math.abs(state.delta[1] - vec[1]) > eps
         ) {
@@ -57,12 +57,12 @@ export const Html3d = React.forwardRef(({
           
           if (baseScale !== undefined) {
             tracked === null ? v1.copy(position) : v1.setFromMatrixPosition(tracked.matrixWorld);
-            const scale = objectScale(v1, camera) * baseScale;
+            const scale = objectScale(v1, r3f.camera) * baseScale;
             state.innerDiv.style.transform = `scale(${scale})`;
           }
   
           state.delta = vec;
-          state.zoom = camera.zoom;
+          state.zoom = r3f.camera.zoom;
         }
       },
 
@@ -75,15 +75,15 @@ export const Html3d = React.forwardRef(({
         if (offset !== undefined) {
           v1.add(offset);
         }
-        return calculatePosition(v1, camera, size)
+        return calculatePosition(v1, r3f.camera, r3f.get().size);
       },
 
-    }), { deps: [baseScale, camera, docked, size, offset, tracked, position] });
+    }), { deps: [baseScale, docked, offset, position, tracked] });
 
     React.useImperativeHandle(ref, () => state, []);
 
     state.domTarget = /** @type {HTMLElement | null} */ (
-      gl.domElement.parentNode?.parentNode ?? null // w.view.rootEl
+      r3f.gl.domElement.parentNode?.parentNode ?? null // w.view.rootEl
     );
 
     React.useLayoutEffect(() => {
@@ -116,7 +116,7 @@ export const Html3d = React.forwardRef(({
     React.useLayoutEffect(() => {
       if (docked ? state.innerDiv : state.rootDiv) {
         state.rootDiv.style.visibility = visible ? 'visible' : 'hidden';
-        state.rootDiv.className = cx(className, { docked });
+        state.rootDiv.className = cx(rootCss, { docked }, className);
       }
     }, [state.rootDiv, state.innerDiv, className, docked, visible]);
 
@@ -127,20 +127,18 @@ export const Html3d = React.forwardRef(({
 );
 
 /**
- * @typedef {Omit<
- *   React.HTMLAttributes<HTMLDivElement> &
- *   BaseProps,
- * 'ref'>} Props
-*/
+ * @typedef {Omit<React.HTMLAttributes<HTMLDivElement> & BaseProps, 'ref'>} Props
+ */
 
 /**
  * @typedef BaseProps
  * @property {boolean} [docked]
  * @property {number} [baseScale]
  * @property {THREE.Vector3Like} [offset]
- * @property {boolean} visible
+ * @property {import("@react-three/fiber").RootState } r3f
  * @property {THREE.Vector3} position
  * @property {THREE.Object3D | null} tracked
+ * @property {boolean} visible
  */
 
 /**
@@ -155,6 +153,15 @@ export const Html3d = React.forwardRef(({
 * @property {(rootState?: import('@react-three/fiber').RootState) => void} onFrame
 * @property {() => [number, number]} computePosition
 */
+
+export const html3DOpacityCssVar = '--html-3d-opacity';
+
+const rootCss = css`
+  &:not(.docked) {
+    transition: opacity ease-out 200ms;
+    opacity: var(${html3DOpacityCssVar});
+  }
+`;
 
 const eps = 0.001;
 const v1 = new THREE.Vector3()

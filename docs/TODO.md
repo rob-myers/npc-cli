@@ -10,10 +10,12 @@
 - ✅ should not be able to spawn from offMesh do to any nav point
   - ℹ️ e.g. restrict to current room
 
-- 🚧 fade Html3d labels whilst window/canvas resize (jerks otherwise)
-- profile-1: keyboard arrow keys/wsad rotates sets cameras rotation (compass points)
+- ✅ fade Html3d labels whilst window/canvas resize (jerks otherwise)
+  - ✅ pass gl, camera as props to avoid rendering onchange RootState.size
+  - ✅ fade them all at once using CSS in WorldMenu
+- ❌ profile-1: keyboard arrow keys/wsad rotates sets cameras rotation (compass points)
 
-- changing `npc-cli/service/const` does not restore agent position
+- 🚧 changing `npc-cli/service/const` should restore agent positions
 - try avoid "narrowEntrances" by allocating more links
   > https://github.com/recastnavigation/recastnavigation/pull/756#issuecomment-2633978785
 

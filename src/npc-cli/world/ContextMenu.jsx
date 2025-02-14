@@ -202,15 +202,16 @@ export function ContextMenu() {
   // Extra initial render: (a) init paused, (b) trigger CSS transition
   React.useEffect(() => void update(), [state.scaled]);
 
-  return (
+  return w.r3f === null ? null : (
     <Html3d
       ref={state.ref('html3d')}
       baseScale={state.baseScale}
       className={contextMenuCss}
       docked={state.docked}
-      visible={state.open}
-      tracked={state.tracked ?? null}
       position={state.position}
+      r3f={w.r3f}
+      tracked={state.tracked ?? null}
+      visible={state.open}
     >
       <Draggable
         ref={state.ref('draggable')}

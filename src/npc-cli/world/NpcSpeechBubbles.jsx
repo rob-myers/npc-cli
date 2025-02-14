@@ -84,10 +84,11 @@ function NpcSpeechBubble({ cm }) {
       ref={cm.html3dRef.bind(cm)}
       className={cm.key === 'default' ? undefined: npcContextMenuCss}
       baseScale={cm.baseScale}
-      position={cm.position}
       offset={cm.offset}
-      visible={cm.open}
+      position={cm.position}
+      r3f={cm.w.r3f}
       tracked={cm.tracked ?? null}
+      visible={cm.open}
     >
       <div className="bubble">
         <div className="speech">
