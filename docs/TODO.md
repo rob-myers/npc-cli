@@ -15,7 +15,9 @@
   - ✅ fade them all at once using CSS in WorldMenu
 - ❌ profile-1: keyboard arrow keys/wsad rotates sets cameras rotation (compass points)
 
-- 🚧 changing `npc-cli/service/const` should restore agent positions
+- ✅ changing `npc-cli/service/const` should restore agent positions?
+  - move constant into BaseTty
+
 - try avoid "narrowEntrances" by allocating more links
   > https://github.com/recastnavigation/recastnavigation/pull/756#issuecomment-2633978785
 

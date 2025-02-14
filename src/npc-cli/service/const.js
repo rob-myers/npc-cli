@@ -25,12 +25,6 @@ export const zIndexWorld = /** @type {const} */ ({
 });
 
 /** @type {import('@xterm/xterm').ITheme} */
-export const xtermJsTheme = {
-  background: "black",
-  foreground: "#41FF00",
-};
-
-/** @type {import('@xterm/xterm').ITheme} */
 export const xtermJsDebugTheme = {
   background: "#020",
   foreground: "#41FF00",
@@ -425,3 +419,5 @@ export const fromXrayInstancedMeshName = {
 
 /** @type {Geom.SixTuple} */
 export const switchDecorQuadScaleUp = [1, 0, 0, 1.5, 0, 0];
+
+1;

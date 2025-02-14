@@ -1,6 +1,5 @@
 import React from 'react';
 import { init as initRecastNav, importTileCache, Crowd } from "@recast-navigation/core";
-import RecastWasm from "@recast-navigation/wasm";
 
 import { isDevelopment, warn, debug, testNever, info } from '../service/generic';
 import { parsePhysicsBodyKey } from '../service/rapier';

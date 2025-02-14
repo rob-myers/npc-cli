@@ -1,6 +1,6 @@
 import React from 'react';
 import { css, cx } from '@emotion/css';
-import { Terminal as XTermTerminal } from "@xterm/xterm";
+import { ITheme, Terminal as XTermTerminal } from "@xterm/xterm";
 import { FitAddon } from "@xterm/addon-fit";
 // 🔔 debugging "Cannot read properties of undefined" onRequestRedraw
 // import { WebglAddon } from "xterm-addon-webgl";
@@ -8,15 +8,17 @@ import { WebglAddon } from "@xterm/addon-webgl";
 import { useBeforeunload } from "react-beforeunload";
 
 import { detectTabPrevNextShortcut } from '../service/generic';
-import { xtermJsTheme } from '../service/const';
 import { stripAnsi } from '../sh/util';
 import { scrollback } from '../sh/io';
 import { ttyXtermClass } from '../sh/tty.xterm';
 import { LinkProvider } from './xterm-link-provider';
 import useSession, { type Session } from "../sh/session.store";
 import useStateRef from '../hooks/use-state-ref';
-import useUpdate from '../hooks/use-update';
 
+/**
+ * Hot-reloading this file e.g. will restart existing files.
+ * It should probably be avoided whilst a World is mounted.
+ */
 export const BaseTty = React.forwardRef<State, Props>(function BaseTty(props: Props, ref) {
 
   const state = useStateRef((): State => ({
@@ -155,3 +157,8 @@ const xtermContainerCss = css`
     min-width: 100px;
   }
 `;
+
+const xtermJsTheme: ITheme = {
+  background: "black",
+  foreground: "#41FF00",
+};
