@@ -4,7 +4,7 @@ import { shallow } from "zustand/shallow";
 import debounce from "debounce";
 
 import useSite from "./site.store";
-import { afterBreakpoint, breakpoint, nav, view } from "../const";
+import { afterBreakpoint, breakpoint, nav, view, zIndexSite } from "../const";
 import { isTouchDevice } from "src/npc-cli/service/dom";
 import { getNavWidth, isSmallView } from "./layout";
 
@@ -180,6 +180,8 @@ const buttonsCss = css`
   align-items: center;
   background-color: #000;
   touch-action: none;
+
+  z-index: ${zIndexSite.aboveViewerFocusOutline};
 
   @media (min-width: ${afterBreakpoint}) {
     cursor: col-resize;

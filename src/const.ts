@@ -55,4 +55,6 @@ export const zIndexSite = /** @type {const} */ ({
   mainHeader: 40,
   mainOverlay: 50,
   nav: 60,
+
+  aboveViewerFocusOutline: 1,
 });
