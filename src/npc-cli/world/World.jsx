@@ -320,8 +320,8 @@ export default function World(props) {
         {state.geomorphs && (
           <group>
             <Floor />
-            <Ceiling />
             <group visible={state.crowd !== null}>
+              <Ceiling />
               <Walls />
               <Doors />
               <Obstacles />
