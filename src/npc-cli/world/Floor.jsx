@@ -18,8 +18,8 @@ export default function Floor(props) {
   const w = React.useContext(WorldContext);
 
   const state = useStateRef(/** @returns {State} */ () => ({
-    grid: getGridPattern(1/5 * geomorphGridMeters * worldToCanvas, 'rgba(100, 100, 100, 0.1)'),
-    largeGrid: getGridPattern(geomorphGridMeters * worldToCanvas, 'rgba(120, 120, 120, 0.1)'),
+    grid: getGridPattern(1/5 * geomorphGridMeters * worldToCanvas, 'rgba(100, 100, 100, 0.15)'),
+    largeGrid: getGridPattern(geomorphGridMeters * worldToCanvas, 'rgba(120, 120, 120, 0.25)'),
     inst: /** @type {*} */ (null),
     quad: getQuadGeometryXZ(`${w.key}-multi-tex-floor-xz`),
 
@@ -65,20 +65,18 @@ export default function Floor(props) {
       const { ct } = w.texFloor;
       const gm = w.geomorphs.layout[gmKey];
 
+      ct.resetTransform();
       ct.clearRect(0, 0, ct.canvas.width, ct.canvas.height);
       ct.setTransform(worldToCanvas, 0, 0, worldToCanvas, -gm.pngRect.x * worldToCanvas, -gm.pngRect.y * worldToCanvas);
 
-      // Floor
-      const floorFill = '#222';
-      drawPolygons(ct, gm.hullPoly.map(x => x.clone().removeHoles()), [floorFill, null]);
-      
-      // NavMesh 🚧 compute navPoly in create-gms-data
-      const navMeshFill = '#111';
-      const navMeshStroke = w.smallViewport ? '#9999cc77' : '#9999cc55';
+      // floor
+      drawPolygons(ct, gm.hullPoly.map(x => x.clone().removeHoles()), ['#222', null]);
+      // walls
+      drawPolygons(ct, gm.walls, ['black', null]);
+      // nav border
       const triangles = gm.navDecomp.tris.map(tri => new Poly(tri.map(i => gm.navDecomp.vs[i])));
       const navPoly = Poly.union(triangles.concat(gm.doors.map(x => x.computeDoorway())));
-      drawPolygons(ct, navPoly, [navMeshFill, navMeshStroke, 0.05]);
-      // drawPolygons(ct, triangles, [null, 'rgba(200, 200, 200, 0.3)', 0.01]); // outlines
+      drawPolygons(ct, navPoly, [null, '#554', 0.02]);
 
       ct.setTransform(1, 0, 0, 1, -gm.pngRect.x * worldToCanvas, -gm.pngRect.y * worldToCanvas);
       // Small grid
@@ -89,45 +87,11 @@ export default function Floor(props) {
       ct.fillRect(0, 0, ct.canvas.width, ct.canvas.height);
       ct.setTransform(worldToCanvas, 0, 0, worldToCanvas, -gm.pngRect.x * worldToCanvas, -gm.pngRect.y * worldToCanvas);
 
-      // cover hull doorway z-fighting (visible from certain angles)
-      gm.hullDoors.forEach(hullDoor => {
-        const poly = hullDoor.computeDoorway(0);
-        const [p, q, r, s] = poly.outline;
-        drawPolygons(ct, poly, ['#000', '#333', 0.025]);
-        ct.strokeStyle = '#777';
-        ct.beginPath(); ct.moveTo(q.x, q.y); ct.lineTo(r.x, r.y); ct.stroke();
-        ct.beginPath(); ct.moveTo(s.x, s.y); ct.lineTo(p.x, p.y); ct.stroke();
-      });
-
-      drawPolygons(ct, gm.walls, ['black', null]);
-
       // drop shadows (avoid doubling e.g. bunk bed, overlapping tables)
       const shadowPolys = Poly.union(gm.obstacles.flatMap(x =>
         x.origPoly.meta['no-shadow'] ? [] : x.origPoly.clone().applyMatrix(tmpMat1.setMatrixValue(x.transform))
       ));
-      drawPolygons(ct, shadowPolys, [navMeshFill, '#99999977']);
-
-      // debug decor: moved to <Debug/>
-      // // ct.setTransform(worldToSgu, 0, 0, worldToSgu, -pngRect.x * worldToSgu, -pngRect.y * worldToSgu);
-      // gm.decor.forEach((decor) => {
-      //   if (decor.type === 'circle') {
-      //     drawCircle(ct, decor.center, decor.radius, [null, '#009', 0.04]);
-      //   } else if (decor.type === 'rect') {
-      //     drawSimplePoly(ct, decor.points, [null, '#070', 0.04]);
-      //   }
-      // });
-
-      // 🧪 debug original geomorph image
-      // imageLoader.loadAsync(`/assets/debug/${gmKey}.png`).then((img) => {
-      //   ct.setTransform(worldToCanvas, 0, 0, worldToCanvas, -pngRect.x * worldToCanvas, -pngRect.y * worldToCanvas);
-      //   ct.globalAlpha = 0.2;
-      //   ct.drawImage(img, 0, 0, img.width, img.height, pngRect.x, pngRect.y, pngRect.width, pngRect.height);
-      //   ct.globalAlpha = 1;
-      //   ct.resetTransform();
-      //   tex.needsUpdate = true;
-      // });
-
-      ct.resetTransform();
+      drawPolygons(ct, shadowPolys, ['#111', null]);
     },
     positionInstances() {
       for (const [gmId, gm] of w.gms.entries()) {
@@ -166,7 +130,6 @@ export default function Floor(props) {
         transparent
         atlas={tex}
         depthWrite={false} // fix z-fighting
-        // diffuse={[1, 1, 0.8]}
         diffuse={[1, 1, 1]}
         objectPickRed={2}
         alphaTest={0.5}
