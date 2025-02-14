@@ -15,11 +15,14 @@
   - ✅ fade them all at once using CSS in WorldMenu
 - ❌ profile-1: keyboard arrow keys/wsad rotates sets cameras rotation (compass points)
 
-- ✅ changing `npc-cli/service/const` should restore agent positions?
+- ✅ changing `npc-cli/service/const` should restore agent positions
   - move constant into BaseTty
 
+- 🚧 changing `npc-cli/service/const` should not break npc selector (on select)
+
 - try avoid "narrowEntrances" by allocating more links
-  > https://github.com/recastnavigation/recastnavigation/pull/756#issuecomment-2633978785
+  - https://github.com/recastnavigation/recastnavigation/pull/756#issuecomment-2633978785
+  - https://github.com/recastnavigation/recastnavigation/blob/77f7e54bc8cf5a816f9f087a3e0ac391d2043be3/Detour/Source/DetourNavMeshBuilder.cpp#L385
 
 - 🚧 spawn command in profile-1
   - ✅ change `w.npc.spawn` args
