@@ -29,7 +29,7 @@ export const pausedControlsCss = css`
   position: absolute;
   right: 0;
   top: 64px;
-  z-index: 4;
+  z-index: ${zIndexTabs.pausedControls};
   display: flex;
   flex-direction: column;
   gap: 12px;

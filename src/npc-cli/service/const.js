@@ -6,11 +6,22 @@ export const localStorageKey = {
 
 export const longPressMs = 500;
 
-/** Includes World and Tty */
-export const zIndexTabs = /** @type {const} */ ({
-  ttyTouchCircle: 3,
-  ttyTouchHelper: 5,
-  faderOverlay: 4,
+/** For individual Tabs, not all Tabs */
+export const zIndexTabs  = /** @type {const} */ ({
+  faderOverlay: 100,
+  pausedControls: 110,
+});
+
+export const zIndexWorld = /** @type {const} */ ({
+  stats: 10,
+  logger: 20,
+  loggerPopUp: 30,
+  contextMenu: 40,
+  touchCircle: 50,
+  disconnectedMessage: 60,
+
+  /** Inside ContextMenu */
+  popUpInContextMenu: 1,
 });
 
 /** @type {import('@xterm/xterm').ITheme} */

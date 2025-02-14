@@ -6,7 +6,7 @@ import { useBeforeunload } from "react-beforeunload";
 import { menuClasses, sidebarClasses } from "react-pro-sidebar";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 
-import { afterBreakpoint, allArticlesMeta, breakpoint, view } from "../const";
+import { afterBreakpoint, allArticlesMeta, breakpoint, view, zIndexSite } from "../const";
 import type { FrontMatter } from "./site.store";
 import { queryClient } from "../npc-cli/service/query-client";
 
@@ -69,7 +69,7 @@ const rootCss = css`
       position: fixed;
       height: 100vh;
       height: 100dvh;
-      z-index: 11;
+      z-index: ${zIndexSite.nav};
 
       &.${sidebarClasses.collapsed} {
         pointer-events: none;

@@ -88,7 +88,6 @@ function NpcSpeechBubble({ cm }) {
       offset={cm.offset}
       visible={cm.open}
       tracked={cm.tracked ?? null}
-      // zIndex={cm.key === 'default' ? 1 : undefined}
     >
       <div className="bubble">
         <div className="speech">

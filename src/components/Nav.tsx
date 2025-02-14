@@ -81,7 +81,6 @@ export default function Nav() {
 
 // See parent component for more CSS
 const navCss = css`
-  z-index: 8;
   -webkit-tap-highlight-color: transparent;
   cursor: pointer;
 
@@ -177,7 +176,6 @@ const icon = {
 
 const toggleCss = css`
   position: absolute;
-  z-index: 1;
   top: 0.6rem;
   right: 1rem;
   width: 1.5rem;

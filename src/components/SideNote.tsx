@@ -133,7 +133,6 @@ const speechBubbleCss = css`
   .arrow {
     visibility: hidden;
     position: absolute;
-    /* z-index: 1; */
     width: 0; 
     height: 0;
   }

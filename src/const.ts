@@ -50,3 +50,9 @@ export const allArticlesMeta: Record<ArticleKey, ArticleMeta> = {
     tags: ['cli', 'web dev', 'behaviour', 'video games'],
   },
 };
+
+export const zIndexSite = /** @type {const} */ ({
+  mainHeader: 40,
+  mainOverlay: 50,
+  nav: 60,
+});

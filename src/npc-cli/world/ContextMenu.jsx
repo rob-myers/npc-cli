@@ -11,6 +11,7 @@ import useStateRef from "../hooks/use-state-ref";
 import { PopUp, popUpContentClassName } from "../components/PopUp";
 import { Html3d, objectScale } from "../components/Html3d";
 import { Draggable } from "../components/Draggable";
+import { zIndexWorld } from "../service/const";
 
 export function ContextMenu() {
 
@@ -343,7 +344,7 @@ export const contextMenuCss = css`
     }
   }
 
-  z-index: 4; // in front of Logger and its PopUp
+  z-index: ${zIndexWorld.contextMenu};
 
   &.docked {
     transform: unset !important;
@@ -399,7 +400,7 @@ export const contextMenuCss = css`
 `;
 
 const optsPopUpCss = css`
-  z-index: 4;
+  z-index: ${zIndexWorld.popUpInContextMenu};
 
   .${popUpContentClassName} {
     display: flex;

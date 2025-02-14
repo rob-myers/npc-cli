@@ -80,19 +80,22 @@ export default function TtyMenu(props: Props) {
   }, []);
 
   return <>
-    <div // Fade Overlay
+    <div
       className={cx(faderOverlayCss, { faded: props.disabled && !state.debugWhilePaused })}
       onPointerUp={() => props.setTabsEnabled(true)}
     />
 
-    <div // Overlay Menu
+    <div
       className={cx(menuCss, { disabled: props.disabled, open: state.touchMenuOpen })}
       onClick={state.onClickMenu}
     >
-      <div className="left-menu-overlay">
-        <div className="menu-toggler" onClick={state.toggleTouchMenu}>
+
+      <div className="toggle-and-paused-controls">
+
+        <div className="toggle" onClick={state.toggleTouchMenu}>
           {state.touchMenuOpen ? ">" : "<"}
         </div>
+
         {props.disabled && (// Overlay Buttons
           <div className={pausedControlsCss}>
             <button className="text-white" onClick={state.clickEnableAll}>
@@ -107,32 +110,35 @@ export default function TtyMenu(props: Props) {
           </div>
         )}
       </div>
-      <div
-        className={cx("icon can-type", { enabled: state.xterm.canType() })}
-        title={`text input ${state.xterm.canType() ? "enabled" : "disabled"}`}
-      >
-        $
-      </div>
-      <div className="icon paste" title="or press e.g. Cmd+V">
-        paste
-      </div>
-      <div className="icon enter" title="or press Enter">
-        enter
-      </div>
-      <div className="icon delete" title="or press Backspace">
-        del
-      </div>
-      <div className="icon ctrl-c" title="or press Ctrl+C">
-        kill
-      </div>
-      <div className="icon clear" title="or press Ctrl+L">
-        clear
-      </div>
-      <div className="icon up" title="or press Up">
-        prev
-      </div>
-      <div className="icon down" title="or press Down">
-        next
+      
+      <div className="touch-menu">
+        <div
+          className={cx("icon can-type", { enabled: state.xterm.canType() })}
+          title={`text input ${state.xterm.canType() ? "enabled" : "disabled"}`}
+        >
+          $
+        </div>
+        <div className="icon paste" title="or press e.g. Cmd+V">
+          paste
+        </div>
+        <div className="icon enter" title="or press Enter">
+          enter
+        </div>
+        <div className="icon delete" title="or press Backspace">
+          del
+        </div>
+        <div className="icon ctrl-c" title="or press Ctrl+C">
+          kill
+        </div>
+        <div className="icon clear" title="or press Ctrl+L">
+          clear
+        </div>
+        <div className="icon up" title="or press Up">
+          prev
+        </div>
+        <div className="icon down" title="or press Down">
+          next
+        </div>
       </div>
     </div>
   </>;
@@ -148,7 +154,7 @@ const menuCss = css`
   --menu-width: 54px;
 
   position: absolute;
-  z-index: ${zIndexTabs.ttyTouchHelper};
+  z-index: ${zIndexTabs.pausedControls};
   top: 0;
   right: 0;
   width: var(--menu-width);
@@ -163,15 +169,10 @@ const menuCss = css`
   border-width: 1px 1px 1px 1px;
   color: white;
 
-  /* &.disabled {
-    filter: brightness(0.5);
-    pointer-events: none;
-  } */
-
   transition: transform 500ms;
   &.open {
     transform: translate(0px, 0px);
-    .menu-toggler {
+    .toggle {
       background: rgba(0, 0, 0, 0.5);
     }
   }
@@ -179,12 +180,12 @@ const menuCss = css`
     transform: translate(var(--menu-width), 0px);
   }
 
-  .left-menu-overlay {
+  .toggle-and-paused-controls {
     position: absolute;
     top: 0px;
     right: calc(var(--menu-width) - 1px);
 
-    .menu-toggler {
+    .toggle {
       width: 32px;
       height: 32px;
   
@@ -198,6 +199,11 @@ const menuCss = css`
       color: #ddd;
       border: 2px solid #444;
     }
+  }
+
+  &.disabled .touch-menu {
+    filter: brightness(0.4);
+    pointer-events: none;
   }
 
   .icon {

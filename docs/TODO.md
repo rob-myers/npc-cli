@@ -4,9 +4,9 @@
 
 ### Final clean before migration
 
-- 🚧 clean z-index
+- ✅ clean z-index
   - e.g. "Logger PopUp above Logger scrollbar"
-- auto-dock ContextMenu in profile-1
+- 🚧 auto-dock ContextMenu in profile-1
 - should not be able to spawn from offMesh do to any nav point
   - ℹ️ e.g. restrict to current room
 - fade Html3d labels whilst window/canvas resize (jerks otherwise)

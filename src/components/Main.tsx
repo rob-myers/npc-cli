@@ -3,7 +3,7 @@ import React from "react";
 import { css, cx } from "@emotion/css";
 import { shallow } from "zustand/shallow";
 
-import { afterBreakpoint, breakpoint } from "../const";
+import { afterBreakpoint, breakpoint, zIndexSite } from "../const";
 import useSite from "./site.store";
 import { isSmallView } from "./layout";
 import { sideNoteRootDataAttribute } from "./SideNote";
@@ -41,7 +41,7 @@ export default function Main(props: React.PropsWithChildren) {
 const sectionMainCss = css`
   > header {
     background-color: #fff;
-    z-index: 4;
+    z-index: ${zIndexSite.mainHeader};
   }
   > main {
     background-color: #fff;
@@ -99,7 +99,7 @@ const mainHeaderCss = css`
 const overlayCss = css`
   -webkit-tap-highlight-color: transparent;
   position: absolute;
-  z-index: 4;
+  z-index: ${zIndexSite.mainOverlay};
   background-color: rgba(0, 0, 0, 0.5);
   left: 0;
   top: 0;

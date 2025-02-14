@@ -10,6 +10,7 @@ import { WebLinksAddon } from "@xterm/addon-web-links";
 
 import useStateRef from "../hooks/use-state-ref";
 import useUpdate from "../hooks/use-update";
+import { zIndexWorld } from "../service/const";
 
 /**
  * Like `BaseTty` but without a session.
@@ -194,7 +195,7 @@ const loggerCss = css`
   textarea { visibility: hidden; }
 
   .xterm .xterm-helpers {
-    z-index: 3 !important;
+    z-index: ${zIndexWorld.logger} !important;
   }
 `;
 

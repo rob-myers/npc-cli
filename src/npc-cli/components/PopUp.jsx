@@ -200,7 +200,6 @@ const rootPopupCss = css`
       visibility: hidden;
       opacity: 0;
       position: absolute;
-      z-index: 1;
       width: 0; 
       height: 0;
     }

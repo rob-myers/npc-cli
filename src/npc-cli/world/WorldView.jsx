@@ -8,7 +8,7 @@ import { damp } from "maath/easing";
 import { debug } from "../service/generic.js";
 import { Rect, Vect } from "../geom/index.js";
 import { dataUrlToBlobUrl, getModifierKeys, getRelativePointer, isRMB, isTouchDevice } from "../service/dom.js";
-import { fromXrayInstancedMeshName, longPressMs, pickedTypesInSomeRoom } from "../service/const.js";
+import { fromXrayInstancedMeshName, longPressMs, pickedTypesInSomeRoom, zIndexWorld } from "../service/const.js";
 import { dampXZ, emptySceneForPicking, hasObjectPickShaderMaterial, pickingRenderTarget, toV3, toXZ, unitXVector3, v3Precision } from "../service/three.js";
 import { popUpRootDataAttribute } from "../components/PopUp.jsx";
 import { WorldContext } from "./world-context.js";
@@ -567,7 +567,7 @@ const rootCss = css`
 
 const statsCss = css`
   position: absolute !important;
-  z-index: 0 !important;
+  z-index: ${zIndexWorld.stats} !important;
   left: unset !important;
   right: 0px;
 `;

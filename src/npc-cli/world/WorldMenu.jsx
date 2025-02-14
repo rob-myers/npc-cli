@@ -12,6 +12,7 @@ import { Draggable } from "../components/Draggable";
 import { PopUp, popUpBubbleClassName, popUpButtonClassName, popUpContentClassName } from "../components/PopUp";
 import { globalLoggerLinksRegex, Logger } from "../terminal/Logger";
 import TouchIndicator from "./TouchIndicator";
+import { zIndexWorld } from "../service/const";
 
 /**
  * @param {Pick<import('./World').Props, 'setTabsEnabled'>} props 
@@ -266,7 +267,7 @@ const loggerContainerCss = css`
   left: 0;
   top: 0;
   max-width: 100%;
-  z-index: 1;
+  z-index: ${zIndexWorld.logger};
   
   > div:nth-child(2) {
     /* height: ${defaultLoggerHeightPx}px; */
@@ -284,8 +285,8 @@ const loggerContainerCss = css`
 
 const loggerPopUpCss = css`
   pointer-events: all;
-  /* z-index: 3; */
-  z-index: 4; // cover Logger scrollbars
+  // cover Logger scrollbars
+  z-index: ${zIndexWorld.loggerPopUp};
   
   .${popUpButtonClassName} {
     color: #8888ff;
@@ -388,7 +389,7 @@ const cssTtyDisconnectedMessage = css`
   position: absolute;
   bottom: 0;
   right: 0;
-  z-index: 5;
+  z-index: ${zIndexWorld.disconnectedMessage};
   
   pointer-events: none;
   padding: 16px;
