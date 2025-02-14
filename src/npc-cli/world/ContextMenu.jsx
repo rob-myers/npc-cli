@@ -162,8 +162,12 @@ export function ContextMenu() {
       state.open = true;
       update();
     },
-    toggleDocked(next) {
-      state.docked = typeof next === 'boolean' ? next : !state.docked;
+    toggleDocked(next = !state.docked) {
+      if (next === state.docked) {
+        return;
+      }
+
+      state.docked = next;
       
       if (state.docked === true) {// About to dock
         state.optsPopUp.close();
