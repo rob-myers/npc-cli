@@ -28,7 +28,11 @@
 - ✅ spawn command in profile-1
   - ✅ change `w.npc.spawn` args
 
+- 🚧 fix stuck npcs far from target
+  - e.g. both turning corner opposite ways
+
 - follow cam permits unreleased drag without attempting to follow
+
 
 ### Migration
 

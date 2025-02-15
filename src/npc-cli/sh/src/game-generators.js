@@ -257,7 +257,7 @@ export async function* handleLoggerLinks({ api, datum: e, w }) {
  */
 export const setupOnSlowNpc = ({ w, args }) => {
 
-  w.npc.onSlowNpcCustom = (npc, agent) => {
+  w.npc.onStuckCustom = (npc, agent) => {
     // warn(`${npc.key}: going slow`);
 
     switch (args[0]) {

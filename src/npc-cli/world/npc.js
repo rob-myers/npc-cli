@@ -696,11 +696,7 @@ export class Npc {
       return;
     }
 
-    if (distance < 2.5 * helper.defaults.radius) {// we only detect slowness near target
-      this.onTickSlowDetect(deltaMs, agent);
-    } else {
-      this.s.slowBegin = null;
-    }
+    this.onTickDetectStuck(deltaMs, agent);
   }
 
   /**
@@ -708,7 +704,7 @@ export class Npc {
    * @param {NPC.CrowdAgent} agent 
    * @returns 
    */
-  onTickSlowDetect(deltaMs, agent) {
+  onTickDetectStuck(deltaMs, agent) {
     const smallDist = 0.1 * agent.raw.desiredSpeed * deltaMs;
 
     if (Math.abs(this.delta.x) > smallDist || Math.abs(this.delta.z) > smallDist) {
@@ -722,8 +718,7 @@ export class Npc {
       return;
     }
 
-
-    this.w.npc.onSlowNpcCustom?.(this, agent);
+    this.w.npc.onStuckCustom?.(this, agent);
   }
 
   /** @param {NPC.CrowdAgent} agent */

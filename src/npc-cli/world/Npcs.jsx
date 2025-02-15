@@ -34,7 +34,7 @@ export default function Npcs(props) {
       tex: new THREE.CanvasTexture(getCanvas(`${w.key} npc.label`)),
     },
     npc: {},
-    onSlowNpcCustom: null,
+    onStuckCustom: null,
     physicsPositions: [],
     tex: /** @type {*} */ ({}),
     pickIdToKey: new Map(),
@@ -353,7 +353,7 @@ export default function Npcs(props) {
  * @property {import("../service/three").LabelsSheetAndTex} label
  * @property {Record<NPC.ClassKey, import("three-stdlib").GLTF & import("@react-three/fiber").ObjectMap>} gltf
  * @property {{ [npcKey: string]: Npc }} npc
- * @property {null | ((npc: NPC.NPC, agent: NPC.CrowdAgent) => void)} onSlowNpcCustom
+ * @property {null | ((npc: NPC.NPC, agent: NPC.CrowdAgent) => void)} onStuckCustom
  * Custom callback to handle npc slow down.
  * We don't use an event because it can happen too often.
  * @property {number[]} physicsPositions
