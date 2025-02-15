@@ -42,7 +42,7 @@ range() {
   ' "$1"
 }
 
-# usage: `readtty`
+# usage: `readtty 0`
 readtty() {
   call '({ api, args }) => api.isTtyAt(...args.map(Number))' $1
 }

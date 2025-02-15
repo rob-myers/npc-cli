@@ -25,9 +25,10 @@
 - ✅ fix `local` now we're using Bash parser
   - can do `local x=foo y=bar` now
 
-- 🚧 spawn command in profile-1
+- ✅ spawn command in profile-1
   - ✅ change `w.npc.spawn` args
-  - e.g. `spawn rob $( click 1 ) --degrees=90`
+
+- follow cam permits unreleased drag without attempting to follow
 
 ### Migration
 
