@@ -22,10 +22,6 @@
 - ✅ changing `npc-cli/service/const` should not break npc selector (on select)
   - ℹ️ glsl.js is issue + did not remount npc onchange custom shader
 
-- try avoid "narrowEntrances" by allocating more links
-  - https://github.com/recastnavigation/recastnavigation/pull/756#issuecomment-2633978785
-  - https://github.com/recastnavigation/recastnavigation/blob/77f7e54bc8cf5a816f9f087a3e0ac391d2043be3/Detour/Source/DetourNavMeshBuilder.cpp#L385
-
 - 🚧 spawn command in profile-1
   - ✅ change `w.npc.spawn` args
   - e.g. `spawn rob $( click 1 ) --degrees=90`
@@ -48,17 +44,19 @@
     - can change World mapKey
     - can change tty env (e.g. PROFILE) and reboot
 
-
 ### On hold
 
-- improve hmr onchange service/const
-- Logger opts for fixing camera angles
+- try avoid "narrowEntrances" by allocating more links
+  - https://github.com/recastnavigation/recastnavigation/pull/756#issuecomment-2633978785
+  - https://github.com/recastnavigation/recastnavigation/blob/77f7e54bc8cf5a816f9f087a3e0ac391d2043be3/Detour/Source/DetourNavMeshBuilder.cpp#L385
+- ✅ improve hmr onchange service/const
+- ❌ Logger opts for fixing camera angles
   - e.g. `min/maxPolarAngle` is `Math.PI * 0.15`
-- profile-1: fov 20 when "close" and fov 5 when far
+- ❌ profile-1: fov 20 when "close" and fov 5 when far
   - `w update 'w => w.view.fov = 20'`
 - ✅ avoid turning around after offMeshConnection
   - ℹ️ happens when moveTo doorway
-- simplify offMeshConnection src intersects line to newDst
+- ✅ simplify offMeshConnection src intersects line to newDst
 - While zooming turn off ContextMenu pointer-events
 - ✅ Still seeing flicker on change "embed" -> "docked" on mobile
 - ✅ Docked ContextMenu can focus i.e. panZoom to point
