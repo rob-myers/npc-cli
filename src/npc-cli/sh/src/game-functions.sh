@@ -1,8 +1,6 @@
-# Usage: gm {gmId} [selector]
+# Usage: gm [gmId] [selector]
 gm() {
-  local gmId selector
-  gmId="${1:-0}"
-  selector="${2:-x=>x}"
+  local gmId="${1:-0}" selector="${2:-x=>x}"
   shift 2
   call '({ w }) => w.gms['$gmId']' | map "$selector" "$@"
 }

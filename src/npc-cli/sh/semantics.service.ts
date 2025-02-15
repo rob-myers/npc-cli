@@ -386,25 +386,37 @@ class semanticsServiceClass {
   }
 
   /**
-   * 🔔 Reachable when `syntax.Variant(syntax.LangBash)`
-   *    not for `syntax.Variant(syntax.LangPOSIX)`.
-   *  
-   * - we do not take advantage of extra Bash parsing
-   * - we forward the semantics to cmd.service builtin "declare"
-   * - we only support listing variables/functions
-   *   e.g. `declare`, `declare -F`, `declare -f myFunc`
-   * - we use `syntax.Variant(syntax.LangBash)` to support the syntax $'...',
-   *   allowing us to use all possible quotes in our js defs
+   * - Reachable for `syntax.Variant(syntax.LangBash)` (not LangPOSIX).
+   * - We use LangBash to support the syntax $'...', which allows us
+   *   to use all possible quotes in the underlying JavaScript functions.
    */
   private async *DeclClause(node: Sh.DeclClause) {
-    const args = [] as string[];
-    for (const { Name, Value } of node.Args) {
-      if (Name !== null)
-        args.push(Name.Value); // myFunc in `declare -f myFunc`
-      else if (Value !== null && Value.Parts[0]?.type === 'Lit')
-        args.push(Value.Parts[0].Value); // -f in `declare -f myFunc`
+
+    if (node.Variant.Value === 'declare') {
+      // 🔔 only listing variables/functions are supported,
+      // and we delegate to cmd.service 'declare'
+      const args = [] as string[];
+      for (const { Name, Value } of node.Args) {
+        if (Name !== null)
+          args.push(Name.Value); // myFunc in `declare -f myFunc`
+        else if (Value !== null && Value.Parts[0]?.type === 'Lit')
+          args.push(Value.Parts[0].Value); // -f in `declare -f myFunc`
+      }
+
+      yield* cmdService.runCmd(node, 'declare', args);
+    } else {
+      // 🔔 we support assignments, so we ignore cmd.service 'local'
+      const process = useSession.api.getProcess(node.meta);
+      if (process.key === 0) {
+        throw Error(`local: cannot be used in session leader`);
+      }
+      for (const arg of node.Args) {
+        if (arg.Name !== null) {
+          process.localVar[arg.Name.Value] = undefined;
+          yield* this.Assign(arg);
+        }
+      }
     }
-    yield* cmdService.runCmd(node, 'declare', args);
 
     // if (node.Variant.Value === "declare") {
     //   if (node.Args.length) {

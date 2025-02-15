@@ -159,7 +159,7 @@ class cmdServiceClass {
         }
         break;
       }
-      case "declare": {
+      case "declare": {// 🔔 see DeclClause
         const { opts, operands } = getOpts(args, {
           boolean: [
             "f", // list functions [matching prefixes]
@@ -282,7 +282,7 @@ class cmdServiceClass {
         this.killProcesses(meta.sessionKey, pids, { STOP: opts.STOP, CONT: opts.CONT });
         break;
       }
-      case "local": {
+      case "local": {// 🔔 see DeclClause
         const process = useSession.api.getProcess(node.meta);
         if (process.key === 0) {
           throw new ShError("session leader doesn't support local variables", 1);

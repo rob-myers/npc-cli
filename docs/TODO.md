@@ -22,6 +22,9 @@
 - ✅ changing `npc-cli/service/const` should not break npc selector (on select)
   - ℹ️ glsl.js is issue + did not remount npc onchange custom shader
 
+- ✅ fix `local` now we're using Bash parser
+  - can do `local x=foo y=bar` now
+
 - 🚧 spawn command in profile-1
   - ✅ change `w.npc.spawn` args
   - e.g. `spawn rob $( click 1 ) --degrees=90`
