@@ -343,7 +343,7 @@ export default function WorldView(props) {
         }
       }
 
-      if (state.target !== null) {
+      if (state.target !== null && state.down === null) {
         if (dampXZ(state.controls.target, state.target.dst, state.target.smoothTime, deltaMs, state.target.maxSpeed, state.target.y, 0.01) === false) {
           if (state.target.resolve !== undefined) {
             state.target.resolve();
@@ -505,7 +505,7 @@ export default function WorldView(props) {
  * @property {import('three-stdlib').MapControls} controls
  * @property {import('@react-three/drei').MapControlsProps} controlsViewportOpts
  * @property {{ screenPoint: Geom.Vect; pointerIds: number[]; longTimeoutId: number; } | null} down
- * Defined iff at least one pointer is down.
+ * Non-null iff at least one pointer is down.
  * @property {{ pickStart: number; pickEnd: number; pointerDown: number; pointerUp: number; }} epoch
  * Each uses Date.now() i.e. milliseconds since epoch
  * @property {number} fov
