@@ -43,7 +43,7 @@ ptags=no-pause; click | filter meta.floor | map --forever '(input, { w, home }) 
 }' &
 
 w update 'w => w.decor.showLabels = true'
-w update 'w => w.view.targetFov = w.smallViewport ? 10 : 20'
+w update 'w => w.view.targetFov = w.smallViewport ? 20 : 20'
 
 setupContextMenu
 ptags=no-pause; events | handleContextMenu &
