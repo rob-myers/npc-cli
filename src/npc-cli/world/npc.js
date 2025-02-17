@@ -705,7 +705,7 @@ export class Npc {
    * @returns 
    */
   onTickDetectStuck(deltaMs, agent) {
-    const smallDist = 0.1 * agent.raw.desiredSpeed * deltaMs;
+    const smallDist = 0.25 * agent.raw.desiredSpeed * deltaMs;
 
     if (Math.abs(this.delta.x) > smallDist || Math.abs(this.delta.z) > smallDist) {
       this.s.slowBegin = null; // reset
@@ -714,7 +714,7 @@ export class Npc {
 
     const { elapsedTime } = this.w.timer;
     this.s.slowBegin ??= elapsedTime;
-    if (elapsedTime - this.s.slowBegin < 0.1) {// 100ms
+    if (elapsedTime - this.s.slowBegin < 0.2) {// 200ms
       return;
     }
 
