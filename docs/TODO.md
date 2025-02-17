@@ -2,41 +2,28 @@
 
 ## Migration to Next.js (npc-cli-next)
 
-### Final clean before migration
-
-- ✅ clean z-index
-  - e.g. "Logger PopUp above Logger scrollbar"
-- ✅ auto-dock ContextMenu in profile-1
-- ✅ should not be able to spawn from offMesh do to any nav point
-  - ℹ️ e.g. restrict to current room
-
-- ✅ fade Html3d labels whilst window/canvas resize (jerks otherwise)
-  - ✅ pass gl, camera as props to avoid rendering onchange RootState.size
-  - ✅ fade them all at once using CSS in WorldMenu
-- ❌ profile-1: keyboard arrow keys/wsad rotates sets cameras rotation (compass points)
-
-- ✅ changing `npc-cli/service/const` should restore agent positions
-  - ℹ️ BaseTty is issue
-  - move constant into 
-
-- ✅ changing `npc-cli/service/const` should not break npc selector (on select)
-  - ℹ️ glsl.js is issue + did not remount npc onchange custom shader
-
-- ✅ fix `local` now we're using Bash parser
-  - can do `local x=foo y=bar` now
-
-- ✅ spawn command in profile-1
-  - ✅ change `w.npc.spawn` args
-
-- ✅ fix stuck npcs far from target
-  - e.g. both turning corner opposite ways
-
-- ✅ follow cam permits drag
-
+### Final clean before migration ✅
 
 ### Migration 🚧
 
-- get Decor working
+- ✅ check it works i.e. `yarn dev`
+- ❌ upgrade next.js
+  - ✅ babel parsing issue e.g. in Floor.jsx
+    - https://stackoverflow.com/a/68193974/2917822
+  - ❌ babel ignore issue i.e. must ignore "shell code"
+    - maybe use swc instead of babel anyway
+  - ❌ react 19 issue with @react-three/fiber
+    - ℹ️ `npm i @react-three/fiber@9.0.0-rc.7`
+    - seeing weird rendering, maybe patch instead
+    - https://github.com/vercel/next.js/issues/71836
+    - https://github.com/pmndrs/react-three-fiber/issues/3222
+- ✅ repo npc-cli-next -> npc-cli-next-old
+- 🚧 new repo npc-cli-next starting from latest
+  - 🚧 start sync site
+  - 🚧 frontmatter or explicit export
+- sync npc-cli
+  - get Decor working
+- fetch-assets?
 
 ## WIP
 
@@ -3819,3 +3806,32 @@ done
 
 - ✅ can cancel offMeshConnection earlier i.e. during initial segment
 - ✅ npc sans access next to door should not traverse offMeshConnection (and flicker back)
+
+- ✅ clean z-index
+  - e.g. "Logger PopUp above Logger scrollbar"
+- ✅ auto-dock ContextMenu in profile-1
+- ✅ should not be able to spawn from offMesh do to any nav point
+  - ℹ️ e.g. restrict to current room
+
+- ✅ fade Html3d labels whilst window/canvas resize (jerks otherwise)
+  - ✅ pass gl, camera as props to avoid rendering onchange RootState.size
+  - ✅ fade them all at once using CSS in WorldMenu
+- ❌ profile-1: keyboard arrow keys/wsad rotates sets cameras rotation (compass points)
+
+- ✅ changing `npc-cli/service/const` should restore agent positions
+  - ℹ️ BaseTty is issue
+  - move constant into 
+
+- ✅ changing `npc-cli/service/const` should not break npc selector (on select)
+  - ℹ️ glsl.js is issue + did not remount npc onchange custom shader
+
+- ✅ fix `local` now we're using Bash parser
+  - can do `local x=foo y=bar` now
+
+- ✅ spawn command in profile-1
+  - ✅ change `w.npc.spawn` args
+
+- ✅ fix stuck npcs far from target
+  - e.g. both turning corner opposite ways
+
+- ✅ follow cam permits drag
