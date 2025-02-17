@@ -954,8 +954,8 @@ export class Npc {
 const staticMaxAcceleration = 4;
 const movingMaxAcceleration = 8;
 const staticSeparationWeight = 2;
-// const movingSeparationWeight = 0.5;
-const movingSeparationWeight = 0.4;
+const movingSeparationWeight = 0.5;
+// const movingSeparationWeight = 0.4;
 const staticCollisionQueryRange = 1;
 const movingCollisionQueryRange = 1.5;
 
